@@ -8,7 +8,6 @@ from celery.task import Task
 from celery.task.sets import subtask, TaskSet
 
 from celery.tests.utils import unittest
-from celery.tests.compat import catch_warnings
 
 
 class MockTask(Task):
@@ -100,31 +99,6 @@ class test_subtask(unittest.TestCase):
 
 
 class test_TaskSet(unittest.TestCase):
-
-    def test_interface__compat(self):
-        with catch_warnings(record=True) as log:
-            ts = TaskSet(MockTask, [[(2, 2)], [(4, 4)], [(8, 8)]])
-            self.assertListEqual(ts.tasks,
-                                 [MockTask.subtask((i, i))
-                                    for i in (2, 4, 8)])
-            self.assertIn("Using this invocation of TaskSet is deprecated",
-                          log[0].message.args[0])
-            log[:] = []
-            self.assertEqual(ts.task, registry.tasks[MockTask.name])
-            self.assertTrue(log)
-            self.assertIn("TaskSet.task is deprecated",
-                          log[0].message.args[0])
-
-            log[:] = []
-            self.assertEqual(ts.task_name, MockTask.name)
-            self.assertTrue(log)
-            self.assertIn("TaskSet.task_name is deprecated",
-                          log[0].message.args[0])
-
-    def test_task_arg_can_be_iterable__compat(self):
-        ts = TaskSet([MockTask.subtask((i, i))
-                        for i in (2, 4, 8)])
-        self.assertEqual(len(ts), 3)
 
     def test_respects_ALWAYS_EAGER(self):
         app = app_or_default()

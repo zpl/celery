@@ -32,7 +32,7 @@ class Beat(object):
         """Starts the celerybeat task scheduler."""
         self.app = app = app_or_default(app)
 
-        self.loglevel = loglevel
+        self.loglevel = loglevel or 0
         self.logfile = logfile
         self.schedule = schedule or app.conf.CELERYBEAT_SCHEDULE_FILENAME
         self.scheduler_cls = scheduler_cls or app.conf.CELERYBEAT_SCHEDULER
