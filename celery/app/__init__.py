@@ -44,11 +44,10 @@ class AppPickler(object):
         return self.build_standard_kwargs(*args)
 
     def build_standard_kwargs(self, main, changes, loader, backend, amqp,
-            events, log, control, accept_magic_kwargs):
+            events, log, control):
         return dict(main=main, loader=loader, backend=backend, amqp=amqp,
                     changes=changes, events=events, log=log, control=control,
-                    set_as_current=False,
-                    accept_magic_kwargs=accept_magic_kwargs)
+                    set_as_current=False)
 
     def construct(self, cls, **kwargs):
         return cls(**kwargs)
@@ -106,7 +105,6 @@ class App(base.BaseApp):
             ignore_result = conf.CELERY_IGNORE_RESULT
             store_errors_even_if_ignored = \
                 conf.CELERY_STORE_ERRORS_EVEN_IF_IGNORED
-            accept_magic_kwargs = self.accept_magic_kwargs
         Task.__doc__ = BaseTask.__doc__
 
         return Task
@@ -166,16 +164,14 @@ class App(base.BaseApp):
 
             def _create_task_cls(fun):
                 options["app"] = self
-                options.setdefault("accept_magic_kwargs", False)
                 base = options.pop("base", None) or self.Task
 
                 @wraps(fun, assigned=("__module__", "__name__"))
                 def run(self, *args, **kwargs):
                     return fun(*args, **kwargs)
 
-                # Save the argspec for this task so we can recognize
-                # which default task kwargs we're going to pass to it later.
-                # (this happens in celery.utils.fun_takes_kwargs)
+                # this was used previously for the magic kwargs.
+                # we leave it here in case someone depends on this.
                 run.argspec = getargspec(fun)
 
                 cls_dict = dict(options, run=run,
@@ -213,16 +209,14 @@ class App(base.BaseApp):
                 self.amqp_cls,
                 self.events_cls,
                 self.log_cls,
-                self.control_cls,
-                self.accept_magic_kwargs)
+                self.control_cls)
 
 
 #: The "default" loader is the default loader used by old applications.
 default_loader = os.environ.get("CELERY_LOADER") or "default"
 
 #: Global fallback app instance.
-default_app = App("default", loader=default_loader,
-                  set_as_current=False, accept_magic_kwargs=True)
+default_app = App("default", loader=default_loader, set_as_current=False)
 
 
 def current_app():

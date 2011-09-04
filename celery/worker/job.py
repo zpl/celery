@@ -15,8 +15,7 @@ from .. import registry
 from ..app import app_or_default
 from ..datastructures import ExceptionInfo
 from ..execute.trace import TaskTrace
-from ..utils import (noop, kwdict, fun_takes_kwargs,
-                     get_symbol_by_name, truncate_text)
+from ..utils import noop, kwdict, get_symbol_by_name, truncate_text
 from ..utils.encoding import safe_repr, safe_str, default_encoding
 from ..utils.timeutils import maybe_iso8601
 
@@ -311,35 +310,6 @@ class TaskRequest(object):
                 "retries": self.retries, "is_eager": False,
                 "delivery_info": self.delivery_info, "chord": self.chord}
 
-    def extend_with_default_kwargs(self, loglevel, logfile):
-        """Extend the tasks keyword arguments with standard task arguments.
-
-        Currently these are `logfile`, `loglevel`, `task_id`,
-        `task_name`, `task_retries`, and `delivery_info`.
-
-        See :meth:`celery.task.base.Task.run` for more information.
-
-        Magic keyword arguments are deprecated and will be removed
-        in version 3.0.
-
-        """
-        if not self.task.accept_magic_kwargs:
-            return self.kwargs
-        kwargs = dict(self.kwargs)
-        default_kwargs = {"logfile": logfile,
-                          "loglevel": loglevel,
-                          "task_id": self.task_id,
-                          "task_name": self.task_name,
-                          "task_retries": self.retries,
-                          "task_is_eager": False,
-                          "delivery_info": self.delivery_info}
-        fun = self.task.run
-        supported_keys = fun_takes_kwargs(fun, default_kwargs)
-        extend_with = dict((key, val) for key, val in default_kwargs.items()
-                                if key in supported_keys)
-        kwargs.update(extend_with)
-        return kwargs
-
     def execute_using_pool(self, pool, loglevel=None, logfile=None):
         """Like :meth:`execute`, but using the :mod:`multiprocessing` pool.
 
@@ -353,10 +323,10 @@ class TaskRequest(object):
         if self.revoked():
             return
 
-        args = self._get_tracer_args(loglevel, logfile)
         instance_attrs = self.get_instance_attrs(loglevel, logfile)
         result = pool.apply_async(execute_and_trace,
-                                  args=args,
+                                  args=(self.task_name, self.task_id,
+                                        self.args, self.kwargs),
                                   kwargs={"hostname": self.hostname,
                                           "request": instance_attrs},
                                   accept_callback=self.on_accepted,
@@ -383,7 +353,8 @@ class TaskRequest(object):
             self.acknowledge()
 
         instance_attrs = self.get_instance_attrs(loglevel, logfile)
-        tracer = WorkerTaskTrace(*self._get_tracer_args(loglevel, logfile),
+        tracer = WorkerTaskTrace(self.task_name, self.task_id,
+                                 self.args, self.kwargs,
                                  **{"hostname": self.hostname,
                                     "loader": self.app.loader,
                                     "request": instance_attrs})
@@ -564,8 +535,3 @@ class TaskRequest(object):
         return '<%s: {name:"%s", id:"%s", args:"%s", kwargs:"%s"}>' % (
                 self.__class__.__name__,
                 self.task_name, self.task_id, self.args, self.kwargs)
-
-    def _get_tracer_args(self, loglevel=None, logfile=None):
-        """Get the :class:`WorkerTaskTrace` tracer for this task."""
-        task_func_kwargs = self.extend_with_default_kwargs(loglevel, logfile)
-        return self.task_name, self.task_id, self.args, task_func_kwargs
