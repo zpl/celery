@@ -33,5 +33,7 @@ def get_backend_cls(backend=None, loader=None):
     return _backend_cache[backend]
 
 
-# deprecate this.
+# TODO: deprecate this.
+# but seems to be used in the wild (e.g. by Zamboni:
+# http://nullege.com/codes/search/celery.backends.default_backend)
 default_backend = LocalProxy(lambda: current_app.backend)
