@@ -82,22 +82,3 @@ def periodic_task(*args, **options):
 @task(name="celery.backend_cleanup")
 def backend_cleanup():
     backend_cleanup.backend.cleanup()
-
-
-class PingTask(Task):  # ✞
-    name = "celery.ping"
-
-    def run(self, **kwargs):
-        return "pong"
-
-
-def ping():  # ✞
-    """Deprecated and scheduled for removal in Celery 2.3.
-
-    Please use :meth:`celery.task.control.ping` instead.
-
-    """
-    warnings.warn(DeprecationWarning(
-        "The ping task has been deprecated and will be removed in Celery "
-        "v2.3.  Please use inspect.ping instead."))
-    return PingTask.apply_async().get()

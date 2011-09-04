@@ -12,7 +12,6 @@ from celery import current_app
 from celery.datastructures import AttributeDict
 from celery.task import task
 from celery.registry import tasks
-from celery.task import PingTask
 from celery.utils import uuid
 from celery.worker.buckets import FastQueue
 from celery.worker.job import TaskRequest
@@ -152,7 +151,7 @@ class test_ControlPanel(unittest.TestCase):
     def test_active(self):
         from celery.worker.job import TaskRequest
 
-        r = TaskRequest(PingTask.name, "do re mi", (), {})
+        r = TaskRequest(mytask.name, "do re mi", (), {})
         state.active_requests.add(r)
         try:
             self.assertTrue(self.panel.handle("dump_active"))
@@ -225,7 +224,7 @@ class test_ControlPanel(unittest.TestCase):
         consumer = Consumer()
         panel = self.create_panel(consumer=consumer)
         self.assertFalse(panel.handle("dump_schedule"))
-        r = TaskRequest("celery.ping", "CAFEBABE", (), {})
+        r = TaskRequest(mytask.name, "CAFEBABE", (), {})
         consumer.eta_schedule.schedule.enter(
                 consumer.eta_schedule.Entry(lambda x: x, (r, )),
                     datetime.now() + timedelta(seconds=10))
@@ -274,7 +273,7 @@ class test_ControlPanel(unittest.TestCase):
         consumer = Consumer()
         panel = self.create_panel(consumer=consumer)
 
-        task = tasks[PingTask.name]
+        task = tasks[mytask.name]
         old_rate_limit = task.rate_limit
         try:
             panel.handle("rate_limit", arguments=dict(task_name=task.name,
