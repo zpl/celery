@@ -66,8 +66,8 @@ class Worker(object):
         conf = app.conf
         self.concurrency = (concurrency or
                             conf.CELERYD_CONCURRENCY or cpu_count())
-        self.loglevel = loglevel or conf.CELERYD_LOG_LEVEL
-        self.logfile = logfile or conf.CELERYD_LOG_FILE
+        self.loglevel = loglevel
+        self.logfile = logfile
 
         self.hostname = hostname or socket.gethostname()
         self.discard = discard

@@ -66,8 +66,7 @@ class WorkController(object):
     #: The loglevel used (default: :const:`logging.INFO`)
     loglevel = logging.ERROR
 
-    #: The logfile used, if no logfile is specified it uses `stderr`
-    #: (default: :setting:`CELERYD_LOG_FILE`).
+    #: The logfile used, if not specified then `stderr` is used.
     logfile = None
 
     #: If :const:`True`, celerybeat is embedded, running in the main worker
@@ -114,7 +113,7 @@ class WorkController(object):
         # Options
         self.loglevel = loglevel or self.loglevel
         self.concurrency = concurrency or conf.CELERYD_CONCURRENCY
-        self.logfile = logfile or conf.CELERYD_LOG_FILE
+        self.logfile = logfile
         self.logger = self.app.log.get_default_logger()
         if send_events is None:
             send_events = conf.CELERY_SEND_EVENTS
