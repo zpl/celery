@@ -3,7 +3,6 @@ from __future__ import with_statement
 
 import os
 import sys
-import operator
 import imp as _imp
 import importlib
 import logging
@@ -12,8 +11,7 @@ import traceback
 import warnings
 
 from contextlib import contextmanager
-from functools import partial, wraps
-from inspect import getargspec
+from functools import wraps
 from itertools import islice
 from pprint import pprint
 

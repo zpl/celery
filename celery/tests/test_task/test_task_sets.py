@@ -2,7 +2,6 @@ from __future__ import with_statement
 
 import anyjson
 
-from celery import registry
 from celery.app import app_or_default
 from celery.task import Task
 from celery.task.sets import subtask, TaskSet

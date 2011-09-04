@@ -1,8 +1,6 @@
 from __future__ import absolute_import
 from __future__ import with_statement
 
-import warnings
-
 from .. import registry
 from ..app import app_or_default
 from ..datastructures import AttributeDict

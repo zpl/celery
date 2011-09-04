@@ -9,7 +9,7 @@ from dateutil.parser import parse as parse_iso8601
 try:
     import pytz
 except ImportError:
-    pytz = None
+    pytz = None  # noqa
 
 
 DAYNAMES = "sun", "mon", "tue", "wed", "thu", "fri", "sat"
@@ -65,9 +65,7 @@ class _Zone(object):
     @cached_property
     def utc(self):
         return self.get_timezone("UTC")
-
 timezone = _Zone()
-
 
 
 def maybe_timedelta(delta):
