@@ -1,10 +1,15 @@
+from __future__ import absolute_import
+
+from base64 import b64encode, b64decode
+
 import anyjson
 
 from kombu.serialization import registry
 
-from celery.security.certificate import Certificate, FSCertStore
-from celery.security.key import PrivateKey
-from celery.security.exceptions import SecurityError
+from .certificate import Certificate, FSCertStore
+from .exceptions import SecurityError
+from .key import PrivateKey
+
 
 class SecureSerializer(object):
 
@@ -23,35 +28,34 @@ class SecureSerializer(object):
         assert self._cert is not None
         try:
             data = self._serialize(data)
-            signature = self._key.sign(data).encode("base64")
+            signature = b64encode(self._key.sign(data))
             signer = self._cert.get_id()
             return self._serialize(dict(data=data,
                                         signer=signer,
                                         signature=signature))
-        except Exception, e:
-            raise SecurityError("Unable to serialize", e)
+        except Exception, exc:
+            raise SecurityError("Unable to serialize: %r" % (exc, ))
 
     def deserialize(self, data):
         """deserialize data structure from string"""
         assert self._cert_store is not None
         try:
             data = self._deserialize(data)
-            signature = data['signature'].decode("base64")
-            signer = data['signer']
-            data = data['data']
+            signature = b64decode(data["signature"])
+            signer = data["signer"]
+            data = data["data"]
             self._cert_store[signer].verify(data, signature)
             return self._deserialize(data)
-        except Exception, e:
-            raise SecurityError("Unable to deserialize", e)
+        except Exception, exc:
+            raise SecurityError("Unable to deserialize: %r" % (exc, ))
+
 
 def register_auth(key=None, cert=None, store=None):
     """register security serializer"""
-    global s
     s = SecureSerializer(key and PrivateKey(key),
                          cert and Certificate(cert),
                          store and FSCertStore(store),
                          anyjson.serialize, anyjson.deserialize)
     registry.register("auth", s.serialize, s.deserialize,
-                      content_type='application/data',
-                      content_encoding='utf-8')
-
+                      content_type="application/data",
+                      content_encoding="utf-8")

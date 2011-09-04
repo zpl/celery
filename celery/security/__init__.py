@@ -1,38 +1,41 @@
 from kombu.serialization import unregister, SerializerNotInstalled
 
-from celery.app import app_or_default
-from celery.security.serialization import register_auth
-from celery.exceptions import ImproperlyConfigured
+from .. import current_app
+from ..exceptions import ImproperlyConfigured
+
+from .serialization import register_auth
+
 
 def _disable_insecure_serializers():
-    for name in ('pickle', 'json', 'yaml', 'msgpack'):
+    for name in ("pickle", "json", "yaml", "msgpack"):
         try:
             unregister(name)
         except SerializerNotInstalled:
             pass
 
+
 def setup_security():
     """setup secure serialization"""
-    conf = app_or_default().conf
-    if conf.CELERY_TASK_SERIALIZER != 'auth':
+    conf = current_app.conf
+    if conf.CELERY_TASK_SERIALIZER != "auth":
         return
 
     try:
-        from OpenSSL import crypto
+        from OpenSSL import crypto  # noqa
     except ImportError:
         raise ImproperlyConfigured(
-            "You need to install pyOpenSSL library to use "
+            "You need to install the pyOpenSSL library to use "
             "the auth serializer.")
 
-    key = getattr(conf, 'CELERY_SECURITY_KEY', None)
-    cert = getattr(conf, 'CELERY_SECURITY_CERTIFICATE', None)
-    store = getattr(conf, 'CELERY_SECURITY_CERT_STORE', None)
+    key = conf.CELERY_SECURITY_KEY
+    cert = conf.CELERY_SECURITY_CERTIFICATE
+    store = conf.CELERY_SECURITY_CERT_STORE
 
     if key is None or cert is None or store is None:
         raise ImproperlyConfigured(
             "CELERY_SECURITY_KEY, CELERY_SECURITY_CERTIFICATE and "
             "CELERY_SECURITY_CERT_STORE options are required "
-            "for auth serializer")
+            "settings when using the auth serializer")
 
     with open(key) as kf, open(cert) as cf:
         register_auth(kf.read(), cf.read(), store)

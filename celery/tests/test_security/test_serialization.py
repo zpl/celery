@@ -6,6 +6,7 @@ from celery.security.key import PrivateKey
 from celery.security.exceptions import SecurityError
 from celery.tests.test_security import CERT1, CERT2, KEY1, KEY2
 
+
 class TestSecureSerializer(unittest.TestCase):
 
     def _get_s(self, key, cert, certs):
@@ -44,4 +45,3 @@ class TestSecureSerializer(unittest.TestCase):
         s1 = self._get_s(KEY1, CERT1, [CERT2])
         s2 = self._get_s(KEY2, CERT2, [CERT1])
         self.assertEqual(s2.deserialize(s1.serialize("foo")), "foo")
-

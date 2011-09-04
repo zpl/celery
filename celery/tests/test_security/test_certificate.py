@@ -2,7 +2,8 @@ from celery.tests.utils import unittest
 
 from celery.security.certificate import Certificate, CertStore
 from celery.security.exceptions import SecurityError
-from celery.tests.test_security import CERT1, CERT2, KEY1, KEY2
+from celery.tests.test_security import CERT1, CERT2, KEY1
+
 
 class TestCertificate(unittest.TestCase):
 
@@ -14,8 +15,9 @@ class TestCertificate(unittest.TestCase):
         self.assertRaises(TypeError, Certificate, None)
         self.assertRaises(SecurityError, Certificate, "")
         self.assertRaises(SecurityError, Certificate, "foo")
-        self.assertRaises(SecurityError, Certificate, CERT1[:20]+CERT1[21:])
+        self.assertRaises(SecurityError, Certificate, CERT1[:20] + CERT1[21:])
         self.assertRaises(SecurityError, Certificate, KEY1)
+
 
 class TestCertStore(unittest.TestCase):
 
@@ -35,4 +37,3 @@ class TestCertStore(unittest.TestCase):
         certstore = CertStore()
         certstore.add_cert(cert1)
         self.assertRaises(SecurityError, certstore.add_cert, cert1)
-
