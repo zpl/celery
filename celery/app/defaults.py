@@ -65,6 +65,7 @@ NAMESPACES = {
         "AMQP_TASK_RESULT_EXPIRES": Option(type="int",
                 deprecate_by="2.5", remove_by="3.0",
                 alt="CELERY_TASK_RESULT_EXPIRES"),
+        "ANNOTATIONS": Option(type="any"),
         "BROADCAST_QUEUE": Option("celeryctl"),
         "BROADCAST_EXCHANGE": Option("celeryctl"),
         "BROADCAST_EXCHANGE_TYPE": Option("fanout"),
