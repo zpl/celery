@@ -259,20 +259,13 @@ Example configuration
 AMQP backend settings
 ---------------------
 
-.. setting:: CELERY_AMQP_TASK_RESULT_EXPIRES
-
-CELERY_AMQP_TASK_RESULT_EXPIRES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. deprecated:: 2.5
-
-The time in seconds of which the task result queues should expire.
-
-This setting is deprecated, and will be removed in version 3.0.
-Please use :setting:`CELERY_TASK_RESULT_EXPIRES` instead.
-
 .. note::
 
-    AMQP result expiration requires RabbitMQ versions 2.1.0 and higher.
+    The AMQP backend requires RabbitMQ 1.1.0 or higher to automatically
+    expire results.  If you are running an older version of RabbitmQ
+    you should disable result expiration like this:
+
+        CELERY_TASK_RESULT_EXPIRES = None
 
 .. setting:: CELERY_RESULT_EXCHANGE
 
@@ -785,7 +778,6 @@ A built-in periodic task will delete the results after this time
     When using the database or MongoDB backends, `celerybeat` must be
     running for the results to be expired.
 
-
 .. setting:: CELERY_MAX_CACHED_RESULTS
 
 CELERY_MAX_CACHED_RESULTS
@@ -1015,18 +1007,6 @@ CELERY_SEND_TASK_ERROR_EMAILS
 The default value for the `Task.send_error_emails` attribute, which if
 set to :const:`True` means errors occurring during task execution will be
 sent to :setting:`ADMINS` by email.
-
-.. setting:: CELERY_TASK_ERROR_WHITELIST
-
-CELERY_TASK_ERROR_WHITELIST
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.5
-
-A white list of exceptions to send error emails for.
-
-This option is pending deprecation and is scheduled for removal
-in version 3.0.
 
 .. setting:: ADMINS
 

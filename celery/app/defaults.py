@@ -1,5 +1,6 @@
 import sys
 
+from collections import deque
 from datetime import timedelta
 
 is_jython = sys.platform.startswith("java")
@@ -32,12 +33,17 @@ def str_to_bool(term, table={"false": False, "no": False, "0": False,
 
 
 class Option(object):
+    alt = None
+    deprecate_by = None
+    remove_by = None
     typemap = dict(string=str, int=int, float=float, any=lambda v: v,
                    bool=str_to_bool, dict=dict, tuple=tuple)
 
     def __init__(self, default=None, *args, **kwargs):
         self.default = default
         self.type = kwargs.get("type") or "string"
+        for attr, value in kwargs.iteritems():
+            setattr(self, attr, value)
 
     def to_python(self, value):
         return self.typemap[self.type](value)
@@ -62,9 +68,6 @@ NAMESPACES = {
     "CELERY": {
         "ACKS_LATE": Option(False, type="bool"),
         "ALWAYS_EAGER": Option(False, type="bool"),
-        "AMQP_TASK_RESULT_EXPIRES": Option(type="int",
-                deprecate_by="2.5", remove_by="3.0",
-                alt="CELERY_TASK_RESULT_EXPIRES"),
         "ANNOTATIONS": Option(type="any"),
         "BROADCAST_QUEUE": Option("celeryctl"),
         "BROADCAST_EXCHANGE": Option("celeryctl"),
@@ -103,8 +106,6 @@ NAMESPACES = {
         "SEND_TASK_ERROR_EMAILS": Option(False, type="bool"),
         "SEND_TASK_SENT_EVENT": Option(False, type="bool"),
         "STORE_ERRORS_EVEN_IF_IGNORED": Option(False, type="bool"),
-        "TASK_ERROR_WHITELIST": Option((), type="tuple",
-            deprecate_by="2.5", remove_by="3.0"),
         "TASK_PUBLISH_RETRY": Option(True, type="bool"),
         "TASK_PUBLISH_RETRY_POLICY": Option({
                 "max_retries": 100,
@@ -165,13 +166,25 @@ NAMESPACES = {
 }
 
 
-def _flatten(d, ns=""):
-    acc = []
-    for key, value in d.iteritems():
-        if isinstance(value, dict):
-            acc.extend(_flatten(value, ns=key + '_'))
-        else:
-            acc.append((ns + key, value.default))
-    return acc
+def flatten(d, ns=""):
+    stack = deque([(ns, d)])
+    while stack:
+        name, space = stack.popleft()
+        for key, value in space.iteritems():
+            if isinstance(value, dict):
+                stack.append((name + key + '_', value))
+            else:
+                yield name + key, value
 
-DEFAULTS = dict(_flatten(NAMESPACES))
+
+def find_deprecated_settings(source):
+    from celery.utils import warn_deprecated
+    for name, opt in flatten(NAMESPACES):
+        if (opt.deprecate_by or opt.remove_by) and getattr(source, name, None):
+            warn_deprecated(description="The %r setting" % (name, ),
+                            deprecation=opt.deprecate_by,
+                            removal=opt.remove_by,
+                            alternative=opt.alt)
+
+
+DEFAULTS = dict((key, value.default) for key, value in flatten(NAMESPACES))
