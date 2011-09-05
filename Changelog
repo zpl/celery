@@ -245,7 +245,6 @@ Fixes
     This was not the case previously, even though the documentation
     states this was the expected behavior.
 
-
 .. _version-2.3.1:
 
 2.3.1
