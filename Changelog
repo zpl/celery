@@ -41,11 +41,9 @@ Important Notes
 
 * :mod:`celery.routes` renamed to :mod:`celery.app.routes`
 
-* The deprecated :func:`celery.loaders.setup_loader` function has been removed.
-
 * Deprecated :class:`PingTask` and :func:`celery.task.ping` has been removed.
 
-* Deprecations
+* The following deprecated functions has been removed:
 
     The following functions has been deprecated and is sceduled for removal in
     version 3.2:
