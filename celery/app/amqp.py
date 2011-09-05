@@ -11,9 +11,8 @@ AMQ related functionality.
 """
 from datetime import datetime, timedelta
 
-from kombu import BrokerConnection, Exchange
-from kombu import compat as messaging
-from kombu.pools import ProducerPool
+from kombu import BrokerConnection, Exchange, Consumer, Producer
+from kombu import pools
 
 from .. import routes as _routes
 from .. import signals
@@ -27,7 +26,7 @@ MSG_OPTIONS = ("mandatory", "priority", "immediate", "routing_key",
 #: Human readable queue declaration.
 QUEUE_FORMAT = """
 . %(name)s exchange:%(exchange)s (%(exchange_type)s) \
-binding:%(binding_key)s
+binding:%(routing_key)s
 """
 
 #: Set of exchange names that have already been declared.
@@ -58,11 +57,10 @@ class Queues(dict):
 
     def __init__(self, queues):
         dict.__init__(self)
-        for queue_name, options in (queues or {}).items():
-            self.add(queue_name, **options)
+        for queue in (queues or ()):
+            self.add(queue)
 
-    def add(self, queue, exchange=None, routing_key=None,
-            exchange_type="direct", **options):
+    def add(self, queue):
         """Add new queue.
 
         :param queue: Name of the queue.
@@ -72,27 +70,30 @@ class Queues(dict):
         :keyword \*\*options: Additional declaration options.
 
         """
-        q = self[queue] = self.options(exchange, routing_key,
-                                       exchange_type, **options)
+        self[queue.name] = queue
+        return queue
+
+    def add_missing(self, name):
+        q = self[name] = self.new_missing(name)
         return q
 
-    def options(self, exchange, routing_key,
-            exchange_type="direct", **options):
-        """Creates new option mapping for queue, with required
-        keys present."""
-        return dict(options, routing_key=routing_key,
-                             binding_key=routing_key,
-                             exchange=exchange,
-                             exchange_type=exchange_type)
+    def new_missing(self, name):
+        return Queue(name, Exchange(name, "direct"), name)
 
     def format(self, indent=0, indent_first=True):
         """Format routing table into string for log dumps."""
         active = self.consume_from
         if not active:
             return ""
-        info = [QUEUE_FORMAT.strip() % dict(
-                    name=(name + ":").ljust(12), **config)
-                        for name, config in sorted(active.iteritems())]
+
+        def as_info(q):
+            return {"name": (q.name + ":").ljust(12),
+                    "exchange": q.exchange.name,
+                    "exchange_type": q.exchange.type,
+                    "routing_key": q.routing_key}
+
+        info = [QUEUE_FORMAT.strip() % as_info(queue)
+                        for _, queue in sorted(active.iteritems())]
         if indent_first:
             return textindent("\n".join(info), indent)
         return info[0] + "\n" + textindent("\n".join(info[1:]), indent)
@@ -113,14 +114,14 @@ class Queues(dict):
         acc = {}
         for queue in wanted:
             try:
-                options = self[queue]
+                queue = self[queue]
             except KeyError:
                 if not create_missing:
                     raise
-                options = self.options(queue, queue)
-            acc[queue] = options
-        self._consume_from = acc
-        self.update(acc)
+                queue = self.new_missing(queue)
+            acc[queue] = queue
+        self._consume_from = queue
+        self.update(queue)
 
     @property
     def consume_from(self):
@@ -129,40 +130,44 @@ class Queues(dict):
         return self
 
     @classmethod
-    def with_defaults(cls, queues, default_exchange, default_exchange_type):
+    def with_defaults(cls, queues, default_exchange):
         """Alternate constructor that adds default exchange and
         exchange type information to queues that does not have any."""
         if queues is None:
-            queues = {}
-        for opts in queues.values():
-            opts.setdefault("exchange", default_exchange),
-            opts.setdefault("exchange_type", default_exchange_type)
-            opts.setdefault("binding_key", default_exchange)
-            opts.setdefault("routing_key", opts.get("binding_key"))
+            queues = ()
+        for queue in queues:
+            if queue.exchange is None or not queue.exchange.name:
+                queue.exchange = default_exchange
+            if queue.routing_key is None:
+                queue.routing_key = default_exchange.name
         return cls(queues)
 
 
-class TaskPublisher(messaging.Publisher):
+class TaskProducer(Producer):
     auto_declare = True
     retry = False
     retry_policy = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, connection, *args, **kwargs):
+        self.connection = connection
         self.app = kwargs.pop("app")
         self.retry = kwargs.pop("retry", self.retry)
         self.retry_policy = kwargs.pop("retry_policy",
                                         self.retry_policy or {})
-        super(TaskPublisher, self).__init__(*args, **kwargs)
+        exchange = kwargs.get("exchange")
+        if isinstance(exchange, basestring):
+            kwargs["exchange"] = Exchange(exchange, "direct")
+        super(TaskProducer, self).__init__(connection.default_channel,
+                                           *args, **kwargs)
 
     def declare(self):
         if self.exchange.name and \
                 self.exchange.name not in _exchanges_declared:
-            super(TaskPublisher, self).declare()
+            super(TaskProducer, self).declare()
             _exchanges_declared.add(self.exchange.name)
 
     def _declare_queue(self, name, retry=False, retry_policy={}):
-        options = self.app.queues[name]
-        queue = messaging.entry_to_queue(name, **options)(self.channel)
+        queue = self.app.queues[name](self.channel)
         if retry:
             self.connection.ensure(queue, queue.declare, **retry_policy)()
         else:
@@ -170,8 +175,10 @@ class TaskPublisher(messaging.Publisher):
         return queue
 
     def _declare_exchange(self, name, type, retry=False, retry_policy={}):
-        ex = Exchange(name, type=type, durable=self.durable,
-                      auto_delete=self.auto_delete)(self.channel)
+        if isinstance(name, Exchange):
+            ex = name(self.channel)
+        else:
+            ex = Exchange(name, type=type)(self.channel)
         if retry:
             return self.connection.ensure(ex, ex.declare, **retry_policy)
         return ex.declare()
@@ -195,7 +202,7 @@ class TaskPublisher(messaging.Publisher):
             _queues_declared.add(entity.name)
         if exchange and exchange not in _exchanges_declared:
             self._declare_exchange(exchange,
-                    exchange_type or self.exchange_type, retry, _retry_policy)
+                    exchange_type or self.exchange.type, retry, _retry_policy)
             _exchanges_declared.add(exchange)
 
         task_id = task_id or uuid()
@@ -228,10 +235,10 @@ class TaskPublisher(messaging.Publisher):
             body["chord"] = chord
 
         do_retry = retry if retry is not None else self.retry
-        send = self.send
+        publish = self.publish
         if do_retry:
-            send = connection.ensure(self, self.send, **_retry_policy)
-        send(body, exchange=exchange, **extract_msg_options(kwargs))
+            publish = connection.ensure(self, self.publish, **_retry_policy)
+        publish(body, exchange=exchange, **extract_msg_options(kwargs))
         signals.task_sent.send(sender=task_name, **body)
         if event_dispatcher:
             event_dispatcher.send("task-sent", uuid=task_id,
@@ -250,25 +257,24 @@ class TaskPublisher(messaging.Publisher):
             self.close()
 
 
-class PublisherPool(ProducerPool):
+class ProducerPool(pools.ProducerPool):
 
     def __init__(self, app):
         self.app = app
-        super(PublisherPool, self).__init__(self.app.pool,
-                                            limit=self.app.pool.limit)
+        super(ProducerPool, self).__init__(self.app.pool,
+                                           limit=self.app.pool.limit)
 
     def create_producer(self):
         conn = self.connections.acquire(block=True)
-        pub = self.app.amqp.TaskPublisher(conn, auto_declare=False)
-        conn._producer_chan = pub.channel
-        return pub
+        producer = self.app.amqp.TaskProducer(conn, auto_declare=False)
+        producer.connection = conn
+        return producer
 
 
 class AMQP(object):
+    Consumer = Consumer
     BrokerConnection = BrokerConnection
-    Publisher = messaging.Publisher
-    Consumer = messaging.Consumer
-    ConsumerSet = messaging.ConsumerSet
+    Producer = Producer
 
     #: Cached and prepared routing table.
     _rtable = None
@@ -283,13 +289,17 @@ class AMQP(object):
         """Create new :class:`Queues` instance, using queue defaults
         from the current configuration."""
         conf = self.app.conf
-        if not queues and conf.CELERY_DEFAULT_QUEUE:
-            queues = {conf.CELERY_DEFAULT_QUEUE: {
-                        "exchange": conf.CELERY_DEFAULT_EXCHANGE,
-                        "exchange_type": conf.CELERY_DEFAULT_EXCHANGE_TYPE,
-                        "binding_key": conf.CELERY_DEFAULT_ROUTING_KEY}}
-        return Queues.with_defaults(queues, conf.CELERY_DEFAULT_EXCHANGE,
-                                            conf.CELERY_DEFAULT_EXCHANGE_TYPE)
+        default = conf.CELERY_DEFAULT_QUEUE
+        defex = conf.CELERY_DEFAULT_EXCHANGE
+        if not isinstance(defex, Exchange):
+            defex = Exchange(conf.CELERY_DEFAULT_EXCHANGE,
+                             type=conf.CELERY_DEFAULT_EXCHANGE_TYPE)
+        if not queues and default:
+            if not isinstance(default, Queue):
+                default = Queue(default, defex,
+                                conf.CELERY_DEFAULT_ROUTING_KEY)
+            queues = (default, )
+        return Queues.with_defaults(queues, defex)
 
     def Router(self, queues=None, create_missing=None):
         """Returns the current task router."""
@@ -299,35 +309,30 @@ class AMQP(object):
 
     def TaskConsumer(self, *args, **kwargs):
         """Returns consumer for a single task queue."""
-        default_queue_name, default_queue = self.get_default_queue()
-        defaults = dict({"queue": default_queue_name}, **default_queue)
-        defaults["routing_key"] = defaults.pop("binding_key", None)
-        return self.Consumer(*args,
+        _, default_queue = self.get_default_queue()
+        return self.Consumer(*args, queues=[default_queue],
                              **self.app.merge(defaults, kwargs))
 
-    def TaskPublisher(self, *args, **kwargs):
-        """Returns publisher used to send tasks.
+    def TaskProducer(self, *args, **kwargs):
+        """Returns producer used to send tasks.
 
         You should use `app.send_task` instead.
 
         """
         conf = self.app.conf
-        _, default_queue = self.get_default_queue()
-        defaults = {"exchange": default_queue["exchange"],
-                    "exchange_type": default_queue["exchange_type"],
-                    "routing_key": conf.CELERY_DEFAULT_ROUTING_KEY,
-                    "serializer": conf.CELERY_TASK_SERIALIZER,
+        defaults = {"serializer": conf.CELERY_TASK_SERIALIZER,
                     "retry": conf.CELERY_TASK_PUBLISH_RETRY,
                     "retry_policy": conf.CELERY_TASK_PUBLISH_RETRY_POLICY,
                     "app": self}
-        return TaskPublisher(*args, **self.app.merge(defaults, kwargs))
+        return TaskProducer(*args, **self.app.merge(defaults, kwargs))
 
     def get_task_consumer(self, connection, queues=None, **kwargs):
         """Return consumer configured to consume from all known task
         queues."""
-        return self.ConsumerSet(connection,
-                                from_dict=queues or self.queues.consume_from,
-                                **kwargs)
+        print("QUEUES: %r" % (self.queues.consume_from.values(), ))
+        return self.Consumer(connection.channel(),
+                             queues=self.queues.consume_from.values(),
+                             **kwargs)
 
     def get_default_queue(self):
         """Returns `(queue_name, queue_options)` tuple for the queue
@@ -347,5 +352,5 @@ class AMQP(object):
         return self._rtable
 
     @cached_property
-    def publisher_pool(self):
-        return PublisherPool(self.app)
+    def producer_pool(self):
+        return ProducerPool(self.app)

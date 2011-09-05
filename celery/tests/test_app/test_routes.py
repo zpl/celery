@@ -14,6 +14,7 @@ def E(queues):
 
 
 def with_queues(**queues):
+    qs = queues
 
     def patch_fun(fun):
 
@@ -22,8 +23,9 @@ def with_queues(**queues):
             app = current_app
             prev_queues = app.conf.CELERY_QUEUES
             prev_Queues = app.amqp.queues
-            app.conf.CELERY_QUEUES = queues
-            app.amqp.queues = app.amqp.Queues(queues)
+            app.conf["CELERY_QUEUES"] = qs
+            qs = app.conf.CELERY_QUEUES
+            app.amqp.queues = app.amqp.Queues(qs)
             try:
                 return fun(*args, **kwargs)
             finally:

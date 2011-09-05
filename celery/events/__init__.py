@@ -61,7 +61,7 @@ class EventDispatcher(object):
         self.hostname = hostname or socket.gethostname()
         self.buffer_while_offline = buffer_while_offline
         self.mutex = threading.Lock()
-        self.publisher = None
+        self.producer = None
         self._outbound_buffer = deque()
         self.serializer = serializer or self.app.conf.CELERY_EVENT_SERIALIZER
 
@@ -76,7 +76,7 @@ class EventDispatcher(object):
         self.close()
 
     def enable(self):
-        self.publisher = Producer(self.channel or self.connection.channel(),
+        self.producer = Producer(self.channel or self.connection.channel(),
                                   exchange=event_exchange,
                                   serializer=self.serializer)
         self.enabled = True
@@ -98,8 +98,8 @@ class EventDispatcher(object):
                 event = Event(type, hostname=self.hostname,
                                     clock=self.app.clock.forward(), **fields)
                 try:
-                    self.publisher.publish(event,
-                                           routing_key=type.replace("-", "."))
+                    self.producer.publish(event,
+                                          routing_key=type.replace("-", "."))
                 except Exception, exc:
                     if not self.buffer_while_offline:
                         raise
@@ -119,10 +119,10 @@ class EventDispatcher(object):
     def close(self):
         """Close the event dispatcher."""
         self.mutex.locked() and self.mutex.release()
-        if self.publisher is not None:
+        if self.producer is not None:
             if not self.channel:  # close auto channel.
-                self.publisher.channel.close()
-            self.publisher = None
+                self.producer.channel.close()
+            self.producer = None
 
 
 class EventReceiver(object):
@@ -246,7 +246,7 @@ class Events(object):
     @contextmanager
     def default_dispatcher(self, hostname=None, enabled=True,
             buffer_while_offline=False):
-        with self.app.amqp.publisher_pool.acquire(block=True) as pub:
-            with self.Dispatcher(pub.connection, hostname, enabled,
-                                 pub.channel, buffer_while_offline) as d:
+        with self.app.amqp.producer_pool.acquire(block=True) as prod:
+            with self.Dispatcher(prod.connection, hostname, enabled,
+                                 prod.channel, buffer_while_offline) as d:
                 yield d

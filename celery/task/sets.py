@@ -125,7 +125,7 @@ class TaskSet(UserList):
     #: Total number of subtasks in this set.
     total = None
 
-    def __init__(self, task=None, tasks=None, app=None, Publisher=None):
+    def __init__(self, task=None, tasks=None, app=None, Producer=None):
         self.app = app_or_default(app)
         if task is not None:
             if hasattr(task, "__iter__"):
@@ -142,29 +142,33 @@ class TaskSet(UserList):
                               CDeprecationWarning)
         self.data = list(tasks or [])
         self.total = len(self.tasks)
-        self.Publisher = Publisher or self.app.amqp.TaskPublisher
+        self.Producer = Producer or self.app.amqp.TaskProducer
 
     def apply_async(self, connection=None, connect_timeout=None,
-            publisher=None, taskset_id=None):
+            producer=None, taskset_id=None, **kwargs):
         """Apply taskset."""
         app = self.app
+
+        # XXX to deprecate
+        if producer is None:
+            producer = kwargs.get("publisher")
 
         if app.conf.CELERY_ALWAYS_EAGER:
             return self.apply(taskset_id=taskset_id)
 
         with app.default_connection(connection, connect_timeout) as conn:
             setid = taskset_id or uuid()
-            pub = publisher or self.Publisher(connection=conn)
+            prod = producer or self.Producer(connection=conn)
             try:
-                results = self._async_results(setid, pub)
+                results = self._async_results(setid, prod)
             finally:
-                if not publisher:  # created by us.
-                    pub.close()
+                if not prodcuer:  # created by us.
+                    prod.close()
 
             return app.TaskSetResult(setid, results)
 
-    def _async_results(self, taskset_id, publisher):
-        return [task.apply_async(taskset_id=taskset_id, publisher=publisher)
+    def _async_results(self, taskset_id, producer):
+        return [task.apply_async(taskset_id=taskset_id, producer=producer)
                 for task in self.tasks]
 
     def apply(self, taskset_id=None):

@@ -23,8 +23,8 @@ class test_basic(WorkerCase):
         self.assertWorkerAlive()
 
     def test_roundtrip_simple_task(self):
-        publisher = tasks.add.get_publisher()
-        results = [(tasks.add.apply_async(i, publisher=publisher), i)
+        producer = tasks.add.get_producer()
+        results = [(tasks.add.apply_async(i, producer=producer), i)
                         for i in zip(xrange(100), xrange(100))]
         for result, i in results:
             self.assertEqual(result.get(timeout=10), operator.add(*i))

@@ -322,8 +322,8 @@ class TestCeleryTasks(unittest.TestCase):
         t1.backend.mark_as_done(presult.task_id, result=None)
         self.assertTrue(presult.successful())
 
-        publisher = t1.get_publisher()
-        self.assertTrue(publisher.exchange)
+        producer = t1.get_producer()
+        self.assertTrue(producer.exchange)
 
     def test_context_get(self):
         request = self.createTaskCls("T1", "c.unittest.t.c.g").request
@@ -349,14 +349,14 @@ class TestCeleryTasks(unittest.TestCase):
         T1.app.conf.CELERY_SEND_TASK_SENT_EVENT = True
         dispatcher = [None]
 
-        class Pub(object):
+        class Pro(object):
             channel = chan
 
             def delay_task(self, *args, **kwargs):
                 dispatcher[0] = kwargs.get("event_dispatcher")
 
         try:
-            T1.apply_async(publisher=Pub())
+            T1.apply_async(producer=Pro())
         finally:
             T1.app.conf.CELERY_SEND_TASK_SENT_EVENT = False
             chan.close()
@@ -364,13 +364,13 @@ class TestCeleryTasks(unittest.TestCase):
 
         self.assertTrue(dispatcher[0])
 
-    def test_get_publisher(self):
+    def test_get_producer(self):
         connection = app_or_default().broker_connection()
-        p = IncrementCounterTask.get_publisher(connection, auto_declare=False,
-                                               exchange="foo")
+        p = IncrementCounterTask.get_producer(connection, auto_declare=False,
+                                              exchange="foo")
         self.assertEqual(p.exchange.name, "foo")
-        p = IncrementCounterTask.get_publisher(connection, auto_declare=False,
-                                               exchange_type="fanout")
+        p = IncrementCounterTask.get_producer(connection, auto_declare=False,
+                                              exchange_type="fanout")
         self.assertEqual(p.exchange.type, "fanout")
 
     def test_update_state(self):

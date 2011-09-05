@@ -24,7 +24,7 @@ class Router(object):
             app=None):
         from .app import app_or_default
         self.app = app_or_default(app)
-        self.queues = {} if queues is None else queues
+        self.queues = self.app.amqp.Queues({} if queues is None else queues)
         self.routes = [] if routes is None else routes
         self.create_missing = create_missing
 
@@ -50,16 +50,17 @@ class Router(object):
 
         if queue:  # expand config from configured queue.
             try:
-                dest = dict(self.queues[queue])
+                self.queues[queue]
             except KeyError:
                 if not self.create_missing:
                     raise QueueNotFound(
                         "Queue %r is not defined in CELERY_QUEUES" % queue)
-                dest = dict(self.app.amqp.queues.add(queue, queue, queue))
-            # needs to be declared by publisher
-            dest["queue"] = queue
-            # routing_key and binding_key are synonyms.
-            dest.setdefault("routing_key", dest.get("binding_key"))
+                self.app.amqp.queues.add_missing(queue)
+            q = self.queues[queue]
+            # needs to be declared by producer
+            dest = dict(queue=queue, exchange=q.exchange.name,
+                        exchange_type=q.exchange.type,
+                        routing_key=q.routing_key)
             return lpmerge(dest, route)
         return route
 

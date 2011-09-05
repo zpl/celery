@@ -4,6 +4,8 @@ from __future__ import absolute_import
 import sys
 import threading
 
+from kombu import Exchange
+
 from ...datastructures import ExceptionInfo
 from ...exceptions import MaxRetriesExceededError, RetryTaskError
 from ...execute.trace import TaskTrace
@@ -257,11 +259,11 @@ class BaseTask(object):
         return self.app.broker_connection(connect_timeout=connect_timeout)
 
     @classmethod
-    def get_publisher(self, connection=None, exchange=None,
-            connect_timeout=None, exchange_type=None, **options):
-        """Get a celery task message publisher.
+    def get_producer(self, connection=None, exchange=None,
+            exchange_type=None, **options):
+        """Get a celery task message producer.
 
-        :rtype :class:`~celery.app.amqp.TaskPublisher`:
+        :rtype :class:`~celery.app.amqp.TaskProducer`:
 
         .. warning::
 
@@ -269,28 +271,23 @@ class BaseTask(object):
             be established for you, in that case you need to close this
             connection after use::
 
-                >>> publisher = self.get_publisher()
-                >>> # ... do something with publisher
-                >>> publisher.connection.close()
+                >>> producer = self.get_producer()
+                >>> # ... do something with producer
+                >>> producer.connection.close()
 
             or used as a context::
 
-                >>> with self.get_publisher() as publisher:
-                ...     # ... do something with publisher
+                >>> with self.get_producer() as producer:
+                ...     # ... do something with producer
+                ...     producer.connection.close()
 
         """
-        exchange = self.exchange if exchange is None else exchange
-        if exchange_type is None:
-            exchange_type = self.exchange_type
-        connection = connection or self.establish_connection(connect_timeout)
-        return self.app.amqp.TaskPublisher(connection=connection,
-                                           exchange=exchange,
-                                           exchange_type=exchange_type,
-                                           routing_key=self.routing_key,
-                                           **options)
+        connection = connection or self.establish_connection()
+        return self.app.amqp.TaskProducer(connection, **options)
+    get_publisher = get_producer
 
     @classmethod
-    def get_consumer(self, connection=None, connect_timeout=None):
+    def get_consumer(self, connection=None, **kwargs):
         """Get message consumer.
 
         :rtype :class:`kombu.messaging.Consumer`:
@@ -307,7 +304,7 @@ class BaseTask(object):
                 >>> consumer.connection.close()
 
         """
-        connection = connection or self.establish_connection(connect_timeout)
+        connection = connection or self.establish_connection()
         return self.app.amqp.TaskConsumer(connection=connection,
                                           exchange=self.exchange,
                                           routing_key=self.routing_key)
@@ -328,8 +325,8 @@ class BaseTask(object):
 
     @classmethod
     def apply_async(self, args=None, kwargs=None, countdown=None,
-            eta=None, task_id=None, publisher=None, connection=None,
-            connect_timeout=None, router=None, expires=None, queues=None,
+            eta=None, task_id=None, producer=None, connection=None,
+            router=None, expires=None, queues=None,
             **options):
         """Apply tasks asynchronously by sending a message.
 
@@ -360,15 +357,11 @@ class BaseTask(object):
                              of establishing a new one.  The `connect_timeout`
                              argument is not respected if this is set.
 
-        :keyword connect_timeout: The timeout in seconds, before we give up
-                                  on establishing a connection to the AMQP
-                                  server.
-
         :keyword retry: If enabled sending of the task message will be retried
                         in the event of connection loss or failure.  Default
                         is taken from the :setting:`CELERY_TASK_PUBLISH_RETRY`
                         setting.  Note you need to handle the
-                        publisher/connection manually for this to work.
+                        producer/connection manually for this to work.
 
         :keyword retry_policy:  Override the retry policy used.  See the
                                 :setting:`CELERY_TASK_PUBLISH_RETRY` setting.
@@ -421,6 +414,10 @@ class BaseTask(object):
         router = self.app.amqp.Router(queues)
         conf = self.app.conf
 
+        # XXX to deprecate
+        publisher = options.pop("publisher", None)
+        producer = producer or publisher
+
         if conf.CELERY_ALWAYS_EAGER:
             return self.apply(args, kwargs, task_id=task_id)
 
@@ -430,22 +427,22 @@ class BaseTask(object):
         options = router.route(options, self.name, args, kwargs)
         expires = expires or self.expires
 
-        publish = publisher or self.app.amqp.publisher_pool.acquire(block=True)
+        produce = producer or self.app.amqp.producer_pool.acquire(block=True)
         evd = None
         if conf.CELERY_SEND_TASK_SENT_EVENT:
             evd = self.app.events.Dispatcher(channel=publish.channel,
                                              buffer_while_offline=False)
 
         try:
-            task_id = publish.delay_task(self.name, args, kwargs,
+            task_id = produce.delay_task(self.name, args, kwargs,
                                          task_id=task_id,
                                          countdown=countdown,
                                          eta=eta, expires=expires,
                                          event_dispatcher=evd,
                                          **options)
         finally:
-            if not publisher:
-                publish.release()
+            if not producer:
+                produce.release()
 
         return self.AsyncResult(task_id)
 

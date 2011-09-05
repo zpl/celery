@@ -136,13 +136,13 @@ class Scheduler(object):
     _last_sync = None
 
     def __init__(self, schedule=None, logger=None, max_interval=None,
-            app=None, Publisher=None, lazy=False, **kwargs):
+            app=None, Producer=None, lazy=False, **kwargs):
         app = self.app = app_or_default(app)
         self.data = maybe_promise({} if schedule is None else schedule)
         self.logger = logger or app.log.get_default_logger(name="celery.beat")
         self.max_interval = max_interval or \
                                 app.conf.CELERYBEAT_MAX_LOOP_INTERVAL
-        self.Publisher = Publisher or app.amqp.TaskPublisher
+        self.Producer = Producer or app.amqp.TaskProducer
         if not lazy:
             self.setup_schedule()
 
@@ -156,13 +156,13 @@ class Scheduler(object):
                         "options": {"expires": 12 * 3600}}
         self.update_from_dict(entries)
 
-    def maybe_due(self, entry, publisher=None):
+    def maybe_due(self, entry, producer=None):
         is_due, next_time_to_run = entry.is_due()
 
         if is_due:
             self.logger.debug("Scheduler: Sending due task %s", entry.task)
             try:
-                result = self.apply_async(entry, publisher=publisher)
+                result = self.apply_async(entry, producer=producer)
             except Exception, exc:
                 self.logger.error("Message Error: %s\n%s", exc,
                                   traceback.format_stack(),
@@ -181,7 +181,7 @@ class Scheduler(object):
         remaining_times = []
         try:
             for entry in self.schedule.itervalues():
-                next_time_to_run = self.maybe_due(entry, self.publisher)
+                next_time_to_run = self.maybe_due(entry, self.producer)
                 if next_time_to_run:
                     remaining_times.append(next_time_to_run)
         except RuntimeError:
@@ -197,7 +197,7 @@ class Scheduler(object):
         new_entry = self.schedule[entry.name] = entry.next()
         return new_entry
 
-    def apply_async(self, entry, publisher=None, **kwargs):
+    def apply_async(self, entry, producer=None, **kwargs):
         # Update timestamps and run counts before we actually execute,
         # so we have that done if an exception is raised (doesn't schedule
         # forever.)
@@ -207,11 +207,11 @@ class Scheduler(object):
         try:
             if task:
                 result = task.apply_async(entry.args, entry.kwargs,
-                                          publisher=publisher,
+                                          producer=producer,
                                           **entry.options)
             else:
                 result = self.send_task(entry.task, entry.args, entry.kwargs,
-                                        publisher=publisher,
+                                        producer=producer,
                                         **entry.options)
         except Exception, exc:
             raise SchedulingError("Couldn't apply scheduled task %s: %s" % (
@@ -291,8 +291,8 @@ class Scheduler(object):
         return self.app.broker_connection()
 
     @cached_property
-    def publisher(self):
-        return self.Publisher(connection=self._ensure_connected())
+    def producer(self):
+        return self.Producer(connection=self._ensure_connected())
 
     @property
     def schedule(self):

@@ -1,6 +1,6 @@
 from . import current_app
 
-TaskPublisher = current_app.amqp.TaskPublisher
+TaskPublisher = current_app.amqp.TaskProducer
 ConsumerSet = current_app.amqp.ConsumerSet
 TaskConsumer = current_app.amqp.TaskConsumer
 establish_connection = current_app.broker_connection

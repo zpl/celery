@@ -20,6 +20,8 @@ from copy import deepcopy
 from functools import wraps
 from threading import Lock
 
+from kombu.common import entry_to_queue
+
 from .. import datastructures
 from ..utils import cached_property, instantiate, lpmerge
 
@@ -103,9 +105,15 @@ class LamportClock(object):
 class Settings(datastructures.ConfigurationView):
 
     @property
-    def CELERY_RESULT_BACKEND(self):
-        """Resolves deprecated alias ``CELERY_BACKEND``."""
-        return self.get("CELERY_RESULT_BACKEND") or self.get("CELERY_BACKEND")
+    def BROKER_BACKEND(self):
+        """Deprecated compat alias to :attr:`BROKER_TRANSPORT`."""
+        return self.BROKER_TRANSPORT
+
+    @property
+    def BROKER_HOST(self):
+        return (os.environ.get("CELERY_BROKER_URL") or
+                self.get("BROKER_URL") or
+                self.get("BROKER_HOST"))
 
     @property
     def BROKER_TRANSPORT(self):
@@ -116,16 +124,18 @@ class Settings(datastructures.ConfigurationView):
                 self.get("CARROT_BACKEND"))
 
     @property
-    def BROKER_BACKEND(self):
-        """Deprecated compat alias to :attr:`BROKER_TRANSPORT`."""
-        return self.BROKER_TRANSPORT
+    def CELERY_RESULT_BACKEND(self):
+        """Resolves deprecated alias ``CELERY_BACKEND``."""
+        return self.get("CELERY_RESULT_BACKEND") or self.get("CELERY_BACKEND")
 
     @property
-    def BROKER_HOST(self):
+    def CELERY_QUEUES(self):
+        q = self.get("CELERY_QUEUES")
+        if isinstance(q, dict):
+            q = self["CELERY_QUEUES"] = [entry_to_queue(name, **opts)
+                                            for name, opts in q.iteritems()]
+        return q
 
-        return (os.environ.get("CELERY_BROKER_URL") or
-                self.get("BROKER_URL") or
-                self.get("BROKER_HOST"))
 
 
 class BaseApp(object):
@@ -198,7 +208,7 @@ class BaseApp(object):
         self.conf.update(self.loader.cmdline_config_parser(argv, namespace))
 
     def send_task(self, name, args=None, kwargs=None, countdown=None,
-            eta=None, task_id=None, publisher=None, connection=None,
+            eta=None, task_id=None, producer=None, connection=None,
             connect_timeout=None, result_cls=None, expires=None,
             queues=None, **options):
         """Send task by name.
@@ -214,6 +224,10 @@ class BaseApp(object):
         router = self.amqp.Router(queues)
         result_cls = result_cls or self.AsyncResult
 
+        # XXX to deprecate
+        publisher = options.pop("publisher", None)
+        producer = producer or publisher
+
         options.setdefault("compression",
                            self.conf.CELERY_MESSAGE_COMPRESSION)
         options = router.route(options, name, args, kwargs)
@@ -221,16 +235,16 @@ class BaseApp(object):
         exchange_type = options.get("exchange_type")
 
         with self.default_connection(connection, connect_timeout) as conn:
-            publish = publisher or self.amqp.TaskPublisher(conn,
+            produce = producer or self.amqp.TaskProducer(conn,
                                             exchange=exchange,
                                             exchange_type=exchange_type)
             try:
-                new_id = publish.delay_task(name, args, kwargs,
+                new_id = produce.delay_task(name, args, kwargs,
                                             task_id=task_id,
                                             countdown=countdown, eta=eta,
                                             expires=expires, **options)
             finally:
-                publisher or publish.close()
+                producer or produce.close()
             return result_cls(new_id)
 
     def AsyncResult(self, task_id, backend=None, task_name=None):
