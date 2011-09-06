@@ -254,7 +254,7 @@ class BaseTask(object):
 
     @classmethod
     def get_publisher(self, connection=None, exchange=None,
-            connect_timeout=None, exchange_type=None, **options):
+            exchange_type=None, **options):
         """Get a celery task message publisher.
 
         :rtype :class:`~celery.app.amqp.TaskPublisher`:
@@ -278,7 +278,7 @@ class BaseTask(object):
         exchange = self.exchange if exchange is None else exchange
         if exchange_type is None:
             exchange_type = self.exchange_type
-        connection = connection or self.establish_connection(connect_timeout)
+        connection = connection or self.establish_connection()
         return self.app.amqp.TaskPublisher(connection=connection,
                                            exchange=exchange,
                                            exchange_type=exchange_type,
@@ -286,7 +286,7 @@ class BaseTask(object):
                                            **options)
 
     @classmethod
-    def get_consumer(self, connection=None, connect_timeout=None):
+    def get_consumer(self, connection=None):
         """Get message consumer.
 
         :rtype :class:`kombu.messaging.Consumer`:
@@ -303,7 +303,7 @@ class BaseTask(object):
                 >>> consumer.connection.close()
 
         """
-        connection = connection or self.establish_connection(connect_timeout)
+        connection = connection or self.establish_connection()
         return self.app.amqp.TaskConsumer(connection=connection,
                                           exchange=self.exchange,
                                           routing_key=self.routing_key)
@@ -325,8 +325,7 @@ class BaseTask(object):
     @classmethod
     def apply_async(self, args=None, kwargs=None, countdown=None,
             eta=None, task_id=None, publisher=None, connection=None,
-            connect_timeout=None, router=None, expires=None, queues=None,
-            **options):
+            router=None, expires=None, queues=None, **options):
         """Apply tasks asynchronously by sending a message.
 
         :keyword args: The positional arguments to pass on to the
@@ -353,12 +352,7 @@ class BaseTask(object):
                           executed after the expiration time.
 
         :keyword connection: Re-use existing broker connection instead
-                             of establishing a new one.  The `connect_timeout`
-                             argument is not respected if this is set.
-
-        :keyword connect_timeout: The timeout in seconds, before we give up
-                                  on establishing a connection to the AMQP
-                                  server.
+                             of establishing a new one.
 
         :keyword retry: If enabled sending of the task message will be retried
                         in the event of connection loss or failure.  Default
