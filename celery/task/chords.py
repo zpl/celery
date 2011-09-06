@@ -1,21 +1,9 @@
 from __future__ import absolute_import
 
 from .. import current_app
-from ..result import TaskSetResult
 from ..utils import uuid
 
 from .sets import TaskSet, subtask
-
-
-@current_app.task(name="celery.chord_unlock", max_retries=None)
-def _unlock_chord(setid, callback, interval=1, propagate=False,
-        max_retries=None):
-    result = TaskSetResult.restore(setid)
-    if result.ready():
-        subtask(callback).delay(result.join(propagate=propagate))
-        result.delete()
-    else:
-        _unlock_chord.retry(countdown=interval, max_retries=max_retries)
 
 
 class Chord(current_app.Task):

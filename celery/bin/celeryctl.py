@@ -207,7 +207,7 @@ class result(Command):
         task = kwargs.get("task")
 
         if task:
-            result_cls = registry.tasks[task].AsyncResult
+            result_cls = self.app.tasks[task].AsyncResult
         result = result_cls(task_id)
         self.out(self.prettify(result.get())[1])
 result = command(result)

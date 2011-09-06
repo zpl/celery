@@ -11,7 +11,6 @@ from celery.utils.timer2 import Timer
 from celery import current_app
 from celery.datastructures import AttributeDict
 from celery.task import task
-from celery.registry import tasks
 from celery.utils import uuid
 from celery.worker.buckets import FastQueue
 from celery.worker.job import TaskRequest
@@ -271,9 +270,9 @@ class test_ControlPanel(unittest.TestCase):
                 self.ready_queue = self.ReadyQueue()
 
         consumer = Consumer()
-        panel = self.create_panel(consumer=consumer)
+        panel = self.create_panel(app=current_app, consumer=consumer)
 
-        task = tasks[mytask.name]
+        task = current_app.tasks[mytask.name]
         old_rate_limit = task.rate_limit
         try:
             panel.handle("rate_limit", arguments=dict(task_name=task.name,

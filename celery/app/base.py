@@ -12,7 +12,6 @@ from __future__ import absolute_import
 from __future__ import with_statement
 
 import os
-import platform as _platform
 import sys
 
 from contextlib import contextmanager
@@ -20,84 +19,23 @@ from copy import deepcopy
 from functools import wraps
 from threading import Lock
 
+from kombu.clocks import LamportClock
+
 from .. import datastructures
+from .. import platforms
 from ..utils import cached_property, instantiate, lpmerge
 
 from .defaults import DEFAULTS, find_deprecated_settings
 
 import kombu
-if kombu.VERSION < (1, 1, 0):
-    raise ImportError("Celery requires Kombu version 1.1.0 or higher.")
+if kombu.VERSION < (1, 3, 1):
+    raise ImportError("Celery requires Kombu version 1.3.1 or higher.")
 
 BUGREPORT_INFO = """
 platform -> system:%(system)s arch:%(arch)s imp:%(py_i)s
 software -> celery:%(celery_v)s kombu:%(kombu_v)s py:%(py_v)s
 settings -> transport:%(transport)s results:%(results)s
 """
-
-
-def pyimplementation():
-    if hasattr(_platform, "python_implementation"):
-        return _platform.python_implementation()
-    elif sys.platform.startswith("java"):
-        return "Jython %s" % (sys.platform, )
-    elif hasattr(sys, "pypy_version_info"):
-        v = ".".join(map(str, sys.pypy_version_info[:3]))
-        if sys.pypy_version_info[3:]:
-            v += "-" + "".join(map(str, sys.pypy_version_info[3:]))
-        return "PyPy %s" % (v, )
-    else:
-        return "CPython"
-
-
-class LamportClock(object):
-    """Lamport's logical clock.
-
-    From Wikipedia:
-
-    "A Lamport logical clock is a monotonically incrementing software counter
-    maintained in each process.  It follows some simple rules:
-
-        * A process increments its counter before each event in that process;
-        * When a process sends a message, it includes its counter value with
-          the message;
-        * On receiving a message, the receiver process sets its counter to be
-          greater than the maximum of its own value and the received value
-          before it considers the message received.
-
-    Conceptually, this logical clock can be thought of as a clock that only
-    has meaning in relation to messages moving between processes.  When a
-    process receives a message, it resynchronizes its logical clock with
-    the sender.
-
-    .. seealso::
-
-        http://en.wikipedia.org/wiki/Lamport_timestamps
-        http://en.wikipedia.org/wiki/Lamport's_Distributed_
-            Mutual_Exclusion_Algorithm
-
-    *Usage*
-
-    When sending a message use :meth:`forward` to increment the clock,
-    when receiving a message use :meth:`adjust` to sync with
-    the time stamp of the incoming message.
-
-    """
-    #: The clocks current value.
-    value = 0
-
-    def __init__(self, initial_value=0):
-        self.value = initial_value
-        self.mutex = Lock()
-
-    def adjust(self, other):
-        with self.mutex:
-            self.value = max(self.value, other) + 1
-
-    def forward(self):
-        with self.mutex:
-            self.value += 1
-        return self.value
 
 
 class Settings(datastructures.ConfigurationView):
@@ -130,7 +68,7 @@ class Settings(datastructures.ConfigurationView):
 
 class BaseApp(object):
     """Base class for apps."""
-    SYSTEM = _platform.system()
+    SYSTEM = platforms.system()
     IS_OSX = SYSTEM == "Darwin"
     IS_WINDOWS = SYSTEM == "Windows"
 
@@ -140,12 +78,13 @@ class BaseApp(object):
     loader_cls = "celery.loaders.app.AppLoader"
     log_cls = "celery.app.log.Logging"
     control_cls = "celery.app.control.Control"
+    registry_cls = "celery.app.registry.TaskRegistry"
 
     _pool = None
 
     def __init__(self, main=None, loader=None, backend=None,
             amqp=None, events=None, log=None, control=None,
-            set_as_current=True, **kwargs):
+            set_as_current=True, tasks=None, **kwargs):
         self.main = main
         self.amqp_cls = amqp or self.amqp_cls
         self.backend_cls = backend or self.backend_cls
@@ -154,8 +93,9 @@ class BaseApp(object):
         self.log_cls = log or self.log_cls
         self.control_cls = control or self.control_cls
         self.set_as_current = set_as_current
+        self.registry_cls = self.registry_cls if tasks is None else tasks
         self.clock = LamportClock()
-
+        self._tasks = instantiate(self.registry_cls, app=self)
         self.on_init()
 
     def on_init(self):
@@ -358,12 +298,12 @@ class BaseApp(object):
     def bugreport(self):
         import celery
         import kombu
-        return BUGREPORT_INFO % {"system": _platform.system(),
-                                 "arch": _platform.architecture(),
-                                 "py_i": pyimplementation(),
+        return BUGREPORT_INFO % {"system": platforms.system(),
+                                 "arch": platforms.architecture(),
+                                 "py_i": platforms.pyimplementation(),
                                  "celery_v": celery.__version__,
                                  "kombu_v": kombu.__version__,
-                                 "py_v": _platform.python_version(),
+                                 "py_v": platforms.python_version(),
                                  "transport": self.conf.BROKER_TRANSPORT,
                                  "results": self.conf.CELERY_RESULT_BACKEND}
 
@@ -416,3 +356,9 @@ class BaseApp(object):
     def log(self):
         """Logging utilities.  See :class:`~celery.log.Logging`."""
         return instantiate(self.log_cls, app=self)
+
+    @cached_property
+    def tasks(self):
+        from .task import builtins
+        builtins.load_builtins(self)
+        return self._tasks

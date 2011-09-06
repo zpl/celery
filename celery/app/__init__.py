@@ -17,7 +17,6 @@ import threading
 from functools import wraps
 from inspect import getargspec
 
-from .. import registry
 from ..utils import cached_property, instantiate
 
 from . import annotations
@@ -178,7 +177,7 @@ class App(base.BaseApp):
                                 __module__=fun.__module__,
                                 __doc__=fun.__doc__)
                 T = type(fun.__name__, (base, ), cls_dict)()
-                return registry.tasks[T.name]             # global instance.
+                return self._tasks[T.name]  # global instance.
 
             return _create_task_cls
 

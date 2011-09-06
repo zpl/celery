@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from ..app import app_or_default
+from .. import current_app
+from ..local import Proxy
 
 from .base import Task, PeriodicTask
 from .sets import TaskSet, subtask
@@ -41,7 +42,7 @@ def task(*args, **kwargs):
             >>> refresh_feed.delay("http://example.com/rss") # Async
             <AsyncResult: 8998d0f4-da0b-4669-ba03-d5ab5ac6ad5d>
     """
-    return app_or_default().task(*args, **kwargs)
+    return current_app.task(*args, **kwargs)
 
 
 def periodic_task(*args, **options):
@@ -77,6 +78,4 @@ def periodic_task(*args, **options):
     return task(**dict({"base": PeriodicTask}, **options))
 
 
-@task(name="celery.backend_cleanup")
-def backend_cleanup():
-    backend_cleanup.backend.cleanup()
+backend_cleanup = Proxy(lambda: current_app.tasks["celery.backend_cleanup"])

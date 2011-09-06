@@ -1,9 +1,10 @@
 from __future__ import absolute_import
 
-import os
-import sys
 import errno
+import os
+import platform as _platform
 import signal as _signal
+import sys
 
 from .local import try_import
 
@@ -15,6 +16,26 @@ grp = try_import("grp")
 DAEMON_UMASK = 0
 DAEMON_WORKDIR = "/"
 DAEMON_REDIRECT_TO = getattr(os, "devnull", "/dev/null")
+
+system = _platform.system
+architecture = _platform.architecture
+python_version = _platform.python_version
+
+
+def pyimplementation():
+    if hasattr(_platform, "python_implementation"):
+        return _platform.python_implementation()
+    elif sys.platform.startswith("java"):
+        return "Jython %s" % (sys.platform, )
+    elif hasattr(sys, "pypy_version_info"):
+        v = ".".join(map(str, sys.pypy_version_info[:3]))
+        if sys.pypy_version_info[3:]:
+            v += "-" + "".join(map(str, sys.pypy_version_info[3:]))
+        return "PyPy %s" % (v, )
+    else:
+        return "CPython"
+
+
 
 
 class LockFailed(Exception):

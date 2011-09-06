@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 from nose import SkipTest
 
 from celery import beat
-from celery import registry
 from celery.result import AsyncResult
 from celery.schedules import schedule
 from celery.task.base import Task
@@ -165,7 +164,7 @@ class test_Scheduler(unittest.TestCase):
             def apply_async(cls, *args, **kwargs):
                 through_task[0] = True
 
-        assert MockTask.name in registry.tasks
+        assert MockTask.name in MockTask.app.tasks
 
         scheduler = mScheduler()
         scheduler.apply_async(scheduler.Entry(task=MockTask.name))

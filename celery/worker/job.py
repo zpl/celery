@@ -11,7 +11,6 @@ from datetime import datetime
 from .. import current_app
 from .. import exceptions
 from .. import platforms
-from .. import registry
 from ..app import app_or_default
 from ..datastructures import ExceptionInfo
 from ..execute.trace import TaskTrace
@@ -239,7 +238,7 @@ class TaskRequest(object):
         self.logger = logger or self.app.log.get_default_logger()
         self.eventer = eventer
 
-        self.task = registry.tasks[self.task_name]
+        self.task = self.app.tasks[self.task_name]
         self._store_errors = True
         if self.task.ignore_result:
             self._store_errors = self.task.store_errors_even_if_ignored
@@ -466,7 +465,7 @@ class TaskRequest(object):
                                           "name": self.task_name,
                                           "hostname": self.hostname}})
 
-        task_obj = registry.tasks.get(self.task_name, object)
+        task_obj = self.app.tasks.get(self.task_name, object)
         task_obj.send_error_email(context, exc_info.exception)
 
     def acknowledge(self):

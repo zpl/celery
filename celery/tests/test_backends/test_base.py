@@ -12,6 +12,7 @@ from celery.utils.serialization import \
 from celery.utils.serialization import UnpickleableExceptionWrapper
 from celery.utils.serialization import get_pickleable_exception as gpe
 
+from celery import current_app
 from celery import states
 from celery.backends.base import BaseBackend, KeyValueStoreBackend
 from celery.backends.base import BaseDictBackend, DisabledBackend
@@ -93,13 +94,12 @@ class test_BaseBackend_interface(unittest.TestCase):
                 b.forget, "SOMExx-N0nex1stant-IDxx-")
 
     def test_on_chord_apply(self, unlock="celery.chord_unlock"):
-        from celery.registry import tasks
-        p, tasks[unlock] = tasks.get(unlock), Mock()
+        p, current_app.tasks[unlock] = current_app.tasks.get(unlock), Mock()
         try:
             b.on_chord_apply("dakj221", "sdokqweok")
-            self.assertTrue(tasks[unlock].apply_async.call_count)
+            self.assertTrue(current_app.tasks[unlock].apply_async.call_count)
         finally:
-            tasks[unlock] = p
+            current_app.tasks[unlock] = p
 
 
 class test_exception_pickle(unittest.TestCase):

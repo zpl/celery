@@ -9,7 +9,7 @@ from kombu.utils.finalize import Finalize
 
 from .. import beat
 from .. import concurrency as _concurrency
-from .. import registry, platforms, signals
+from .. import platforms, signals
 from ..app import app_or_default
 from ..exceptions import SystemTerminate
 from ..utils import noop, instantiate
@@ -160,7 +160,7 @@ class WorkController(object):
             self.ready_queue = FastQueue()
             self.ready_queue.put = self.process_task
         else:
-            self.ready_queue = TaskBucket(task_registry=registry.tasks)
+            self.ready_queue = TaskBucket(task_registry=self.app.tasks)
 
         self.logger.debug("Instantiating thread components...")
 

@@ -1,8 +1,12 @@
+from __future__ import absolute_import
+from __future__ import with_statement
+
 from mock import patch
+from contextlib import contextmanager
 
 from celery import current_app
 from celery.task import chords
-from celery.task import TaskSet
+from celery.task import task, TaskSet
 from celery.tests.utils import AppCase, Mock
 
 passthru = lambda x: x
@@ -13,40 +17,53 @@ def add(x, y):
     return x + y
 
 
+@contextmanager
+def patch_unlock_retry():
+    unlock = current_app.tasks["celery.chord_unlock"]
+    retry = Mock()
+    prev, unlock.retry = unlock.retry, retry
+    yield unlock, retry
+    unlock.retry = prev
+
+
 class test_unlock_chord_task(AppCase):
 
-    @patch("celery.task.chords.TaskSetResult")
-    @patch("celery.task.chords._unlock_chord.retry")
-    def test_unlock_ready(self, retry, TaskSetResult):
-        callback = Mock()
-        result = Mock(attrs=dict(ready=lambda: True,
-                                 join=lambda **kw: [2, 4, 8, 6]))
-        TaskSetResult.restore = lambda setid: result
-        subtask, chords.subtask = chords.subtask, passthru
-        try:
-            chords._unlock_chord("setid", callback)
-        finally:
-            chords.subtask = subtask
-        callback.delay.assert_called_with([2, 4, 8, 6])
-        result.delete.assert_called_with()
-        # did not retry
-        self.assertFalse(retry.call_count)
+    @patch("celery.result.TaskSetResult")
+    def test_unlock_ready(self, TaskSetResult):
+        tasks = current_app.tasks
 
-    @patch("celery.task.chords.TaskSetResult")
-    @patch("celery.task.chords._unlock_chord.retry")
-    def test_when_not_ready(self, retry, TaskSetResult):
-        callback = Mock()
-        result = Mock(attrs=dict(ready=lambda: False))
-        TaskSetResult.restore = lambda setid: result
-        chords._unlock_chord("setid", callback, interval=10, max_retries=30)
-        self.assertFalse(callback.delay.call_count)
-        # did retry
-        chords._unlock_chord.retry.assert_called_with(countdown=10,
-                                                     max_retries=30)
+        @task
+        def callback(*args, **kwargs):
+            pass
+
+        callback.apply_async = Mock()
+        with patch_unlock_retry() as (unlock, retry):
+            result = Mock(attrs=dict(ready=lambda: True,
+                                    join=lambda **kw: [2, 4, 8, 6]))
+            TaskSetResult.restore = lambda setid: result
+            subtask, chords.subtask = chords.subtask, passthru
+            try:
+                unlock("setid", callback)
+            finally:
+                chords.subtask = subtask
+            callback.apply_async.assert_called_with(([2, 4, 8, 6], ), {})
+            result.delete.assert_called_with()
+            # did not retry
+            self.assertFalse(retry.call_count)
+
+    @patch("celery.result.TaskSetResult")
+    def test_when_not_ready(self, TaskSetResult):
+        with patch_unlock_retry() as (unlock, retry):
+            callback = Mock()
+            result = Mock(attrs=dict(ready=lambda: False))
+            TaskSetResult.restore = lambda setid: result
+            unlock("setid", callback, interval=10, max_retries=30)
+            self.assertFalse(callback.delay.call_count)
+            # did retry
+            unlock.retry.assert_called_with(countdown=10, max_retries=30)
 
     def test_is_in_registry(self):
-        from celery.registry import tasks
-        self.assertIn("celery.chord_unlock", tasks)
+        self.assertIn("celery.chord_unlock", current_app.tasks)
 
 
 class test_chord(AppCase):

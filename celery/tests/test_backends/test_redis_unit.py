@@ -103,7 +103,6 @@ class test_RedisBackend(unittest.TestCase):
 
     @patch("celery.result.TaskSetResult")
     def test_on_chord_part_return(self, setresult):
-        from celery.registry import tasks
         from celery.task import subtask
         b = self.MockBackend()
         deps = Mock()
@@ -113,7 +112,7 @@ class test_RedisBackend(unittest.TestCase):
         task = Mock()
         task.name = "foobarbaz"
         try:
-            tasks["foobarbaz"] = task
+            current_app.tasks["foobarbaz"] = task
             task.request.chord = subtask(task)
 
             b.on_chord_part_return(task)
@@ -126,7 +125,7 @@ class test_RedisBackend(unittest.TestCase):
 
             self.assertTrue(b.client.expire.call_count)
         finally:
-            tasks.pop("foobarbaz")
+            current_app.tasks.pop("foobarbaz")
 
     def test_process_cleanup(self):
         self.Backend().process_cleanup()

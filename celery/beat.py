@@ -16,7 +16,6 @@ from datetime import datetime
 
 from . import __version__
 from . import platforms
-from . import registry
 from . import signals
 from .app import app_or_default
 from .schedules import maybe_schedule, crontab
@@ -201,7 +200,7 @@ class Scheduler(object):
         # so we have that done if an exception is raised (doesn't schedule
         # forever.)
         entry = self.reserve(entry)
-        task = registry.tasks.get(entry.task)
+        task = self.app.tasks.get(entry.task)
 
         try:
             if task:

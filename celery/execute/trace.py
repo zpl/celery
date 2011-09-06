@@ -3,10 +3,10 @@ from __future__ import absolute_import
 import sys
 import traceback
 
+from .. import current_app
 from .. import states, signals
 from ..datastructures import ExceptionInfo
 from ..exceptions import RetryTaskError
-from ..registry import tasks
 
 
 class TraceInfo(object):
@@ -57,7 +57,7 @@ class TaskTrace(object):
         self.task_name = task_name
         self.args = args
         self.kwargs = kwargs
-        self.task = task or tasks[self.task_name]
+        self.task = task or current_app.tasks[self.task_name]
         self.request = request or {}
         self.status = states.PENDING
         self.strtb = None

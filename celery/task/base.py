@@ -67,7 +67,6 @@ class PeriodicTask(Task):
     """
     abstract = True
     ignore_result = True
-    type = "periodic"
     relative = False
     options = None
 
