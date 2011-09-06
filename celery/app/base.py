@@ -223,24 +223,15 @@ class BaseApp(object):
         router = self.amqp.Router(queues)
         result_cls = result_cls or self.AsyncResult
 
+        options = router.route(options, name, args, kwargs)
         options.setdefault("compression",
                            self.conf.CELERY_MESSAGE_COMPRESSION)
-        options = router.route(options, name, args, kwargs)
-        exchange = options.get("exchange")
-        exchange_type = options.get("exchange_type")
 
-        with self.default_connection(connection) as conn:
-            publish = publisher or self.amqp.TaskPublisher(conn,
-                                            exchange=exchange,
-                                            exchange_type=exchange_type)
-            try:
-                new_id = publish.delay_task(name, args, kwargs,
-                                            task_id=task_id,
-                                            countdown=countdown, eta=eta,
-                                            expires=expires, **options)
-            finally:
-                publisher or publish.close()
-            return result_cls(new_id)
+        with self.acquire_publisher(connection, publisher, block=True) as pub:
+            return result_cls(pub.delay_task(name, args, kwargs,
+                                             task_id=task_id,
+                                             countdown=countdown, eta=eta,
+                                             expires=expires, **options))
 
     def AsyncResult(self, task_id, backend=None, task_name=None):
         """Create :class:`celery.result.BaseAsyncResult` instance."""
@@ -345,8 +336,8 @@ class BaseApp(object):
             yield publisher
         else:
             connection = self.broker_connection(connection)
-            with self.amqp.publishers[connection].acquire(**kwargs):
-                yield publisher
+            with self.amqp.publishers[connection].acquire(**kwargs) as pub:
+                yield pub
 
     @property
     def pool(self):

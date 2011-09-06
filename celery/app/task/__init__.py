@@ -248,6 +248,67 @@ class BaseTask(object):
             propagate=propagate, task_name=self.name, task_id=self.request.id)
 
     @classmethod
+    def establish_connection(self, *args, **kwargs):
+        """Establish a connection to the message broker."""
+        return self.app.broker_connection(*args, **kwargs)
+
+    @classmethod
+    def get_publisher(self, connection=None, exchange=None,
+            exchange_type=None, **options):
+        """Get a celery task message publisher.
+
+        :rtype :class:`~celery.app.amqp.TaskPublisher`:
+
+        .. warning::
+
+            If you don't specify a connection, one will automatically
+            be established for you, in that case you need to close this
+            connection after use::
+
+                >>> publisher = self.get_publisher()
+                >>> # ... do something with publisher
+                >>> publisher.connection.close()
+
+            or used as a context::
+
+                >>> with self.get_publisher() as publisher:
+                ...     # ... do something with publisher
+
+        """
+        exchange = self.exchange if exchange is None else exchange
+        if exchange_type is None:
+            exchange_type = self.exchange_type
+        connection = connection or self.establish_connection()
+        return self.app.amqp.TaskPublisher(connection=connection,
+                                           exchange=exchange,
+                                           exchange_type=exchange_type,
+                                           routing_key=self.routing_key,
+                                           **options)
+
+    @classmethod
+    def get_consumer(self, connection=None):
+        """Get message consumer.
+
+        :rtype :class:`kombu.messaging.Consumer`:
+
+        .. warning::
+
+            If you don't specify a connection, one will automatically
+            be established for you, in that case you need to close this
+            connection after use::
+
+                >>> consumer = self.get_consumer()
+                >>> # do something with consumer
+                >>> consumer.close()
+                >>> consumer.connection.close()
+
+        """
+        connection = connection or self.establish_connection()
+        return self.app.amqp.TaskConsumer(connection=connection,
+                                          exchange=self.exchange,
+                                          routing_key=self.routing_key)
+
+    @classmethod
     def delay(self, *args, **kwargs):
         """Star argument version of :meth:`apply_async`.
 
@@ -360,9 +421,8 @@ class BaseTask(object):
         options = router.route(options, self.name, args, kwargs)
         expires = expires or self.expires
 
-        publish = publisher or app.acquire_publisher(connection, block=True)
-
         with app.acquire_publisher(connection, publisher, block=True) as pub:
+            print("PUB: %r" % (pub, ))
             evd = None
             if conf.CELERY_SEND_TASK_SENT_EVENT:
                 evd = app.events.Dispatcher(channel=pub.channel,
