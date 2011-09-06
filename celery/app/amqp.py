@@ -9,9 +9,10 @@ AMQ related functionality.
 :license: BSD, see LICENSE for more details.
 
 """
+from collections import defaultdict
 from datetime import datetime, timedelta
 
-from kombu import BrokerConnection, Exchange, Consumer, Producer
+from kombu import BrokerConnection, Consumer, Exchange, Producer, Queue
 from kombu import pools
 
 from .. import signals
@@ -34,10 +35,10 @@ binding:%(routing_key)s
 """
 
 #: Set of exchange names that have already been declared.
-_exchanges_declared = set()
+_exchanges_declared = defaultdict(lambda: set())
 
 #: Set of queue names that have already been declared.
-_queues_declared = set()
+_queues_declared = defaultdict(lambda: set())
 
 
 def extract_msg_options(options, keep=MSG_OPTIONS):
@@ -165,10 +166,10 @@ class TaskProducer(Producer):
                                            *args, **kwargs)
 
     def declare(self):
-        if self.exchange.name and \
-                self.exchange.name not in _exchanges_declared:
+        edeclared = _exchanges_declared[self.connection]
+        if self.exchange.name and self.exchange.name not in edeclared:
             super(TaskProducer, self).declare()
-            _exchanges_declared.add(self.exchange.name)
+            edeclared.add(self.exchange.name)
 
     def _declare_queue(self, name, retry=False, retry_policy={}):
         queue = self.app.queues[name](self.channel)
@@ -187,6 +188,20 @@ class TaskProducer(Producer):
             return self.connection.ensure(ex, ex.declare, **retry_policy)
         return ex.declare()
 
+    def maybe_declare(self, queue, exchange, exchange_type, retry,
+            retry_policy):
+        connection = self.connection
+        qdeclared = _queues_declared[connection]
+        edeclared = _exchanges_declared[connection]
+        if queue and queue not in qdeclared:
+            entity = self._declare_queue(queue, retry, retry_policy)
+            edeclared.add(entity.exchange.name)
+            qdeclared.add(entity.name)
+        if exchange and exchange not in edeclared:
+            self._declare_exchange(exchange,
+                    exchange_type or self.exchange.type, retry, retry_policy)
+            edeclared.add(exchange)
+
     def delay_task(self, task_name, task_args=None, task_kwargs=None,
             countdown=None, eta=None, task_id=None, taskset_id=None,
             expires=None, exchange=None, exchange_type=None,
@@ -195,19 +210,14 @@ class TaskProducer(Producer):
         """Send task message."""
 
         connection = self.connection
+        publish = self.publish
+
         _retry_policy = self.retry_policy
         if retry_policy:  # merge default and custom policy
             _retry_policy = dict(_retry_policy, **retry_policy)
 
-        # declare entities
-        if queue and queue not in _queues_declared:
-            entity = self._declare_queue(queue, retry, _retry_policy)
-            _exchanges_declared.add(entity.exchange.name)
-            _queues_declared.add(entity.name)
-        if exchange and exchange not in _exchanges_declared:
-            self._declare_exchange(exchange,
-                    exchange_type or self.exchange.type, retry, _retry_policy)
-            _exchanges_declared.add(exchange)
+        self.maybe_declare(queue, exchange, exchange_type,
+                           retry, _retry_policy)
 
         task_id = task_id or uuid()
         task_args = task_args or []
@@ -232,47 +242,45 @@ class TaskProducer(Producer):
                 "retries": retries or 0,
                 "eta": eta,
                 "expires": expires,
-                "tz": TZ_UTC}
-        if taskset_id:
-            body["taskset"] = taskset_id
-        if chord:
-            body["chord"] = chord
+                "tz": TZ_UTC,
+                "taskset": taskset_id,
+                "chord": chord}
 
-        do_retry = retry if retry is not None else self.retry
-        publish = self.publish
-        if do_retry:
+        if (retry if retry is not None else self.retry):
             publish = connection.ensure(self, self.publish, **_retry_policy)
         publish(body, exchange=exchange, **extract_msg_options(kwargs))
+
         signals.task_sent.send(sender=task_name, **body)
         if event_dispatcher:
-            event_dispatcher.send("task-sent", uuid=task_id,
-                                               name=task_name,
-                                               args=repr(task_args),
-                                               kwargs=repr(task_kwargs),
-                                               retries=retries,
-                                               eta=eta,
-                                               expires=expires)
+            event_dispatcher.send("task-sent",
+                            uuid=task_id, name=task_name,
+                            args=repr(task_args), kwargs=repr(task_kwargs),
+                            retries=retries, eta=eta, expires=expires)
         return task_id
-
-    def __exit__(self, *exc_info):
-        try:
-            self.release()
-        except AttributeError:
-            self.close()
 
 
 class ProducerPool(pools.ProducerPool):
 
-    def __init__(self, app):
-        self.app = app
-        super(ProducerPool, self).__init__(self.app.pool,
-                                           limit=self.app.pool.limit)
+    def __init__(self, type, connections, limit):
+        self.type = type
+        super(ProducerPool, self).__init__(connections, limit=limit)
 
     def create_producer(self):
         conn = self.connections.acquire(block=True)
-        producer = self.app.amqp.TaskProducer(conn, auto_declare=False)
+        producer = self.type(conn, auto_declare=False)
         producer.connection = conn
         return producer
+
+
+class _Producers(pools.PoolGroup):
+
+    def __init__(self, type, connections):
+        self.type = type
+        self.connections = connections
+
+    def create(self, connection, limit):
+        return ProducerPool(self.type,
+                            self.connections[connection], limit=limit)
 
 
 class AMQP(object):
@@ -307,20 +315,15 @@ class AMQP(object):
 
     def Router(self, queues=None, create_missing=None):
         """Returns the current task router."""
+        create_missing = (create_missing if create_missing is not None
+                            else self.app.conf.CELERY_CREATE_MISSING_QUEUES)
         return _routes.Router(self.routes, queues or self.queues,
-                              self.app.either("CELERY_CREATE_MISSING_QUEUES",
-                                              create_missing), app=self.app)
-
-    def TaskConsumer(self, *args, **kwargs):
-        """Returns consumer for a single task queue."""
-        _, default_queue = self.get_default_queue()
-        return self.Consumer(*args, queues=[default_queue],
-                             **self.app.merge(defaults, kwargs))
+                              create_missing, app=self.app)
 
     def TaskProducer(self, *args, **kwargs):
         """Returns producer used to send tasks.
 
-        You should use `app.send_task` instead.
+        You probably want `app.send_task` instead.
 
         """
         conf = self.app.conf
@@ -333,7 +336,6 @@ class AMQP(object):
     def get_task_consumer(self, connection, queues=None, **kwargs):
         """Return consumer configured to consume from all known task
         queues."""
-        print("QUEUES: %r" % (self.queues.consume_from.values(), ))
         return self.Consumer(connection.channel(),
                              queues=self.queues.consume_from.values(),
                              **kwargs)
@@ -356,5 +358,11 @@ class AMQP(object):
         return self._rtable
 
     @cached_property
-    def producer_pool(self):
-        return ProducerPool(self.app)
+    def connections(self):
+        pools.set_limit(self.app.conf.BROKER_POOL_LIMIT)
+        return pools.connections
+
+    @cached_property
+    def producers(self):
+        return pools.register_group(_Producers(self.TaskProducer,
+                                               self.connections))

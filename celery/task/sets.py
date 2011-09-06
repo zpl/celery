@@ -97,11 +97,10 @@ class TaskSet(UserList):
     #: Total number of subtasks in this set.
     total = None
 
-    def __init__(self, tasks=None, app=None, Producer=None):
+    def __init__(self, tasks=None, app=None):
         self.app = app_or_default(app)
         self.data = list(tasks or [])
         self.total = len(self.tasks)
-        self.Producer = Producer or self.app.amqp.TaskProducer
 
     def apply_async(self, connection=None, producer=None, taskset_id=None,
             **kwargs):
@@ -115,16 +114,9 @@ class TaskSet(UserList):
         if app.conf.CELERY_ALWAYS_EAGER:
             return self.apply(taskset_id=taskset_id)
 
-        with app.default_connection(connection) as conn:
+        with app.acquire_producer(connection, producer, block=True) as prod:
             setid = taskset_id or uuid()
-            prod = producer or self.Producer(connection=conn)
-            try:
-                results = self._async_results(setid, prod)
-            finally:
-                if not prodcuer:  # created by us.
-                    prod.close()
-
-            return app.TaskSetResult(setid, results)
+            return app.TaskSetResult(setid, self._async_results(setid, pub))
 
     def _async_results(self, taskset_id, producer):
         return [task.apply_async(taskset_id=taskset_id, producer=producer)

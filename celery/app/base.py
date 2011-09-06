@@ -17,7 +17,6 @@ import sys
 
 from contextlib import contextmanager
 from copy import deepcopy
-from functools import wraps
 from threading import Lock
 
 from kombu.common import entry_to_queue
@@ -25,7 +24,7 @@ from kombu.common import entry_to_queue
 from .. import datastructures
 from ..utils import cached_property, instantiate, lpmerge
 
-from .defaults import DEFAULTS, find_deprecated_settings
+from .defaults import DEFAULTS, find_deprecated_settings, NAMESPACES
 
 import kombu
 if kombu.VERSION < (1, 1, 0):
@@ -105,9 +104,23 @@ class LamportClock(object):
 class Settings(datastructures.ConfigurationView):
 
     @property
+    def BROKERS(self):
+        brokers = self.get("BROKERS") or {}
+        defaults = dict((opt.key, opt.default)
+                    for opt in NAMESPACES["BROKER"].itervalues() if opt.key)
+        brokers.setdefault(self.BROKER_DEFAULT, {"hostname": self.BROKER_HOST})
+        return dict((name, lpmerge(defaults, params))
+                        for name, params in brokers.iteritems())
+
+    @property
     def BROKER_BACKEND(self):
         """Deprecated compat alias to :attr:`BROKER_TRANSPORT`."""
         return self.BROKER_TRANSPORT
+
+    @property
+    def BROKER_DEFAULT(self):
+        return (os.environ.get("CELERY_BROKER_DEFAULT") or
+                self.get("BROKER_DEFAULT"))
 
     @property
     def BROKER_HOST(self):
@@ -137,7 +150,6 @@ class Settings(datastructures.ConfigurationView):
         return q
 
 
-
 class BaseApp(object):
     """Base class for apps."""
     SYSTEM = _platform.system()
@@ -150,8 +162,6 @@ class BaseApp(object):
     loader_cls = "celery.loaders.app.AppLoader"
     log_cls = "celery.app.log.Logging"
     control_cls = "celery.app.control.Control"
-
-    _pool = None
 
     def __init__(self, main=None, loader=None, backend=None,
             amqp=None, events=None, log=None, control=None,
@@ -226,24 +236,15 @@ class BaseApp(object):
         publisher = options.pop("publisher", None)
         producer = producer or publisher
 
+        options = router.route(options, name, args, kwargs)
         options.setdefault("compression",
                            self.conf.CELERY_MESSAGE_COMPRESSION)
-        options = router.route(options, name, args, kwargs)
-        exchange = options.get("exchange")
-        exchange_type = options.get("exchange_type")
 
-        with self.default_connection(connection) as conn:
-            produce = producer or self.amqp.TaskProducer(conn,
-                                            exchange=exchange,
-                                            exchange_type=exchange_type)
-            try:
-                new_id = produce.delay_task(name, args, kwargs,
-                                            task_id=task_id,
-                                            countdown=countdown, eta=eta,
-                                            expires=expires, **options)
-            finally:
-                producer or produce.close()
-            return result_cls(new_id)
+        with self.acquire_producer(connection, producer, block=True) as prod:
+            return result_cls(prod.delay_task(name, args, kwargs,
+                                              task_id=task_id,
+                                              countdown=countdown, eta=eta,
+                                              expires=expires, **options))
 
     def AsyncResult(self, task_id, backend=None, task_name=None):
         """Create :class:`celery.result.BaseAsyncResult` instance."""
@@ -256,38 +257,33 @@ class BaseApp(object):
         from ..result import TaskSetResult
         return TaskSetResult(taskset_id, results, app=self)
 
-    def broker_connection(self, hostname=None, userid=None,
-            password=None, virtual_host=None, port=None, ssl=None,
-            insist=None, connect_timeout=None, transport=None, **kwargs):
+    def broker_connection(self, *args, **kwargs):
         """Establish a connection to the message broker.
 
-        :keyword hostname: defaults to the :setting:`BROKER_HOST` setting.
-        :keyword userid: defaults to the :setting:`BROKER_USER` setting.
-        :keyword password: defaults to the :setting:`BROKER_PASSWORD` setting.
-        :keyword virtual_host: defaults to the :setting:`BROKER_VHOST` setting.
-        :keyword port: defaults to the :setting:`BROKER_PORT` setting.
-        :keyword ssl: defaults to the :setting:`BROKER_USE_SSL` setting.
-        :keyword insist: defaults to the :setting:`BROKER_INSIST` setting.
-        :keyword connect_timeout: defaults to the
-            :setting:`BROKER_CONNECTION_TIMEOUT` setting.
-        :keyword backend_cls: defaults to the :setting:`BROKER_TRANSPORT`
-            setting.
+        Default values are taken from the default broker (found in
+        :setting:`BROKERS`).
+
+        :keyword hostname: or the ``hostname`` field of the default broker.
+        :keyword userid: or the ``userid`` field of the default broker.
+        :keyword password: or the ``password`` field of the default broker.
+        :keyword virtual_host: or the ``virtual_host`` of the default broker.
+        :keyword port: or the ``port`` field of the default broker.
+        :keyword ssl: or the ``ssl`` field of the default broker.
+        :keyword connect_timeout: or the ``connect_timeout`` field of the
+            default broker.
+        :keyword transport: or the ``transport`` field of the default broker.
 
         :returns :class:`kombu.connection.BrokerConnection`:
 
         """
-        return self.amqp.BrokerConnection(
-                    hostname or self.conf.BROKER_HOST,
-                    userid or self.conf.BROKER_USER,
-                    password or self.conf.BROKER_PASSWORD,
-                    virtual_host or self.conf.BROKER_VHOST,
-                    port or self.conf.BROKER_PORT,
-                    transport=transport or self.conf.BROKER_TRANSPORT,
-                    insist=self.either("BROKER_INSIST", insist),
-                    ssl=self.either("BROKER_USE_SSL", ssl),
-                    connect_timeout=self.either(
-                                "BROKER_CONNECTION_TIMEOUT", connect_timeout),
-                    transport_options=self.conf.BROKER_TRANSPORT_OPTIONS)
+        conf = self.conf
+        alias = conf.BROKER_DEFAULT
+        if len(args) == 1:
+            alias = args[0] or alias
+        if not isinstance(alias, basestring):
+            return alias
+        return self.amqp.BrokerConnection(**dict(
+                    conf.BROKERS[alias or conf.BROKER_DEFAULT], **kwargs))
 
     @contextmanager
     def default_connection(self, connection=None):
@@ -297,30 +293,9 @@ class BaseApp(object):
         :keyword connection: If not provided, then a connection will be
                              acquired from the connection pool.
         """
-        if connection:
-            yield connection
-        else:
-            with self.pool.acquire(block=True) as connection:
-                yield connection
-
-    def with_default_connection(self, fun):
-        """With any function accepting the `connection` keyword argument,
-        establishes a default connection if one is not already passed to it.
-
-        Any automatically established connection will be closed after
-        the function returns.
-
-        **Deprecated**
-
-        Use ``with app.default_connection(connection)`` instead.
-
-        """
-        @wraps(fun)
-        def _inner(*args, **kwargs):
-            connection = kwargs.pop("connection", None)
-            with self.default_connection(connection) as c:
-                return fun(*args, **dict(kwargs, connection=c))
-        return _inner
+        connection = self.broker_connection(connection)
+        with self.amqp.connections[connection].acquire(block=True) as conn:
+                yield conn
 
     def prepare_config(self, c):
         """Prepare configuration before it is merged with the defaults."""
@@ -341,14 +316,6 @@ class BaseApp(object):
                                        use_ssl=self.conf.EMAIL_USE_SSL,
                                        use_tls=self.conf.EMAIL_USE_TLS)
 
-    def either(self, default_key, *values):
-        """Fallback to the value of a configuration key if none of the
-        `*values` are true."""
-        for value in values:
-            if value is not None:
-                return value
-        return self.conf.get(default_key)
-
     def merge(self, l, r):
         """Like `dict(a, **b)` except it will keep values from `a`
         if the value in `b` is :const:`None`."""
@@ -364,11 +331,6 @@ class BaseApp(object):
         return Settings({}, [self.prepare_config(self.loader.conf),
                              deepcopy(DEFAULTS)])
 
-    def _after_fork(self, obj_):
-        if self._pool:
-            self._pool.force_close_all()
-            self._pool = None
-
     def bugreport(self):
         import celery
         import kombu
@@ -381,17 +343,18 @@ class BaseApp(object):
                                  "transport": self.conf.BROKER_TRANSPORT,
                                  "results": self.conf.CELERY_RESULT_BACKEND}
 
+    @contextmanager
+    def acquire_producer(self, connection, producer=None, **kwargs):
+        if producer:
+            yield producer:
+        else:
+            connection = self.broker_connection(connection)
+            with self.amqp.producers[connection].acquire(**kwargs) as pub:
+                yield pub
+
     @property
     def pool(self):
-        if self._pool is None:
-            try:
-                from multiprocessing.util import register_after_fork
-                register_after_fork(self, self._after_fork)
-            except ImportError:
-                pass
-            limit = self.conf.BROKER_POOL_LIMIT
-            self._pool = self.broker_connection().Pool(limit)
-        return self._pool
+        return self.amqp.connections[self.broker_connection()]
 
     @cached_property
     def amqp(self):

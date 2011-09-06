@@ -1,6 +1,6 @@
 import os
 
-BROKER_TRANSPORT = "memory"
+BROKERS = {"default": {"hostname": "memory://"}}
 
 #: Don't want log output when running suite.
 CELERYD_HIJACK_ROOT_LOGGER = False

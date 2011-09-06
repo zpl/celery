@@ -141,7 +141,10 @@ class Command(object):
                   "default")
         broker = preload_options.pop("broker", None)
         if broker:
-            os.environ["CELERY_BROKER_URL"] = broker
+            if "://" in broker:
+                os.environ["CELERY_BROKER_URL"] = broker
+            else:
+                os.environ["CELERY_BROKER_DEFAULT"] = broker
         config_module = preload_options.pop("config_module", None)
         if config_module:
             os.environ["CELERY_CONFIG_MODULE"] = config_module

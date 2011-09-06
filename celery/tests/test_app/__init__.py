@@ -3,8 +3,6 @@ from __future__ import with_statement
 import os
 import sys
 
-from mock import Mock
-
 from celery import Celery
 from celery import app as _app
 from celery.app import defaults
@@ -159,47 +157,19 @@ class test_App(unittest.TestCase):
         self.assertTrue(self.app.mail_admins("Subject", "Body"))
 
     def test_amqp_get_broker_info(self):
-        self.assertDictContainsSubset({"hostname": "localhost",
-                                       "userid": "guest",
-                                       "password": "guest",
+        self.assertDictContainsSubset({"hostname": "",
+                                       "userid": None,
+                                       "password": None,
                                        "virtual_host": "/"},
-                                      self.app.broker_connection(
-                                          transport="amqplib").info())
-        self.app.conf.BROKER_PORT = 1978
-        self.app.conf.BROKER_VHOST = "foo"
-        self.assertDictContainsSubset({"port": 1978,
-                                       "virtual_host": "foo"},
-                                      self.app.broker_connection(
-                                          transport="amqplib").info())
-        conn = self.app.broker_connection(virtual_host="/value")
-        self.assertDictContainsSubset({"virtual_host": "/value"},
-                                      conn.info())
+                                      self.app.broker_connection().info())
 
     def test_BROKER_BACKEND_alias(self):
         self.assertEqual(self.app.conf.BROKER_BACKEND,
                          self.app.conf.BROKER_TRANSPORT)
 
-    def test_with_default_connection(self):
-
-        @self.app.with_default_connection
-        def handler(connection=None, foo=None):
-            return connection, foo
-
-        connection, foo = handler(foo=42)
-        self.assertEqual(foo, 42)
-        self.assertTrue(connection)
-
-    def test_after_fork(self):
-        p = self.app._pool = Mock()
-        self.app._after_fork(self.app)
-        p.force_close_all.assert_called_with()
-        self.assertIsNone(self.app._pool)
-        self.app._after_fork(self.app)
-
     def test_pool_no_multiprocessing(self):
         with mask_modules("multiprocessing.util"):
-            pool = self.app.pool
-            self.assertIs(pool, self.app._pool)
+            self.assertTrue(self.app.pool)
 
     def test_bugreport(self):
         self.assertTrue(self.app.bugreport())
@@ -225,7 +195,7 @@ class test_App(unittest.TestCase):
         assert conn.transport_cls == "memory"
 
         pub = self.app.amqp.TaskPublisher(conn, exchange="foo_exchange")
-        self.assertIn("foo_exchange", amqp._exchanges_declared)
+        self.assertIn("foo_exchange", amqp._exchanges_declared[pub.connection])
 
         dispatcher = Dispatcher()
         self.assertTrue(pub.delay_task("footask", (), {},
@@ -238,7 +208,7 @@ class test_App(unittest.TestCase):
                                        event_dispatcher=dispatcher,
                                        exchange="bar_exchange",
                                        routing_key="bar_exchange"))
-        self.assertIn("bar_exchange", amqp._exchanges_declared)
+        self.assertIn("bar_exchange", amqp._exchanges_declared[pub.connection])
 
     def test_error_mail_sender(self):
         x = ErrorMail.subject % {"name": "task_name",

@@ -5,7 +5,6 @@ from mock import Mock
 from pyparsing import ParseException
 
 from celery import task
-from celery.app import app_or_default
 from celery.task import task as task_dec
 from celery.exceptions import RetryTaskError
 from celery.execute import send_task
@@ -317,9 +316,6 @@ class TestCeleryTasks(unittest.TestCase):
         t1.backend.mark_as_done(presult.task_id, result=None)
         self.assertTrue(presult.successful())
 
-        publisher = t1.get_publisher()
-        self.assertTrue(publisher.exchange)
-
     def test_context_get(self):
         request = self.createTaskCls("T1", "c.unittest.t.c.g").request
         request.foo = 32
@@ -344,29 +340,20 @@ class TestCeleryTasks(unittest.TestCase):
         T1.app.conf.CELERY_SEND_TASK_SENT_EVENT = True
         dispatcher = [None]
 
-        class Pub(object):
+        class Producer(object):
             channel = chan
 
             def delay_task(self, *args, **kwargs):
                 dispatcher[0] = kwargs.get("event_dispatcher")
 
         try:
-            T1.apply_async(publisher=Pub())
+            T1.apply_async(producer=Producer())
         finally:
             T1.app.conf.CELERY_SEND_TASK_SENT_EVENT = False
             chan.close()
             conn.close()
 
         self.assertTrue(dispatcher[0])
-
-    def test_get_publisher(self):
-        connection = app_or_default().broker_connection()
-        p = IncrementCounterTask.get_publisher(connection, auto_declare=False,
-                                               exchange="foo")
-        self.assertEqual(p.exchange.name, "foo")
-        p = IncrementCounterTask.get_publisher(connection, auto_declare=False,
-                                               exchange_type="fanout")
-        self.assertEqual(p.exchange.type, "fanout")
 
     def test_update_state(self):
 

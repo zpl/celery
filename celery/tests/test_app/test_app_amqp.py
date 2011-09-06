@@ -1,6 +1,7 @@
 from __future__ import with_statement
 
 from kombu import Exchange, Queue
+from kombu import pools
 from mock import Mock
 
 from celery.tests.utils import AppCase
@@ -55,16 +56,12 @@ class test_TaskProducer(AppCase):
 class test_ProducerPool(AppCase):
 
     def test_setup_nolimit(self):
-        L = self.app.conf.BROKER_POOL_LIMIT
-        self.app.conf.BROKER_POOL_LIMIT = None
+        conf = self.app.conf
+        prev, conf.BROKER_POOL_LIMIT = conf.BROKER_POOL_LIMIT, None
+        pools.set_limit(None)
         try:
-            delattr(self.app, "_pool")
-        except AttributeError:
-            pass
-        self.app.amqp.__dict__.pop("producer_pool", None)
-        try:
-            pool = self.app.amqp.producer_pool
-            self.assertEqual(pool.limit, self.app.pool.limit)
+            pool = self.app.amqp.producers[self.app.broker_connection()]
+            self.assertIsNone(pool.limit)
             self.assertFalse(pool._resource.queue)
 
             r1 = pool.acquire()
@@ -74,24 +71,20 @@ class test_ProducerPool(AppCase):
             r1 = pool.acquire()
             r2 = pool.acquire()
         finally:
-            self.app.conf.BROKER_POOL_LIMIT = L
+            conf.BROKER_POOL_LIMIT = prev
+            pools.set_limit(prev)
 
     def test_setup(self):
-        L = self.app.conf.BROKER_POOL_LIMIT
-        self.app.conf.BROKER_POOL_LIMIT = 2
+        conf = self.app.conf
+        prev, conf.BROKER_POOL_LIMIT = conf.BROKER_POOL_LIMIT, 10
+        pools.set_limit(10)
         try:
-            delattr(self.app, "_pool")
-        except AttributeError:
-            pass
-        self.app.amqp.__dict__.pop("producer_pool", None)
-        try:
-            pool = self.app.amqp.producer_pool
-            self.assertEqual(pool.limit, self.app.pool.limit)
+            pool = self.app.amqp.producers[self.app.broker_connection()]
+            self.assertEqual(pool.limit, 10)
             self.assertTrue(pool._resource.queue)
 
             p1 = r1 = pool.acquire()
             p2 = r2 = pool.acquire()
-            r1.connection_default_channel = None
             r1.release()
             r2.release()
             r1 = pool.acquire()
@@ -101,4 +94,5 @@ class test_ProducerPool(AppCase):
             r1.release()
             r2.release()
         finally:
-            self.app.conf.BROKER_POOL_LIMIT = L
+            conf.BROKER_POOL_LIMIT = prev
+            pools.set_limit(prev)

@@ -4,8 +4,6 @@ from __future__ import absolute_import
 import sys
 import threading
 
-from kombu import Exchange
-
 from ...datastructures import ExceptionInfo
 from ...exceptions import MaxRetriesExceededError, RetryTaskError
 from ...execute.trace import TaskTrace
@@ -250,9 +248,9 @@ class BaseTask(object):
             propagate=propagate, task_name=self.name, task_id=self.request.id)
 
     @classmethod
-    def establish_connection(self, connect_timeout=None):
+    def establish_connection(self, *args, **kwargs):
         """Establish a connection to the message broker."""
-        return self.app.broker_connection(connect_timeout=connect_timeout)
+        return self.app.broker_connection(*args, **kwargs)
 
     @classmethod
     def get_producer(self, connection=None, exchange=None,
@@ -405,8 +403,9 @@ class BaseTask(object):
             be replaced by a local :func:`apply` call instead.
 
         """
+        app = self.app
         router = self.app.amqp.Router(queues)
-        conf = self.app.conf
+        conf = app.conf
 
         # XXX to deprecate
         publisher = options.pop("publisher", None)
@@ -421,24 +420,18 @@ class BaseTask(object):
         options = router.route(options, self.name, args, kwargs)
         expires = expires or self.expires
 
-        produce = producer or self.app.amqp.producer_pool.acquire(block=True)
-        evd = None
-        if conf.CELERY_SEND_TASK_SENT_EVENT:
-            evd = self.app.events.Dispatcher(channel=publish.channel,
-                                             buffer_while_offline=False)
-
-        try:
-            task_id = produce.delay_task(self.name, args, kwargs,
-                                         task_id=task_id,
-                                         countdown=countdown,
-                                         eta=eta, expires=expires,
-                                         event_dispatcher=evd,
-                                         **options)
-        finally:
-            if not producer:
-                produce.release()
-
-        return self.AsyncResult(task_id)
+        with app.acquire_producer(connection, producer, block=True) as prod:
+            evd = None
+            if conf.CELERY_SEND_TASK_SENT_EVENT:
+                evd = app.events.Dispatcher(channel=prod.channel,
+                                            buffer_while_offline=False)
+            task_id = prod.delay_task(self.name, args, kwargs,
+                                      task_id=task_id,
+                                      countdown=countdown,
+                                      eta=eta, expires=expires,
+                                      event_dispatcher=evd,
+                                      **options)
+            return self.AsyncResult(task_id)
 
     @classmethod
     def retry(self, args=None, kwargs=None, exc=None, throw=True,
@@ -542,8 +535,9 @@ class BaseTask(object):
         kwargs = kwargs or {}
         task_id = options.get("task_id") or uuid()
         retries = options.get("retries", 0)
-        throw = self.app.either("CELERY_EAGER_PROPAGATES_EXCEPTIONS",
-                                options.pop("throw", None))
+        throw = options.pop("throw", None)
+        throw = (throw if throw is not None
+                       else self.app.conf.CELERY_EAGER_PROPAGATES_EXCEPTIONS)
 
         # Make sure we get the task instance, not class.
         task = tasks[self.name]
