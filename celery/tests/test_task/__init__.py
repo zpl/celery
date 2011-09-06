@@ -317,9 +317,6 @@ class TestCeleryTasks(unittest.TestCase):
         t1.backend.mark_as_done(presult.task_id, result=None)
         self.assertTrue(presult.successful())
 
-        publisher = t1.get_publisher()
-        self.assertTrue(publisher.exchange)
-
     def test_context_get(self):
         request = self.createTaskCls("T1", "c.unittest.t.c.g").request
         request.foo = 32
@@ -358,15 +355,6 @@ class TestCeleryTasks(unittest.TestCase):
             conn.close()
 
         self.assertTrue(dispatcher[0])
-
-    def test_get_publisher(self):
-        connection = app_or_default().broker_connection()
-        p = IncrementCounterTask.get_publisher(connection, auto_declare=False,
-                                               exchange="foo")
-        self.assertEqual(p.exchange.name, "foo")
-        p = IncrementCounterTask.get_publisher(connection, auto_declare=False,
-                                               exchange_type="fanout")
-        self.assertEqual(p.exchange.type, "fanout")
 
     def test_update_state(self):
 

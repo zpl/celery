@@ -135,8 +135,9 @@ class Scheduler(object):
     _last_sync = None
 
     def __init__(self, schedule=None, logger=None, max_interval=None,
-            app=None, Publisher=None, lazy=False, **kwargs):
+            app=None, Publisher=None, lazy=False, connection=None, **kwargs):
         app = self.app = app_or_default(app)
+        self.connection = app.broker_connection(connection)
         self.data = maybe_promise({} if schedule is None else schedule)
         self.logger = logger or app.log.get_default_logger(name="celery.beat")
         self.max_interval = max_interval or \
@@ -284,10 +285,6 @@ class Scheduler(object):
 
         return self.connection.ensure_connection(_error_handler,
                     self.app.conf.BROKER_CONNECTION_MAX_RETRIES)
-
-    @cached_property
-    def connection(self):
-        return self.app.broker_connection()
 
     @cached_property
     def publisher(self):

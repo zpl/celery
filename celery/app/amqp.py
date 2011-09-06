@@ -9,11 +9,12 @@ AMQ related functionality.
 :license: BSD, see LICENSE for more details.
 
 """
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 from kombu import BrokerConnection, Exchange
 from kombu import compat as messaging
-from kombu.pools import ProducerPool
+from kombu import pools
 
 from .. import signals
 from ..utils import cached_property, textindent, uuid
@@ -35,10 +36,10 @@ binding:%(binding_key)s
 """
 
 #: Set of exchange names that have already been declared.
-_exchanges_declared = set()
+_exchanges_declared = defaultdict(lambda: set())
 
 #: Set of queue names that have already been declared.
-_queues_declared = set()
+_queues_declared = defaultdict(lambda: set())
 
 
 def extract_msg_options(options, keep=MSG_OPTIONS):
@@ -159,10 +160,10 @@ class TaskPublisher(messaging.Publisher):
         super(TaskPublisher, self).__init__(*args, **kwargs)
 
     def declare(self):
-        if self.exchange.name and \
-                self.exchange.name not in _exchanges_declared:
+        edeclared = _exchanges_declared[self.connection]
+        if self.exchange.name and self.exchange.name not in edeclared:
             super(TaskPublisher, self).declare()
-            _exchanges_declared.add(self.exchange.name)
+            edeclared.add(self.exchange.name)
 
     def _declare_queue(self, name, retry=False, retry_policy={}):
         options = self.app.queues[name]
@@ -188,19 +189,22 @@ class TaskPublisher(messaging.Publisher):
         """Send task message."""
 
         connection = self.connection
+
         _retry_policy = self.retry_policy
         if retry_policy:  # merge default and custom policy
             _retry_policy = dict(_retry_policy, **retry_policy)
 
         # declare entities
-        if queue and queue not in _queues_declared:
+        qdeclared = _queues_declared[connection]
+        edeclared = _exchanges_declared[connection]
+        if queue and queue not in qdeclared:
             entity = self._declare_queue(queue, retry, _retry_policy)
-            _exchanges_declared.add(entity.exchange.name)
-            _queues_declared.add(entity.name)
-        if exchange and exchange not in _exchanges_declared:
+            edeclared.add(entity.exchange.name)
+            qdeclared.add(entity.name)
+        if exchange and exchange not in edeclared:
             self._declare_exchange(exchange,
                     exchange_type or self.exchange_type, retry, _retry_policy)
-            _exchanges_declared.add(exchange)
+            edeclared.add(exchange)
 
         task_id = task_id or uuid()
         task_args = task_args or []
@@ -254,18 +258,28 @@ class TaskPublisher(messaging.Publisher):
             self.close()
 
 
-class PublisherPool(ProducerPool):
+class PublisherPool(pools.ProducerPool):
 
-    def __init__(self, app):
-        self.app = app
-        super(PublisherPool, self).__init__(self.app.pool,
-                                            limit=self.app.pool.limit)
+    def __init__(self, type, connections, limit):
+        self.type = type
+        super(PublisherPool, self).__init__(connections, limit=limit)
 
     def create_producer(self):
         conn = self.connections.acquire(block=True)
-        pub = self.app.amqp.TaskPublisher(conn, auto_declare=False)
-        conn._producer_chan = pub.channel
+        pub = self.type(conn, auto_declare=False)
+        conn._default_channel = pub.channel
         return pub
+
+
+class _Publishers(pools.PoolGroup):
+
+    def __init__(self, type, connections):
+        self.type = type
+        self.connections = connections
+
+    def create(self, connection, limit):
+        return PublisherPool(self.type,
+                             self.connections[connection], limit=limit)
 
 
 class AMQP(object):
@@ -297,9 +311,10 @@ class AMQP(object):
 
     def Router(self, queues=None, create_missing=None):
         """Returns the current task router."""
+        create_missing = (create_missing if create_missing is not None
+                            else self.app.conf.CELERY_CREATE_MISSING_QUEUES)
         return _routes.Router(self.routes, queues or self.queues,
-                              self.app.either("CELERY_CREATE_MISSING_QUEUES",
-                                              create_missing), app=self.app)
+                              create_missing, app=self.app)
 
     def TaskConsumer(self, *args, **kwargs):
         """Returns consumer for a single task queue."""
@@ -351,5 +366,11 @@ class AMQP(object):
         return self._rtable
 
     @cached_property
-    def publisher_pool(self):
-        return PublisherPool(self.app)
+    def connections(self):
+        pools.set_limit(self.app.conf.BROKER_POOL_LIMIT)
+        return pools.connections
+
+    @cached_property
+    def publishers(self):
+        return pools.register_group(_Publishers(self.TaskPublisher,
+                                                self.connections))
