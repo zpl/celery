@@ -3,6 +3,8 @@ from __future__ import with_statement
 import os
 import sys
 
+from kombu import Exchange
+
 from celery import Celery
 from celery import app as _app
 from celery.app import defaults
@@ -194,21 +196,23 @@ class test_App(unittest.TestCase):
             chan.close()
         assert conn.transport_cls == "memory"
 
-        pub = self.app.amqp.TaskPublisher(conn, exchange="foo_exchange")
-        self.assertIn("foo_exchange", amqp._exchanges_declared[pub.connection])
+        ex = Exchange("foo_exchange")
+        prod = self.app.amqp.TaskProducer(conn, exchange=ex)
+        self.assertIn(ex.name, amqp._exchanges_declared[prod.connection])
 
         dispatcher = Dispatcher()
-        self.assertTrue(pub.delay_task("footask", (), {},
-                                       exchange="moo_exchange",
-                                       routing_key="moo_exchange",
-                                       event_dispatcher=dispatcher))
+        self.assertTrue(prod.delay_task("footask", (), {},
+                                        exchange=Exchange("moo_exchange"),
+                                        routing_key="moo_exchange",
+                                        event_dispatcher=dispatcher))
         self.assertTrue(dispatcher.sent)
         self.assertEqual(dispatcher.sent[0][0], "task-sent")
-        self.assertTrue(pub.delay_task("footask", (), {},
-                                       event_dispatcher=dispatcher,
-                                       exchange="bar_exchange",
-                                       routing_key="bar_exchange"))
-        self.assertIn("bar_exchange", amqp._exchanges_declared[pub.connection])
+        self.assertTrue(prod.delay_task("footask", (), {},
+                                        event_dispatcher=dispatcher,
+                                        exchange=Exchange("bar_exchange"),
+                                        routing_key="bar_exchange"))
+        self.assertIn("bar_exchange",
+                      amqp._exchanges_declared[prod.connection])
 
     def test_error_mail_sender(self):
         x = ErrorMail.subject % {"name": "task_name",

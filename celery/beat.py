@@ -162,7 +162,7 @@ class Scheduler(object):
         if is_due:
             self.logger.debug("Scheduler: Sending due task %s", entry.task)
             try:
-                result = self.apply_async(entry):
+                result = self.apply_async(entry)
             except Exception, exc:
                 self.logger.error("Message Error: %s\n%s", exc,
                                   traceback.format_stack(),
@@ -213,7 +213,7 @@ class Scheduler(object):
                                           **entry.options)
             else:
                 result = self.send_task(entry.task, entry.args, entry.kwargs,
-                                        connection=self.connection
+                                        connection=self.connection,
                                         **entry.options)
         except Exception, exc:
             raise SchedulingError("Couldn't apply scheduled task %s: %s" % (

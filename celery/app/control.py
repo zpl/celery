@@ -87,7 +87,7 @@ class Control(object):
         return Inspect(self, destination=destination, timeout=timeout,
                              callback=callback)
 
-    def discard_all(self, connection=None):
+    def purge(self, connection=None):
         """Discard all waiting tasks.
 
         This will ignore all tasks waiting for execution, and they will
@@ -97,8 +97,8 @@ class Control(object):
 
         """
         with self.app.default_connection(connection) as conn:
-            return self.app.amqp.get_task_consumer(connection=conn)\
-                                .discard_all()
+            return self.app.amqp.get_task_consumer(connection=conn).purge()
+    discard_all = purge  # XXX deprecate
 
     def revoke(self, task_id, destination=None, terminate=False,
             signal="SIGTERM", **kwargs):

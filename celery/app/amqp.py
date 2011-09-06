@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 
 from kombu import BrokerConnection, Consumer, Exchange, Producer, Queue
 from kombu import pools
+from kombu.common import entry_to_queue
 
 from .. import signals
 from ..utils import cached_property, textindent, uuid
@@ -119,14 +120,14 @@ class Queues(dict):
         acc = {}
         for queue in wanted:
             try:
-                queue = self[queue]
+                q = self[queue]
             except KeyError:
                 if not create_missing:
                     raise
-                queue = self.new_missing(queue)
-            acc[queue] = queue
-        self._consume_from = queue
-        self.update(queue)
+                q = self.new_missing(queue)
+            acc[queue] = q
+        self._consume_from = acc
+        self.update(acc)
 
     @property
     def consume_from(self):
@@ -148,6 +149,12 @@ class Queues(dict):
         return cls(queues)
 
 
+def maybe_exchange(exchange, exchange_type):
+    if isinstance(exchange, basestring):
+        return Exchange(exchange, type=exchange_type)
+    return exchange
+
+
 class TaskProducer(Producer):
     auto_declare = True
     retry = False
@@ -159,9 +166,8 @@ class TaskProducer(Producer):
         self.retry = kwargs.pop("retry", self.retry)
         self.retry_policy = kwargs.pop("retry_policy",
                                         self.retry_policy or {})
-        exchange = kwargs.get("exchange")
-        if isinstance(exchange, basestring):
-            kwargs["exchange"] = Exchange(exchange, "direct")
+        kwargs["exchange"] = maybe_exchange(kwargs.get("exchange"),
+                                            kwargs.get("exchange_type"))
         super(TaskProducer, self).__init__(connection.default_channel,
                                            *args, **kwargs)
 
@@ -179,17 +185,13 @@ class TaskProducer(Producer):
             queue.declare()
         return queue
 
-    def _declare_exchange(self, name, type, retry=False, retry_policy={}):
-        if isinstance(name, Exchange):
-            ex = name(self.channel)
-        else:
-            ex = Exchange(name, type=type)(self.channel)
+    def _declare_exchange(self, exchange, retry=False, retry_policy={}):
+        ex = exchange(self.channel)
         if retry:
             return self.connection.ensure(ex, ex.declare, **retry_policy)
         return ex.declare()
 
-    def maybe_declare(self, queue, exchange, exchange_type, retry,
-            retry_policy):
+    def maybe_declare(self, queue, exchange, retry, retry_policy):
         connection = self.connection
         qdeclared = _queues_declared[connection]
         edeclared = _exchanges_declared[connection]
@@ -197,10 +199,9 @@ class TaskProducer(Producer):
             entity = self._declare_queue(queue, retry, retry_policy)
             edeclared.add(entity.exchange.name)
             qdeclared.add(entity.name)
-        if exchange and exchange not in edeclared:
-            self._declare_exchange(exchange,
-                    exchange_type or self.exchange.type, retry, retry_policy)
-            edeclared.add(exchange)
+        if exchange and exchange.name not in edeclared:
+            self._declare_exchange(exchange, retry, retry_policy)
+            edeclared.add(exchange.name)
 
     def delay_task(self, task_name, task_args=None, task_kwargs=None,
             countdown=None, eta=None, task_id=None, taskset_id=None,
@@ -216,8 +217,8 @@ class TaskProducer(Producer):
         if retry_policy:  # merge default and custom policy
             _retry_policy = dict(_retry_policy, **retry_policy)
 
-        self.maybe_declare(queue, exchange, exchange_type,
-                           retry, _retry_policy)
+        exchange = maybe_exchange(exchange, exchange_type)
+        self.maybe_declare(queue, exchange, retry, _retry_policy)
 
         task_id = task_id or uuid()
         task_args = task_args or []
@@ -300,6 +301,10 @@ class AMQP(object):
     def Queues(self, queues):
         """Create new :class:`Queues` instance, using queue defaults
         from the current configuration."""
+        #: queues can also be dict.
+        if not isinstance(queues, Queues) and isinstance(queues, dict):
+            queues = [entry_to_queue(name, **opts)
+                        for name, opts in queues.iteritems()]
         conf = self.app.conf
         default = conf.CELERY_DEFAULT_QUEUE
         defex = conf.CELERY_DEFAULT_EXCHANGE
@@ -314,7 +319,7 @@ class AMQP(object):
         return Queues.with_defaults(queues, defex)
 
     def Router(self, queues=None, create_missing=None):
-        """Returns the current task router."""
+        """Creates new task router."""
         create_missing = (create_missing if create_missing is not None
                             else self.app.conf.CELERY_CREATE_MISSING_QUEUES)
         return _routes.Router(self.routes, queues or self.queues,
@@ -366,3 +371,7 @@ class AMQP(object):
     def producers(self):
         return pools.register_group(_Producers(self.TaskProducer,
                                                self.connections))
+
+    @cached_property
+    def router(self):
+        return self.Router()

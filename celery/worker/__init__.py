@@ -251,10 +251,9 @@ class WorkController(object):
             self.terminate()
             raise
         except SystemExit:
-            raise
             self.stop()
             raise
-        except:
+        except BaseException:
             self.stop()
             try:
                 raise

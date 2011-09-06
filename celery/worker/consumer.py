@@ -551,15 +551,9 @@ class Consumer(object):
         # Re-establish the broker connection and setup the task consumer.
         self.connection = self._open_connection()
         self._debug("Connection established.")
-        print("CREATING TASK CONSUMER")
-        try:
-            self.task_consumer = self.app.amqp.get_task_consumer(self.connection,
+        self.task_consumer = self.app.amqp.get_task_consumer(self.connection,
                                     on_decode_error=self.on_decode_error)
-        except:
-            self.logger.error("NONOO", exc_info=sys.exc_info())
-            raise
 
-        print("CONSUMER: %r" % (self.task_consumer, ))
         # QoS: Reset prefetch window.
         self.qos = QoS(self.task_consumer,
                        self.initial_prefetch_count, self.logger)

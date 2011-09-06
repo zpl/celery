@@ -24,7 +24,8 @@ class Router(object):
             app=None):
         from . import app_or_default
         self.app = app_or_default(app)
-        self.queues = self.app.amqp.Queues({} if queues is None else queues)
+        print("QUEUES AT INIT: %r" % (type(queues), ))
+        self.queues = {} if queues is None else queues
         self.routes = [] if routes is None else routes
         self.create_missing = create_missing
 
@@ -49,6 +50,7 @@ class Router(object):
             queue = route.pop("queue", None)
 
         if queue:  # expand config from configured queue.
+            print("QUEUES: %r" % (self.queues, ))
             try:
                 self.queues[queue]
             except KeyError:

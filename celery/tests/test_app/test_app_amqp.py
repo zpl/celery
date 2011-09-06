@@ -37,9 +37,9 @@ class test_TaskProducer(AppCase):
         producer._declare_queue(q, retry=True)
         self.assertTrue(producer.connection.ensure.call_count)
 
-    def test_ensure_declare_exchange(self, e="x9248311"):
+    def test_ensure_declare_exchange(self, e=Exchange("x9248311")):
         producer = self.app.amqp.TaskProducer(Mock())
-        producer._declare_exchange(e, "direct", retry=True)
+        producer._declare_exchange(e, retry=True)
         self.assertTrue(producer.connection.ensure.call_count)
 
     def test_retry_policy(self):

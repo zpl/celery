@@ -19,8 +19,6 @@ from contextlib import contextmanager
 from copy import deepcopy
 from threading import Lock
 
-from kombu.common import entry_to_queue
-
 from .. import datastructures
 from ..utils import cached_property, instantiate, lpmerge
 
@@ -141,14 +139,6 @@ class Settings(datastructures.ConfigurationView):
         """Resolves deprecated alias ``CELERY_BACKEND``."""
         return self.get("CELERY_RESULT_BACKEND") or self.get("CELERY_BACKEND")
 
-    @property
-    def CELERY_QUEUES(self):
-        q = self.get("CELERY_QUEUES")
-        if isinstance(q, dict):
-            q = self["CELERY_QUEUES"] = [entry_to_queue(name, **opts)
-                                            for name, opts in q.iteritems()]
-        return q
-
 
 class BaseApp(object):
     """Base class for apps."""
@@ -218,7 +208,7 @@ class BaseApp(object):
 
     def send_task(self, name, args=None, kwargs=None, countdown=None,
             eta=None, task_id=None, producer=None, connection=None,
-            result_cls=None, expires=None, queues=None, **options):
+            result_cls=None, expires=None, router=None, **options):
         """Send task by name.
 
         :param name: Name of task to execute (e.g. `"tasks.add"`).
@@ -229,7 +219,7 @@ class BaseApp(object):
         :meth:`~celery.app.task.BaseTask.apply_async`.
 
         """
-        router = self.amqp.Router(queues)
+        router = router or self.amqp.router
         result_cls = result_cls or self.AsyncResult
 
         # XXX to deprecate
@@ -346,7 +336,7 @@ class BaseApp(object):
     @contextmanager
     def acquire_producer(self, connection, producer=None, **kwargs):
         if producer:
-            yield producer:
+            yield producer
         else:
             connection = self.broker_connection(connection)
             with self.amqp.producers[connection].acquire(**kwargs) as pub:

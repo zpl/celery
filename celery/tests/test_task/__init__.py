@@ -229,7 +229,7 @@ class TestCeleryTasks(unittest.TestCase):
 
     def assertNextTaskDataEqual(self, consumer, presult, task_name,
             test_eta=False, test_expires=False, **kwargs):
-        next_task = consumer.fetch()
+        next_task = consumer.queues[0].get()
         task_data = next_task.decode()
         self.assertEqual(task_data["id"], presult.task_id)
         self.assertEqual(task_data["task"], task_name)
@@ -276,8 +276,8 @@ class TestCeleryTasks(unittest.TestCase):
         t1 = T1()
         consumer = t1.get_consumer()
         self.assertRaises(NotImplementedError, consumer.receive, "foo", "foo")
-        consumer.discard_all()
-        self.assertIsNone(consumer.fetch())
+        consumer.purge()
+        self.assertIsNone(consumer.queues[0].get())
 
         # Without arguments.
         presult = t1.delay()
@@ -307,10 +307,10 @@ class TestCeleryTasks(unittest.TestCase):
                 name="George Costanza", test_eta=True, test_expires=True)
 
         # Discarding all tasks.
-        consumer.discard_all()
+        consumer.purge()
         t1.apply_async()
-        self.assertEqual(consumer.discard_all(), 1)
-        self.assertIsNone(consumer.fetch())
+        self.assertEqual(consumer.purge(), 1)
+        self.assertIsNone(consumer.queues[0].get())
 
         self.assertFalse(presult.successful())
         t1.backend.mark_as_done(presult.task_id, result=None)
@@ -425,13 +425,12 @@ class TestTaskSet(unittest.TestCase):
 
         consumer = IncrementCounterTask().get_consumer()
         consumer.purge()
-        consumer.close()
         taskset_res = ts.apply_async()
         subtasks = taskset_res.subtasks
         taskset_id = taskset_res.taskset_id
         consumer = IncrementCounterTask().get_consumer()
         for subtask in subtasks:
-            m = consumer.fetch().payload
+            m = consumer.queues[0].get().payload
             self.assertDictContainsSubset({"taskset": taskset_id,
                                            "task": IncrementCounterTask.name,
                                            "id": subtask.task_id}, m)

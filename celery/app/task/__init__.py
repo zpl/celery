@@ -276,7 +276,7 @@ class BaseTask(object):
                 ...     producer.connection.close()
 
         """
-        connection = connection or self.establish_connection()
+        connection = self.establish_connection(connection)
         return self.app.amqp.TaskProducer(connection, **options)
     get_publisher = get_producer
 
@@ -298,10 +298,11 @@ class BaseTask(object):
                 >>> consumer.connection.close()
 
         """
-        connection = connection or self.establish_connection()
-        return self.app.amqp.TaskConsumer(connection=connection,
-                                          exchange=self.exchange,
-                                          routing_key=self.routing_key)
+        options = self.app.amqp.router.route({"queue": self.queue},
+                                             self.name, (), {})
+        queue = self.app.amqp.queues[options["queue"]]
+        connection = self.establish_connection(connection)
+        return self.app.amqp.Consumer(connection, queues=[queue])
 
     @classmethod
     def delay(self, *args, **kwargs):
@@ -320,7 +321,7 @@ class BaseTask(object):
     @classmethod
     def apply_async(self, args=None, kwargs=None, countdown=None,
             eta=None, task_id=None, producer=None, connection=None,
-            router=None, expires=None, queues=None, **options):
+            router=None, expires=None, **options):
         """Apply tasks asynchronously by sending a message.
 
         :keyword args: The positional arguments to pass on to the
@@ -404,8 +405,8 @@ class BaseTask(object):
 
         """
         app = self.app
-        router = self.app.amqp.Router(queues)
         conf = app.conf
+        router = router or app.amqp.router
 
         # XXX to deprecate
         publisher = options.pop("publisher", None)

@@ -125,8 +125,8 @@ class test_Broadcast(unittest.TestCase):
     def tearDown(self):
         del(self.app.control)
 
-    def test_discard_all(self):
-        self.control.discard_all()
+    def test_purge(self):
+        self.control.purge()
 
     @with_mock_broadcast
     def test_broadcast(self):

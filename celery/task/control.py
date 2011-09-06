@@ -6,5 +6,7 @@ rate_limit = Proxy(lambda: current_app.control.rate_limit)
 time_limit = Proxy(lambda: current_app.control.time_limit)
 ping = Proxy(lambda: current_app.control.ping)
 revoke = Proxy(lambda: current_app.control.revoke)
-discard_all = Proxy(lambda: current_app.control.discard_all)
+purge = Proxy(lambda: current_app.control.purge)
 inspect = Proxy(lambda: current_app.control.inspect)
+
+discard_all = purge  # XXX deprecate

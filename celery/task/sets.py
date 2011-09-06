@@ -116,7 +116,7 @@ class TaskSet(UserList):
 
         with app.acquire_producer(connection, producer, block=True) as prod:
             setid = taskset_id or uuid()
-            return app.TaskSetResult(setid, self._async_results(setid, pub))
+            return app.TaskSetResult(setid, self._async_results(setid, prod))
 
     def _async_results(self, taskset_id, producer):
         return [task.apply_async(taskset_id=taskset_id, producer=producer)
