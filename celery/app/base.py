@@ -17,7 +17,6 @@ import sys
 
 from contextlib import contextmanager
 from copy import deepcopy
-from functools import wraps
 from threading import Lock
 
 from .. import datastructures

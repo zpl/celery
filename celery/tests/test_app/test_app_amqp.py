@@ -96,4 +96,3 @@ class test_PublisherPool(AppCase):
         finally:
             conf.BROKER_POOL_LIMIT = prev
             pools.set_limit(prev)
-

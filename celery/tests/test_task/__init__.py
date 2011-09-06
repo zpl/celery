@@ -5,7 +5,6 @@ from mock import Mock
 from pyparsing import ParseException
 
 from celery import task
-from celery.app import app_or_default
 from celery.task import task as task_dec
 from celery.exceptions import RetryTaskError
 from celery.execute import send_task

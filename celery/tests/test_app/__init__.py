@@ -3,8 +3,6 @@ from __future__ import with_statement
 import os
 import sys
 
-from mock import Mock
-
 from celery import Celery
 from celery import app as _app
 from celery.app import defaults

@@ -61,7 +61,7 @@ NAMESPACES = {
         "VHOST": Option(None, type="string", key="virtual_host"),
         "CONNECTION_TIMEOUT": Option(4, type="int", key="connect_timeout"),
         "CONNECTION_RETRY": Option(True, type="bool", key="connection_retry"),
-        "CONNECTION_MAX_RETRIES": Option(100,type="int",
+        "CONNECTION_MAX_RETRIES": Option(100, type="int",
                                          key="connection_max_retries"),
         "POOL_LIMIT": Option(None, type="int", key=None),
         "USE_SSL": Option(False, type="bool", key="ssl"),
