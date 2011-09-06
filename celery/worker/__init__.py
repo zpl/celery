@@ -12,7 +12,6 @@ from .. import concurrency as _concurrency
 from .. import registry, platforms, signals
 from ..app import app_or_default
 from ..exceptions import SystemTerminate
-from ..log import SilenceRepeated
 from ..utils import noop, instantiate
 
 from . import state
@@ -145,8 +144,6 @@ class WorkController(object):
                                 conf.CELERYD_ETA_SCHEDULER_PRECISION
         self.prefetch_multiplier = prefetch_multiplier or \
                                 conf.CELERYD_PREFETCH_MULTIPLIER
-        self.timer_debug = SilenceRepeated(self.logger.debug,
-                                           max_iterations=10)
         self.db = db or conf.CELERYD_STATE_DB
         self.disable_rate_limits = disable_rate_limits or \
                                 conf.CELERY_DISABLE_RATE_LIMITS
@@ -317,4 +314,4 @@ class WorkController(object):
         self.logger.error("Timer error: %r", exc, exc_info=exc_info)
 
     def on_timer_tick(self, delay):
-        self.timer_debug("Scheduler wake-up! Next eta %s secs." % delay)
+        self.logger.debug("Scheduler wake-up! Next eta %s secs.", delay)

@@ -22,10 +22,7 @@ from ..exceptions import CPendingDeprecationWarning, CDeprecationWarning
 
 from .compat import StringIO
 from .encoding import safe_repr as _safe_repr
-
-LOG_LEVELS = dict(logging._levelNames)
-LOG_LEVELS["FATAL"] = logging.FATAL
-LOG_LEVELS[logging.FATAL] = "FATAL"
+from .log import LOG_LEVELS
 
 PENDING_DEPRECATION_FMT = """
     %(description)s is scheduled for deprecation in \

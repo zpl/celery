@@ -29,7 +29,7 @@ from celery.tests.utils import (AppCase, StringIO, mask_modules,
                                 reset_modules, skip_unless_module)
 
 
-from celery.utils.patch import ensure_process_aware_logger
+from celery.utils.log import ensure_process_aware_logger
 ensure_process_aware_logger()
 
 
