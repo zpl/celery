@@ -15,6 +15,8 @@ from celery.utils.serialization import pickle
 from celery.tests import config
 from celery.tests.utils import (unittest, mask_modules, platform_pyimp,
                                 sys_platform, pypy_version)
+from celery.utils.mail import ErrorMail
+from kombu.utils import gen_unique_id
 
 THIS_IS_A_KEY = "this is a value"
 
@@ -108,7 +110,6 @@ class test_App(unittest.TestCase):
     def test_config_from_cmdline(self):
         cmdline = [".always_eager=no",
                    ".result_backend=/dev/null",
-                   '.task_error_whitelist=(list)["a", "b", "c"]',
                    "celeryd.prefetch_multiplier=368",
                    ".foobarstring=(string)300",
                    ".foobarint=(int)300",
@@ -117,8 +118,6 @@ class test_App(unittest.TestCase):
         self.assertFalse(self.app.conf.CELERY_ALWAYS_EAGER)
         self.assertEqual(self.app.conf.CELERY_RESULT_BACKEND, "/dev/null")
         self.assertEqual(self.app.conf.CELERYD_PREFETCH_MULTIPLIER, 368)
-        self.assertListEqual(self.app.conf.CELERY_TASK_ERROR_WHITELIST,
-                             ["a", "b", "c"])
         self.assertEqual(self.app.conf.CELERY_FOOBARSTRING, "300")
         self.assertEqual(self.app.conf.CELERY_FOOBARINT, 300)
         self.assertDictEqual(self.app.conf.CELERY_RESULT_ENGINE_OPTIONS,
@@ -241,6 +240,13 @@ class test_App(unittest.TestCase):
                                        exchange="bar_exchange",
                                        routing_key="bar_exchange"))
         self.assertIn("bar_exchange", amqp._exchanges_declared)
+
+    def test_error_mail_sender(self):
+        x = ErrorMail.subject % {"name": "task_name",
+                                 "id": gen_unique_id(),
+                                 "exc": "FOOBARBAZ",
+                                 "hostname": "lana"}
+        self.assertTrue(x)
 
 
 class test_BaseApp(unittest.TestCase):

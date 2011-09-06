@@ -10,6 +10,7 @@ from ...execute.trace import TaskTrace
 from ...registry import tasks, _unpickle_task
 from ...result import EagerResult
 from ...utils import mattrgetter, uuid
+from ...utils.mail import ErrorMail
 
 extract_exec_options = mattrgetter("queue", "routing_key",
                                    "exchange", "immediate",
@@ -106,6 +107,7 @@ class BaseTask(object):
     """
     __metaclass__ = TaskType
 
+    ErrorMail = ErrorMail
     MaxRetriesExceededError = MaxRetriesExceededError
 
     #: The application instance associated with this task class.
@@ -176,9 +178,6 @@ class BaseTask(object):
     #: of this type fails.
     send_error_emails = False
     disable_error_emails = False                            # FIXME
-
-    #: List of exception types to send error emails for.
-    error_whitelist = ()
 
     #: The name of a serializer that are registered with
     #: :mod:`kombu.serialization.registry`.  Default is `"pickle"`.
@@ -645,6 +644,11 @@ class BaseTask(object):
 
         """
         pass
+
+    def send_error_email(self, context, exc, **kwargs):
+        if self.send_error_emails and not self.disable_error_emails:
+            sender = self.ErrorMail(self, **kwargs)
+            sender.send(context, exc)
 
     def on_success(self, retval, task_id, args, kwargs):
         """Success handler.
