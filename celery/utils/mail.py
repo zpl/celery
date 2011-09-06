@@ -1,6 +1,5 @@
 import sys
 import smtplib
-from celery.utils import get_symbol_by_name
 
 try:
     from email.mime.text import MIMEText
