@@ -5,7 +5,6 @@ import os
 import sys
 import imp as _imp
 import importlib
-import logging
 import threading
 import traceback
 import warnings
@@ -22,7 +21,7 @@ from ..exceptions import CPendingDeprecationWarning, CDeprecationWarning
 
 from .compat import StringIO
 from .encoding import safe_repr as _safe_repr
-from .log import LOG_LEVELS
+from .log import LOG_LEVELS  # noqa
 
 PENDING_DEPRECATION_FMT = """
     %(description)s is scheduled for deprecation in \
