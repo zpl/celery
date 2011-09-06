@@ -11,7 +11,7 @@ from ...exceptions import MaxRetriesExceededError, RetryTaskError
 from ...execute.trace import TaskTrace
 from ...registry import tasks, _unpickle_task
 from ...result import EagerResult
-from ...utils import fun_takes_kwargs, mattrgetter, uuid
+from ...utils import mattrgetter, uuid
 from ...utils.mail import ErrorMail
 
 extract_exec_options = mattrgetter("queue", "routing_key",
@@ -90,6 +90,9 @@ class TaskType(type):
                 task_name = task_cls.name = '.'.join([task_cls.app.main, name])
             tasks.register(task_cls)
         task = tasks[task_name].__class__
+
+        # decorate with annotations from config.
+        task.app.annotate_task(task)
         return task
 
     def __repr__(cls):
@@ -117,10 +120,6 @@ class BaseTask(object):
 
     #: If :const:`True` the task is an abstract base class.
     abstract = True
-
-    #: If disabled the worker will not forward magic keyword arguments.
-    #: Deprecated and scheduled for removal in v3.0.
-    accept_magic_kwargs = False
 
     #: Request context (set when task is applied).
     request = Context()
@@ -181,9 +180,6 @@ class BaseTask(object):
     #: of this type fails.
     send_error_emails = False
     disable_error_emails = False                            # FIXME
-
-    #: List of exception types to send error emails for.
-    error_whitelist = ()
 
     #: The name of a serializer that are registered with
     #: :mod:`kombu.serialization.registry`.  Default is `"pickle"`.
@@ -326,8 +322,7 @@ class BaseTask(object):
     @classmethod
     def apply_async(self, args=None, kwargs=None, countdown=None,
             eta=None, task_id=None, producer=None, connection=None,
-            router=None, expires=None, queues=None,
-            **options):
+            router=None, expires=None, queues=None, **options):
         """Apply tasks asynchronously by sending a message.
 
         :keyword args: The positional arguments to pass on to the
@@ -354,8 +349,7 @@ class BaseTask(object):
                           executed after the expiration time.
 
         :keyword connection: Re-use existing broker connection instead
-                             of establishing a new one.  The `connect_timeout`
-                             argument is not respected if this is set.
+                             of establishing a new one.
 
         :keyword retry: If enabled sending of the task message will be retried
                         in the event of connection loss or failure.  Default
@@ -560,20 +554,6 @@ class BaseTask(object):
                    "logfile": options.get("logfile"),
                    "loglevel": options.get("loglevel", 0),
                    "delivery_info": {"is_eager": True}}
-        if self.accept_magic_kwargs:
-            default_kwargs = {"task_name": task.name,
-                              "task_id": task_id,
-                              "task_retries": retries,
-                              "task_is_eager": True,
-                              "logfile": options.get("logfile"),
-                              "loglevel": options.get("loglevel", 0),
-                              "delivery_info": {"is_eager": True}}
-            supported_keys = fun_takes_kwargs(task.run, default_kwargs)
-            extend_with = dict((key, val)
-                                    for key, val in default_kwargs.items()
-                                        if key in supported_keys)
-            kwargs.update(extend_with)
-
         trace = TaskTrace(task.name, task_id, args, kwargs,
                           task=task, request=request, propagate=throw)
         retval = trace.execute()

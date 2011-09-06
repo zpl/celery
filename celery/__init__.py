@@ -7,7 +7,7 @@ from __future__ import absolute_import
 import os
 import sys
 
-VERSION = (2, 4, 0, "a1")
+VERSION = (3, 0, 0, "a1")
 
 __version__ = ".".join(map(str, VERSION[0:3])) + "".join(VERSION[3:])
 __author__ = "Ask Solem"
@@ -26,10 +26,10 @@ def Celery(*args, **kwargs):
     return App(*args, **kwargs)
 
 if not os.environ.get("CELERY_NO_EVAL", False):
-    from .local import LocalProxy
+    from .local import Proxy
 
     def _get_current_app():
         from .app import current_app
         return current_app()
 
-    current_app = LocalProxy(_get_current_app)
+    current_app = Proxy(_get_current_app)

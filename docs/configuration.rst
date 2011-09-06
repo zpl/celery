@@ -40,9 +40,66 @@ It should contain all you need to run a basic Celery set-up.
     ## available will be used.
     CELERYD_CONCURRENCY = 10
 
+    CELERY_ANNOTATIONS = {"tasks.add": {"rate_limit": "10/s"}}
+
 
 Configuration Directives
 ========================
+
+.. _conf-tasks:
+
+Task settings
+-------------
+
+.. setting:: CELERY_ANNOTATIONS
+
+CELERY_ANNOTATIONS
+~~~~~~~~~~~~~~~~~~
+
+This setting can be used to rewrite any task attribute from the
+configuration.  The setting can be a dict, or a list of annotation
+objects that filter for tasks and return a map of attributes
+to change.
+
+
+This will change the ``rate_limit`` attribute for the ``tasks.add``
+task:
+
+.. code-block:: python
+
+    CELERY_ANNOTATIONS = {"tasks.add": {"rate_limit": "10/s"}}
+
+or change the same for all tasks:
+
+.. code-block:: python
+
+    CELERY_ANNOTATIONS = {"*": {"rate_limit": "10/s"}}
+
+
+You can change methods too, for example the ``on_failure`` handler:
+
+.. code-block:: python
+
+    def my_on_failure(self, exc, task_id, args, kwargs, einfo):
+        print("Oh no! Task failed: %r" % (exc, ))
+
+    CELERY_ANNOTATIONS = {"*": {"on_failure": my_on_failure}}
+
+
+If you need more flexibility then you can use objects
+instead of a dict to choose which tasks to annotate:
+
+.. code-block:: python
+
+    class MyAnnotate(object):
+
+        def annotate(self, task):
+            if task.name.startswith("tasks."):
+                return {"rate_limit": "10/s"}
+
+    CELERY_ANNOTATIONS = (MyAnnotate(), {...})
+
+
 
 .. _conf-concurrency:
 
@@ -1294,12 +1351,10 @@ CELERYBEAT_MAX_LOOP_INTERVAL
 The maximum number of seconds :mod:`~celery.bin.celerybeat` can sleep
 between checking the schedule.  Default is 300 seconds (5 minutes).
 
-
 .. _conf-celerymon:
 
 Monitor Server: celerymon
 -------------------------
-
 
 .. setting:: CELERYMON_LOG_FORMAT
 
@@ -1312,135 +1367,3 @@ Default is `[%(asctime)s: %(levelname)s/%(processName)s] %(message)s`
 
 See the Python :mod:`logging` module for more information about log
 formats.
-
-.. _conf-deprecated:
-
-Deprecated Settings
--------------------
-
-These settings have been deprecated and should no longer used,
-as they will be removed in future versions.
-
-.. setting:: CELERY_AMQP_TASK_RESULT_EXPIRES
-
-CELERY_AMQP_TASK_RESULT_EXPIRES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.5
-
-The time in seconds of which the task result queues should expire.
-
-This setting is deprecated, and will be removed in version 3.0.
-Please use :setting:`CELERY_TASK_RESULT_EXPIRES` instead.
-
-.. note::
-
-    AMQP result expiration requires RabbitMQ versions 2.1.0 and higher.
-
-.. setting:: CELERY_TASK_ERROR_WHITELIST
-
-CELERY_TASK_ERROR_WHITELIST
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.5
-
-A white list of exceptions to send error emails for.
-
-This option is pending deprecation and is scheduled for removal
-in version 3.0.
-
-.. setting:: CELERYD_LOG_FILE
-
-CELERYD_LOG_FILE
-~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.4
-
-This option is deprecated and is scheduled for removal in version 3.0.
-Please use the :option:`--logfile` argument instead.
-
-The default file name the worker daemon logs messages to.  Can be overridden
-using the :option:`--logfile` option to :mod:`~celery.bin.celeryd`.
-
-The default is :const:`None` (`stderr`)
-
-.. setting:: CELERYD_LOG_LEVEL
-
-CELERYD_LOG_LEVEL
-~~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.4
-
-This option is deprecated and is scheduled for removal in version 3.0.
-Please use the :option:`--loglevel` argument instead.
-
-Worker log level, can be one of :const:`DEBUG`, :const:`INFO`, :const:`WARNING`,
-:const:`ERROR` or :const:`CRITICAL`.
-
-Can also be set via the :option:`--loglevel` argument to
-:mod:`~celery.bin.celeryd`.
-
-See the :mod:`logging` module for more information.
-
-.. setting:: CELERYBEAT_LOG_FILE
-
-CELERYBEAT_LOG_FILE
-~~~~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.4
-
-This option is deprecated and is scheduled for removal in version 3.0.
-Please use the :option:`--logfile` argument instead.
-
-The default file name to log messages to.  Can be overridden using
-the `--logfile` option to :mod:`~celery.bin.celerybeat`.
-
-The default is :const:`None` (`stderr`).
-
-.. setting:: CELERYBEAT_LOG_LEVEL
-
-CELERYBEAT_LOG_LEVEL
-~~~~~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.4
-
-This option is deprecated and is scheduled for removal in version 3.0.
-Please use the :option:`--loglevel` argument instead.
-
-Logging level. Can be any of :const:`DEBUG`, :const:`INFO`, :const:`WARNING`,
-:const:`ERROR`, or :const:`CRITICAL`.
-
-Can also be set via the :option:`--loglevel` argument to
-:mod:`~celery.bin.celerybeat`.
-
-See the :mod:`logging` module for more information.
-
-.. setting:: CELERYMON_LOG_FILE
-
-CELERYMON_LOG_FILE
-~~~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.4
-
-This option is deprecated and is scheduled for removal in version 3.0.
-Please use the :option:`--logfile` argument instead.
-
-The default file name to log messages to.  Can be overridden using
-the :option:`--logfile` argument to `celerymon`.
-
-The default is :const:`None` (`stderr`)
-
-.. setting:: CELERYMON_LOG_LEVEL
-
-CELERYMON_LOG_LEVEL
-~~~~~~~~~~~~~~~~~~~
-
-.. deprecated:: 2.4
-
-This option is deprecated and is scheduled for removal in version 3.0.
-Please use the :option:`--loglevel` argument instead.
-
-Logging level. Can be any of :const:`DEBUG`, :const:`INFO`, :const:`WARNING`,
-:const:`ERROR`, or :const:`CRITICAL`.
-
-See the :mod:`logging` module for more information.

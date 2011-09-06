@@ -5,8 +5,9 @@ import atexit
 from .. import platforms
 from ..app import app_or_default
 from ..datastructures import TokenBucket
-from ..utils import timer2, instantiate, LOG_LEVELS
+from ..utils import timer2, instantiate
 from ..utils.dispatch import Signal
+from ..utils.log import LOG_LEVELS
 from ..utils.timeutils import rate
 
 

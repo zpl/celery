@@ -33,7 +33,6 @@ from celery.tests.utils import StringIO, wrap_logger
 
 
 scratch = {"ACK": False}
-some_kwargs_scratchpad = {}
 
 
 def jail(task_id, task_name, args, kwargs):
@@ -44,7 +43,7 @@ def on_ack():
     scratch["ACK"] = True
 
 
-@task_dec(accept_magic_kwargs=True)
+@task_dec()
 def mytask(i, **kwargs):
     return i ** i
 
@@ -61,13 +60,7 @@ class MyTaskIgnoreResult(Task):
         return i ** i
 
 
-@task_dec(accept_magic_kwargs=True)
-def mytask_some_kwargs(i, logfile):
-    some_kwargs_scratchpad["logfile"] = logfile
-    return i ** i
-
-
-@task_dec(accept_magic_kwargs=True)
+@task_dec()
 def mytask_raising(i, **kwargs):
     raise KeyError(i)
 
@@ -236,16 +229,16 @@ class test_TaskRequest(unittest.TestCase):
         tw.terminate(pool, signal="KILL")
 
     def test_revoked_expires_expired(self):
-        tw = TaskRequest(mytask.name, uuid(), [1], {"f": "x"})
-        tw.expires = datetime.now() - timedelta(days=1)
+        tw = TaskRequest(mytask.name, uuid(), [1], {"f": "x"},
+                         expires=datetime.utcnow() - timedelta(days=1))
         tw.revoked()
         self.assertIn(tw.task_id, revoked)
         self.assertEqual(mytask.backend.get_status(tw.task_id),
                          states.REVOKED)
 
     def test_revoked_expires_not_expired(self):
-        tw = TaskRequest(mytask.name, uuid(), [1], {"f": "x"})
-        tw.expires = datetime.now() + timedelta(days=1)
+        tw = TaskRequest(mytask.name, uuid(), [1], {"f": "x"},
+                         expires=datetime.utcnow() + timedelta(days=1))
         tw.revoked()
         self.assertNotIn(tw.task_id, revoked)
         self.assertNotEqual(mytask.backend.get_status(tw.task_id),
@@ -253,9 +246,9 @@ class test_TaskRequest(unittest.TestCase):
 
     def test_revoked_expires_ignore_result(self):
         mytask.ignore_result = True
-        tw = TaskRequest(mytask.name, uuid(), [1], {"f": "x"})
+        tw = TaskRequest(mytask.name, uuid(), [1], {"f": "x"},
+                         expires=datetime.utcnow() - timedelta(days=1))
         try:
-            tw.expires = datetime.now() - timedelta(days=1)
             tw.revoked()
             self.assertIn(tw.task_id, revoked)
             self.assertNotEqual(mytask.backend.get_status(tw.task_id),
@@ -290,22 +283,9 @@ class test_TaskRequest(unittest.TestCase):
             tw.on_failure(einfo)
             self.assertFalse(mail_sent[0])
 
-            mail_sent[0] = False
-            mytask.send_error_emails = True
-            mytask.error_whitelist = [KeyError]
-            tw.on_failure(einfo)
-            self.assertTrue(mail_sent[0])
-
-            mail_sent[0] = False
-            mytask.send_error_emails = True
-            mytask.error_whitelist = [SyntaxError]
-            tw.on_failure(einfo)
-            self.assertFalse(mail_sent[0])
-
         finally:
             app.mail_admins = old_mail_admins
             mytask.send_error_emails = old_enable_mails
-            mytask.error_whitelist = ()
 
     def test_already_revoked(self):
         tw = TaskRequest(mytask.name, uuid(), [1], {"f": "x"})
@@ -555,15 +535,6 @@ class test_TaskRequest(unittest.TestCase):
         self.assertEqual(meta["result"], 256)
         self.assertEqual(meta["status"], states.SUCCESS)
 
-    def test_execute_success_some_kwargs(self):
-        tid = uuid()
-        tw = TaskRequest(mytask_some_kwargs.name, tid, [4], {})
-        self.assertEqual(tw.execute(logfile="foobaz.log"), 256)
-        meta = mytask_some_kwargs.backend.get_task_meta(tid)
-        self.assertEqual(some_kwargs_scratchpad.get("logfile"), "foobaz.log")
-        self.assertEqual(meta["result"], 256)
-        self.assertEqual(meta["status"], states.SUCCESS)
-
     def test_execute_ack(self):
         tid = uuid()
         tw = TaskRequest(mytask.name, tid, [4], {"f": "x"},
@@ -608,20 +579,6 @@ class test_TaskRequest(unittest.TestCase):
         self.assertEqual(p.args[2], [4])
         self.assertIn("f", p.args[3])
         self.assertIn([4], p.args)
-
-    def test_default_kwargs(self):
-        tid = uuid()
-        tw = TaskRequest(mytask.name, tid, [4], {"f": "x"})
-        self.assertDictEqual(
-                tw.extend_with_default_kwargs(10, "some_logfile"), {
-                    "f": "x",
-                    "logfile": "some_logfile",
-                    "loglevel": 10,
-                    "task_id": tw.task_id,
-                    "task_retries": 0,
-                    "task_is_eager": False,
-                    "delivery_info": {},
-                    "task_name": tw.task_name})
 
     def _test_on_failure(self, exception):
         app = app_or_default()

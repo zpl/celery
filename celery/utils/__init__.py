@@ -3,7 +3,6 @@ from __future__ import with_statement
 
 import os
 import sys
-import operator
 import imp as _imp
 import importlib
 import logging
@@ -12,8 +11,7 @@ import traceback
 import warnings
 
 from contextlib import contextmanager
-from functools import partial, wraps
-from inspect import getargspec
+from functools import wraps
 from itertools import islice
 from pprint import pprint
 
@@ -24,10 +22,7 @@ from ..exceptions import CPendingDeprecationWarning, CDeprecationWarning
 
 from .compat import StringIO
 from .encoding import safe_repr as _safe_repr
-
-LOG_LEVELS = dict(logging._levelNames)
-LOG_LEVELS["FATAL"] = logging.FATAL
-LOG_LEVELS[logging.FATAL] = "FATAL"
+from .log import LOG_LEVELS
 
 PENDING_DEPRECATION_FMT = """
     %(description)s is scheduled for deprecation in \
@@ -252,35 +247,6 @@ def get_full_cls_name(cls):
     """With a class, get its full module and class name."""
     return ".".join([cls.__module__,
                      cls.__name__])
-
-
-def fun_takes_kwargs(fun, kwlist=[]):
-    """With a function, and a list of keyword arguments, returns arguments
-    in the list which the function takes.
-
-    If the object has an `argspec` attribute that is used instead
-    of using the :meth:`inspect.getargspec` introspection.
-
-    :param fun: The function to inspect arguments of.
-    :param kwlist: The list of keyword arguments.
-
-    Examples
-
-        >>> def foo(self, x, y, logfile=None, loglevel=None):
-        ...     return x * y
-        >>> fun_takes_kwargs(foo, ["logfile", "loglevel", "task_id"])
-        ["logfile", "loglevel"]
-
-        >>> def foo(self, x, y, **kwargs):
-        >>> fun_takes_kwargs(foo, ["logfile", "loglevel", "task_id"])
-        ["logfile", "loglevel", "task_id"]
-
-    """
-    argspec = getattr(fun, "argspec", getargspec(fun))
-    args, _varargs, keywords, _defaults = argspec
-    if keywords != None:
-        return kwlist
-    return filter(partial(operator.contains, args), kwlist)
 
 
 def get_cls_by_name(name, aliases={}, imp=None, package=None, **kwargs):

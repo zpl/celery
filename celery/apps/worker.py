@@ -14,7 +14,8 @@ import warnings
 from .. import __version__, platforms, signals
 from ..app import app_or_default
 from ..exceptions import ImproperlyConfigured, SystemTerminate
-from ..utils import get_full_cls_name, LOG_LEVELS, cry
+from ..utils import get_full_cls_name, cry
+from ..utils.log import LOG_LEVELS
 from ..worker import WorkController
 
 BANNER = """
@@ -66,8 +67,8 @@ class Worker(object):
         conf = app.conf
         self.concurrency = (concurrency or
                             conf.CELERYD_CONCURRENCY or cpu_count())
-        self.loglevel = loglevel or conf.CELERYD_LOG_LEVEL
-        self.logfile = logfile or conf.CELERYD_LOG_FILE
+        self.loglevel = loglevel or 0
+        self.logfile = logfile
 
         self.hostname = hostname or socket.gethostname()
         self.discard = discard

@@ -12,7 +12,6 @@ from .. import concurrency as _concurrency
 from .. import registry, platforms, signals
 from ..app import app_or_default
 from ..exceptions import SystemTerminate
-from ..log import SilenceRepeated
 from ..utils import noop, instantiate
 
 from . import state
@@ -66,8 +65,7 @@ class WorkController(object):
     #: The loglevel used (default: :const:`logging.INFO`)
     loglevel = logging.ERROR
 
-    #: The logfile used, if no logfile is specified it uses `stderr`
-    #: (default: :setting:`CELERYD_LOG_FILE`).
+    #: The logfile used, if not specified then `stderr` is used.
     logfile = None
 
     #: If :const:`True`, celerybeat is embedded, running in the main worker
@@ -114,7 +112,7 @@ class WorkController(object):
         # Options
         self.loglevel = loglevel or self.loglevel
         self.concurrency = concurrency or conf.CELERYD_CONCURRENCY
-        self.logfile = logfile or conf.CELERYD_LOG_FILE
+        self.logfile = logfile
         self.logger = self.app.log.get_default_logger()
         if send_events is None:
             send_events = conf.CELERY_SEND_EVENTS
@@ -146,8 +144,6 @@ class WorkController(object):
                                 conf.CELERYD_ETA_SCHEDULER_PRECISION
         self.prefetch_multiplier = prefetch_multiplier or \
                                 conf.CELERYD_PREFETCH_MULTIPLIER
-        self.timer_debug = SilenceRepeated(self.logger.debug,
-                                           max_iterations=10)
         self.db = db or conf.CELERYD_STATE_DB
         self.disable_rate_limits = disable_rate_limits or \
                                 conf.CELERY_DISABLE_RATE_LIMITS
@@ -256,13 +252,14 @@ class WorkController(object):
         except SystemExit:
             raise
             self.stop()
+            raise
         except:
             self.stop()
             try:
                 raise
             except TypeError:
                 # eventlet borks here saying that the exception is None(?)
-                pass
+                sys.exit()
 
     def process_task(self, request):
         """Process task by sending it to the pool of workers."""
@@ -318,4 +315,4 @@ class WorkController(object):
         self.logger.error("Timer error: %r", exc, exc_info=exc_info)
 
     def on_timer_tick(self, delay):
-        self.timer_debug("Scheduler wake-up! Next eta %s secs." % delay)
+        self.logger.debug("Scheduler wake-up! Next eta %s secs.", delay)

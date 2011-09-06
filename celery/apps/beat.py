@@ -8,7 +8,8 @@ import traceback
 from .. import __version__, platforms
 from .. import beat
 from ..app import app_or_default
-from ..utils import get_full_cls_name, LOG_LEVELS
+from ..utils import get_full_cls_name
+from ..utils.log import LOG_LEVELS
 from ..utils.timeutils import humanize_seconds
 
 STARTUP_INFO_FMT = """
@@ -32,8 +33,8 @@ class Beat(object):
         """Starts the celerybeat task scheduler."""
         self.app = app = app_or_default(app)
 
-        self.loglevel = loglevel or app.conf.CELERYBEAT_LOG_LEVEL
-        self.logfile = logfile or app.conf.CELERYBEAT_LOG_FILE
+        self.loglevel = loglevel or 0
+        self.logfile = logfile
         self.schedule = schedule or app.conf.CELERYBEAT_SCHEDULE_FILENAME
         self.scheduler_cls = scheduler_cls or app.conf.CELERYBEAT_SCHEDULER
         self.max_interval = max_interval

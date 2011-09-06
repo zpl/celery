@@ -1,36 +1,11 @@
 from __future__ import absolute_import
 from __future__ import with_statement
 
-import warnings
-
 from .. import registry
 from ..app import app_or_default
 from ..datastructures import AttributeDict
-from ..exceptions import CDeprecationWarning
 from ..utils import cached_property, reprcall, uuid
 from ..utils.compat import UserList
-
-TASKSET_DEPRECATION_TEXT = """\
-Using this invocation of TaskSet is deprecated and will be removed
-in Celery v2.4!
-
-TaskSets now supports multiple types of tasks, the API has to reflect
-this so the syntax has been changed to:
-
-    from celery.task import TaskSet
-
-    ts = TaskSet(tasks=[
-            %(cls)s.subtask(args1, kwargs1, options1),
-            %(cls)s.subtask(args2, kwargs2, options2),
-            ...
-            %(cls)s.subtask(argsN, kwargsN, optionsN),
-    ])
-
-    result = ts.apply_async()
-
-Thank you for your patience!
-
-"""
 
 
 class subtask(AttributeDict):
@@ -44,7 +19,7 @@ class subtask(AttributeDict):
     :keyword args: Positional arguments to apply.
     :keyword kwargs: Keyword arguments to apply.
     :keyword options: Additional options to
-      :func:`celery.execute.apply_async`.
+      :meth:`Task.apply_async`.
 
     Note that if the first argument is a :class:`dict`, the other
     arguments will be ignored and the values in the dict will be used
@@ -119,33 +94,17 @@ class TaskSet(UserList):
         >>> list_of_return_values = taskset_result.join()  # *expensive*
 
     """
-    _task = None                # compat
-    _task_name = None           # compat
-
     #: Total number of subtasks in this set.
     total = None
 
-    def __init__(self, task=None, tasks=None, app=None, Producer=None):
+    def __init__(self, tasks=None, app=None, Producer=None):
         self.app = app_or_default(app)
-        if task is not None:
-            if hasattr(task, "__iter__"):
-                tasks = task
-            else:
-                # Previously TaskSet only supported applying one kind of task.
-                # the signature then was TaskSet(task, arglist),
-                # so convert the arguments to subtasks'.
-                tasks = [subtask(task, *arglist) for arglist in tasks]
-                task = self._task = registry.tasks[task.name]
-                self._task_name = task.name
-                warnings.warn(TASKSET_DEPRECATION_TEXT % {
-                                "cls": task.__class__.__name__},
-                              CDeprecationWarning)
         self.data = list(tasks or [])
         self.total = len(self.tasks)
         self.Producer = Producer or self.app.amqp.TaskProducer
 
-    def apply_async(self, connection=None, connect_timeout=None,
-            producer=None, taskset_id=None, **kwargs):
+    def apply_async(self, connection=None, producer=None, taskset_id=None,
+            **kwargs):
         """Apply taskset."""
         app = self.app
 
@@ -156,7 +115,7 @@ class TaskSet(UserList):
         if app.conf.CELERY_ALWAYS_EAGER:
             return self.apply(taskset_id=taskset_id)
 
-        with app.default_connection(connection, connect_timeout) as conn:
+        with app.default_connection(connection) as conn:
             setid = taskset_id or uuid()
             prod = producer or self.Producer(connection=conn)
             try:
@@ -182,17 +141,3 @@ class TaskSet(UserList):
     @property
     def tasks(self):
         return self.data
-
-    @property
-    def task(self):
-        warnings.warn(
-            "TaskSet.task is deprecated and will be removed in 1.4",
-            CDeprecationWarning)
-        return self._task
-
-    @property
-    def task_name(self):
-        warnings.warn(
-            "TaskSet.task_name is deprecated and will be removed in 1.4",
-            CDeprecationWarning)
-        return self._task_name

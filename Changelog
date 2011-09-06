@@ -5,6 +5,99 @@
 .. contents::
     :local:
 
+.. _version-3.0.0:
+
+3.0.0
+=====
+:release-date: TBA
+:status: PLANNING
+:branch: 3.0
+
+. _v300-important:
+
+Important Notes
+---------------
+
+* The deprecated `celery.decorators` module has been removed as scheduled.
+
+    Instead of::
+
+        from celery.decorators import ...
+
+    do::
+
+        from celery.task import ...
+
+* Completely removed support for the magic keyword arguments.
+  This means that the `accept_magic_kwargs` option introduced in v2.2 is now
+  ingnored.
+
+* Celery now uses the UTC by default.
+
+    You can change the local timezone using the :setting:`CELERY_TIMEZONE` setting.
+    This requires the :mod:`pytz` library to be installed.
+
+    [... This is lame, need to write more]
+
+* :mod:`celery.routes` renamed to :mod:`celery.app.routes`
+
+* Deprecated :class:`PingTask` and :func:`celery.task.ping` has been removed.
+
+* The following deprecated functions has been removed:
+
+    The following functions has been deprecated and is sceduled for removal in
+    version 3.2:
+
+    =====================================  ===================================
+    **Old function**                       **Alternative**
+    =====================================  ===================================
+    `celery.loaders.current_loader`        `celery.current_app.loader`
+    `celery.loaders.load_settings`         `celery.current_app.conf`
+    `celery.execute.apply`                 `Task.apply`
+    `celery.execute.apply_async`           `Task.apply_async`
+    `celery.execute.delay_task`            `celery.execute.send_task`
+    =====================================  ===================================
+
+* The old :class:`TaskSet` api has been removed.
+
+    This means you can no longer initialize a taskset by using the
+    ``TaskSet(task_type, list_of_arguments)`` form.
+
+* Removed deprecated module ``celery.task.schedules``.
+
+    Use ``celery.schedules`` instead.
+
+* Removed deprecated settings:
+
+    =====================================  ===================================
+    **Old setting**                        **Alternative**
+    =====================================  ===================================
+    `CELERYD_LOG_LEVEL`                    ``celeryd --loglevel=``
+    `CELERYD_LOG_FILE`                     ``celeryd --logfile=``
+    `CELERYBEAT_LOG_LEVEL`                 ``celerybeat --loglevel=``
+    `CELERYBEAT_LOG_FILE`                  ``celerybeat --logfile=``
+    `CELERYMON_LOG_LEVEL`                  ``celerymon --loglevel=``
+    `CELERYMON_LOG_FILE`                   ``celerymon --logfile=``
+    =====================================  ===================================
+
+* The deprecated module ``celery.conf has been removed.
+
+    Use ``celery.current_app.conf`` instead.
+
+* Deprecated ``celery.messaging``  module removed.
+
+    [List alternatives here]
+
+News
+====
+
+* Secure serializer support.
+
+    [Need to write something about this here:]
+
+* New :setting:`CELERY_ANNOTATIONS` setting can change arbitrary task
+  attributes from the configuration.
+
 .. _version-2.4.0:
 
 2.4.0
