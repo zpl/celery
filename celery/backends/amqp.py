@@ -9,7 +9,7 @@ import time
 from itertools import count
 
 from kombu.entity import Exchange, Queue
-from kombu.messaging import Consumer, Producer
+from kombu.messaging import Consumer
 
 from .. import states
 from ..exceptions import TimeoutError
@@ -33,7 +33,6 @@ class AMQPBackend(BaseDictBackend):
     Exchange = Exchange
     Queue = Queue
     Consumer = Consumer
-    Producer = Producer
 
     BacklogLimitExceeded = BacklogLimitExceeded
 
@@ -73,23 +72,14 @@ class AMQPBackend(BaseDictBackend):
                           auto_delete=self.auto_delete,
                           queue_arguments=self.queue_arguments)
 
-    def _create_producer(self, task_id, channel):
-        self._create_binding(task_id)(channel).declare()
-        return self.Producer(channel, exchange=self.exchange,
-                             routing_key=task_id.replace("-", ""),
-                             serializer=self.serializer)
-
     def _create_consumer(self, bindings, channel):
         return self.Consumer(channel, bindings, no_ack=True)
 
     def _publish_result(self, connection, task_id, meta):
-        # cache single channel
-        if connection._default_channel is not None and \
-                connection._default_channel.connection is None:
-            connection.maybe_close_channel(connection._default_channel)
-        channel = connection.default_channel
-
-        self._create_producer(task_id, channel).publish(meta)
+        with self.app.acquire_producer(connection, None) as prod:
+            self._create_binding(task_id)(prod.channel).declare()
+            prod.publish(meta, exchange=self.exchange,
+                               routing_key=task_id.replace("-", ""))
 
     def revive(self, channel):
         pass
