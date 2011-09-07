@@ -2,8 +2,8 @@ from __future__ import absolute_import
 
 import logging
 import socket
-import traceback
 import sys
+import traceback
 
 from kombu.syn import blocking
 from kombu.utils.finalize import Finalize
