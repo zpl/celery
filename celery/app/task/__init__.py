@@ -431,12 +431,12 @@ class BaseTask(object):
             if conf.CELERY_SEND_TASK_SENT_EVENT:
                 evd = app.events.Dispatcher(channel=prod.channel,
                                             buffer_while_offline=False)
-            task_id = prod.delay_task(self.name, args, kwargs,
-                                      task_id=task_id,
-                                      countdown=countdown,
-                                      eta=eta, expires=expires,
-                                      event_dispatcher=evd,
-                                      **options)
+            task_id = prod.send_task(self.name, args, kwargs,
+                                     task_id=task_id,
+                                     countdown=countdown,
+                                     eta=eta, expires=expires,
+                                     event_dispatcher=evd,
+                                     **options)
             return self.AsyncResult(task_id)
 
     @classmethod

@@ -344,7 +344,7 @@ class TestCeleryTasks(unittest.TestCase):
         class Producer(object):
             channel = chan
 
-            def delay_task(self, *args, **kwargs):
+            def send_task(self, *args, **kwargs):
                 dispatcher[0] = kwargs.get("event_dispatcher")
 
         try:

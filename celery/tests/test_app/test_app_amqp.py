@@ -44,12 +44,12 @@ class test_TaskProducer(AppCase):
 
     def test_retry_policy(self):
         pub = self.app.amqp.TaskProducer(Mock())
-        pub.delay_task("tasks.add", (2, 2), {},
+        pub.send_task("tasks.add", (2, 2), {},
                        retry_policy={"frobulate": 32.4})
 
     def test_publish_no_retry(self):
         pub = self.app.amqp.TaskProducer(Mock())
-        pub.delay_task("tasks.add", (2, 2), {}, retry=False, chord=123)
+        pub.send_task("tasks.add", (2, 2), {}, retry=False, chord=123)
         self.assertFalse(pub.connection.ensure.call_count)
 
 

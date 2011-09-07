@@ -231,10 +231,10 @@ class BaseApp(object):
                            self.conf.CELERY_MESSAGE_COMPRESSION)
 
         with self.acquire_producer(connection, producer, block=True) as prod:
-            return result_cls(prod.delay_task(name, args, kwargs,
-                                              task_id=task_id,
-                                              countdown=countdown, eta=eta,
-                                              expires=expires, **options))
+            return result_cls(prod.send_task(name, args, kwargs,
+                                             task_id=task_id,
+                                             countdown=countdown, eta=eta,
+                                             expires=expires, **options))
 
     def AsyncResult(self, task_id, backend=None, task_name=None):
         """Create :class:`celery.result.BaseAsyncResult` instance."""

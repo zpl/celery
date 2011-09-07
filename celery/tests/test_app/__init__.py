@@ -201,16 +201,16 @@ class test_App(unittest.TestCase):
         self.assertIn(ex.name, amqp._exchanges_declared[prod.connection])
 
         dispatcher = Dispatcher()
-        self.assertTrue(prod.delay_task("footask", (), {},
-                                        exchange=Exchange("moo_exchange"),
-                                        routing_key="moo_exchange",
-                                        event_dispatcher=dispatcher))
+        self.assertTrue(prod.send_task("footask", (), {},
+                                       exchange=Exchange("moo_exchange"),
+                                       routing_key="moo_exchange",
+                                       event_dispatcher=dispatcher))
         self.assertTrue(dispatcher.sent)
         self.assertEqual(dispatcher.sent[0][0], "task-sent")
-        self.assertTrue(prod.delay_task("footask", (), {},
-                                        event_dispatcher=dispatcher,
-                                        exchange=Exchange("bar_exchange"),
-                                        routing_key="bar_exchange"))
+        self.assertTrue(prod.send_task("footask", (), {},
+                                       event_dispatcher=dispatcher,
+                                       exchange=Exchange("bar_exchange"),
+                                       routing_key="bar_exchange"))
         self.assertIn("bar_exchange",
                       amqp._exchanges_declared[prod.connection])
 
