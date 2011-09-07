@@ -297,6 +297,7 @@ class TestCeleryTasks(unittest.TestCase):
         presult2 = t1.apply_async(kwargs=dict(name="George Costanza"),
                                 eta=datetime.utcnow() + timedelta(days=1),
                                 expires=datetime.utcnow() + timedelta(days=2))
+
         self.assertNextTaskDataEqual(consumer, presult2, t1.name,
                 name="George Costanza", test_eta=True, test_expires=True)
 
