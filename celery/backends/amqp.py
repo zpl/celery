@@ -41,7 +41,7 @@ class AMQPBackend(BaseDictBackend):
             **kwargs):
         super(AMQPBackend, self).__init__(**kwargs)
         conf = self.app.conf
-        self._connection = connection
+        self.connection = self.app.broker_connection(connection)
         self.queue_arguments = {}
         self.persistent = (conf.CELERY_RESULT_PERSISTENT if persistent is None
                                                          else persistent)
@@ -75,11 +75,10 @@ class AMQPBackend(BaseDictBackend):
     def _create_consumer(self, bindings, channel):
         return self.Consumer(channel, bindings, no_ack=True)
 
-    def _publish_result(self, connection, task_id, meta):
-        with self.app.acquire_producer(connection, None) as prod:
-            self._create_binding(task_id)(prod.channel).declare()
-            prod.publish(meta, exchange=self.exchange,
-                               routing_key=task_id.replace("-", ""))
+    def _publish_result(self, producer, task_id, meta):
+            self._create_binding(task_id)(producer.channel).declare()
+            producer.publish(meta, exchange=self.exchange,
+                                   routing_key=task_id.replace("-", ""))
 
     def revive(self, channel):
         pass
@@ -87,21 +86,23 @@ class AMQPBackend(BaseDictBackend):
     def _store_result(self, task_id, result, status, traceback=None,
             max_retries=20, interval_start=0, interval_step=1,
             interval_max=1):
+        connection = self.connection
+        acquire_producer = self.app.acquire_producer
         """Send task return value and status."""
         with self.mutex:
-            with self.app.pool.acquire(block=True) as conn:
+            with acquire_producer(connection, None, block=True) as prod:
 
                 def errback(error, delay):
                     print("Couldn't send result for %r: %r. Retry in %rs." % (
                             task_id, error, delay))
 
-                send = conn.ensure(self, self._publish_result,
-                            max_retries=max_retries,
-                            errback=errback,
-                            interval_start=interval_start,
-                            interval_step=interval_step,
-                            interval_max=interval_max)
-                send(conn, task_id, {"task_id": task_id, "status": status,
+                send = connection.ensure(prod, self._publish_result,
+                                         max_retries=max_retries,
+                                         errback=errback,
+                                         interval_start=interval_start,
+                                         interval_step=interval_step,
+                                         interval_max=interval_max)
+                send(prod, task_id, {"task_id": task_id, "status": status,
                                 "result": self.encode_result(result, status),
                                 "traceback": traceback})
         return result
