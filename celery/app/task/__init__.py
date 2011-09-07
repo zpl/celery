@@ -281,7 +281,14 @@ class BaseTask(object):
     get_publisher = get_producer
 
     @classmethod
-    def get_consumer(self, connection=None, **kwargs):
+    def get_queue(self, queue=None, **options):
+        amqp = self.app.amqp
+        options.setdefault("queue", queue or self.queue)
+        dest = amqp.router.route(options, self.name, (), {})
+        return amqp.queues[dest["queue"]]
+
+    @classmethod
+    def get_consumer(self, connection=None, queue=None, **kwargs):
         """Get message consumer.
 
         :rtype :class:`kombu.messaging.Consumer`:
@@ -298,11 +305,9 @@ class BaseTask(object):
                 >>> consumer.connection.close()
 
         """
-        options = self.app.amqp.router.route({"queue": self.queue},
-                                             self.name, (), {})
-        queue = self.app.amqp.queues[options["queue"]]
+        queue = self.get_queue(queue)
         connection = self.establish_connection(connection)
-        return self.app.amqp.Consumer(connection, queues=[queue])
+        return self.app.amqp.Consumer(connection, queues=[queue], **kwargs)
 
     @classmethod
     def delay(self, *args, **kwargs):

@@ -283,9 +283,8 @@ class BaseApp(object):
         :keyword connection: If not provided, then a connection will be
                              acquired from the connection pool.
         """
-        connection = self.broker_connection(connection)
-        with self.amqp.connections[connection].acquire(block=True) as conn:
-                yield conn
+        with self.acquire_connection(connection, block=True) as conn:
+            yield conn
 
     def prepare_config(self, c):
         """Prepare configuration before it is merged with the defaults."""
@@ -341,6 +340,10 @@ class BaseApp(object):
             connection = self.broker_connection(connection)
             with self.amqp.producers[connection].acquire(**kwargs) as pub:
                 yield pub
+
+    def acquire_connection(self, connection=None, **kwargs):
+        return self.amqp.connections[self.broker_connection(connection)] \
+                                    .acquire(**kwargs)
 
     @property
     def pool(self):
