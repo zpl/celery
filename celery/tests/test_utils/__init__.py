@@ -31,10 +31,6 @@ class test_chunks(unittest.TestCase):
 
 class test_utils(unittest.TestCase):
 
-    def test_get_full_cls_name(self):
-        Class = type("Fox", (object, ), {"__module__": "quick.brown"})
-        self.assertEqual(utils.get_full_cls_name(Class), "quick.brown.Fox")
-
     def test_is_iterable(self):
         for a in "f", ["f"], ("f", ), {"f": "f"}:
             self.assertTrue(utils.is_iterable(a))
@@ -83,10 +79,6 @@ class test_utils(unittest.TestCase):
         iterations[0] = 0
         self.assertIsNone(utils.first(predicate, xrange(10, 20)))
         self.assertEqual(iterations[0], 10)
-
-    def test_get_cls_by_name__instance_returns_instance(self):
-        instance = object()
-        self.assertIs(utils.get_cls_by_name(instance), instance)
 
     def test_truncate_text(self):
         self.assertEqual(utils.truncate_text("ABCDEFGHI", 3), "ABC...")

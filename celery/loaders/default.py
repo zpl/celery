@@ -5,7 +5,7 @@ import warnings
 
 from ..datastructures import AttributeDict
 from ..exceptions import NotConfigured
-from ..utils import find_module
+from ..utils.imports import find_module
 
 from .base import BaseLoader
 

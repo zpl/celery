@@ -14,7 +14,8 @@ import warnings
 from .. import __version__, platforms, signals
 from ..app import app_or_default
 from ..exceptions import ImproperlyConfigured, SystemTerminate
-from ..utils import get_full_cls_name, cry
+from ..utils import cry
+from ..utils.imports import get_full_cls_name
 from ..utils.log import LOG_LEVELS
 from ..worker import WorkController
 

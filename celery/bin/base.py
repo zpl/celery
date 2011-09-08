@@ -157,7 +157,7 @@ class Command(object):
         return argv
 
     def get_cls_by_name(self, name):
-        from ..utils import get_cls_by_name, import_from_cwd
+        from ..utils.imports import get_cls_by_name, import_from_cwd
         return get_cls_by_name(name, imp=import_from_cwd)
 
     def process_cmdline_config(self, argv):

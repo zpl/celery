@@ -20,7 +20,8 @@ from copy import deepcopy
 from threading import Lock
 
 from .. import datastructures
-from ..utils import cached_property, instantiate, lpmerge
+from ..utils import cached_property, lpmerge
+from ..utils.imports import instantiate
 
 from .defaults import DEFAULTS, find_deprecated_settings, NAMESPACES
 
@@ -247,11 +248,28 @@ class BaseApp(object):
         from ..result import TaskSetResult
         return TaskSetResult(taskset_id, results, app=self)
 
+    @contextmanager
+    def acquire_producer(self, connection, producer=None, **kwargs):
+        if producer:
+            yield producer
+        else:
+            connection = self.broker_connection(connection)
+            with self.amqp.producers[connection].acquire(**kwargs) as pub:
+                yield pub
+
+    def acquire_connection(self, connection=None, **kwargs):
+        return self.amqp.connections[self.broker_connection(connection)] \
+                                    .acquire(**kwargs)
+
     def broker_connection(self, *args, **kwargs):
         """Establish a connection to the message broker.
 
         Default values are taken from the default broker (found in
         :setting:`BROKERS`).
+
+        :param URL_or_broker_alias:  This can be either a broker alias
+          defined in the :setting:`BROKERS` setting, or a kombu AMQP URL.
+          If not provided then the default connection will be used.
 
         :keyword hostname: or the ``hostname`` field of the default broker.
         :keyword userid: or the ``userid`` field of the default broker.
@@ -266,14 +284,58 @@ class BaseApp(object):
         :returns :class:`kombu.connection.BrokerConnection`:
 
         """
+        # we handle several cases here for backward compatibility:
+        #
+        #   1) broker_connection("alias")
+        #
+        #        Use default connection parameters from conf.BROKERS["alias"]
+        #
+        #   2) broker_connection(None)
+        #
+        #        Some other function supporting a connection argument
+        #        called this and the user provided None.  This means
+        #        broker_connection can be used as a type of sorts, coercing
+        #        several different types of invocation into a working
+        #        connection instance.
+        #
+        #   3) broker_connection(BrokerConnection("redis://"))
+        #
+        #        Same as 2.
+        #
+        #   4) broker_connection("localhost")
+        #
+        #        Don't think this is wildly used, but there is a chance that
+        #        it is, so we need to support it, maybe add a deprecation
+        #        warning, so only URLs or explicit keyword arguments are
+        #        used in the future.
+        #
+        #   5) broker_connection(hostname="localhost", userid="guest",
+        #                        password="guest": port=5672")
+        #
+        #       Using the same keyword arguments as kombu.BrokerConnection.
+        #
+        #   5) broker_connection("redis://localhost:312")
+        #
+        #        Using kombu URLs, this should be allowed.
+        #
         conf = self.conf
-        alias = conf.BROKER_DEFAULT
+        default = conf.BROKER_DEFAULT
+        using_alias = None
         if len(args) == 1:
-            alias = args[0] or alias
-        if not isinstance(alias, basestring):
-            return alias
-        return self.amqp.BrokerConnection(**dict(
-                    conf.BROKERS[alias or conf.BROKER_DEFAULT], **kwargs))
+            _hostname = args[0]
+            if _hostname is None:
+                using_alias = default
+            elif not isinstance(_hostname, basestring):
+                # already a connection instance
+                return _hostname
+            elif _hostname in conf.BROKERS:
+                using_alias = _hostname
+            args = []
+        elif not args:
+            using_alias = conf.BROKER_DEFAULT
+        if using_alias:
+            kwargs = dict(conf.BROKERS[using_alias], **kwargs)
+        return self.amqp.BrokerConnection(**kwargs)
 
     @contextmanager
     def default_connection(self, connection=None):
@@ -331,19 +393,6 @@ class BaseApp(object):
                                  "py_v": _platform.python_version(),
                                  "transport": self.conf.BROKER_TRANSPORT,
                                  "results": self.conf.CELERY_RESULT_BACKEND}
-
-    @contextmanager
-    def acquire_producer(self, connection, producer=None, **kwargs):
-        if producer:
-            yield producer
-        else:
-            connection = self.broker_connection(connection)
-            with self.amqp.producers[connection].acquire(**kwargs) as pub:
-                yield pub
-
-    def acquire_connection(self, connection=None, **kwargs):
-        return self.amqp.connections[self.broker_connection(connection)] \
-                                    .acquire(**kwargs)
 
     @property
     def pool(self):

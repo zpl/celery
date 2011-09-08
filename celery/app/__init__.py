@@ -18,7 +18,8 @@ from functools import wraps
 from inspect import getargspec
 
 from .. import registry
-from ..utils import cached_property, instantiate
+from ..utils import cached_property
+from ..utils.imports import instantiate
 
 from . import annotations
 from . import base

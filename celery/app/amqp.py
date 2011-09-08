@@ -161,7 +161,6 @@ class TaskProducer(Producer):
     retry_policy = None
 
     def __init__(self, connection, *args, **kwargs):
-        self.connection = connection
         self.app = kwargs.pop("app")
         self.retry = kwargs.pop("retry", self.retry)
         self.retry_policy = kwargs.pop("retry_policy",

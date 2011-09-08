@@ -11,7 +11,7 @@ from time import time
 
 from celery.exceptions import TimeoutError
 from celery.task.control import ping, flatten_reply, inspect
-from celery.utils import get_full_cls_name
+from celery.utils.imports import get_full_cls_name
 
 from celery.tests.utils import unittest
 

@@ -8,7 +8,7 @@ import traceback
 from .. import __version__, platforms
 from .. import beat
 from ..app import app_or_default
-from ..utils import get_full_cls_name
+from ..utils.imports import get_full_cls_name
 from ..utils.log import LOG_LEVELS
 from ..utils.timeutils import humanize_seconds
 
