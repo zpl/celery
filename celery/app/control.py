@@ -96,7 +96,7 @@ class Control(object):
         :returns: the number of tasks discarded.
 
         """
-        with self.app.default_connection(connection) as conn:
+        with self.app.connection_or_acquire(connection) as conn:
             return self.app.amqp.get_task_consumer(connection=conn).purge()
     discard_all = purge  # XXX deprecate
 
@@ -198,7 +198,7 @@ class Control(object):
             received.
 
         """
-        with self.app.default_connection(connection) as conn:
+        with self.app.connection_or_acquire(connection) as conn:
             if channel is None:
                 channel = conn.default_channel
             return self.mailbox(conn)._broadcast(command, arguments,

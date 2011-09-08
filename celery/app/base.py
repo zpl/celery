@@ -149,7 +149,7 @@ class BaseApp(object):
 
     amqp_cls = "celery.app.amqp.AMQP"
     backend_cls = None
-    events_cls = "celery.events.Events"
+    events_cls = "celery.app.events.Events"
     loader_cls = "celery.loaders.app.AppLoader"
     log_cls = "celery.app.log.Logging"
     control_cls = "celery.app.control.Control"
@@ -261,7 +261,7 @@ class BaseApp(object):
         return self.amqp.connections[self.broker_connection(connection)] \
                                     .acquire(**kwargs)
 
-    def broker_connection(self, *args, **kwargs):
+    def broker_connection(self, url=None, *args, **kwargs):
         """Establish a connection to the message broker.
 
         Default values are taken from the default broker (found in
@@ -319,34 +319,32 @@ class BaseApp(object):
         #        Using kombu URLs, this should be allowed.
         #
         conf = self.conf
-        default = conf.BROKER_DEFAULT
-        using_alias = None
-        if len(args) == 1:
-            _hostname = args[0]
-            if _hostname is None:
-                using_alias = default
-            elif not isinstance(_hostname, basestring):
-                # already a connection instance
-                return _hostname
-            elif _hostname in conf.BROKERS:
-                using_alias = _hostname
-            args = []
-        elif not args:
-            using_alias = conf.BROKER_DEFAULT
-        if using_alias:
-            kwargs = dict(conf.BROKERS[using_alias], **kwargs)
-        return self.amqp.BrokerConnection(**kwargs)
+        brokers = conf.BROKERS
+        alias = conf.BROKER_DEFAULT
+        if url is not None:
+            if not isinstance(url, basestring):
+                return url  # already connection instance.
+            else:
+                if url in brokers:
+                    using_alias = url
+                else:
+                    args.insert(0, url)
+        return self.amqp.BrokerConnection(*args, **dict(brokers[alias], **kwargs))
 
     @contextmanager
-    def default_connection(self, connection=None):
+    def connection_or_acquire(self, connection=None):
         """For use within a with-statement to get a connection from the pool
         if one is not already provided.
 
         :keyword connection: If not provided, then a connection will be
                              acquired from the connection pool.
         """
-        with self.acquire_connection(connection, block=True) as conn:
-            yield conn
+        if connection.connected:
+            yield connection
+        else:
+            with self.acquire_connection(connection, block=True) as conn:
+                yield conn
+    default_connection = connection_or_acquire
 
     def prepare_config(self, c):
         """Prepare configuration before it is merged with the defaults."""
