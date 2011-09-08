@@ -28,7 +28,7 @@ class Events(object):
                                app=self.app)
 
     def State(self):
-        from .state import State as _State
+        from ..events.state import State as _State
         return _State()
 
     @contextmanager

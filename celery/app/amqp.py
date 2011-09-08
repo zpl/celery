@@ -9,12 +9,11 @@ AMQ related functionality.
 :license: BSD, see LICENSE for more details.
 
 """
-from collections import defaultdict
 from datetime import datetime, timedelta
 
 from kombu import BrokerConnection, Consumer, Exchange, Producer, Queue
 from kombu import pools
-from kombu.common import entry_to_queue
+from kombu.common import entry_to_queue, maybe_declare
 
 from .. import signals
 from ..utils import cached_property, uuid
@@ -35,12 +34,6 @@ QUEUE_FORMAT = """
 . %(name)s exchange:%(exchange)s (%(exchange_type)s) \
 binding:%(routing_key)s
 """
-
-#: Set of exchange names that have already been declared.
-_exchanges_declared = defaultdict(lambda: set())
-
-#: Set of queue names that have already been declared.
-_queues_declared = defaultdict(lambda: set())
 
 
 def extract_msg_options(options, keep=MSG_OPTIONS):
@@ -66,6 +59,12 @@ class Queues(dict):
         dict.__init__(self)
         for queue in (queues or ()):
             self.add(queue)
+
+    def __getitem__(self, key):
+        try:
+            return dict.__getitem__(self, key)
+        except KeyError:
+            return self.aliases[key]
 
     def add(self, queue):
         """Add new queue.
@@ -149,6 +148,10 @@ class Queues(dict):
                 queue.routing_key = default_exchange.name
         return cls(queues)
 
+    @property
+    def aliases(self):
+        return dict((q.alias, q) for q in self.itervalues() if q.alias)
+
 
 def maybe_exchange(exchange, exchange_type):
     if isinstance(exchange, basestring):
@@ -172,53 +175,26 @@ class TaskProducer(Producer):
                                            *args, **kwargs)
 
     def declare(self):
-        edeclared = _exchanges_declared[self.connection]
-        if self.exchange.name and self.exchange.name not in edeclared:
-            super(TaskProducer, self).declare()
-            edeclared.add(self.exchange.name)
-
-    def _declare_queue(self, name, retry=False, retry_policy={}):
-        queue = self.app.queues[name](self.channel)
-        if retry:
-            self.connection.ensure(queue, queue.declare, **retry_policy)()
-        else:
-            queue.declare()
-        return queue
-
-    def _declare_exchange(self, exchange, retry=False, retry_policy={}):
-        ex = exchange(self.channel)
-        if retry:
-            return self.connection.ensure(ex, ex.declare, **retry_policy)
-        return ex.declare()
-
-    def maybe_declare(self, queue, exchange, retry, retry_policy):
-        connection = self.connection
-        qdeclared = _queues_declared[connection]
-        edeclared = _exchanges_declared[connection]
-        if queue and queue not in qdeclared:
-            entity = self._declare_queue(queue, retry, retry_policy)
-            edeclared.add(entity.exchange.name)
-            qdeclared.add(entity.name)
-        if exchange and exchange.name not in edeclared:
-            self._declare_exchange(exchange, retry, retry_policy)
-            edeclared.add(exchange.name)
+        maybe_declare(self.exchange, self.channel)
 
     def _send_task(self, body, exchange=None, exchange_type=None,
             retry=None, retry_policy=None, queue=None, **options):
         publish = self.publish
         connection = self.connection
+        exchange = maybe_exchange(exchange, exchange_type)
 
         _retry_policy = self.retry_policy
         if retry_policy:  # merge default and custom policy
             _retry_policy = dict(_retry_policy, **retry_policy)
 
-        exchange = maybe_exchange(exchange, exchange_type)
-        self.maybe_declare(queue, exchange, retry, _retry_policy)
+        if queue:
+            self._declare_queue(queue, retry, retry_policy)
+        if exchange:
+            self._declare_exchange(exchange, retry, retry_policy)
 
         if (retry if retry is not None else self.retry):
             publish = connection.ensure(self, self.publish, **_retry_policy)
         publish(body, exchange=exchange, **extract_msg_options(options))
-
 
     def send_task(self, name, args=None, kwargs=None,
             countdown=None, eta=None, id=None, taskset_id=None,
@@ -262,6 +238,23 @@ class TaskProducer(Producer):
                             args=repr(args), kwargs=repr(kwargs),
                             retries=retries, eta=eta, expires=expires)
         return id
+
+    def _declare_queue(self, name, retry=False, retry_policy={}):
+        queue = self.app.queues[name](self.channel)
+        if retry:
+            self.connection.ensure(queue, maybe_declare,
+                                   **retry_policy)(queue, self.channel)
+        else:
+            maybe_declare(queue, self.channel)
+        return queue
+
+    def _declare_exchange(self, exchange, retry=False, retry_policy={}):
+        ex = exchange(self.channel)
+        if retry:
+            return self.connection.ensure(ex, maybe_declare,
+                                          **retry_policy)(ex, self.channel)
+        return maybe_declare(ex, self.channel)
+
 
 
 class ProducerPool(pools.ProducerPool):

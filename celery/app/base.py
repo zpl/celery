@@ -339,7 +339,7 @@ class BaseApp(object):
         :keyword connection: If not provided, then a connection will be
                              acquired from the connection pool.
         """
-        if connection.connected:
+        if connection and connection.connected:
             yield connection
         else:
             with self.acquire_connection(connection, block=True) as conn:

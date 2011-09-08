@@ -4,6 +4,7 @@ import os
 import sys
 
 from kombu import Exchange
+from kombu.common import declared_entities
 
 from celery import Celery
 from celery import app as _app
@@ -15,8 +16,8 @@ from celery.utils.serialization import pickle
 from celery.tests import config
 from celery.tests.utils import (unittest, mask_modules, platform_pyimp,
                                 sys_platform, pypy_version)
+from celery.utils import uuid
 from celery.utils.mail import ErrorMail
-from kombu.utils import gen_unique_id
 
 THIS_IS_A_KEY = "this is a value"
 
@@ -198,7 +199,7 @@ class test_App(unittest.TestCase):
 
         ex = Exchange("foo_exchange")
         prod = self.app.amqp.TaskProducer(conn, exchange=ex)
-        self.assertIn(ex.name, amqp._exchanges_declared[prod.connection])
+        self.assertIn(ex, declared_entities[prod.connection])
 
         dispatcher = Dispatcher()
         self.assertTrue(prod.send_task("footask", (), {},
@@ -211,12 +212,12 @@ class test_App(unittest.TestCase):
                                        event_dispatcher=dispatcher,
                                        exchange=Exchange("bar_exchange"),
                                        routing_key="bar_exchange"))
-        self.assertIn("bar_exchange",
-                      amqp._exchanges_declared[prod.connection])
+        self.assertIn(Exchange("bar_exchange"),
+                      declared_entities[prod.connection])
 
     def test_error_mail_sender(self):
         x = ErrorMail.subject % {"name": "task_name",
-                                 "id": gen_unique_id(),
+                                 "id": uuid(),
                                  "exc": "FOOBARBAZ",
                                  "hostname": "lana"}
         self.assertTrue(x)
