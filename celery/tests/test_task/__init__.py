@@ -9,7 +9,7 @@ from celery.task import task as task_dec
 from celery.exceptions import RetryTaskError
 from celery.execute import send_task
 from celery.result import EagerResult
-from celery.schedules import crontab, crontab_parser
+from celery.schedules import is_iterable, crontab, crontab_parser
 from celery.utils import uuid
 from celery.utils.timeutils import parse_iso8601
 
@@ -126,7 +126,16 @@ class RetryTaskCustomExc(task.Task):
                 return self.retry(kwargs=kwargs, countdown=0, exc=exc)
 
 
-class TestTaskRetries(unittest.TestCase):
+class test_utils(unittest.TestCase):
+
+    def test_is_iterable(self):
+        for a in "f", ["f"], ("f", ), {"f": "f"}:
+            self.assertTrue(is_iterable(a))
+        for b in object(), 1:
+            self.assertFalse(is_iterable(b))
+
+
+class test_task_retries(unittest.TestCase):
 
     def test_retry(self):
         RetryTask.max_retries = 3
@@ -201,7 +210,7 @@ class TestTaskRetries(unittest.TestCase):
         self.assertEqual(RetryTask.iterations, 2)
 
 
-class TestCeleryTasks(unittest.TestCase):
+class test_tasks(unittest.TestCase):
 
     def test_unpickle_task(self):
         import pickle
@@ -400,7 +409,7 @@ class TestCeleryTasks(unittest.TestCase):
         self.assertTrue(logger)
 
 
-class TestTaskSet(unittest.TestCase):
+class test_task_sets(unittest.TestCase):
 
     @with_eager_tasks
     def test_function_taskset(self):
@@ -446,7 +455,7 @@ class TestTaskSet(unittest.TestCase):
         self.assertTrue(res.taskset_id.startswith(prefix))
 
 
-class TestTaskApply(unittest.TestCase):
+class test_apply_tasks(unittest.TestCase):
 
     def test_apply_throw(self):
         self.assertRaises(KeyError, RaisingTask.apply, throw=True)
@@ -486,7 +495,7 @@ class MyPeriodic(task.PeriodicTask):
     run_every = timedelta(hours=1)
 
 
-class TestPeriodicTask(unittest.TestCase):
+class test_periodic_tasks(unittest.TestCase):
 
     def test_must_have_run_every(self):
         self.assertRaises(NotImplementedError, type, "Foo",

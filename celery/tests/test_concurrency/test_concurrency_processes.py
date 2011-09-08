@@ -18,7 +18,7 @@ except ImportError:
     mp = _mp()  # noqa
 
 from celery.datastructures import ExceptionInfo
-from celery.utils import noop
+from celery.utils.functional import noop
 from celery.tests.utils import unittest
 
 

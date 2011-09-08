@@ -5,9 +5,16 @@ from dateutil.relativedelta import relativedelta
 from pyparsing import (Word, Literal, ZeroOrMore, Optional,
                        Group, StringEnd, alphas)
 
-from .utils import is_iterable
 from .utils.timeutils import (timedelta_seconds, weekday,
                               remaining, humanize_seconds)
+
+
+def is_iterable(obj):
+    try:
+        iter(obj)
+    except TypeError:
+        return False
+    return True
 
 
 class schedule(object):

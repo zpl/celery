@@ -24,7 +24,7 @@ import mock
 from nose import SkipTest
 
 from ..app import app_or_default
-from ..utils import noop
+from ..utils.functional import noop
 from ..utils.compat import StringIO, LoggerAdapter
 
 

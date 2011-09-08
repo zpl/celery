@@ -15,7 +15,8 @@ from .. import registry
 from ..app import app_or_default
 from ..datastructures import ExceptionInfo
 from ..execute.trace import TaskTrace
-from ..utils import noop, kwdict, truncate_text
+from ..utils import kwdict, truncate_text
+from ..utils.functional import noop
 from ..utils.encoding import safe_repr, safe_str, default_encoding
 from ..utils.timeutils import maybe_iso8601, timezone
 

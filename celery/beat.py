@@ -20,7 +20,8 @@ from . import registry
 from . import signals
 from .app import app_or_default
 from .schedules import maybe_schedule, crontab
-from .utils import cached_property, maybe_promise
+from .utils import cached_property
+from .utils.functional import maybe_promise
 from .utils.imports import instantiate
 from .utils.timeutils import humanize_seconds
 

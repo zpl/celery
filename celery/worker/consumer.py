@@ -79,9 +79,10 @@ import warnings
 from ..app import app_or_default
 from ..datastructures import AttributeDict
 from ..exceptions import NotRegistered
-from ..utils import noop
 from ..utils import timer2
 from ..utils.encoding import safe_repr
+from ..utils.functional import noop
+
 from . import state
 from .job import TaskRequest, InvalidTaskError
 from .control.registry import Panel

@@ -3,7 +3,7 @@ from functools import wraps
 from celery import current_app
 from celery.app import routes
 from celery.exceptions import QueueNotFound
-from celery.utils import maybe_promise
+from celery.utils.functional import maybe_promise
 from celery.tests.utils import unittest
 
 
