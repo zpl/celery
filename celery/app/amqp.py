@@ -17,7 +17,8 @@ from kombu import pools
 from kombu.common import entry_to_queue
 
 from .. import signals
-from ..utils import cached_property, textindent, uuid
+from ..utils import cached_property, uuid
+from ..utils import text
 
 from . import routes as _routes
 
@@ -101,8 +102,8 @@ class Queues(dict):
         info = [QUEUE_FORMAT.strip() % as_info(queue)
                         for _, queue in sorted(active.iteritems())]
         if indent_first:
-            return textindent("\n".join(info), indent)
-        return info[0] + "\n" + textindent("\n".join(info[1:]), indent)
+            return text.indent("\n".join(info), indent)
+        return info[0] + "\n" + text.indent("\n".join(info[1:]), indent)
 
     def select_subset(self, wanted, create_missing=True):
         """Select subset of the currently defined queues.

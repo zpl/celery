@@ -4,6 +4,7 @@ from celery.tests.utils import unittest
 from celery import utils
 from celery.utils.functional import promise, mpromise, maybe_promise
 from celery.utils.functional import padlist, firstmethod
+from celery.utils.text import abbr, abbrtask, truncate
 
 
 def double(x):
@@ -39,21 +40,21 @@ class test_utils(unittest.TestCase):
         self.assertEqual("four", firstmethod("m")([
             A(), A(), A(), promise(lambda: A("four")), A("five")]))
 
-    def test_truncate_text(self):
-        self.assertEqual(utils.truncate_text("ABCDEFGHI", 3), "ABC...")
-        self.assertEqual(utils.truncate_text("ABCDEFGHI", 10), "ABCDEFGHI")
+    def test_truncate(self):
+        self.assertEqual(truncate("ABCDEFGHI", 3), "ABC...")
+        self.assertEqual(truncate("ABCDEFGHI", 10), "ABCDEFGHI")
 
     def test_abbr(self):
-        self.assertEqual(utils.abbr(None, 3), "???")
-        self.assertEqual(utils.abbr("ABCDEFGHI", 6), "ABC...")
-        self.assertEqual(utils.abbr("ABCDEFGHI", 20), "ABCDEFGHI")
-        self.assertEqual(utils.abbr("ABCDEFGHI", 6, None), "ABCDEF")
+        self.assertEqual(abbr(None, 3), "???")
+        self.assertEqual(abbr("ABCDEFGHI", 6), "ABC...")
+        self.assertEqual(abbr("ABCDEFGHI", 20), "ABCDEFGHI")
+        self.assertEqual(abbr("ABCDEFGHI", 6, None), "ABCDEF")
 
     def test_abbrtask(self):
-        self.assertEqual(utils.abbrtask(None, 3), "???")
-        self.assertEqual(utils.abbrtask("feeds.tasks.refresh", 10),
+        self.assertEqual(abbrtask(None, 3), "???")
+        self.assertEqual(abbrtask("feeds.tasks.refresh", 10),
                                         "[.]refresh")
-        self.assertEqual(utils.abbrtask("feeds.tasks.refresh", 30),
+        self.assertEqual(abbrtask("feeds.tasks.refresh", 30),
                                         "feeds.tasks.refresh")
 
     def test_cached_property(self):

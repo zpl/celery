@@ -7,7 +7,6 @@ from contextlib import contextmanager
 
 __all__ = ["get_full_cls_name",
            "get_cls_by_name",
-           "get_symbol_by_name",
            "instantiate",
            "cwd_in_path",
            "find_module",

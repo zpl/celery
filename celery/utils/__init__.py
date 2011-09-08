@@ -7,7 +7,6 @@ import traceback
 import warnings
 
 from functools import wraps
-from itertools import islice
 from pprint import pprint
 
 from kombu.utils import cached_property, gen_unique_id  # noqa
@@ -83,49 +82,11 @@ def kwdict(kwargs):
                     for key, value in kwargs.items())
 
 
-def is_iterable(obj):
-    try:
-        iter(obj)
-    except TypeError:
-        return False
-    return True
-
-
 def mattrgetter(*attrs):
     """Like :func:`operator.itemgetter` but returns :const:`None` on missing
     attributes instead of raising :exc:`AttributeError`."""
     return lambda obj: dict((attr, getattr(obj, attr, None))
                                 for attr in attrs)
-
-
-def truncate_text(text, maxlen=128, suffix="..."):
-    """Truncates text to a maximum number of characters."""
-    if len(text) >= maxlen:
-        return text[:maxlen].rsplit(" ", 1)[0] + suffix
-    return text
-
-
-def abbr(S, max, ellipsis="..."):
-    if S is None:
-        return "???"
-    if len(S) > max:
-        return ellipsis and (S[:max - len(ellipsis)] + ellipsis) or S[:max]
-    return S
-
-
-def abbrtask(S, max):
-    if S is None:
-        return "???"
-    if len(S) > max:
-        module, _, cls = S.rpartition(".")
-        module = abbr(module, max - len(cls) - 3, False)
-        return module + "[.]" + cls
-    return S
-
-
-def textindent(t, indent=0):
-        """Indent text."""
-        return "\n".join(" " * indent + p for p in t.split("\n"))
 
 
 def cry():  # pragma: no cover
