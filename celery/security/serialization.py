@@ -6,8 +6,9 @@ import anyjson
 
 from kombu.serialization import registry
 
+from ..exceptions import SecurityError
+
 from .certificate import Certificate, FSCertStore
-from .exceptions import SecurityError
 from .key import PrivateKey
 
 

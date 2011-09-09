@@ -1,6 +1,5 @@
 from celery.tests.utils import unittest
 
-from celery import registry
 from celery.app.registry import TaskRegistry
 from celery.task import Task, PeriodicTask
 

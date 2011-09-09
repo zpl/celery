@@ -81,13 +81,11 @@ class TestEventDispatcher(unittest.TestCase):
             self.assertEqual(dispatcher.producer.serializer,
                             self.app.conf.CELERY_EVENT_SERIALIZER)
 
-            created_channel = dispatcher.producer.channel
             dispatcher.disable()
             dispatcher.disable()  # Disable with no active producer
             dispatcher2.disable()
             self.assertFalse(dispatcher.enabled)
             self.assertIsNone(dispatcher.producer)
-            self.assertTrue(created_channel.closed)
             self.assertFalse(dispatcher2.channel.closed,
                              "does not close manually provided channel")
 

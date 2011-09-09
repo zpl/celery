@@ -1,8 +1,10 @@
-from celery.tests.utils import unittest
+from celery.exceptions import SecurityError
 
 from celery.security.key import PrivateKey
-from celery.security.exceptions import SecurityError
-from celery.tests.test_security import CERT1, KEY1, KEY2
+
+from celery.tests.utils import unittest
+
+from . import CERT1, KEY1, KEY2
 
 
 class TestKey(unittest.TestCase):

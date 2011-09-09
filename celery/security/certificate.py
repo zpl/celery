@@ -9,7 +9,7 @@ try:
 except ImportError:
     crypto = None  # noqa
 
-from .exceptions import SecurityError
+from ..exceptions import SecurityError
 
 
 class Certificate(object):

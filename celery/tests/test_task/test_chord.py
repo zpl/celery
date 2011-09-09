@@ -30,7 +30,6 @@ class test_unlock_chord_task(AppCase):
 
     @patch("celery.result.TaskSetResult")
     def test_unlock_ready(self, TaskSetResult):
-        tasks = current_app.tasks
 
         @task
         def callback(*args, **kwargs):
