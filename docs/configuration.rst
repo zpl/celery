@@ -46,6 +46,21 @@ It should contain all you need to run a basic Celery set-up.
 Configuration Directives
 ========================
 
+Time and date settings
+----------------------
+
+.. setting:: CELERY_TIMEZONE
+
+CELERY_TIMEZONE
+---------------
+
+Configure Celery to use a custom timezone.
+The timezone value can be any timezone supported by the :mod:`pytz`
+library.  :mod:`pytz` must be installed for the selected timezone
+to be used.
+
+If not set then the systems default local time zone is used.
+
 .. _conf-tasks:
 
 Task settings
@@ -577,20 +592,67 @@ persistent messages.
 Broker Settings
 ---------------
 
-.. setting:: BROKER_TRANSPORT
+.. setting:: BROKERS
 
-BROKER_TRANSPORT
-~~~~~~~~~~~~~~~~
-:Aliases: ``BROKER_BACKEND``
-:Deprecated aliases: ``CARROT_BACKEND``
+BROKERS
+~~~~~~~
 
-The Kombu transport to use.  Default is ``amqplib``.
+Brokers is a mapping of known broker connection parameters.
+The keys are aliases that can be used with the :option:`--broker` option
+to command line applications, and the ``connection`` argument to various
+functions.
 
-You can use a custom transport class name, or select one of the
-built-in transports: ``amqplib``, ``pika``, ``redis``, ``beanstalk``,
-``sqlalchemy``, ``django``, ``mongodb``, ``couchdb``.
+**Example**:
+
+.. code-block:: python
+
+    BROKERS = {"default": "amqp://guest:guest@localhost:5672//"}
+
+The ``default`` key is the broker that will be used by default.  You can change
+the name of the default key using the :setting:`BROKER_DEFAULT` setting.
+
+
+We can add some more brokers too:
+
+.. code-block:: python
+
+    BROKERS = {"default": "amqp://guest:guest@localhost:5672//",
+               "redis": "redis://",
+               "default-ssl": {
+                    "hostname": "amqp://guest:guest@localhost:5672//",
+                    "ssl": True,
+                    "login_method": "EXTERNAL",
+                }
+    }
+
+
+Then you can force :program:`celeryd` to use one of these aliases by using
+the :option:`-b` option::
+
+    $ celeryd -l info -b redis
+
+Or send a task to the broker using the ``connection`` argument to
+:meth:`apply_async`::
+
+    >>> mytask.apply_async(args, kwargs, connection="redis")
+
+Or create an amqp backend instance using one of the connection aliases::
+
+    >>> from celery.backends.amqp import AMQPBackend
+    >>> backend = AMQPBackend(connection="default-ssl")
+
+.. setting:: BROKER_DEFAULT
+
+BROKER_DEFAULT
+~~~~~~~~~~~~~~
+
+The default broker alias to use.  This must exist in the :setting:`BROKERS`
+setting.  By default the alias named ``default`` is used.
 
 .. setting:: BROKER_URL
+
+BROKER_URL
+~~~~~~~~~~
 
 Default broker URL.  This must be an URL in the format of::
 
@@ -604,7 +666,23 @@ to set options, e.g.::
 
     amqp://localhost/myvhost?ssl=1
 
-See the Kombu documentation for more information about broker URLs.
+See the Kombu documentation for more information about broker URLs,
+and see the :setting:`BROKER_TRANSPORT` settings for more information about
+available transports.
+
+.. setting:: BROKER_TRANSPORT
+
+BROKER_TRANSPORT
+~~~~~~~~~~~~~~~~
+:Aliases: ``BROKER_BACKEND``
+:Deprecated aliases: ``CARROT_BACKEND``
+
+The Kombu transport to use.  Default is ``amqplib``.
+
+You can use a custom transport class name, or select one of the
+built-in transports: ``amqplib``, ``pika``, ``redis``, ``beanstalk``,
+``sqlalchemy``, ``django``, ``mongodb``, ``couchdb``.
+
 
 .. setting:: BROKER_HOST
 

@@ -1,5 +1,10 @@
 def setup(app):
     app.add_crossref_type(
+        directivename="appattr",
+        rolename="appattr",
+        indextemplate="pair: %s; appattr",
+    )
+    app.add_crossref_type(
         directivename="setting",
         rolename="setting",
         indextemplate="pair: %s; setting",

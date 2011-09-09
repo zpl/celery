@@ -186,21 +186,6 @@ class Control(object):
     def broadcast(self, command, arguments=None, destination=None,
             connection=None, reply=False, timeout=1, limit=None,
             callback=None, channel=None):
-        """Broadcast a control command to the celery workers.
-
-        :param command: Name of command to send.
-        :param arguments: Keyword arguments for the command.
-        :keyword destination: If set, a list of the hosts to send the
-            command to, when empty broadcast to all workers.
-        :keyword connection: Custom broker connection to use, if not set,
-            a connection will be established automatically.
-        :keyword reply: Wait for and return the reply.
-        :keyword timeout: Timeout in seconds to wait for the reply.
-        :keyword limit: Limit number of replies.
-        :keyword callback: Callback called immediately for each reply
-            received.
-
-        """
         with self.app.connection_or_acquire(connection) as conn:
             if channel is None:
                 channel = conn.default_channel

@@ -58,7 +58,6 @@
     celery.utils.imports
     celery.utils.log
     celery.utils.mail
-    celery.utils.patch
     celery.utils.serialization
     celery.utils.term
     celery.utils.text

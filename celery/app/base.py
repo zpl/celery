@@ -36,6 +36,13 @@ settings -> transport:%(transport)s results:%(results)s
 """
 
 
+def _url_or_map(params):
+    """Converts URL values in the :setting:`BROKERS` setting to dicts."""
+    if isinstance(params, basestring):
+        return {"hostname": params}
+    return params
+
+
 class Settings(datastructures.ConfigurationView):
 
     @property
@@ -44,7 +51,7 @@ class Settings(datastructures.ConfigurationView):
         defaults = dict((opt.key, opt.default)
                     for opt in NAMESPACES["BROKER"].itervalues() if opt.key)
         brokers.setdefault(self.BROKER_DEFAULT, {"hostname": self.BROKER_HOST})
-        return dict((name, lpmerge(defaults, params))
+        return dict((name, lpmerge(defaults, _url_or_map(params)))
                         for name, params in brokers.iteritems())
 
     @property
