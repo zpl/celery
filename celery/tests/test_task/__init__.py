@@ -2,14 +2,14 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 from mock import Mock
-from pyparsing import ParseException
 
 from celery import task
 from celery.task import task as task_dec
 from celery.exceptions import RetryTaskError
 from celery.execute import send_task
 from celery.result import EagerResult
-from celery.schedules import is_iterable, crontab, crontab_parser
+from celery.schedules import ParseException
+from celery.schedules import _is_iterable, crontab, crontab_parser
 from celery.utils import uuid
 from celery.utils.timeutils import parse_iso8601
 
@@ -130,9 +130,9 @@ class test_utils(unittest.TestCase):
 
     def test_is_iterable(self):
         for a in "f", ["f"], ("f", ), {"f": "f"}:
-            self.assertTrue(is_iterable(a))
+            self.assertTrue(_is_iterable(a))
         for b in object(), 1:
-            self.assertFalse(is_iterable(b))
+            self.assertFalse(_is_iterable(b))
 
 
 class test_task_retries(unittest.TestCase):

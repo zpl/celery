@@ -14,7 +14,7 @@ import warnings
 from .. import __version__, platforms, signals
 from ..app import app_or_default
 from ..exceptions import ImproperlyConfigured, SystemTerminate
-from ..utils import cry
+from ..utils import cry, isatty
 from ..utils.imports import get_full_cls_name
 from ..utils.log import LOG_LEVELS
 from ..worker import WorkController
@@ -100,7 +100,7 @@ class Worker(object):
         if autoscale:
             max_c, _, min_c = autoscale.partition(",")
             self.autoscale = [int(max_c), min_c and int(min_c) or 0]
-        self._isatty = sys.stdout.isatty()
+        self._isatty = isatty(sys.stdout)
 
         self.colored = app.log.colored(self.logfile)
 
