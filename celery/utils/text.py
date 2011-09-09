@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+
 def truncate(text, maxlen=128, suffix="..."):
     """Truncates text to a maximum number of characters."""
     if len(text) >= maxlen:

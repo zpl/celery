@@ -1,5 +1,9 @@
 import socket
 
+from functools import partial
+
+from kombu import Consumer
+
 from celery import events
 from celery.app import app_or_default
 from celery.tests.utils import unittest
@@ -134,20 +138,18 @@ class TestEventReceiver(unittest.TestCase):
             events.EventReceiver.handlers = {}
 
     def test_itercapture(self):
-        connection = self.app.broker_connection()
-        try:
+        with self.app.acquire_connection(block=True) as connection:
+            channel = connection.default_channel
+            C = partial(Consumer, channel)
             r = self.app.events.Receiver(connection, node_id="celery.tests")
-            it = r.itercapture(timeout=0.0001, wakeup=False)
-            consumer = it.next()
+            consumer = r.get_consumers(C, connection.default_channel)[0]
             self.assertTrue(consumer.queues)
             self.assertEqual(consumer.callbacks[0], r._receive)
 
+            it = r.itercapture(timeout=0.0001, wakeup=False)
             self.assertRaises(socket.timeout, it.next)
-
             self.assertRaises(socket.timeout,
                               r.capture, timeout=0.00001)
-        finally:
-            connection.close()
 
     def test_itercapture_limit(self):
         connection = self.app.broker_connection()
@@ -168,7 +170,6 @@ class TestEventReceiver(unittest.TestCase):
             for ev in evs:
                 producer.send(ev)
             it = r.itercapture(limit=4, wakeup=True)
-            it.next()  # skip consumer (see itercapture)
             list(it)
             self.assertEqual(events_received[0], 4)
         finally:

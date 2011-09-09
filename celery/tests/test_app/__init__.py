@@ -178,7 +178,6 @@ class test_App(unittest.TestCase):
         self.assertTrue(self.app.bugreport())
 
     def test_send_task_sent_event(self):
-        from celery.app import amqp
 
         class Dispatcher(object):
             sent = []

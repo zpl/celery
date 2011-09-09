@@ -17,7 +17,6 @@ import sys
 
 from contextlib import contextmanager
 from copy import deepcopy
-from threading import Lock
 
 from kombu.clocks import LamportClock
 
@@ -278,10 +277,11 @@ class BaseApp(object):
                 return url  # already connection instance.
             else:
                 if url in brokers:
-                    using_alias = url
+                    alias = url
                 else:
                     args.insert(0, url)
-        return self.amqp.BrokerConnection(*args, **dict(brokers[alias], **kwargs))
+        return self.amqp.BrokerConnection(*args,
+                                          **dict(brokers[alias], **kwargs))
 
     @contextmanager
     def connection_or_acquire(self, connection=None):

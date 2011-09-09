@@ -256,18 +256,14 @@ class TaskProducer(Producer):
         return maybe_declare(ex, self.channel)
 
 
-
 class ProducerPool(pools.ProducerPool):
 
-    def __init__(self, type, connections, limit):
+    def __init__(self, type, *args, **kwargs):
         self.type = type
-        super(ProducerPool, self).__init__(connections, limit=limit)
+        super(ProducerPool, self).__init__(*args, **kwargs)
 
-    def create_producer(self):
-        conn = self.connections.acquire(block=True)
-        producer = self.type(conn, auto_declare=False)
-        producer.connection = conn
-        return producer
+    def Producer(self, connection):
+        return self.type(connection, auto_declare=False)
 
 
 class _Producers(pools.PoolGroup):

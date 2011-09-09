@@ -76,9 +76,11 @@ class AMQPBackend(BaseDictBackend):
         return self.Consumer(channel, bindings, no_ack=True)
 
     def _publish_result(self, producer, task_id, meta):
-            self._create_binding(task_id)(producer.channel).declare()
+            q = self._create_binding(task_id)(producer.channel)
+            q.declare()
             producer.publish(meta, exchange=self.exchange,
-                                   routing_key=task_id.replace("-", ""))
+                                   routing_key=q.routing_key,
+                                   reply_to=q.name)
 
     def revive(self, channel):
         pass
@@ -133,7 +135,8 @@ class AMQPBackend(BaseDictBackend):
             return self.wait_for(task_id, timeout, cache)
 
     def poll(self, task_id, backlog_limit=100):
-        with self.app.pool.acquire_channel(block=True) as (_, channel):
+        with self.app.acquire_connection(self.connection, block=True) as conn:
+            channel = conn.default_channel
             binding = self._create_binding(task_id)(channel)
             binding.declare()
             latest, acc = None, None
@@ -173,13 +176,15 @@ class AMQPBackend(BaseDictBackend):
         return results
 
     def consume(self, task_id, timeout=None):
-        with self.app.pool.acquire_channel(block=True) as (conn, channel):
+        with self.app.acquire_connection(self.connection, block=True) as conn:
+            channel = conn.default_channel
             binding = self._create_binding(task_id)
             with self._create_consumer(binding, channel) as consumer:
                 return self.drain_events(conn, consumer, timeout).values()[0]
 
     def get_many(self, task_ids, timeout=None, **kwargs):
-        with self.app.pool.acquire_channel(block=True) as (conn, channel):
+        with self.app.acquire_connection(self.connection, block=True) as conn:
+            channel = conn.default_channel
             ids = set(task_ids)
             cached_ids = set()
             for task_id in ids:

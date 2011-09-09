@@ -6,11 +6,8 @@ import socket
 import threading
 
 from collections import deque
-from contextlib import contextmanager
-from itertools import count
 
-from kombu.entity import Exchange, Queue
-from kombu.messaging import Consumer, Producer
+from kombu import Exchange, Producer, Queue
 from kombu.mixins import ConsumerMixin
 
 from ..app import app_or_default
@@ -77,9 +74,10 @@ class EventDispatcher(object):
         self.close()
 
     def enable(self):
-        self.producer = Producer(self.channel or self.connection.channel(),
-                                  exchange=event_exchange,
-                                  serializer=self.serializer)
+        conn = self.connection
+        self.producer = Producer(self.channel or conn.default_channel,
+                                 exchange=event_exchange,
+                                 serializer=self.serializer)
         self.enabled = True
 
     def disable(self):
@@ -102,6 +100,7 @@ class EventDispatcher(object):
                     self.producer.publish(event,
                                           routing_key=type.replace("-", "."))
                 except Exception, exc:
+                    # XXX Should log warning here...
                     if not self.buffer_while_offline:
                         raise
                     self._outbound_buffer.append((type, fields, exc))
@@ -121,9 +120,7 @@ class EventDispatcher(object):
         """Close the event dispatcher."""
         self.mutex.locked() and self.mutex.release()
         if self.producer is not None:
-            if not self.channel:  # close auto channel.
-                self.producer.channel.close()
-            self.producer = None
+            self.producer = self.producer.release()
 
 
 class EventReceiver(ConsumerMixin):
@@ -153,6 +150,18 @@ class EventReceiver(ConsumerMixin):
                            auto_delete=True,
                            durable=False)
 
+    def itercapture(self, limit=None, timeout=None, wakeup=True):
+        return self.consume(limit=limit, timeout=timeout, wakeup=wakeup)
+
+    def capture(self, limit=None, timeout=None, wakeup=True):
+        """Open up a consumer capturing events.
+
+        This has to run in the main process, and it will never
+        stop unless forced via :exc:`KeyboardInterrupt` or :exc:`SystemExit`.
+
+        """
+        return list(self.consume(limit=limit, timeout=timeout, wakeup=wakeup))
+
     def process(self, type, event):
         """Process the received event by dispatching it to the appropriate
         handler."""
@@ -166,18 +175,6 @@ class EventReceiver(ConsumerMixin):
     def on_consume_ready(self, connection, channel, wakeup=True, **kwargs):
         if wakeup:
             self.wakeup_workers(channel=channel)
-
-    def itercapture(self, limit=None, timeout=None, wakeup=True):
-        return self.consume(limit=limit, timeout=timeout, wakeup=wakeup)
-
-    def capture(self, limit=None, timeout=None, wakeup=True):
-        """Open up a consumer capturing events.
-
-        This has to run in the main process, and it will never
-        stop unless forced via :exc:`KeyboardInterrupt` or :exc:`SystemExit`.
-
-        """
-        return list(self.consume(limit=limit, timeout=timeout, wakeup=wakeup))
 
     def wakeup_workers(self, channel=None):
         self.app.control.broadcast("heartbeat",

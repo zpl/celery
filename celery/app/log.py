@@ -45,7 +45,6 @@ class Logging(object):
 
     def setup_logging_subsystem(self, loglevel=None, logfile=None,
             format=None, colorize=None, **kwargs):
-        print("SET: %r" % (loglevel, ))
         if Logging._setup:
             return
         format = format or self.format
