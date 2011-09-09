@@ -1,11 +1,11 @@
 ====================================================
- celery.task.control
+ celery.app.control
 ====================================================
 
 .. contents::
     :local:
-.. currentmodule:: celery.task.control
+.. currentmodule:: celery.app.control
 
-.. automodule:: celery.task.control
+.. automodule:: celery.app.control
     :members:
     :undoc-members:

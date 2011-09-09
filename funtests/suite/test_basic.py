@@ -13,10 +13,6 @@ from celery.tests.functional import tasks
 from celery.tests.functional.case import WorkerCase
 
 
-from celery.task.control import broadcast
-
-
-
 class test_basic(WorkerCase):
 
     def test_started(self):

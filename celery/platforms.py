@@ -36,8 +36,6 @@ def pyimplementation():
         return "CPython"
 
 
-
-
 class LockFailed(Exception):
     pass
 

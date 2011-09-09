@@ -153,9 +153,9 @@ Example changing the time limit for the ``tasks.crawl_the_web`` task
 to have a soft time limit of one minute, and a hard time limit of
 two minutes::
 
-    >>> from celery.task import control
-    >>> control.time_limit("tasks.crawl_the_web",
-                           soft=60, hard=120, reply=True)
+    >>> from celery import current_app as celery
+    >>> celery.control.time_limit("tasks.crawl_the_web",
+    ...                           soft=60, hard=120, reply=True)
     [{'worker1.example.com': {'ok': 'time limits set successfully'}}]
 
 Only tasks that starts executing after the time limit change will be affected.
@@ -209,19 +209,21 @@ to the number of destination hosts.
 
 .. _worker-broadcast-fun:
 
-The :func:`~celery.task.control.broadcast` function.
+The :appattr:`~celery.control.broadcast` function.
 ----------------------------------------------------
 
 This is the client function used to send commands to the workers.
 Some remote control commands also have higher-level interfaces using
-:func:`~celery.task.control.broadcast` in the background, like
-:func:`~celery.task.control.rate_limit` and :func:`~celery.task.control.ping`.
+:appattr:`~celery.control.broadcast` in the background, like
+:appattr:`~celery.control.rate_limit`, :appattr:`~celery.control.time_limit`,
+and :appattr:`~celery.control.ping`.
 
 Sending the :control:`rate_limit` command and keyword arguments::
 
-    >>> from celery.task.control import broadcast
-    >>> broadcast("rate_limit", arguments={"task_name": "myapp.mytask",
-    ...                                    "rate_limit": "200/m"})
+    >>> from celery import current_app as celery
+    >>> celery.control.broadcast("rate_limit",
+    ...                          arguments={"task_name": "myapp.mytask",
+    ...                          "rate_limit": "200/m"})
 
 This will send the command asynchronously, without waiting for a reply.
 To request a reply you have to use the `reply` argument::
@@ -235,7 +237,6 @@ To request a reply you have to use the `reply` argument::
 Using the `destination` argument you can specify a list of workers
 to receive the command::
 
-    >>> broadcast
     >>> broadcast("rate_limit", {"task_name": "myapp.mytask",
     ...                          "rate_limit": "200/m"}, reply=True,
     ...           destination=["worker1.example.com"])
@@ -244,7 +245,7 @@ to receive the command::
 
 Of course, using the higher-level interface to set rate limits is much
 more convenient, but there are commands that can only be requested
-using :func:`~celery.task.control.broadcast`.
+using :appattr:`~celery.control.broadcast`.
 
 .. _worker-rate-limits:
 
@@ -256,14 +257,14 @@ Rate limits
 Example changing the rate limit for the `myapp.mytask` task to accept
 200 tasks a minute on all servers::
 
-    >>> from celery.task.control import rate_limit
-    >>> rate_limit("myapp.mytask", "200/m")
+    >>> from celery import current_app as celery
+    >>> celery.control.rate_limit("myapp.mytask", "200/m")
 
 Example changing the rate limit on a single host by specifying the
 destination host name::
 
-    >>> rate_limit("myapp.mytask", "200/m",
-    ...            destination=["worker1.example.com"])
+    >>> celery.control.rate_limit("myapp.mytask", "200/m",
+    ...                destination=["worker1.example.com"])
 
 .. warning::
 
@@ -295,14 +296,14 @@ Terminating a task also revokes it.
 
 ::
 
-    >>> from celery.task.control import revoke
-    >>> revoke("d9078da5-9915-40a0-bfa1-392c7bde42ed")
+    >>> from celery import current_app celery
+    >>> celery.control.revoke("d9078da5-9915-40a0-bfa1-392c7bde42ed")
 
-    >>> revoke("d9078da5-9915-40a0-bfa1-392c7bde42ed",
-    ...        terminate=True)
+    >>> celery.control.revoke("d9078da5-9915-40a0-bfa1-392c7bde42ed",
+    ...                       terminate=True)
 
-    >>> revoke("d9078da5-9915-40a0-bfa1-392c7bde42ed",
-    ...        terminate=True, signal="SIGKILL")
+    >>> celery.control.revoke("d9078da5-9915-40a0-bfa1-392c7bde42ed",
+    ...                       terminate=True, signal="SIGKILL")
 
 .. control:: shutdown
 
@@ -324,13 +325,13 @@ The workers reply with the string 'pong', and that's just about it.
 It will use the default one second timeout for replies unless you specify
 a custom timeout::
 
-    >>> from celery.task.control import ping
-    >>> ping(timeout=0.5)
+    >>> from celery import current_app as celery
+    >>> celery.control.ping(timeout=0.5)
     [{'worker1.example.com': 'pong'},
      {'worker2.example.com': 'pong'},
      {'worker3.example.com': 'pong'}]
 
-:func:`~celery.task.control.ping` also supports the `destination` argument,
+:appattr:`~celery.control.ping` also supports the `destination` argument,
 so you can specify which workers to ping::
 
     >>> ping(['worker2.example.com', 'worker3.example.com'])
@@ -388,15 +389,15 @@ then import them using the :setting:`CELERY_IMPORTS` setting::
 Inspecting workers
 ==================
 
-:class:`celery.task.control.inspect` lets you inspect running workers.  It
+:appattr:`celery.control.inspect` lets you inspect running workers.  It
 uses remote control commands under the hood.
 
 .. code-block:: python
 
-    >>> from celery.task.control import inspect
+    >>> from celery import current_app as celery
 
     # Inspect all nodes.
-    >>> i = inspect()
+    >>> i = celery.control.inspect()
 
     # Specify multiple nodes to inspect.
     >>> i = inspect(["worker1.example.com", "worker2.example.com"])
@@ -411,7 +412,7 @@ Dump of registered tasks
 ------------------------
 
 You can get a list of tasks registered in the worker using the
-:meth:`~celery.task.control.inspect.registered_tasks`::
+:meth:`~celery.control.inspect.registered_tasks`::
 
     >>> i.registered_tasks()
     [{'worker1.example.com': ['celery.delete_expired_task_meta',
@@ -428,7 +429,7 @@ Dump of currently executing tasks
 ---------------------------------
 
 You can get a list of active tasks using
-:meth:`~celery.task.control.inspect.active`::
+:meth:`~celery.control.inspect.active`::
 
     >>> i.active()
     [{'worker1.example.com':
@@ -443,7 +444,7 @@ Dump of scheduled (ETA) tasks
 -----------------------------
 
 You can get a list of tasks waiting to be scheduled by using
-:meth:`~celery.task.control.inspect.scheduled`::
+:appattr:`~celery.control.inspect.scheduled`::
 
     >>> i.scheduled()
     [{'worker1.example.com':
@@ -471,7 +472,7 @@ Reserved tasks are tasks that has been received, but is still waiting to be
 executed.
 
 You can get a list of these using
-:meth:`~celery.task.control.inspect.reserved`::
+:appattr:`~celery.control.inspect.reserved`::
 
     >>> i.reserved()
     [{'worker1.example.com':

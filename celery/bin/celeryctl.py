@@ -202,7 +202,6 @@ class result(Command):
     )
 
     def run(self, task_id, *args, **kwargs):
-        from .. import registry
         result_cls = self.app.AsyncResult
         task = kwargs.get("task")
 

@@ -9,8 +9,7 @@ from .sets import TaskSet, subtask
 from .chords import chord
 from .control import discard_all   # XXX deprecate
 
-__all__ = ["Task", "TaskSet", "PeriodicTask", "subtask",
-           "discard_all", "chord"]
+__all__ = ["Task", "TaskSet", "PeriodicTask", "subtask", "chord"]
 
 
 def task(*args, **kwargs):

@@ -1,11 +1,11 @@
 =================================
- celery.routes
+ celery.app.annotations
 =================================
 
 .. contents::
     :local:
-.. currentmodule:: celery.routes
+.. currentmodule:: celery.app.annotations
 
-.. automodule:: celery.routes
+.. automodule:: celery.app.annotations
     :members:
     :undoc-members:

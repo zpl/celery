@@ -1,11 +1,11 @@
 ================================
- celery.registry
+ celery.app.registry
 ================================
 
 .. contents::
     :local:
-.. currentmodule:: celery.registry
+.. currentmodule:: celery.app.registry
 
-.. automodule:: celery.registry
+.. automodule:: celery.app.registry
     :members:
     :undoc-members:

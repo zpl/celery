@@ -9,8 +9,8 @@ import traceback
 from itertools import count
 from time import time
 
+from celery import current_app
 from celery.exceptions import TimeoutError
-from celery.task.control import ping, flatten_reply, inspect
 from celery.utils.imports import get_full_cls_name
 
 from celery.tests.utils import unittest
@@ -56,9 +56,9 @@ class Worker(object):
         self.pid = pid
 
     def is_alive(self, timeout=1):
-        r = ping(destination=[self.hostname],
-                 timeout=timeout)
-        return self.hostname in flatten_reply(r)
+        r = current_app.control.ping(destination=[self.hostname],
+                                    timeout=timeout)
+        return self.hostname in current_app.control.flatten_reply(r)
 
     def wait_until_started(self, timeout=10, interval=0.5):
         try_while(lambda: self.is_alive(interval),
@@ -117,10 +117,12 @@ class WorkerCase(unittest.TestCase):
         self.assertTrue(self.worker.is_alive)
 
     def inspect(self, timeout=1):
-        return inspect([self.worker.hostname], timeout=timeout)
+        return current_app.control.inspect([self.worker.hostname],
+                                           timeout=timeout)
 
     def my_response(self, response):
-        return flatten_reply(response)[self.worker.hostname]
+        return current_app.control.flatten_reply(
+                    response)[self.worker.hostname]
 
     def is_accepted(self, task_id, interval=0.5):
         active = self.inspect(timeout=interval).active()

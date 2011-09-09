@@ -10,14 +10,18 @@
 
     celery.app
     celery.app.task
+    celery.app.task.builtins
+    celery.app.control
+    celery.app.events
     celery.app.amqp
     celery.app.defaults
+    celery.app.registry
+    celery.app.log
     celery.task
     celery.task.base
     celery.task.sets
     celery.task.chords
     celery.result
-    celery.task.control
     celery.task.http
     celery.schedules
     celery.signals
@@ -26,7 +30,6 @@
     celery.loaders.app
     celery.loaders.default
     celery.loaders.base
-    celery.registry
     celery.states
     celery.contrib.abortable
     celery.contrib.batches

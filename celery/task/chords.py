@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from .. import current_app
 from ..utils import uuid
 
-from .sets import TaskSet, subtask
+from .sets import TaskSet
 
 
 class Chord(current_app.Task):

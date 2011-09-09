@@ -8,6 +8,8 @@
 .. toctree::
     :maxdepth: 1
 
+    celery.app.annotations
+    celery.app.routes
     celery.worker
     celery.worker.consumer
     celery.worker.job
@@ -36,23 +38,29 @@
     celery.backends.tyrant
     celery.execute.trace
     celery.datastructures
-    celery.routes
-    celery.log
     celery.events.snapshot
     celery.events.cursesmon
     celery.events.dumper
     celery.db.models
     celery.db.session
+    celery.platforms
+    celery.security
+    celery.security.certificate
+    celery.security.key
+    celery.security.serialization
     celery.utils
-    celery.utils.term
-    celery.utils.timeutils
-    celery.utils.encoding
     celery.utils.compat
+    celery.utils.dispatch
+    celery.utils.dispatch.saferef
+    celery.utils.dispatch.signal
+    celery.utils.encoding
+    celery.utils.functional
+    celery.utils.imports
+    celery.utils.log
     celery.utils.mail
     celery.utils.patch
     celery.utils.serialization
+    celery.utils.term
+    celery.utils.text
     celery.utils.timer2
-    celery.utils.dispatch
-    celery.utils.dispatch.signal
-    celery.utils.dispatch.saferef
-    celery.platforms
+    celery.utils.timeutils

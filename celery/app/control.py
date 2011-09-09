@@ -83,6 +83,9 @@ class Control(object):
         self.app = app_or_default(app)
         self.mailbox = self.Mailbox("celeryd", type="fanout")
 
+    def flatten_reply(self, reply):
+        return flatten_reply(reply)
+
     def inspect(self, destination=None, timeout=1, callback=None):
         return Inspect(self, destination=destination, timeout=timeout,
                              callback=callback)

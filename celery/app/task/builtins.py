@@ -15,6 +15,7 @@ def add_backend_cleanup_task(app):
 
     return backend_cleanup
 
+
 @builtin_task
 def add_unlock_chord_task(app):
     @app.task(name="celery.chord_unlock", max_retries=None)
