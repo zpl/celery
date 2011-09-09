@@ -61,8 +61,8 @@ configuration:
 
 .. code-block:: python
 
-    CELERY_QUEUES = {"default": {"exchange": "default",
-                                 "binding_key": "default"}}
+    CELERY_QUEUES = (Queue("default",
+                           Exchange("default"), routing_key="default"), )
     CELERY_DEFAULT_QUEUE = "default"
 
 .. _routing-autoqueue-details:
@@ -78,13 +78,9 @@ A queue named `"video"` will be created with the following settings:
 
 .. code-block:: python
 
-    {"exchange": "video",
-     "exchange_type": "direct",
-     "routing_key": "video"}
-
-The non-AMQP backends like `ghettoq` does not support exchanges, so they
-require the exchange to have the same name as the queue. Using this design
-ensures it will work for them as well.
+    Queue("video",
+          Exchange("video", type="direct"),
+          routing_key="video"))
 
 .. _routing-manual:
 
@@ -97,22 +93,18 @@ configuration:
 
 .. code-block:: python
 
+    from kombu import Queue
+
+    CELERY_QUEUES = (Queue('default',    routing_key='task.#'),
+                     Queue('feed_tasks', routing_key='feed.#'))
     CELERY_DEFAULT_QUEUE = "default"
-    CELERY_QUEUES = {
-        "default": {
-            "binding_key": "task.#",
-        },
-        "feed_tasks": {
-            "binding_key": "feed.#",
-        },
-    }
     CELERY_DEFAULT_EXCHANGE = "tasks"
     CELERY_DEFAULT_EXCHANGE_TYPE = "topic"
     CELERY_DEFAULT_ROUTING_KEY = "task.default"
 
-:setting:`CELERY_QUEUES` is a map of queue names and their
-exchange/type/binding_key, if you don't set exchange or exchange type, they
-will be taken from the :setting:`CELERY_DEFAULT_EXCHANGE` and
+The :setting:`CELERY_QUEUES` setting is a list of queue definitions,
+If you don't specify the exchange, these will be taken from the
+:setting:`CELERY_DEFAULT_EXCHANGE` and
 :setting:`CELERY_DEFAULT_EXCHANGE_TYPE` settings.
 
 To route a task to the `feed_tasks` queue, you can add an entry in the
@@ -157,19 +149,12 @@ just specify a custom exchange and exchange type:
 
 .. code-block:: python
 
-    CELERY_QUEUES = {
-            "feed_tasks": {
-                "binding_key": "feed.#",
-            },
-            "regular_tasks": {
-                "binding_key": "task.#",
-            },
-            "image_tasks": {
-                "binding_key": "image.compress",
-                "exchange": "mediatasks",
-                "exchange_type": "direct",
-            },
-        }
+    from kombu import Exchange, Queue
+
+    CELERY_QUEUES = (Queue("feed_tasks",    routing_key="feed.#"),
+                     Queue("regular_tasks", routing_key="task.#"),
+                     Queue("image_tasks",   routing_key="image.compress",
+                           exchange=Exchange("mediatasks", type="direct")))
 
 If you're confused about these terms, you should read up on AMQP.
 
@@ -251,28 +236,19 @@ One for video, one for images and one default queue for everything else:
 
 .. code-block:: python
 
-    CELERY_QUEUES = {
-        "default": {
-            "exchange": "default",
-            "binding_key": "default"},
-        "videos": {
-            "exchange": "media",
-            "binding_key": "media.video",
-        },
-        "images": {
-            "exchange": "media",
-            "binding_key": "media.image",
-        }
-    }
+    from kombu import Exchange, Queue
+
+    media_exchange = Exchange("media", type="direct")
+
+    CELERY_QUEUES = (
+            Queue("default"),
+            Queue("videos", media_exchange, routing_key="media.video"),
+            Queue("images", media_exchange, routing_key="media.image"),
+    )
     CELERY_DEFAULT_QUEUE = "default"
+    CELERY_DEFAULT_EXCHANGE = "default"
     CELERY_DEFAULT_EXCHANGE_TYPE = "direct"
     CELERY_DEFAULT_ROUTING_KEY = "default"
-
-.. note::
-
-    In Celery the `routing_key` is the key used to send the message,
-    while `binding_key` is the key the queue is bound with.  In the AMQP API
-    they are both referred to as the routing key.
 
 .. _amqp-exchange-types:
 
@@ -456,21 +432,16 @@ One for video, one for images and one default queue for everything else:
 
 .. code-block:: python
 
-    CELERY_QUEUES = {
-        "default": {
-            "exchange": "default",
-            "binding_key": "default"},
-        "videos": {
-            "exchange": "media",
-            "exchange_type": "topic",
-            "binding_key": "media.video",
-        },
-        "images": {
-            "exchange": "media",
-            "exchange_type": "topic",
-            "binding_key": "media.image",
-        }
-    }
+    from kombu import Exchange, Queue
+
+    media_exchange = Exchange("media", type="topic")
+
+    CELERY_QUEUES = (
+            Queue("default"),
+            Queue("videos", media_exchange, routing_key="media.video"),
+            Queue("images", media_exchange, routing_key="media.image"),
+    )
+
     CELERY_DEFAULT_QUEUE = "default"
     CELERY_DEFAULT_EXCHANGE = "default"
     CELERY_DEFAULT_EXCHANGE_TYPE = "direct"
@@ -516,8 +487,7 @@ All you need to define a new router is to create a class with a
 
         def route_for_task(self, task, args=None, kwargs=None):
             if task == "myapp.tasks.compress_video":
-                return {"exchange": "video",
-                        "exchange_type": "topic",
+                return {"exchange": Exchange("video", type="topic"),
                         "routing_key": "video.compress"}
             return None
 
@@ -528,9 +498,7 @@ that queue in :setting:`CELERY_QUEUES`::
 
     becomes -->
 
-        {"queue": "video",
-         "exchange": "video",
-         "exchange_type": "topic",
+        {"queue": Queue("video", Exchange("video", type="topic")),
          "routing_key": "video.compress"}
 
 
@@ -557,3 +525,30 @@ same behavior:
 
 The routers will then be traversed in order, it will stop at the first router
 returning a true value, and use that as the final route for the task.
+
+Broadcast
+---------
+
+Celery can also support broadcast routing.
+Here is an example exchange ``bcast`` that uses this:
+
+.. code-block:: python
+
+    from kombu.common import Broadcast
+
+    CELERY_QUEUES = (Broadcast("broadcast_tasks"), )
+
+    CELERY_ROUTES = {"tasks.reload_cache": "broadcast_tasks"}
+
+
+Now the ``tasks.reload_tasks`` task will be sent to every
+worker consuming from this queue.
+
+.. admonition:: Broadcast & Results
+
+    Note that Celery result does not define what happens if two
+    tasks have the same task_id.  If the same task is distributed to more
+    than one worker, then the state history may not be preserved.
+
+    It is a good idea to set the ``task.ignore_result`` attribute in
+    this case.

@@ -18,6 +18,8 @@
 Important Notes
 ---------------
 
+* Now depends on Kombu 2.0.0
+
 * The deprecated `celery.decorators` module has been removed as scheduled.
 
     Instead of::
@@ -158,6 +160,8 @@ Important Notes
 
 News
 ----
+
+* No longer depends on :mod:`pyparsing`.
 
 * Broker transports can be now be specified using URLs
 

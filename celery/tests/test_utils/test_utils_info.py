@@ -1,7 +1,7 @@
 from celery.tests.utils import unittest
 
 from celery import Celery
-from celery.utils import textindent
+from celery.utils.text import indent
 
 RANDTEXT = """\
 The quick brown
@@ -33,8 +33,8 @@ QUEUE_FORMAT2 = """. queue2:      exchange:exchange2 (type2) binding:bind2"""
 
 class TestInfo(unittest.TestCase):
 
-    def test_textindent(self):
-        self.assertEqual(textindent(RANDTEXT, 4), RANDTEXT_RES)
+    def test_ndent(self):
+        self.assertEqual(indent(RANDTEXT, 4), RANDTEXT_RES)
 
     def test_format_queues(self):
         celery = Celery(set_as_current=False)

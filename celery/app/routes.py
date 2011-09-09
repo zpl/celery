@@ -1,7 +1,9 @@
 from __future__ import absolute_import
 
 from ..exceptions import QueueNotFound
-from ..utils import firstmethod, instantiate, lpmerge, mpromise
+from ..utils import lpmerge
+from ..utils.functional import firstmethod, mpromise
+from ..utils.imports import instantiate
 
 _first_route = firstmethod("route_for_task")
 
@@ -50,16 +52,17 @@ class Router(object):
 
         if queue:  # expand config from configured queue.
             try:
-                dest = dict(self.queues[queue])
+                self.queues[queue]
             except KeyError:
                 if not self.create_missing:
                     raise QueueNotFound(
                         "Queue %r is not defined in CELERY_QUEUES" % queue)
-                dest = dict(self.app.amqp.queues.add(queue, queue, queue))
-            # needs to be declared by publisher
-            dest["queue"] = queue
-            # routing_key and binding_key are synonyms.
-            dest.setdefault("routing_key", dest.get("binding_key"))
+                self.app.amqp.queues.add_missing(queue)
+            q = self.queues[queue]
+            # needs to be declared by producer
+            dest = dict(queue=queue, exchange=q.exchange.name,
+                        exchange_type=q.exchange.type,
+                        routing_key=q.routing_key)
             return lpmerge(dest, route)
         return route
 

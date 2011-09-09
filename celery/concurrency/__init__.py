@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from ..utils import get_cls_by_name
+from ..utils.imports import get_cls_by_name
 
 ALIASES = {
     "processes": "celery.concurrency.processes.TaskPool",

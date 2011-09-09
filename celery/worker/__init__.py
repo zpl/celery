@@ -13,7 +13,8 @@ from .. import concurrency as _concurrency
 from .. import platforms, signals
 from ..app import app_or_default
 from ..exceptions import SystemTerminate
-from ..utils import noop, instantiate
+from ..utils.functional import noop
+from ..utils.imports import instantiate
 
 from . import state
 from .buckets import TaskBucket, FastQueue
@@ -253,7 +254,7 @@ class WorkController(object):
         except SystemExit:
             self.stop()
             raise
-        except:
+        except BaseException:
             self.stop()
             try:
                 raise

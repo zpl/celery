@@ -14,7 +14,8 @@ import warnings
 from .. import __version__, platforms, signals
 from ..app import app_or_default
 from ..exceptions import ImproperlyConfigured, SystemTerminate
-from ..utils import get_full_cls_name, cry
+from ..utils import cry, isatty
+from ..utils.imports import get_full_cls_name
 from ..utils.log import LOG_LEVELS
 from ..worker import WorkController
 
@@ -57,7 +58,7 @@ class Worker(object):
     WorkController = WorkController
 
     def __init__(self, concurrency=None, loglevel=None, logfile=None,
-            hostname=None, discard=False, run_clockservice=False,
+            hostname=None, purge=False, run_clockservice=False,
             schedule=None, task_time_limit=None, task_soft_time_limit=None,
             max_tasks_per_child=None, queues=None, events=None, db=None,
             include=None, app=None, pidfile=None,
@@ -71,7 +72,7 @@ class Worker(object):
         self.logfile = logfile
 
         self.hostname = hostname or socket.gethostname()
-        self.discard = discard
+        self.purge = purge
         self.run_clockservice = run_clockservice
         if self.app.IS_WINDOWS and self.run_clockservice:
             self.die("-B option does not work on Windows.  "
@@ -99,7 +100,7 @@ class Worker(object):
         if autoscale:
             max_c, _, min_c = autoscale.partition(",")
             self.autoscale = [int(max_c), min_c and int(min_c) or 0]
-        self._isatty = sys.stdout.isatty()
+        self._isatty = isatty(sys.stdout)
 
         self.colored = app.log.colored(self.logfile)
 
@@ -127,7 +128,7 @@ class Worker(object):
             warnings.warn(
                 "Running celeryd with superuser privileges is not encouraged!")
 
-        if self.discard:
+        if self.purge:
             self.purge_messages()
 
         # Dump configuration to screen so we have some basic information
@@ -172,9 +173,9 @@ class Worker(object):
                                 loglevel=self.redirect_stdouts_level)
 
     def purge_messages(self):
-        count = self.app.control.discard_all()
+        count = self.app.control.purge()
         what = (not count or count > 1) and "messages" or "message"
-        print("discard: Erased %d %s from the queue.\n" % (count, what))
+        print("purge: Erased %d %s from the queue.\n" % (count, what))
 
     def worker_init(self):
         # Run the worker init handler.

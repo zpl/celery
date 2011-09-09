@@ -49,12 +49,11 @@ class ProducerPool(object):
 
     def _producer(self):
         connection = current_app.broker_connection()
-        publisher = current_app.amqp.TaskPublisher(connection)
+        producer = current_app.amqp.TaskProducer(connection)
         inqueue = self.inqueue
 
         while 1:
             task, args, kwargs, options, receipt = inqueue.get()
             result = task.apply_async(args, kwargs,
-                                      publisher=publisher,
-                                      **options)
+                                      producer=producer, **options)
             receipt.finished(result)

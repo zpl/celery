@@ -249,16 +249,16 @@ class BaseTask(object):
             propagate=propagate, task_name=self.name, task_id=self.request.id)
 
     @classmethod
-    def establish_connection(self, connect_timeout=None):
+    def establish_connection(self, *args, **kwargs):
         """Establish a connection to the message broker."""
-        return self.app.broker_connection(connect_timeout=connect_timeout)
+        return self.app.broker_connection(*args, **kwargs)
 
     @classmethod
-    def get_publisher(self, connection=None, exchange=None,
+    def get_producer(self, connection=None, exchange=None,
             exchange_type=None, **options):
-        """Get a celery task message publisher.
+        """Get a celery task message producer.
 
-        :rtype :class:`~celery.app.amqp.TaskPublisher`:
+        :rtype :class:`~celery.app.amqp.TaskProducer`:
 
         .. warning::
 
@@ -266,28 +266,30 @@ class BaseTask(object):
             be established for you, in that case you need to close this
             connection after use::
 
-                >>> publisher = self.get_publisher()
-                >>> # ... do something with publisher
-                >>> publisher.connection.close()
+                >>> producer = self.get_producer()
+                >>> # ... do something with producer
+                >>> producer.connection.close()
 
             or used as a context::
 
-                >>> with self.get_publisher() as publisher:
-                ...     # ... do something with publisher
+                >>> with self.get_producer() as producer:
+                ...     # ... do something with producer
+                ...     producer.connection.close()
 
         """
-        exchange = self.exchange if exchange is None else exchange
-        if exchange_type is None:
-            exchange_type = self.exchange_type
-        connection = connection or self.establish_connection()
-        return self.app.amqp.TaskPublisher(connection=connection,
-                                           exchange=exchange,
-                                           exchange_type=exchange_type,
-                                           routing_key=self.routing_key,
-                                           **options)
+        connection = self.establish_connection(connection)
+        return self.app.amqp.TaskProducer(connection, **options)
+    get_publisher = get_producer
 
     @classmethod
-    def get_consumer(self, connection=None):
+    def get_queue(self, queue=None, **options):
+        amqp = self.app.amqp
+        options.setdefault("queue", queue or self.queue)
+        dest = amqp.router.route(options, self.name, (), {})
+        return amqp.queues[dest["queue"]]
+
+    @classmethod
+    def get_consumer(self, connection=None, queue=None, **kwargs):
         """Get message consumer.
 
         :rtype :class:`kombu.messaging.Consumer`:
@@ -304,10 +306,9 @@ class BaseTask(object):
                 >>> consumer.connection.close()
 
         """
-        connection = connection or self.establish_connection()
-        return self.app.amqp.TaskConsumer(connection=connection,
-                                          exchange=self.exchange,
-                                          routing_key=self.routing_key)
+        queue = self.get_queue(queue)
+        connection = self.establish_connection(connection)
+        return self.app.amqp.Consumer(connection, queues=[queue], **kwargs)
 
     @classmethod
     def delay(self, *args, **kwargs):
@@ -325,8 +326,8 @@ class BaseTask(object):
 
     @classmethod
     def apply_async(self, args=None, kwargs=None, countdown=None,
-            eta=None, task_id=None, publisher=None, connection=None,
-            router=None, expires=None, queues=None, **options):
+            eta=None, task_id=None, producer=None, connection=None,
+            router=None, expires=None, **options):
         """Apply tasks asynchronously by sending a message.
 
         :keyword args: The positional arguments to pass on to the
@@ -359,7 +360,7 @@ class BaseTask(object):
                         in the event of connection loss or failure.  Default
                         is taken from the :setting:`CELERY_TASK_PUBLISH_RETRY`
                         setting.  Note you need to handle the
-                        publisher/connection manually for this to work.
+                        producer/connection manually for this to work.
 
         :keyword retry_policy:  Override the retry policy used.  See the
                                 :setting:`CELERY_TASK_PUBLISH_RETRY` setting.
@@ -409,8 +410,13 @@ class BaseTask(object):
             be replaced by a local :func:`apply` call instead.
 
         """
-        router = self.app.amqp.Router(queues)
-        conf = self.app.conf
+        app = self.app
+        conf = app.conf
+        router = router or app.amqp.router
+
+        # XXX to deprecate
+        publisher = options.pop("publisher", None)
+        producer = producer or publisher
 
         if conf.CELERY_ALWAYS_EAGER:
             return self.apply(args, kwargs, task_id=task_id)
@@ -421,24 +427,18 @@ class BaseTask(object):
         options = router.route(options, self.name, args, kwargs)
         expires = expires or self.expires
 
-        publish = publisher or self.app.amqp.publisher_pool.acquire(block=True)
-        evd = None
-        if conf.CELERY_SEND_TASK_SENT_EVENT:
-            evd = self.app.events.Dispatcher(channel=publish.channel,
-                                             buffer_while_offline=False)
-
-        try:
-            task_id = publish.delay_task(self.name, args, kwargs,
-                                         task_id=task_id,
-                                         countdown=countdown,
-                                         eta=eta, expires=expires,
-                                         event_dispatcher=evd,
-                                         **options)
-        finally:
-            if not publisher:
-                publish.release()
-
-        return self.AsyncResult(task_id)
+        with app.acquire_producer(connection, producer, block=True) as prod:
+            evd = None
+            if conf.CELERY_SEND_TASK_SENT_EVENT:
+                evd = app.events.Dispatcher(channel=prod.channel,
+                                            buffer_while_offline=False)
+            task_id = prod.send_task(self.name, args, kwargs,
+                                     task_id=task_id,
+                                     countdown=countdown,
+                                     eta=eta, expires=expires,
+                                     event_dispatcher=evd,
+                                     **options)
+            return self.AsyncResult(task_id)
 
     @classmethod
     def retry(self, args=None, kwargs=None, exc=None, throw=True,
@@ -542,8 +542,9 @@ class BaseTask(object):
         kwargs = kwargs or {}
         task_id = options.get("task_id") or uuid()
         retries = options.get("retries", 0)
-        throw = self.app.either("CELERY_EAGER_PROPAGATES_EXCEPTIONS",
-                                options.pop("throw", None))
+        throw = options.pop("throw", None)
+        throw = (throw if throw is not None
+                       else self.app.conf.CELERY_EAGER_PROPAGATES_EXCEPTIONS)
 
         # Make sure we get the task instance, not class.
         task = self.app._tasks[self.name]

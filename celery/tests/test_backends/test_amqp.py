@@ -85,20 +85,15 @@ class test_AMQPBackend(unittest.TestCase):
     @sleepdeprived()
     def test_store_result_retries(self):
 
-        class _Producer(object):
+        class Backend(AMQPBackend):
             iterations = 0
             stop_raising_at = 5
 
-            def __init__(self, *args, **kwargs):
-                pass
-
-            def publish(self, msg, *args, **kwargs):
+            def _publish_result(self, producer, task_id, meta):
                 if self.iterations > self.stop_raising_at:
                     return
+                self.iterations += 1
                 raise KeyError("foo")
-
-        class Backend(AMQPBackend):
-            Producer = _Producer
 
         backend = Backend()
         self.assertRaises(KeyError, backend.store_result,

@@ -9,7 +9,7 @@ import time
 from itertools import count
 
 from kombu.entity import Exchange, Queue
-from kombu.messaging import Consumer, Producer
+from kombu.messaging import Consumer
 
 from .. import states
 from ..exceptions import TimeoutError
@@ -33,7 +33,6 @@ class AMQPBackend(BaseDictBackend):
     Exchange = Exchange
     Queue = Queue
     Consumer = Consumer
-    Producer = Producer
 
     BacklogLimitExceeded = BacklogLimitExceeded
 
@@ -42,7 +41,7 @@ class AMQPBackend(BaseDictBackend):
             **kwargs):
         super(AMQPBackend, self).__init__(**kwargs)
         conf = self.app.conf
-        self._connection = connection
+        self.connection = self.app.broker_connection(connection)
         self.queue_arguments = {}
         self.persistent = (conf.CELERY_RESULT_PERSISTENT if persistent is None
                                                          else persistent)
@@ -73,23 +72,15 @@ class AMQPBackend(BaseDictBackend):
                           auto_delete=self.auto_delete,
                           queue_arguments=self.queue_arguments)
 
-    def _create_producer(self, task_id, channel):
-        self._create_binding(task_id)(channel).declare()
-        return self.Producer(channel, exchange=self.exchange,
-                             routing_key=task_id.replace("-", ""),
-                             serializer=self.serializer)
-
     def _create_consumer(self, bindings, channel):
         return self.Consumer(channel, bindings, no_ack=True)
 
-    def _publish_result(self, connection, task_id, meta):
-        # cache single channel
-        if connection._default_channel is not None and \
-                connection._default_channel.connection is None:
-            connection.maybe_close_channel(connection._default_channel)
-        channel = connection.default_channel
-
-        self._create_producer(task_id, channel).publish(meta)
+    def _publish_result(self, producer, task_id, meta):
+            q = self._create_binding(task_id)(producer.channel)
+            q.declare()
+            producer.publish(meta, exchange=self.exchange,
+                                   routing_key=q.routing_key,
+                                   reply_to=q.name)
 
     def revive(self, channel):
         pass
@@ -97,21 +88,23 @@ class AMQPBackend(BaseDictBackend):
     def _store_result(self, task_id, result, status, traceback=None,
             max_retries=20, interval_start=0, interval_step=1,
             interval_max=1):
+        connection = self.connection
+        acquire_producer = self.app.acquire_producer
         """Send task return value and status."""
         with self.mutex:
-            with self.app.pool.acquire(block=True) as conn:
+            with acquire_producer(connection, None, block=True) as prod:
 
                 def errback(error, delay):
                     print("Couldn't send result for %r: %r. Retry in %rs." % (
                             task_id, error, delay))
 
-                send = conn.ensure(self, self._publish_result,
-                            max_retries=max_retries,
-                            errback=errback,
-                            interval_start=interval_start,
-                            interval_step=interval_step,
-                            interval_max=interval_max)
-                send(conn, task_id, {"task_id": task_id, "status": status,
+                send = connection.ensure(prod, self._publish_result,
+                                         max_retries=max_retries,
+                                         errback=errback,
+                                         interval_start=interval_start,
+                                         interval_step=interval_step,
+                                         interval_max=interval_max)
+                send(prod, task_id, {"task_id": task_id, "status": status,
                                 "result": self.encode_result(result, status),
                                 "traceback": traceback})
         return result
@@ -142,7 +135,8 @@ class AMQPBackend(BaseDictBackend):
             return self.wait_for(task_id, timeout, cache)
 
     def poll(self, task_id, backlog_limit=100):
-        with self.app.pool.acquire_channel(block=True) as (_, channel):
+        with self.app.acquire_connection(self.connection, block=True) as conn:
+            channel = conn.default_channel
             binding = self._create_binding(task_id)(channel)
             binding.declare()
             latest, acc = None, None
@@ -182,13 +176,15 @@ class AMQPBackend(BaseDictBackend):
         return results
 
     def consume(self, task_id, timeout=None):
-        with self.app.pool.acquire_channel(block=True) as (conn, channel):
+        with self.app.acquire_connection(self.connection, block=True) as conn:
+            channel = conn.default_channel
             binding = self._create_binding(task_id)
             with self._create_consumer(binding, channel) as consumer:
                 return self.drain_events(conn, consumer, timeout).values()[0]
 
     def get_many(self, task_ids, timeout=None, **kwargs):
-        with self.app.pool.acquire_channel(block=True) as (conn, channel):
+        with self.app.acquire_connection(self.connection, block=True) as conn:
+            channel = conn.default_channel
             ids = set(task_ids)
             cached_ids = set()
             for task_id in ids:

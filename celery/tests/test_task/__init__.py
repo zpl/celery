@@ -2,15 +2,14 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 from mock import Mock
-from pyparsing import ParseException
 
 from celery import task
-from celery.app import app_or_default
 from celery.task import task as task_dec
 from celery.exceptions import RetryTaskError
 from celery.execute import send_task
 from celery.result import EagerResult
-from celery.schedules import crontab, crontab_parser
+from celery.schedules import ParseException
+from celery.schedules import _is_iterable, crontab, crontab_parser
 from celery.utils import uuid
 from celery.utils.timeutils import parse_iso8601
 
@@ -127,7 +126,16 @@ class RetryTaskCustomExc(task.Task):
                 return self.retry(kwargs=kwargs, countdown=0, exc=exc)
 
 
-class TestTaskRetries(unittest.TestCase):
+class test_utils(unittest.TestCase):
+
+    def test_is_iterable(self):
+        for a in "f", ["f"], ("f", ), {"f": "f"}:
+            self.assertTrue(_is_iterable(a))
+        for b in object(), 1:
+            self.assertFalse(_is_iterable(b))
+
+
+class test_task_retries(unittest.TestCase):
 
     def test_retry(self):
         RetryTask.max_retries = 3
@@ -202,7 +210,7 @@ class TestTaskRetries(unittest.TestCase):
         self.assertEqual(RetryTask.iterations, 2)
 
 
-class TestCeleryTasks(unittest.TestCase):
+class test_tasks(unittest.TestCase):
 
     def test_unpickle_task(self):
         import pickle
@@ -230,7 +238,7 @@ class TestCeleryTasks(unittest.TestCase):
 
     def assertNextTaskDataEqual(self, consumer, presult, task_name,
             test_eta=False, test_expires=False, **kwargs):
-        next_task = consumer.fetch()
+        next_task = consumer.queues[0].get()
         task_data = next_task.decode()
         self.assertEqual(task_data["id"], presult.task_id)
         self.assertEqual(task_data["task"], task_name)
@@ -277,8 +285,8 @@ class TestCeleryTasks(unittest.TestCase):
         t1 = T1()
         consumer = t1.get_consumer()
         self.assertRaises(NotImplementedError, consumer.receive, "foo", "foo")
-        consumer.discard_all()
-        self.assertIsNone(consumer.fetch())
+        consumer.purge()
+        self.assertIsNone(consumer.queues[0].get())
 
         # Without arguments.
         presult = t1.delay()
@@ -309,17 +317,14 @@ class TestCeleryTasks(unittest.TestCase):
                 name="George Costanza", test_eta=True, test_expires=True)
 
         # Discarding all tasks.
-        consumer.discard_all()
+        consumer.purge()
         t1.apply_async()
-        self.assertEqual(consumer.discard_all(), 1)
-        self.assertIsNone(consumer.fetch())
+        self.assertEqual(consumer.purge(), 1)
+        self.assertIsNone(consumer.queues[0].get())
 
         self.assertFalse(presult.successful())
         t1.backend.mark_as_done(presult.task_id, result=None)
         self.assertTrue(presult.successful())
-
-        publisher = t1.get_publisher()
-        self.assertTrue(publisher.exchange)
 
     def test_context_get(self):
         request = self.createTaskCls("T1", "c.unittest.t.c.g").request
@@ -345,29 +350,20 @@ class TestCeleryTasks(unittest.TestCase):
         T1.app.conf.CELERY_SEND_TASK_SENT_EVENT = True
         dispatcher = [None]
 
-        class Pub(object):
+        class Producer(object):
             channel = chan
 
-            def delay_task(self, *args, **kwargs):
+            def send_task(self, *args, **kwargs):
                 dispatcher[0] = kwargs.get("event_dispatcher")
 
         try:
-            T1.apply_async(publisher=Pub())
+            T1.apply_async(producer=Producer())
         finally:
             T1.app.conf.CELERY_SEND_TASK_SENT_EVENT = False
             chan.close()
             conn.close()
 
         self.assertTrue(dispatcher[0])
-
-    def test_get_publisher(self):
-        connection = app_or_default().broker_connection()
-        p = IncrementCounterTask.get_publisher(connection, auto_declare=False,
-                                               exchange="foo")
-        self.assertEqual(p.exchange.name, "foo")
-        p = IncrementCounterTask.get_publisher(connection, auto_declare=False,
-                                               exchange_type="fanout")
-        self.assertEqual(p.exchange.type, "fanout")
 
     def test_update_state(self):
 
@@ -413,7 +409,7 @@ class TestCeleryTasks(unittest.TestCase):
         self.assertTrue(logger)
 
 
-class TestTaskSet(unittest.TestCase):
+class test_task_sets(unittest.TestCase):
 
     @with_eager_tasks
     def test_function_taskset(self):
@@ -439,13 +435,12 @@ class TestTaskSet(unittest.TestCase):
 
         consumer = IncrementCounterTask().get_consumer()
         consumer.purge()
-        consumer.close()
         taskset_res = ts.apply_async()
         subtasks = taskset_res.subtasks
         taskset_id = taskset_res.taskset_id
         consumer = IncrementCounterTask().get_consumer()
         for subtask in subtasks:
-            m = consumer.fetch().payload
+            m = consumer.queues[0].get().payload
             self.assertDictContainsSubset({"taskset": taskset_id,
                                            "task": IncrementCounterTask.name,
                                            "id": subtask.task_id}, m)
@@ -460,7 +455,7 @@ class TestTaskSet(unittest.TestCase):
         self.assertTrue(res.taskset_id.startswith(prefix))
 
 
-class TestTaskApply(unittest.TestCase):
+class test_apply_tasks(unittest.TestCase):
 
     def test_apply_throw(self):
         self.assertRaises(KeyError, RaisingTask.apply, throw=True)
@@ -500,7 +495,7 @@ class MyPeriodic(task.PeriodicTask):
     run_every = timedelta(hours=1)
 
 
-class TestPeriodicTask(unittest.TestCase):
+class test_periodic_tasks(unittest.TestCase):
 
     def test_must_have_run_every(self):
         self.assertRaises(NotImplementedError, type, "Foo",

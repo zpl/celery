@@ -1,5 +1,7 @@
 from __future__ import with_statement
 
+from kombu import Exchange, Queue
+from kombu import pools
 from mock import Mock
 
 from celery.tests.utils import AppCase
@@ -19,51 +21,47 @@ class TestMsgOptions(AppCase):
         self.assertEqual(result["routing_key"], "foo.xuzzy")
 
 
-class test_TaskPublisher(AppCase):
+class test_TaskProducer(AppCase):
 
     def test__exit__(self):
 
-        publisher = self.app.amqp.TaskPublisher(self.app.broker_connection())
-        publisher.release = Mock()
-        with publisher:
+        producer = self.app.amqp.TaskProducer(self.app.broker_connection())
+        producer.release = Mock()
+        with producer:
             pass
-        publisher.release.assert_called_with()
+        producer.release.assert_called_with()
 
     def test_ensure_declare_queue(self, q="x1242112"):
-        publisher = self.app.amqp.TaskPublisher(Mock())
-        self.app.amqp.queues.add(q, q, q)
-        publisher._declare_queue(q, retry=True)
-        self.assertTrue(publisher.connection.ensure.call_count)
+        producer = self.app.amqp.TaskProducer(Mock())
+        self.app.amqp.queues.add(Queue(q, Exchange(q), q))
+        producer._declare_queue(q, retry=True)
+        self.assertTrue(producer.connection.ensure.call_count)
 
-    def test_ensure_declare_exchange(self, e="x9248311"):
-        publisher = self.app.amqp.TaskPublisher(Mock())
-        publisher._declare_exchange(e, "direct", retry=True)
-        self.assertTrue(publisher.connection.ensure.call_count)
+    def test_ensure_declare_exchange(self, e=Exchange("x9248311")):
+        producer = self.app.amqp.TaskProducer(Mock())
+        producer._declare_exchange(e, retry=True)
+        self.assertTrue(producer.connection.ensure.call_count)
 
     def test_retry_policy(self):
-        pub = self.app.amqp.TaskPublisher(Mock())
-        pub.delay_task("tasks.add", (2, 2), {},
+        pub = self.app.amqp.TaskProducer(Mock())
+        pub.send_task("tasks.add", (2, 2), {},
                        retry_policy={"frobulate": 32.4})
 
     def test_publish_no_retry(self):
-        pub = self.app.amqp.TaskPublisher(Mock())
-        pub.delay_task("tasks.add", (2, 2), {}, retry=False, chord=123)
+        pub = self.app.amqp.TaskProducer(Mock())
+        pub.send_task("tasks.add", (2, 2), {}, retry=False, chord=123)
         self.assertFalse(pub.connection.ensure.call_count)
 
 
-class test_PublisherPool(AppCase):
+class test_ProducerPool(AppCase):
 
     def test_setup_nolimit(self):
-        L = self.app.conf.BROKER_POOL_LIMIT
-        self.app.conf.BROKER_POOL_LIMIT = None
+        conf = self.app.conf
+        prev, conf.BROKER_POOL_LIMIT = conf.BROKER_POOL_LIMIT, None
+        pools.set_limit(None)
         try:
-            delattr(self.app, "_pool")
-        except AttributeError:
-            pass
-        self.app.amqp.__dict__.pop("publisher_pool", None)
-        try:
-            pool = self.app.amqp.publisher_pool
-            self.assertEqual(pool.limit, self.app.pool.limit)
+            pool = self.app.amqp.producers[self.app.broker_connection()]
+            self.assertIsNone(pool.limit)
             self.assertFalse(pool._resource.queue)
 
             r1 = pool.acquire()
@@ -73,24 +71,20 @@ class test_PublisherPool(AppCase):
             r1 = pool.acquire()
             r2 = pool.acquire()
         finally:
-            self.app.conf.BROKER_POOL_LIMIT = L
+            conf.BROKER_POOL_LIMIT = prev
+            pools.set_limit(prev)
 
     def test_setup(self):
-        L = self.app.conf.BROKER_POOL_LIMIT
-        self.app.conf.BROKER_POOL_LIMIT = 2
+        conf = self.app.conf
+        prev, conf.BROKER_POOL_LIMIT = conf.BROKER_POOL_LIMIT, 10
+        pools.set_limit(10)
         try:
-            delattr(self.app, "_pool")
-        except AttributeError:
-            pass
-        self.app.amqp.__dict__.pop("publisher_pool", None)
-        try:
-            pool = self.app.amqp.publisher_pool
-            self.assertEqual(pool.limit, self.app.pool.limit)
+            pool = self.app.amqp.producers[self.app.broker_connection()]
+            self.assertEqual(pool.limit, 10)
             self.assertTrue(pool._resource.queue)
 
             p1 = r1 = pool.acquire()
             p2 = r2 = pool.acquire()
-            delattr(r1.connection, "_producer_chan")
             r1.release()
             r2.release()
             r1 = pool.acquire()
@@ -100,4 +94,5 @@ class test_PublisherPool(AppCase):
             r1.release()
             r2.release()
         finally:
-            self.app.conf.BROKER_POOL_LIMIT = L
+            conf.BROKER_POOL_LIMIT = prev
+            pools.set_limit(prev)

@@ -500,13 +500,15 @@ Message Routing
 CELERY_QUEUES
 ~~~~~~~~~~~~~
 
-The mapping of queues the worker consumes from.  This is a dictionary
-of queue name/options.  See :ref:`guide-routing` for more information.
+List of queue declarations we can send tasks to and the workers can
+consumes from.  This is a list of :class:`kombu.entity.Queue` instances.
+See :ref:`guide-routing` for more information.
 
-The default is a queue/exchange/binding key of `"celery"`, with
-exchange type `direct`.
+The default is a durable queue/exchange/binding key of `"celery"`, with
+exchange type `direct`, that holds persistent messages.
 
-You don't have to care about this unless you want custom routing facilities.
+You don't have to configure this setting unless you have a need for
+complex routing facilities.
 
 .. setting:: CELERY_ROUTES
 

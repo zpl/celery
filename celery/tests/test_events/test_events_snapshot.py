@@ -1,5 +1,5 @@
 from celery.app import app_or_default
-from celery.events import Events
+from celery.app.events import Events
 from celery.events.snapshot import Polaroid, evcam
 from celery.tests.utils import unittest
 

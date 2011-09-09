@@ -79,9 +79,10 @@ import warnings
 from ..app import app_or_default
 from ..datastructures import AttributeDict
 from ..exceptions import NotRegistered
-from ..utils import noop
 from ..utils import timer2
 from ..utils.encoding import safe_repr
+from ..utils.functional import noop
+
 from . import state
 from .job import TaskRequest, InvalidTaskError
 from .control.registry import Panel
@@ -443,8 +444,9 @@ class Consumer(object):
         """Closes the current broker connection and all open channels."""
         if self.task_consumer:
             self._debug("Closing consumer channel...")
+            self.maybe_conn_error(self.task_consumer.cancel)
             self.task_consumer = \
-                    self.maybe_conn_error(self.task_consumer.close)
+                    self.maybe_conn_error(self.task_consumer.channel.close)
 
         if self.broadcast_consumer:
             self._debug("Closing broadcast channel...")
@@ -552,6 +554,7 @@ class Consumer(object):
         self._debug("Connection established.")
         self.task_consumer = self.app.amqp.get_task_consumer(self.connection,
                                     on_decode_error=self.on_decode_error)
+
         # QoS: Reset prefetch window.
         self.qos = QoS(self.task_consumer,
                        self.initial_prefetch_count, self.logger)

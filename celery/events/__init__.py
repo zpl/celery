@@ -6,11 +6,9 @@ import socket
 import threading
 
 from collections import deque
-from contextlib import contextmanager
-from itertools import count
 
-from kombu.entity import Exchange, Queue
-from kombu.messaging import Consumer, Producer
+from kombu import Exchange, Producer, Queue
+from kombu.mixins import ConsumerMixin
 
 from ..app import app_or_default
 from ..utils import uuid
@@ -61,7 +59,7 @@ class EventDispatcher(object):
         self.hostname = hostname or socket.gethostname()
         self.buffer_while_offline = buffer_while_offline
         self.mutex = threading.Lock()
-        self.publisher = None
+        self.producer = None
         self._outbound_buffer = deque()
         self.serializer = serializer or self.app.conf.CELERY_EVENT_SERIALIZER
 
@@ -76,9 +74,10 @@ class EventDispatcher(object):
         self.close()
 
     def enable(self):
-        self.publisher = Producer(self.channel or self.connection.channel(),
-                                  exchange=event_exchange,
-                                  serializer=self.serializer)
+        conn = self.connection
+        self.producer = Producer(self.channel or conn.default_channel,
+                                 exchange=event_exchange,
+                                 serializer=self.serializer)
         self.enabled = True
 
     def disable(self):
@@ -98,9 +97,10 @@ class EventDispatcher(object):
                 event = Event(type, hostname=self.hostname,
                                     clock=self.app.clock.forward(), **fields)
                 try:
-                    self.publisher.publish(event,
-                                           routing_key=type.replace("-", "."))
+                    self.producer.publish(event,
+                                          routing_key=type.replace("-", "."))
                 except Exception, exc:
+                    # XXX Should log warning here...
                     if not self.buffer_while_offline:
                         raise
                     self._outbound_buffer.append((type, fields, exc))
@@ -119,13 +119,11 @@ class EventDispatcher(object):
     def close(self):
         """Close the event dispatcher."""
         self.mutex.locked() and self.mutex.release()
-        if self.publisher is not None:
-            if not self.channel:  # close auto channel.
-                self.publisher.channel.close()
-            self.publisher = None
+        if self.producer is not None:
+            self.producer = self.producer.release()
 
 
-class EventReceiver(object):
+class EventReceiver(ConsumerMixin):
     """Capture events.
 
     :param connection: Connection to the broker.
@@ -152,37 +150,8 @@ class EventReceiver(object):
                            auto_delete=True,
                            durable=False)
 
-    def process(self, type, event):
-        """Process the received event by dispatching it to the appropriate
-        handler."""
-        handler = self.handlers.get(type) or self.handlers.get("*")
-        handler and handler(event)
-
-    @contextmanager
-    def consumer(self):
-        """Create event consumer.
-
-        .. warning::
-
-            This creates a new channel that needs to be closed
-            by calling `consumer.channel.close()`.
-
-        """
-        consumer = Consumer(self.connection.channel(),
-                            queues=[self.queue], no_ack=True)
-        consumer.register_callback(self._receive)
-        with consumer:
-            yield consumer
-        consumer.channel.close()
-
     def itercapture(self, limit=None, timeout=None, wakeup=True):
-        with self.consumer() as consumer:
-            if wakeup:
-                self.wakeup_workers(channel=consumer.channel)
-
-            yield consumer
-
-            self.drain_events(limit=limit, timeout=timeout)
+        return self.consume(limit=limit, timeout=timeout, wakeup=wakeup)
 
     def capture(self, limit=None, timeout=None, wakeup=True):
         """Open up a consumer capturing events.
@@ -191,24 +160,26 @@ class EventReceiver(object):
         stop unless forced via :exc:`KeyboardInterrupt` or :exc:`SystemExit`.
 
         """
-        list(self.itercapture(limit=limit, timeout=timeout, wakeup=wakeup))
+        return list(self.consume(limit=limit, timeout=timeout, wakeup=wakeup))
+
+    def process(self, type, event):
+        """Process the received event by dispatching it to the appropriate
+        handler."""
+        handler = self.handlers.get(type) or self.handlers.get("*")
+        handler and handler(event)
+
+    def get_consumers(self, Consumer, channel):
+        return [Consumer(queues=[self.queue],
+                         callbacks=[self._receive], no_ack=True)]
+
+    def on_consume_ready(self, connection, channel, wakeup=True, **kwargs):
+        if wakeup:
+            self.wakeup_workers(channel=channel)
 
     def wakeup_workers(self, channel=None):
         self.app.control.broadcast("heartbeat",
                                    connection=self.connection,
                                    channel=channel)
-
-    def drain_events(self, limit=None, timeout=None):
-        for iteration in count(0):
-            if limit and iteration >= limit:
-                break
-            try:
-                self.connection.drain_events(timeout=timeout)
-            except socket.timeout:
-                if timeout:
-                    raise
-            except socket.error:
-                pass
 
     def _receive(self, body, message):
         type = body.pop("type").lower()
@@ -216,37 +187,3 @@ class EventReceiver(object):
         if clock:
             self.app.clock.adjust(clock)
         self.process(type, Event(type, body))
-
-
-class Events(object):
-
-    def __init__(self, app=None):
-        self.app = app
-
-    def Receiver(self, connection, handlers=None, routing_key="#",
-            node_id=None):
-        return EventReceiver(connection,
-                             handlers=handlers,
-                             routing_key=routing_key,
-                             node_id=node_id,
-                             app=self.app)
-
-    def Dispatcher(self, connection=None, hostname=None, enabled=True,
-            channel=None, buffer_while_offline=True):
-        return EventDispatcher(connection,
-                               hostname=hostname,
-                               enabled=enabled,
-                               channel=channel,
-                               app=self.app)
-
-    def State(self):
-        from .state import State as _State
-        return _State()
-
-    @contextmanager
-    def default_dispatcher(self, hostname=None, enabled=True,
-            buffer_while_offline=False):
-        with self.app.amqp.publisher_pool.acquire(block=True) as pub:
-            with self.Dispatcher(pub.connection, hostname, enabled,
-                                 pub.channel, buffer_while_offline) as d:
-                yield d

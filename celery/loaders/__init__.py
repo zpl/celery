@@ -1,7 +1,8 @@
 from __future__ import absolute_import
 
 from .. import current_app
-from ..utils import deprecated, get_cls_by_name
+from ..utils import deprecated
+from ..utils.imports import get_cls_by_name
 
 LOADER_ALIASES = {"app": "celery.loaders.app.AppLoader",
                   "default": "celery.loaders.default.Loader",

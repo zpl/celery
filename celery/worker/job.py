@@ -14,8 +14,10 @@ from .. import platforms
 from ..app import app_or_default
 from ..datastructures import ExceptionInfo
 from ..execute.trace import TaskTrace
-from ..utils import noop, kwdict, truncate_text
+from ..utils import kwdict
+from ..utils.functional import noop
 from ..utils.encoding import safe_repr, safe_str, default_encoding
+from ..utils.text import truncate
 from ..utils.timeutils import maybe_iso8601, timezone
 
 from . import state
@@ -477,7 +479,7 @@ class TaskRequest(object):
     def repr_result(self, result, maxlen=46):
         # 46 is the length needed to fit
         #     "the quick brown fox jumps over the lazy dog" :)
-        return truncate_text(safe_repr(result), maxlen)
+        return truncate(safe_repr(result), maxlen)
 
     def info(self, safe=False):
         return {"id": self.task_id,

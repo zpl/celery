@@ -50,8 +50,7 @@ except ImportError:
 install_requires.extend([
     "python-dateutil>=1.5.0,<2.0.0",
     "anyjson>=0.3.1",
-    "kombu>=1.3.1,<2.0.0",
-    "pyparsing>=1.5.0,<2.0.0",
+    "kombu>=2.0.0<3.0.0",
 ])
 if is_py3k:
     install_requires.append("python-dateutil>2.0.0")

@@ -56,15 +56,10 @@ SQLAlchemy
 
 .. _otherqueues-sqlalchemy-conf:
 
-For the SQLAlchemy transport you have to install the
-`kombu-sqlalchemy` library::
-
-    $ pip install -U kombu-sqlalchemy
-
 Configuration
 -------------
 
-This transport uses only the :setting:`BROKER_HOST` setting, which have to be
+This transport uses only the :setting:`BROKER_URL` setting, which have to be
 an SQLAlchemy database URI.
 
 #. Set your broker transport::
@@ -73,7 +68,7 @@ an SQLAlchemy database URI.
 
 #. Configure the database URI::
 
-    BROKER_HOST = "sqlite:///celerydb.sqlite"
+    BROKER_URL = "sqlite:///celerydb.sqlite"
 
 Please see `SQLAlchemy: Supported Databases`_ for a table of supported databases.
 Some other `SQLAlchemy Connection String`_, examples:
@@ -81,16 +76,16 @@ Some other `SQLAlchemy Connection String`_, examples:
 .. code-block:: python
 
     # sqlite (filename)
-    BROKER_HOST = "sqlite:///celerydb.sqlite"
+    BROKER_URL = "sqlite:///celerydb.sqlite"
 
     # mysql
-    BROKER_HOST = "mysql://scott:tiger@localhost/foo"
+    BROKER_URL = "mysql://scott:tiger@localhost/foo"
 
     # postgresql
-    BROKER_HOST = "postgresql://scott:tiger@localhost/mydatabase"
+    BROKER_URL = "postgresql://scott:tiger@localhost/mydatabase"
 
     # oracle
-    BROKER_HOST = "oracle://scott:tiger@127.0.0.1:1521/sidname"
+    BROKER_URL = "oracle://scott:tiger@127.0.0.1:1521/sidname"
 
 .. _`SQLAlchemy: Supported Databases`:
     http://www.sqlalchemy.org/docs/core/engines.html#supported-databases
@@ -115,11 +110,6 @@ Django Database
 
 .. _otherqueues-django-conf:
 
-For the Django database transport support you have to install the
-`django-kombu` library::
-
-    $ pip install -U django-kombu
-
 Configuration
 -------------
 
@@ -130,12 +120,11 @@ configuration values.
 
     BROKER_TRANSPORT = "django"
 
-#. Add :mod:`djkombu` to `INSTALLED_APPS`::
+#. Add :mod:`kombu.transport.django` to `INSTALLED_APPS`::
 
-    INSTALLED_APPS = ("djkombu", )
+    INSTALLED_APPS = ("kombu.transport.django", )
 
-
-#. Verify you database settings::
+#. Verify your database settings::
 
     DATABASE_ENGINE = "mysql"
     DATABASE_NAME = "mydb"
@@ -146,6 +135,6 @@ configuration values.
   you should read the Django database settings reference:
   http://docs.djangoproject.com/en/1.1/ref/settings/#database-engine
 
-#. Sync your database schema.
+#. Sync your database schema::
 
     $ python manage.py syncdb

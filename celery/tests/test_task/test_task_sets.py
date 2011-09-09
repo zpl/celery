@@ -131,12 +131,12 @@ class test_TaskSet(unittest.TestCase):
         ts.apply_async()
         self.assertEqual(applied[0], 3)
 
-        class Publisher(object):
+        class Producer(object):
 
-            def send(self, *args, **kwargs):
+            def publish(self, *args, **kwargs):
                 pass
 
-        ts.apply_async(publisher=Publisher())
+        ts.apply_async(producer=Producer())
 
     def test_apply(self):
 

@@ -7,7 +7,7 @@ from ..local import Proxy
 from .base import Task, PeriodicTask
 from .sets import TaskSet, subtask
 from .chords import chord
-from .control import discard_all
+from .control import discard_all   # XXX deprecate
 
 __all__ = ["Task", "TaskSet", "PeriodicTask", "subtask",
            "discard_all", "chord"]

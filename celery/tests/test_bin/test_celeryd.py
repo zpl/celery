@@ -215,11 +215,12 @@ class test_Worker(AppCase):
             worker = self.Worker(queues=["image"])
             worker.init_queues()
             self.assertIn("image", app.amqp.queues.consume_from)
-            self.assertDictContainsSubset({"exchange": "image",
-                                           "routing_key": "image",
-                                           "binding_key": "image",
-                                           "exchange_type": "direct"},
-                                            app.amqp.queues["image"])
+            image_q = app.amqp.queues["image"]
+            self.assertDictContainsSubset({"routing_key": "image"},
+                                            image_q.as_dict())
+            self.assertDictContainsSubset({"name": "image",
+                                           "type": "direct"},
+                                           image_q.exchange.as_dict())
         finally:
             app.amqp.queues = p
 

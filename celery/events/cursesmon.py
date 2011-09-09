@@ -13,7 +13,7 @@ from math import ceil
 from .. import __version__
 from .. import states
 from ..app import app_or_default
-from ..utils import abbr, abbrtask
+from ..utils.text import abbr, abbrtask
 
 BORDER_SPACING = 4
 LEFT_BORDER_OFFSET = 3
@@ -466,13 +466,13 @@ def evtop(app=None):
     conn = app.broker_connection()
     recv = app.events.Receiver(conn, handlers={"*": state.event})
     capture = recv.itercapture()
-    capture.next()
     display = CursesMonitor(state, app=app)
     display.init_screen()
     refresher = DisplayThread(display)
     refresher.start()
     try:
-        capture.next()
+        for _ in capture:
+            pass
     except Exception:
         refresher.shutdown = True
         refresher.join()

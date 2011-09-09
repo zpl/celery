@@ -51,11 +51,11 @@
 
     Send events that can be captured by monitors like `celerymon`.
 
-.. cmdoption:: --purge, --discard
+.. cmdoption:: --purge
 
-    Discard all waiting tasks before the daemon is started.
+    Purge all waiting tasks from the queue before the worker starts.
     **WARNING**: This is unrecoverable, and the tasks will be
-    deleted from the messaging server.
+    deleted from the messaging server forever..
 
 .. cmdoption:: --time-limit
 
@@ -110,10 +110,10 @@ class WorkerCommand(Command):
                 help="Pool implementation: "
                      "processes (default), eventlet or gevent."),
             Option('--purge', '--discard', default=False,
-                action="store_true", dest="discard",
-                help="Discard all waiting tasks before the server is"
-                     "started. WARNING: There is no undo operation "
-                     "and the tasks will be deleted."),
+                action="store_true", dest="purge",
+                help="Purge all waiting tasks from the queue before the "
+                     "server is started. WARNING: There is no undo operation "
+                     "and the tasks will be deleted forever."),
             Option('-f', '--logfile',
                 default=None, action="store", dest="logfile",
                 help="Path to log file."),
