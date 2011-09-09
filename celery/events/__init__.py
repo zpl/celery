@@ -11,6 +11,7 @@ from itertools import count
 
 from kombu.entity import Exchange, Queue
 from kombu.messaging import Consumer, Producer
+from kombu.mixins import ConsumerMixin
 
 from ..app import app_or_default
 from ..utils import uuid
@@ -125,7 +126,7 @@ class EventDispatcher(object):
             self.producer = None
 
 
-class EventReceiver(object):
+class EventReceiver(ConsumerMixin):
     """Capture events.
 
     :param connection: Connection to the broker.
@@ -158,31 +159,16 @@ class EventReceiver(object):
         handler = self.handlers.get(type) or self.handlers.get("*")
         handler and handler(event)
 
-    @contextmanager
-    def consumer(self):
-        """Create event consumer.
+    def get_consumers(self, Consumer, channel):
+        return [Consumer(queues=[self.queue],
+                         callbacks=[self._receive], no_ack=True)]
 
-        .. warning::
-
-            This creates a new channel that needs to be closed
-            by calling `consumer.channel.close()`.
-
-        """
-        consumer = Consumer(self.connection.channel(),
-                            queues=[self.queue], no_ack=True)
-        consumer.register_callback(self._receive)
-        with consumer:
-            yield consumer
-        consumer.channel.close()
+    def on_consume_ready(self, connection, channel, wakeup=True, **kwargs):
+        if wakeup:
+            self.wakeup_workers(channel=channel)
 
     def itercapture(self, limit=None, timeout=None, wakeup=True):
-        with self.consumer() as consumer:
-            if wakeup:
-                self.wakeup_workers(channel=consumer.channel)
-
-            yield consumer
-
-            self.drain_events(limit=limit, timeout=timeout)
+        return self.consume(limit=limit, timeout=timeout, wakeup=wakeup)
 
     def capture(self, limit=None, timeout=None, wakeup=True):
         """Open up a consumer capturing events.
@@ -191,24 +177,12 @@ class EventReceiver(object):
         stop unless forced via :exc:`KeyboardInterrupt` or :exc:`SystemExit`.
 
         """
-        list(self.itercapture(limit=limit, timeout=timeout, wakeup=wakeup))
+        return list(self.consume(limit=limit, timeout=timeout, wakeup=wakeup))
 
     def wakeup_workers(self, channel=None):
         self.app.control.broadcast("heartbeat",
                                    connection=self.connection,
                                    channel=channel)
-
-    def drain_events(self, limit=None, timeout=None):
-        for iteration in count(0):
-            if limit and iteration >= limit:
-                break
-            try:
-                self.connection.drain_events(timeout=timeout)
-            except socket.timeout:
-                if timeout:
-                    raise
-            except socket.error:
-                pass
 
     def _receive(self, body, message):
         type = body.pop("type").lower()
