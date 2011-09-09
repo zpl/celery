@@ -42,9 +42,8 @@ It should contain all you need to run a basic Celery set-up.
 
     CELERY_ANNOTATIONS = {"tasks.add": {"rate_limit": "10/s"}}
 
-
-Configuration Directives
-========================
+Common Configuration Directives
+===============================
 
 Time and date settings
 ----------------------
@@ -63,8 +62,8 @@ If not set then the systems default local time zone is used.
 
 .. _conf-tasks:
 
-Task settings
--------------
+Task Annotations
+----------------
 
 .. setting:: CELERY_ANNOTATIONS
 
@@ -115,21 +114,6 @@ instead of a dict to choose which tasks to annotate:
     CELERY_ANNOTATIONS = (MyAnnotate(), {...})
 
 
-
-.. _conf-concurrency:
-
-Concurrency settings
---------------------
-
-.. setting:: CELERYD_CONCURRENCY
-
-CELERYD_CONCURRENCY
-~~~~~~~~~~~~~~~~~~~
-
-The number of concurrent worker processes/threads/green threads, executing
-tasks.
-
-Defaults to the number of available CPUs.
 
 .. setting:: CELERYD_PREFETCH_MULTIPLIER
 
@@ -1063,17 +1047,6 @@ Can also be set via the :option:`--statedb` argument to
 
 Not enabled by default.
 
-.. setting:: CELERYD_ETA_SCHEDULER_PRECISION
-
-CELERYD_ETA_SCHEDULER_PRECISION
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Set the maximum time in seconds that the ETA scheduler can sleep between
-rechecking the schedule.  Default is 1 second.
-
-Setting this value to 1 second means the schedulers precision will
-be 1 second. If you need near millisecond precision you can set this to 0.1.
-
 .. _conf-error-mails:
 
 Error E-Mails
@@ -1190,13 +1163,6 @@ george@vandelay.com and kramer@vandelay.com:
 Events
 ------
 
-.. setting:: CELERY_SEND_EVENTS
-
-CELERY_SEND_EVENTS
-~~~~~~~~~~~~~~~~~~
-
-Send events so the worker can be monitored by tools like `celerymon`.
-
 .. setting:: CELERY_SEND_TASK_SENT_EVENT
 
 CELERY_SEND_TASK_SENT_EVENT
@@ -1272,6 +1238,45 @@ this behavior.
     Logging can also be customized by connecting to the
     :signal:`celery.signals.setup_logging` signal.
 
+.. _conf-celerybeat:
+
+Periodic Tasks
+--------------
+
+.. setting:: CELERYBEAT_SCHEDULE
+
+CELERYBEAT_SCHEDULE
+~~~~~~~~~~~~~~~~~~~
+
+The periodic task schedule used by :mod:`~celery.bin.celerybeat`.
+See :ref:`beat-entries`.
+
+.. setting:: CELERYBEAT_SCHEDULER
+
+CELERYBEAT_SCHEDULER
+~~~~~~~~~~~~~~~~~~~~
+
+The default scheduler class.  Default is
+`"celery.beat.PersistentScheduler"`.
+
+Can also be set via the :option:`-S` argument to
+:mod:`~celery.bin.celerybeat`.
+
+Rare Settings
+=============
+
+These settings are mostly for advanced use, or they are more easily
+managed as command-line arguments.
+
+.. setting:: CELERY_SEND_EVENTS
+
+CELERY_SEND_EVENTS
+~~~~~~~~~~~~~~~~~~
+
+Send events so the worker can be monitored by tools like `celerymon`.
+
+This can also be set using the :option:`-E` option to :program:`celeryd`.
+
 .. setting:: CELERYD_LOG_COLOR
 
 CELERYD_LOG_COLOR
@@ -1334,10 +1339,63 @@ Can be one of :const:`DEBUG`, :const:`INFO`, :const:`WARNING`,
 
 Default is :const:`WARNING`.
 
+.. setting:: CELERYD_ETA_SCHEDULER_PRECISION
+
+CELERYD_ETA_SCHEDULER_PRECISION
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set the maximum time in seconds that the ETA scheduler can sleep between
+rechecking the schedule.  Default is 1 second.
+
+Setting this value to 1 second means the schedulers precision will
+be 1 second. If you need near millisecond precision you can set this to 0.1.
+
+.. setting:: CELERYD_CONCURRENCY
+
+CELERYD_CONCURRENCY
+~~~~~~~~~~~~~~~~~~~
+
+The number of concurrent worker processes/threads/green threads, executing
+tasks.
+
+Defaults to the number of available CPUs.
+
+.. setting:: CELERYMON_LOG_FORMAT
+
+CELERYMON_LOG_FORMAT
+~~~~~~~~~~~~~~~~~~~~
+
+The format the ``celerymon`` program should use for log messages.
+
+Default is `[%(asctime)s: %(levelname)s/%(processName)s] %(message)s`
+
+See the Python :mod:`logging` module for more information about log
+formats.
+
+.. setting:: CELERYBEAT_MAX_LOOP_INTERVAL
+
+CELERYBEAT_MAX_LOOP_INTERVAL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The maximum number of seconds :mod:`~celery.bin.celerybeat` can sleep
+between checking the schedule.  Default is 300 seconds (5 minutes).
+
+.. setting:: CELERYBEAT_SCHEDULE_FILENAME
+
+CELERYBEAT_SCHEDULE_FILENAME
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Name of the file used by `PersistentScheduler` to store the last run times
+of periodic tasks.  Can be a relative or absolute path, but be aware that the
+suffix `.db` may be appended to the file name (depending on Python version).
+
+Can also be set via the :option:`--schedule` argument to
+:mod:`~celery.bin.celerybeat`.
+
 .. _conf-custom-components:
 
-Custom Component Classes (advanced)
------------------------------------
+Custom Worker Component Classes
+-------------------------------
 
 .. setting:: CELERYD_POOL
 
@@ -1387,63 +1445,3 @@ Name of the ETA scheduler class used by the worker.
 Default is :class:`celery.utils.timer2.Timer`, or one overrided
 by the pool implementation.
 
-.. _conf-celerybeat:
-
-Periodic Task Server: celerybeat
---------------------------------
-
-.. setting:: CELERYBEAT_SCHEDULE
-
-CELERYBEAT_SCHEDULE
-~~~~~~~~~~~~~~~~~~~
-
-The periodic task schedule used by :mod:`~celery.bin.celerybeat`.
-See :ref:`beat-entries`.
-
-.. setting:: CELERYBEAT_SCHEDULER
-
-CELERYBEAT_SCHEDULER
-~~~~~~~~~~~~~~~~~~~~
-
-The default scheduler class.  Default is
-`"celery.beat.PersistentScheduler"`.
-
-Can also be set via the :option:`-S` argument to
-:mod:`~celery.bin.celerybeat`.
-
-.. setting:: CELERYBEAT_SCHEDULE_FILENAME
-
-CELERYBEAT_SCHEDULE_FILENAME
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Name of the file used by `PersistentScheduler` to store the last run times
-of periodic tasks.  Can be a relative or absolute path, but be aware that the
-suffix `.db` may be appended to the file name (depending on Python version).
-
-Can also be set via the :option:`--schedule` argument to
-:mod:`~celery.bin.celerybeat`.
-
-.. setting:: CELERYBEAT_MAX_LOOP_INTERVAL
-
-CELERYBEAT_MAX_LOOP_INTERVAL
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The maximum number of seconds :mod:`~celery.bin.celerybeat` can sleep
-between checking the schedule.  Default is 300 seconds (5 minutes).
-
-.. _conf-celerymon:
-
-Monitor Server: celerymon
--------------------------
-
-.. setting:: CELERYMON_LOG_FORMAT
-
-CELERYMON_LOG_FORMAT
-~~~~~~~~~~~~~~~~~~~~
-
-The format to use for log messages.
-
-Default is `[%(asctime)s: %(levelname)s/%(processName)s] %(message)s`
-
-See the Python :mod:`logging` module for more information about log
-formats.
