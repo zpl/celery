@@ -27,16 +27,11 @@ up and running.
   callback: :meth:`~Consumer.receive_message`.
 
 * So for each message received the :meth:`~Consumer.receive_message`
-  method is called, this checks the payload of the message for either
-  a `task` key or a `control` key.
+  method is called.
 
   If the message is a task, it verifies the validity of the message
   converts it to a :class:`celery.worker.job.TaskRequest`, and sends
   it to :meth:`~Consumer.on_task`.
-
-  If the message is a control command the message is passed to
-  :meth:`~Consumer.on_control`, which in turn dispatches
-  the control command using the control dispatcher.
 
   It also tries to handle malformed or invalid messages properly,
   so the worker doesn't choke on them and die. Any invalid messages
@@ -58,6 +53,10 @@ up and running.
   detects that the value has changed it will send out the actual
   QoS event to the broker.
 
+*  If the message is a control command the message is passed to
+  :meth:`~Consumer.on_control`, which in turn dispatches
+  the control command using the control dispatcher.
+
 * Notice that when the connection is lost all internal queues are cleared
   because we can no longer ack the messages reserved in memory.
   However, this is not dangerous as the broker will resend them
@@ -75,6 +74,11 @@ import sys
 import threading
 import traceback
 import warnings
+
+from contextlib import contextmanager
+from functools import partial
+
+from kombu.mixins import ConsumerMixin
 
 from ..app import app_or_default
 from ..datastructures import AttributeDict
@@ -192,7 +196,7 @@ class QoS(object):
             return self.set(self.value)
 
 
-class Consumer(object):
+class Consumer(ConsumerMixin):
     """Listen for messages received from the broker and
     move them to the ready queue for task processing.
 
@@ -229,21 +233,6 @@ class Consumer(object):
     #: went offline/disappeared.
     heart = None
 
-    #: The logger instance to use.  Defaults to the default Celery logger.
-    logger = None
-
-    #: The broker connection.
-    connection = None
-
-    #: The consumer used to consume task messages.
-    task_consumer = None
-
-    #: The consumer used to consume broadcast commands.
-    broadcast_consumer = None
-
-    #: The process mailbox (kombu pidbox node).
-    pidbox_node = None
-
     #: The current worker pool instance.
     pool = None
 
@@ -254,74 +243,44 @@ class Consumer(object):
     # Consumer state, can be RUN or CLOSE.
     _state = None
 
+    # List of active consumer instances.
+    _consumers = None
+
     def __init__(self, ready_queue, eta_schedule, logger,
             init_callback=noop, send_events=False, hostname=None,
             initial_prefetch_count=2, pool=None, app=None,
-            priority_timer=None, controller=None):
+            priority_timer=None, controller=None, connection=None):
         self.app = app_or_default(app)
-        self.connection = None
-        self.task_consumer = None
+        self.connection = self.app.broker_connection(connection)
         self.controller = controller
-        self.broadcast_consumer = None
         self.ready_queue = ready_queue
         self.eta_schedule = eta_schedule
         self.send_events = send_events
         self.init_callback = init_callback
-        self.logger = logger
         self.hostname = hostname or socket.gethostname()
         self.initial_prefetch_count = initial_prefetch_count
-        self.event_dispatcher = None
-        self.heart = None
         self.pool = pool
+        self._logger = logger
         self.priority_timer = priority_timer or timer2.default_timer
-        pidbox_state = AttributeDict(app=self.app,
-                                     logger=logger,
-                                     hostname=self.hostname,
-                                     listener=self,     # pre 2.2
-                                     consumer=self)
-        self.pidbox_node = self.app.control.mailbox.Node(self.hostname,
-                                                         state=pidbox_state,
-                                                         handlers=Panel.data)
-        conninfo = self.app.broker_connection()
-        self.connection_errors = conninfo.connection_errors
-        self.channel_errors = conninfo.channel_errors
 
     def start(self):
-        """Start the consumer.
+        self.run()
 
-        Automatically survives intermittent connection failure,
-        and will retry establishing the connection and restart
-        consuming messages.
+    def create_pidbox_node(self, channel):
+        return self.app.control.mailbox.Node(self.hostname,
+                        channel=channel, handlers=Panel.data,
+                        state=AttributeDict(app=self.app,
+                                            logger=self.logger,
+                                            hostname=self.hostname,
+                                            consumer=self))
 
-        """
+    def on_iteration(self):
+        if self.qos.prev != self.qos.value:
+            self.qos.update()
 
-        self.init_callback(self)
-
-        while self._state != CLOSE:
-            try:
-                self.reset_connection()
-                self.consume_messages()
-            except self.connection_errors:
-                self.logger.error("Consumer: Connection to broker lost."
-                                + " Trying to re-establish the connection...",
-                                exc_info=sys.exc_info())
-
-    def consume_messages(self):
-        """Consume messages forever (or until an exception is raised)."""
-        self._debug("Starting message consumer...")
-        self.task_consumer.consume()
-        self._debug("Ready to accept tasks!")
-
-        while self._state != CLOSE and self.connection:
-            if self.qos.prev != self.qos.value:
-                self.qos.update()
-            try:
-                self.connection.drain_events(timeout=1)
-            except socket.timeout:
-                pass
-            except socket.error:
-                if self._state != CLOSE:
-                    raise
+    def on_consume_ready(self, connection, channel, consumers, **kwargs):
+        self.debug("Ready to accept tasks!")
+        self.consumers = consumers
 
     def on_task(self, task):
         """Handle received task.
@@ -360,17 +319,16 @@ class Consumer(object):
             state.task_reserved(task)
             self.ready_queue.put(task)
 
-    def on_control(self, body, message):
+    def on_control(self, node, body, message):
         """Process remote control command message."""
         try:
-            self.pidbox_node.handle_message(body, message)
+            node.handle_message(body, message)
         except KeyError, exc:
-            self.logger.error("No such control command: %s", exc)
+            self.error("No such control command: %s", exc)
         except Exception, exc:
-            self.logger.error(
+            self.error(
                 "Error occurred while handling control command: %r\n%r",
                     exc, traceback.format_exc(), exc_info=sys.exc_info())
-            self.reset_pidbox_node()
 
     def apply_eta_task(self, task):
         """Method called by the timer to apply a task with an
@@ -430,33 +388,6 @@ class Consumer(object):
         else:
             self.on_task(task)
 
-    def maybe_conn_error(self, fun):
-        """Applies function but ignores any connection or channel
-        errors raised."""
-        try:
-            fun()
-        except (AttributeError, ) + \
-                self.connection_errors + \
-                self.channel_errors:
-            pass
-
-    def close_connection(self):
-        """Closes the current broker connection and all open channels."""
-        if self.task_consumer:
-            self._debug("Closing consumer channel...")
-            self.maybe_conn_error(self.task_consumer.cancel)
-            self.task_consumer = \
-                    self.maybe_conn_error(self.task_consumer.channel.close)
-
-        if self.broadcast_consumer:
-            self._debug("Closing broadcast channel...")
-            self.broadcast_consumer = \
-                self.maybe_conn_error(self.broadcast_consumer.channel.close)
-
-        if self.connection:
-            self._debug("Closing broker connection...")
-            self.connection = self.maybe_conn_error(self.connection.close)
-
     def stop_consumers(self, close_connection=True):
         """Stop consuming tasks and broadcast commands, also stops
         the heartbeat thread and event dispatcher.
@@ -473,98 +404,75 @@ class Consumer(object):
             self.logger.debug("Heart: Going into cardiac arrest...")
             self.heart = self.heart.stop()
 
-        self._debug("Cancelling task consumer...")
-        if self.task_consumer:
-            self.maybe_conn_error(self.task_consumer.cancel)
+        self.debug("Cancelling consumers...")
+        for consumer in (self._consumers or []):
+            self.maybe_conn_error(consumer.cancel)
 
         if self.event_dispatcher:
-            self._debug("Shutting down event dispatcher...")
+            self.debug("Shutting down event dispatcher...")
             self.event_dispatcher = \
                     self.maybe_conn_error(self.event_dispatcher.close)
 
-        self._debug("Cancelling broadcast consumer...")
-        if self.broadcast_consumer:
-            self.maybe_conn_error(self.broadcast_consumer.cancel)
-
         if close_connection:
-            self.close_connection()
+            self.should_stop = True
 
-    def on_decode_error(self, message, exc):
-        """Callback called if an error occurs while decoding
-        a message received.
+    def get_consumers(self, Consumer, channel):
+        tasks = self.app.amqp.get_task_consumer(channel,
+                    on_decode_error=self.on_decode_error,
+                    callbacks=[self.receive_message])
 
-        Simply logs the error and acknowledges the message so it
-        doesn't enter a loop.
+        # QoS: Reset prefetch window.
+        self.qos = QoS(tasks, self.initial_prefetch_count, self.logger)
+        self.qos.update()
 
-        :param message: The message with errors.
-        :param exc: The original exception instance.
+        return [tasks]
 
-        """
-        self.logger.critical(
-            "Can't decode message body: %r (type:%r encoding:%r raw:%r')",
-                    exc, message.content_type, message.content_encoding,
-                    safe_repr(message.body))
-        message.ack()
-
-    def reset_pidbox_node(self):
-        """Sets up the process mailbox."""
-        # close previously opened channel if any.
-        if self.pidbox_node.channel:
-            try:
-                self.pidbox_node.channel.close()
-            except self.connection_errors + self.channel_errors:
-                pass
-
+    @contextmanager
+    def extra_context(self, connection, channel):
+        box = self._pidbox_consumer
         if self.pool is not None and self.pool.is_green:
-            return self.pool.spawn_n(self._green_pidbox_node)
-        self.pidbox_node.channel = self.connection.channel()
-        self.broadcast_consumer = self.pidbox_node.listen(
-                                        callback=self.on_control)
-        self.broadcast_consumer.consume()
+            box = self._green_pidbox_consumer
 
-    def _green_pidbox_node(self):
-        """Sets up the process mailbox when running in a greenlet
-        environment."""
-        conn = self._open_connection()
-        self.pidbox_node.channel = conn.channel()
-        self.broadcast_consumer = self.pidbox_node.listen(
-                                        callback=self.on_control)
-        self.broadcast_consumer.consume()
+        with box(connection, channel):
+            yield
 
-        try:
-            while self.connection:  # main connection still open?
-                conn.drain_events()
-        finally:
-            conn.close()
+    @contextmanager
+    def _pidbox_consumer(self, connection, _):
+        with connection.channel() as channel:
+            node = self.create_pidbox_node(channel)
+            callback = partial(self.on_control, node)
+            with node.listen(callback=callback):
+                yield
 
-    def reset_connection(self):
-        """Re-establish the broker connection and set up consumers,
-        heartbeat and the event dispatcher."""
-        self._debug("Re-establishing connection to the broker...")
-        self.stop_consumers()
+    @contextmanager
+    def _green_pidbox_consumer(self, connection, _):
+
+        class gPidboxConsumer(ConsumerMixin):
+
+            def __init__(self, c, connection, callback):
+                self.c = c
+                self.connection = connection
+                self.callback = callback
+
+            def get_consumers(self, Consumer, channel):
+                node = self.c.create_pidbox_node(channel)
+                callback = partial(self.callback, node)
+                return [node.listen(callback=callback)]
+
+        gpidbox = gPidboxConsumer(self, connection, self.on_control)
+        self.pool.spawn_n(gpidbox.run)
+        yield
+        gpidbox.should_stop = True
+
+    def on_connection_revived(self):
+        self.debug("Connection revived")
+        self.init_callback(self)
 
         # Clear internal queues to get rid of old messages.
         # They can't be acked anyway, as a delivery tag is specific
         # to the current channel.
         self.ready_queue.clear()
         self.eta_schedule.clear()
-
-        # Re-establish the broker connection and setup the task consumer.
-        self.connection = self._open_connection()
-        self._debug("Connection established.")
-        self.task_consumer = self.app.amqp.get_task_consumer(self.connection,
-                                    on_decode_error=self.on_decode_error)
-
-        # QoS: Reset prefetch window.
-        self.qos = QoS(self.task_consumer,
-                       self.initial_prefetch_count, self.logger)
-        self.qos.update()
-
-        # receive_message handles incoming messages.
-        self.task_consumer.register_callback(self.receive_message)
-
-        # Setup the process mailbox.
-        self.reset_pidbox_node()
 
         # Flush events sent while connection was down.
         prev_event_dispatcher = self.event_dispatcher
@@ -591,31 +499,6 @@ class Consumer(object):
         self.heart = Heart(self.priority_timer, self.event_dispatcher)
         self.heart.start()
 
-    def _open_connection(self):
-        """Establish the broker connection.
-
-        Will retry establishing the connection if the
-        :setting:`BROKER_CONNECTION_RETRY` setting is enabled
-
-        """
-
-        # Callback called for each retry while the connection
-        # can't be established.
-        def _error_handler(exc, interval):
-            self.logger.error("Consumer: Connection Error: %s. "
-                              "Trying again in %d seconds...", exc, interval)
-
-        # remember that the connection is lazy, it won't establish
-        # until it's needed.
-        conn = self.app.broker_connection()
-        if not self.app.conf.BROKER_CONNECTION_RETRY:
-            # retry disabled, just call connect directly.
-            conn.connect()
-            return conn
-
-        return conn.ensure_connection(_error_handler,
-                    self.app.conf.BROKER_CONNECTION_MAX_RETRIES)
-
     def stop(self):
         """Stop consuming.
 
@@ -626,11 +509,18 @@ class Consumer(object):
         # Notifies other threads that this instance can't be used
         # anymore.
         self._state = CLOSE
-        self._debug("Stopping consumers...")
+        self.should_stop = True
+        self.debug("Stopping consumers...")
         self.stop_consumers(close_connection=False)
 
+    def get_logger(self):
+        return self._logger
+
+    def close_connection(self):
+        self.should_stop = True
+
     @property
-    def info(self):
+    def information(self):
         """Returns information about this consumer instance
         as a dict.
 
@@ -644,5 +534,6 @@ class Consumer(object):
             conninfo.pop("password", None)  # don't send password.
         return {"broker": conninfo, "prefetch_count": self.qos.value}
 
-    def _debug(self, msg, **kwargs):
-        self.logger.debug("Consumer: %s", msg, **kwargs)
+    @property
+    def connect_max_retries(self):
+        return self.app.conf.BROKER_CONNECTION_MAX_RETRIES

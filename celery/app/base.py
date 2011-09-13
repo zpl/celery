@@ -263,6 +263,7 @@ class BaseApp(object):
         #
         #        Using kombu URLs, this should be allowed.
         #
+        args = list(args)
         conf = self.conf
         brokers = conf.BROKERS
         alias = conf.BROKER_DEFAULT
@@ -274,8 +275,9 @@ class BaseApp(object):
                     alias = url
                 else:
                     args.insert(0, url)
-        return self.amqp.BrokerConnection(*args,
-                                          **dict(brokers[alias], **kwargs))
+        if not len(args):
+            kwargs = dict(brokers[alias], **kwargs)
+        return self.amqp.BrokerConnection(*args, **kwargs)
 
     @contextmanager
     def connection_or_acquire(self, connection=None):

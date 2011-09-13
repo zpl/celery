@@ -18,6 +18,7 @@ from kombu.common import entry_to_queue, maybe_declare
 from .. import signals
 from ..utils import cached_property, uuid
 from ..utils import text
+from ..utils.encoding import safe_repr
 
 from . import routes as _routes
 
@@ -159,48 +160,39 @@ def maybe_exchange(exchange, exchange_type):
     return exchange
 
 
+def merge_policy(custom, default):
+    if custom:
+        return dict(default, **custom)
+    return default or {}
+
+
 class TaskProducer(Producer):
     auto_declare = True
     retry = False
     retry_policy = None
 
     def __init__(self, connection, *args, **kwargs):
-        self.app = kwargs.pop("app")
+        self.amqp = kwargs.pop("amqp")
         self.retry = kwargs.pop("retry", self.retry)
         self.retry_policy = kwargs.pop("retry_policy",
                                         self.retry_policy or {})
-        kwargs["exchange"] = maybe_exchange(kwargs.get("exchange"),
-                                            kwargs.get("exchange_type"))
-        super(TaskProducer, self).__init__(connection.default_channel,
-                                           *args, **kwargs)
+        self.event_dispatcher = kwargs.pop("event_dispatcher", None)
+        exchange = maybe_exchange(kwargs.pop("exchange", None),
+                                  kwargs.pop("exchange_type", None))
+        super(TaskProducer, self).__init__(connection,
+                                           *args, exchange=exchange, **kwargs)
 
     def declare(self):
         maybe_declare(self.exchange, self.channel)
 
-    def _send_task(self, body, exchange=None, exchange_type=None,
-            retry=None, retry_policy=None, queue=None, **options):
-        publish = self.publish
-        connection = self.connection
-        exchange = maybe_exchange(exchange, exchange_type)
-
-        _retry_policy = self.retry_policy
-        if retry_policy:  # merge default and custom policy
-            _retry_policy = dict(_retry_policy, **retry_policy)
-
-        if queue:
-            self._declare_queue(queue, retry, retry_policy)
-        if exchange:
-            self._declare_exchange(exchange, retry, retry_policy)
-
-        if (retry if retry is not None else self.retry):
-            publish = connection.ensure(self, self.publish, **_retry_policy)
-        publish(body, exchange=exchange, **extract_msg_options(options))
-
     def send_task(self, name, args=None, kwargs=None,
             countdown=None, eta=None, id=None, taskset_id=None,
             expires=None, event_dispatcher=None, now=None,
-            retries=0, chord=None, **options):
+            retries=0, chord=None, exchange=None, exchange_type=None,
+            queue=None, retry=None, retry_policy=None, **options):
         """Send task message."""
+        retry = retry if retry is not None else self.retry
+        retry_policy = merge_policy(retry_policy, self.retry_policy)
 
         id = id or uuid()
         args = args or []
@@ -229,31 +221,29 @@ class TaskProducer(Producer):
                 "taskset": taskset_id,
                 "chord": chord}
 
-        self._send_task(body, **options)
+        exchange = maybe_exchange(exchange, exchange_type)
+        queue = self.amqp.queues[queue] if queue else None
+        self.publish(body, declare=[exchange, queue], exchange=exchange,
+                     retry=retry, retry_policy=retry_policy,
+                     **extract_msg_options(options))
 
         signals.task_sent.send(sender=name, **body)
-        if event_dispatcher:
-            event_dispatcher.send("task-sent",
-                            uuid=id, name=name,
-                            args=repr(args), kwargs=repr(kwargs),
-                            retries=retries, eta=eta, expires=expires)
+        self.event_dispatcher and self.send_sent_event(retry, retry_policy,
+                                                       **body)
         return id
 
-    def _declare_queue(self, name, retry=False, retry_policy={}):
-        queue = self.app.queues[name](self.channel)
-        if retry:
-            self.connection.ensure(queue, maybe_declare,
-                                   **retry_policy)(queue, self.channel)
-        else:
-            maybe_declare(queue, self.channel)
-        return queue
+    def send_sent_event(self, retry=None, retry_policy=None,
+            id=None, args=None, kwargs=None, retries=None, eta=None,
+            expires=None, **_):
+        self.event_dispatcher.publish("task-sent",
+                                      {"id": id,
+                                       "args": safe_repr(args),
+                                       "kwargs": safe_repr(kwargs),
+                                       "retries": retries,
+                                       "eta": eta,
+                                       "expires": expires},
+                                      retry=retry, retry_policy=retry_policy)
 
-    def _declare_exchange(self, exchange, retry=False, retry_policy={}):
-        ex = exchange(self.channel)
-        if retry:
-            return self.connection.ensure(ex, maybe_declare,
-                                          **retry_policy)(ex, self.channel)
-        return maybe_declare(ex, self.channel)
 
 
 class ProducerPool(pools.ProducerPool):
@@ -271,6 +261,7 @@ class _Producers(pools.PoolGroup):
     def __init__(self, type, connections):
         self.type = type
         self.connections = connections
+        self.limit = pools.use_global_limit
 
     def create(self, connection, limit):
         return ProducerPool(self.type,
@@ -287,6 +278,10 @@ class AMQP(object):
 
     def __init__(self, app):
         self.app = app
+
+    def merge_retry_policy(self, custom):
+        return merge_policy(custom,
+                            self.app.conf.CELERY_TASK_PUBLISH_RETRY_POLICY)
 
     def Queues(self, queues):
         """Create new :class:`Queues` instance, using queue defaults
@@ -315,22 +310,28 @@ class AMQP(object):
         return _routes.Router(self.routes, queues or self.queues,
                               create_missing, app=self.app)
 
-    def TaskProducer(self, *args, **kwargs):
+    def TaskProducer(self, connection, *args, **kwargs):
         """Returns producer used to send tasks.
 
         You probably want `app.send_task` instead.
 
         """
+        evd = None
         conf = self.app.conf
+        if conf.CELERY_SEND_TASK_SENT_EVENT:
+            evd = self.app.events.Dispatcher(connection=connection,
+                                             buffer_while_offline=False)
         defaults = {"serializer": conf.CELERY_TASK_SERIALIZER,
                     "retry": conf.CELERY_TASK_PUBLISH_RETRY,
                     "retry_policy": conf.CELERY_TASK_PUBLISH_RETRY_POLICY,
-                    "app": self}
-        return TaskProducer(*args, **self.app.merge(defaults, kwargs))
+                    "event_dispatcher": evd,
+                    "amqp": self}
+        return TaskProducer(connection,
+                            *args, **self.app.merge(defaults, kwargs))
 
-    def get_task_consumer(self, connection, queues=None, **kwargs):
+    def get_task_consumer(self, channel, **kwargs):
         """Return consumer configured to consume from all active queues."""
-        return self.Consumer(connection.channel(),
+        return self.Consumer(channel,
                              queues=self.queues.consume_from.values(),
                              **kwargs)
 

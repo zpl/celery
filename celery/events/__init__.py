@@ -9,8 +9,10 @@ from collections import deque
 
 from kombu import Exchange, Producer, Queue
 from kombu.mixins import ConsumerMixin
+from kombu.log import LogMixin
 
 from ..app import app_or_default
+from ..app.amqp import merge_policy
 from ..utils import uuid
 
 event_exchange = Exchange("celeryev", type="topic")
@@ -28,7 +30,7 @@ def Event(type, _fields=None, **fields):
     return event
 
 
-class EventDispatcher(object):
+class EventDispatcher(LogMixin):
     """Send events as messages.
 
     :param connection: Connection to the broker.
@@ -52,7 +54,7 @@ class EventDispatcher(object):
 
     def __init__(self, connection=None, hostname=None, enabled=True,
             channel=None, buffer_while_offline=True, app=None,
-            serializer=None):
+            serializer=None, retry=False, retry_policy=None):
         self.app = app_or_default(app)
         self.connection = connection
         self.channel = channel
@@ -62,6 +64,8 @@ class EventDispatcher(object):
         self.producer = None
         self._outbound_buffer = deque()
         self.serializer = serializer or self.app.conf.CELERY_EVENT_SERIALIZER
+        self.retry = retry
+        self.retry_policy = self.app.amqp.merge_retry_policy(retry_policy)
 
         self.enabled = enabled
         if self.enabled:
@@ -74,16 +78,38 @@ class EventDispatcher(object):
         self.close()
 
     def enable(self):
-        conn = self.connection
-        self.producer = Producer(self.channel or conn.default_channel,
-                                 exchange=event_exchange,
-                                 serializer=self.serializer)
+        if self.producer is None:
+            channel = self.channel or self.connection
+            self.producer = Producer(channel, serializer=self.serializer,
+                                              auto_declare=False)
         self.enabled = True
 
     def disable(self):
         if self.enabled:
             self.enabled = False
             self.close()
+
+    def publish(self, type, fields, retry=None, retry_policy=None):
+        if not self.enabled:
+            return
+        retry = retry if retry is not None else self.retry
+        retry_policy = merge_policy(retry_policy, self.retry_policy)
+        event = Event(type, hostname=self.hostname,
+                            clock=self.app.clock.forward(), **fields)
+        with self.mutex:
+            try:
+                self.producer.publish(event,
+                                      exchange=event_exchange,
+                                      declare=[event_exchange],
+                                      routing_key=type.replace("-", "."),
+                                      retry=retry,
+                                      retry_policy=retry_policy)
+            except Exception, exc:
+                if not self.buffer_while_offline:
+                    raise
+                self.error("Event buffered for error: %r", exc)
+                self._outbound_buffer.append((type, fields, exc))
+
 
     def send(self, type, **fields):
         """Send event.
@@ -92,18 +118,8 @@ class EventDispatcher(object):
         :keyword \*\*fields: Event arguments.
 
         """
-        if self.enabled:
-            with self.mutex:
-                event = Event(type, hostname=self.hostname,
-                                    clock=self.app.clock.forward(), **fields)
-                try:
-                    self.producer.publish(event,
-                                          routing_key=type.replace("-", "."))
-                except Exception, exc:
-                    # XXX Should log warning here...
-                    if not self.buffer_while_offline:
-                        raise
-                    self._outbound_buffer.append((type, fields, exc))
+        return self.publish(type, fields)
+
 
     def flush(self):
         while self._outbound_buffer:

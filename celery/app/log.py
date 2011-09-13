@@ -3,9 +3,11 @@ from __future__ import absolute_import
 import logging
 import sys
 
+from kombu.utils.compat import WatchedFileHandler
+
 from .. import signals
 from ..utils import isatty
-from ..utils.compat import LoggerAdapter, WatchedFileHandler
+from ..utils.compat import LoggerAdapter
 from ..utils.log import (ColorFormatter, ensure_process_aware_logger,
                          LoggingProxy, get_multiprocessing_logger,
                          reset_multiprocessing_logger)

@@ -164,7 +164,7 @@ def stats(panel, **kwargs):
     if panel.consumer.controller.autoscaler:
         asinfo = panel.consumer.controller.autoscaler.info()
     return {"total": state.total_count,
-            "consumer": panel.consumer.info,
+            "consumer": panel.consumer.information,
             "pool": panel.consumer.pool.info,
             "autoscaler": asinfo}
 

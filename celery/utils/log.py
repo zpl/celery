@@ -9,14 +9,12 @@ try:
 except ImportError:
     current_process = mputil = None  # noqa
 
+from kombu.log import LOG_LEVELS
+
 from .encoding import safe_str
 from .term import colored
 
 _process_aware = False
-
-LOG_LEVELS = dict(logging._levelNames)
-LOG_LEVELS["FATAL"] = logging.FATAL
-LOG_LEVELS[logging.FATAL] = "FATAL"
 
 
 class ColorFormatter(logging.Formatter):
