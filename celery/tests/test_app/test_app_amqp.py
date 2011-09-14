@@ -56,6 +56,7 @@ class test_TaskProducer(AppCase):
 class test_ProducerPool(AppCase):
 
     def test_setup_nolimit(self):
+        pools.reset()
         conf = self.app.conf
         prev, conf.BROKER_POOL_LIMIT = conf.BROKER_POOL_LIMIT, None
         pools.set_limit(None)
@@ -75,6 +76,7 @@ class test_ProducerPool(AppCase):
             pools.set_limit(prev)
 
     def test_setup(self):
+        pools.reset()
         conf = self.app.conf
         prev, conf.BROKER_POOL_LIMIT = conf.BROKER_POOL_LIMIT, 10
         pools.set_limit(10)

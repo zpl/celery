@@ -25,6 +25,7 @@ def add_unlock_chord_task(app):
         from ...task.sets import subtask
         result = TaskSetResult.restore(setid)
         if result.ready():
+
             subtask(callback).delay(result.join(propagate=propagate))
             result.delete()
         else:

@@ -271,6 +271,7 @@ class _Producers(pools.PoolGroup):
     def __init__(self, type, connections):
         self.type = type
         self.connections = connections
+        self.limit = pools.use_global_limit
 
     def create(self, connection, limit):
         return ProducerPool(self.type,

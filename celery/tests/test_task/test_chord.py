@@ -33,9 +33,10 @@ class test_unlock_chord_task(AppCase):
 
         @task
         def callback(*args, **kwargs):
+            print("CALLBACK CALLED")
             pass
 
-        callback.apply_async = Mock()
+        callback.delay = Mock()
         with patch_unlock_retry() as (unlock, retry):
             from celery.task import sets
             result = Mock(attrs=dict(ready=lambda: True,
@@ -46,8 +47,8 @@ class test_unlock_chord_task(AppCase):
                 unlock("setid", callback)
             finally:
                 sets.subtask = subtask
-            callback.apply_async.assert_called_with(([2, 4, 8, 6], ), {})
             result.delete.assert_called_with()
+            callback.delay.assert_called_with([2, 4, 8, 6])
             # did not retry
             self.assertFalse(retry.call_count)
 
