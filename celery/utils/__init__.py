@@ -9,7 +9,7 @@ import warnings
 from functools import wraps
 from pprint import pprint
 
-from kombu.utils import cached_property, gen_unique_id  # noqa
+from kombu.utils import cached_property, gen_unique_id, kwdict  # noqa
 uuid = gen_unique_id
 
 from ..exceptions import CPendingDeprecationWarning, CDeprecationWarning
@@ -69,17 +69,6 @@ def lpmerge(L, R):
     """Left precedent dictionary merge.  Keeps values from `l`, if the value
     in `r` is :const:`None`."""
     return dict(L, **dict((k, v) for k, v in R.iteritems() if v is not None))
-
-
-def kwdict(kwargs):
-    """Make sure keyword arguments are not in unicode.
-
-    This should be fixed in newer Python versions,
-      see: http://bugs.python.org/issue4978.
-
-    """
-    return dict((key.encode("utf-8"), value)
-                    for key, value in kwargs.items())
 
 
 def mattrgetter(*attrs):

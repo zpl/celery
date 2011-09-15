@@ -11,6 +11,7 @@ Custom data structures.
 from __future__ import absolute_import
 from __future__ import with_statement
 
+import sys
 import time
 import traceback
 
@@ -85,8 +86,15 @@ class DictAttribute(object):
     def __contains__(self, key):
         return hasattr(self.obj, key)
 
-    def iteritems(self):
+    def _iterate_items(self):
         return vars(self.obj).iteritems()
+    iteritems = _iterate_items
+
+    if sys.version_info >= (3, 0):
+        items = _iterate_items
+    else:
+        def items(self):
+            return list(self._iterate_items())
 
 
 class ConfigurationView(AttributeDictMixin):
@@ -151,23 +159,26 @@ class ConfigurationView(AttributeDictMixin):
         # changes takes precedence.
         return chain(*[op(d) for d in reversed(self._order)])
 
-    def iterkeys(self):
+    def _iterate_keys(self):
         return self._iter(lambda d: d.iterkeys())
+    iterkeys = _iterate_keys
 
-    def iteritems(self):
+    def _iterate_items(self):
         return self._iter(lambda d: d.iteritems())
+    iteritems = _iterate_items
 
-    def itervalues(self):
+    def _iterate_values(self):
         return self._iter(lambda d: d.itervalues())
+    itervalues = _iterate_values
 
     def keys(self):
-        return list(self.iterkeys())
+        return list(self._iterate_keys())
 
     def items(self):
-        return list(self.iteritems())
+        return list(self._iterate_items())
 
     def values(self):
-        return list(self.itervalues())
+        return list(self._iterate_values())
 
 
 class ExceptionInfo(object):
@@ -314,6 +325,16 @@ class LRUCache(UserDict):
         with self.mutex:
             value = self[key] = self.data.pop(key)
             return value
+
+    def keys(self):
+        # userdict.keys in py3k calls __getitem__
+        return self.data.keys()
+
+    def values(self):
+        return self.data.values()
+
+    def items(self):
+        return self.data.items()
 
     def __setitem__(self, key, value):
         # remove least recently used key.

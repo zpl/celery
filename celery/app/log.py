@@ -147,9 +147,9 @@ class Logging(object):
         """
         proxy = LoggingProxy(logger, loglevel)
         if stdout:
-            sys.stdout = proxy
+            sys.stdout = sys.__stdout__ = proxy
         if stderr:
-            sys.stderr = proxy
+            sys.stderr = sys.__stderr__ = proxy
         return proxy
 
     def _setup_logger(self, logger, logfile, format, colorize,

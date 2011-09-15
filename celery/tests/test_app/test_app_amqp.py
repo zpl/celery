@@ -62,7 +62,7 @@ class test_ProducerPool(AppCase):
         pools.set_limit(None)
         try:
             pool = self.app.amqp.producers[self.app.broker_connection()]
-            self.assertIsNone(pool.limit)
+            self.assertEqual(pool.limit, 0)
             self.assertFalse(pool._resource.queue)
 
             r1 = pool.acquire()

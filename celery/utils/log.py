@@ -18,6 +18,8 @@ LOG_LEVELS = dict(logging._levelNames)
 LOG_LEVELS["FATAL"] = logging.FATAL
 LOG_LEVELS[logging.FATAL] = "FATAL"
 
+is_py3k = sys.version_info >= (3, 0)
+
 
 class ColorFormatter(logging.Formatter):
     #: Loglevel -> Color mapping.
@@ -31,7 +33,7 @@ class ColorFormatter(logging.Formatter):
 
     def formatException(self, ei):
         r = logging.Formatter.formatException(self, ei)
-        if isinstance(r, str):
+        if isinstance(r, str) and not is_py3k:
             return r.decode("utf-8", "replace")    # Convert to unicode
         return r
 

@@ -31,8 +31,12 @@ class InvalidTaskError(Exception):
     """The task has invalid data or is not properly constructed."""
 
 
-def default_encode(obj):
-    return unicode(obj, default_encoding())
+if sys.version_info >= (3, 0):
+    def default_encode(obj):
+        return obj
+else:
+    def default_encode(obj):
+        return unicode(obj, default_encoding())
 
 
 class WorkerTaskTrace(TaskTrace):
@@ -458,8 +462,8 @@ class TaskRequest(object):
                    "name": self.task_name,
                    "exc": safe_repr(exc_info.exception),
                    "traceback": safe_str(exc_info.traceback),
-                   "args": self.args,
-                   "kwargs": self.kwargs}
+                   "args": safe_repr(self.args),
+                   "kwargs": safe_repr(self.kwargs)}
 
         self.logger.error(self.error_msg.strip(), context,
                           exc_info=exc_info,

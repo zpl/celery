@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 
 from kombu.transport.base import Message
 from mock import Mock
+from nose import SkipTest
 
 from celery import states
 from celery.app import app_or_default
@@ -21,6 +22,7 @@ from celery.exceptions import RetryTaskError, NotRegistered, WorkerLostError
 from celery.log import setup_logger
 from celery.result import AsyncResult
 from celery.task.base import Task
+from celery.utils.encoding import to_utf8
 from celery.utils import uuid
 from celery.worker.job import (WorkerTaskTrace, TaskRequest,
                                InvalidTaskError, execute_and_trace,
@@ -29,7 +31,7 @@ from celery.worker.state import revoked
 
 from celery.tests.compat import catch_warnings
 from celery.tests.utils import unittest
-from celery.tests.utils import StringIO, wrap_logger
+from celery.tests.utils import WhateverIO, wrap_logger
 
 
 scratch = {"ACK": False}
@@ -67,6 +69,10 @@ def mytask_raising(i, **kwargs):
 
 class test_default_encode(unittest.TestCase):
 
+    def setUp(self):
+        if sys.version_info >= (3, 0):
+            raise SkipTest("py3k: not relevant")
+
     def test_jython(self):
         prev, sys.platform = sys.platform, "java 1.6.1"
         try:
@@ -92,8 +98,7 @@ class test_RetryTaskError(unittest.TestCase):
             raise Exception("foo")
         except Exception, exc:
             ret = RetryTaskError("Retrying task", exc)
-
-        self.assertEqual(ret.exc, exc)
+            self.assertEqual(ret.exc, exc)
 
 
 class test_WorkerTaskTrace(unittest.TestCase):
@@ -495,8 +500,9 @@ class test_TaskRequest(unittest.TestCase):
         self.assertTrue(x)
 
     def test_from_message(self):
+        us = u"æØåveéðƒeæ"
         body = {"task": mytask.name, "id": uuid(),
-                "args": [2], "kwargs": {u"æØåveéðƒeæ": "bar"}}
+                "args": [2], "kwargs": {us: "bar"}}
         m = Message(None, body=anyjson.serialize(body), backend="foo",
                           content_type="application/json",
                           content_encoding="utf-8")
@@ -505,9 +511,9 @@ class test_TaskRequest(unittest.TestCase):
         self.assertEqual(tw.task_name, body["task"])
         self.assertEqual(tw.task_id, body["id"])
         self.assertEqual(tw.args, body["args"])
-        self.assertEqual(tw.kwargs.keys()[0],
-                          u"æØåveéðƒeæ".encode("utf-8"))
-        self.assertNotIsInstance(tw.kwargs.keys()[0], unicode)
+        us = to_utf8(us)
+        self.assertEqual(tw.kwargs.keys()[0], us)
+        self.assertIsInstance(tw.kwargs.keys()[0], str)
         self.assertTrue(tw.logger)
 
     def test_from_message_nonexistant_task(self):
@@ -589,20 +595,20 @@ class test_TaskRequest(unittest.TestCase):
         except Exception:
             exc_info = ExceptionInfo(sys.exc_info())
 
-        logfh = StringIO()
-        tw.logger.handlers = []
-        tw.logger = setup_logger(logfile=logfh, loglevel=logging.INFO,
-                                 root=False)
+            logfh = WhateverIO()
+            tw.logger.handlers = []
+            tw.logger = setup_logger(logfile=logfh, loglevel=logging.INFO,
+                                    root=False)
 
-        app.conf.CELERY_SEND_TASK_ERROR_EMAILS = True
+            app.conf.CELERY_SEND_TASK_ERROR_EMAILS = True
 
-        tw.on_failure(exc_info)
-        logvalue = logfh.getvalue()
-        self.assertIn(mytask.name, logvalue)
-        self.assertIn(tid, logvalue)
-        self.assertIn("ERROR", logvalue)
+            tw.on_failure(exc_info)
+            logvalue = logfh.getvalue()
+            self.assertIn(mytask.name, logvalue)
+            self.assertIn(tid, logvalue)
+            self.assertIn("ERROR", logvalue)
 
-        app.conf.CELERY_SEND_TASK_ERROR_EMAILS = False
+            app.conf.CELERY_SEND_TASK_ERROR_EMAILS = False
 
     def test_on_failure(self):
         self._test_on_failure(Exception("Inside unit tests"))
