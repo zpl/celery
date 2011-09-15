@@ -618,4 +618,4 @@ class test_TaskRequest(unittest.TestCase):
 
     def test_on_failure_utf8_exception(self):
         self._test_on_failure(Exception(
-            u"Бобры атакуют".encode('utf8')))
+                from_utf8(u"Бобры атакуют")))

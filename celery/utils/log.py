@@ -9,7 +9,7 @@ try:
 except ImportError:
     current_process = mputil = None  # noqa
 
-from .encoding import safe_str, from_utf8
+from .encoding import safe_str
 from .term import colored
 
 _process_aware = False
@@ -34,7 +34,7 @@ class ColorFormatter(logging.Formatter):
     def formatException(self, ei):
         r = logging.Formatter.formatException(self, ei)
         if isinstance(r, str) and not is_py3k:
-            return from_utf8(t, "replace")    # Convert to unicode
+            return safe_str(r)
         return r
 
     def format(self, record):
@@ -56,10 +56,7 @@ class ColorFormatter(logging.Formatter):
             if "processName" not in record.__dict__:
                 process_name = current_process and current_process()._name or ""
                 record.__dict__["processName"] = process_name
-        t = logging.Formatter.format(self, record)
-        if isinstance(t, unicode):
-            return from_utf8(t, "replace")
-        return t
+        return safe_str(logging.Formatter.format(self, record))
 
 
 class LoggingProxy(object):

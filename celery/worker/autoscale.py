@@ -99,7 +99,6 @@ class Autoscaler(threading.Thread):
                 self.scale()
                 sleep(1.0)
             except Exception, exc:
-                raise
                 self.logger.error("Thread Autoscaler crashed: %r", exc,
                                   exc_info=sys.exc_info())
                 os._exit(1)
