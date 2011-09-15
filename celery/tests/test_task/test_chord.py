@@ -33,7 +33,6 @@ class test_unlock_chord_task(AppCase):
 
         @task
         def callback(*args, **kwargs):
-            print("CALLBACK CALLED")
             pass
 
         callback.delay = Mock()

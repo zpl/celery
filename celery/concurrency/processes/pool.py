@@ -74,16 +74,29 @@ class LaxBoundedSemaphore(threading._Semaphore):
         _Semaphore.__init__(self, value, verbose)
         self._initial_value = value
 
-    def release(self):
-        if self._Semaphore__value < self._initial_value:
-            _Semaphore.release(self)
-        if __debug__:
-            self._note("%s.release: success, value=%s (unchanged)" % (
-                self, self._Semaphore__value))
+    if sys.version_info >= (3, 0):
 
-    def clear(self):
-        while self._Semaphore__value < self._initial_value:
-            _Semaphore.release(self)
+        def release(self):
+            if self._value < self._initial_value:
+                _Semaphore.release(self)
+            if __debug__:
+                self._note("%s.release: success, value=%s (unchanged)" % (
+                    self, self._value))
+
+        def clear(self):
+            while self._value < self._initial_value:
+                _Semaphore.release(self)
+    else:
+        def release(self):
+            if self._Semaphore__value < self._initial_value:
+                _Semaphore.release(self)
+            if __debug__:
+                self._note("%s.release: success, value=%s (unchanged)" % (
+                    self, self._Semaphore__value))
+
+        def clear(self):
+            while self._Semaphore__value < self._initial_value:
+                _Semaphore.release(self)
 
 #
 # Exceptions

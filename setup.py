@@ -52,7 +52,7 @@ install_requires.extend([
     "kombu",
 ])
 if is_py3k:
-    install_requires.append("python-dateutil>2.0.0")
+    install_requires.append("python-dateutil>=2.0.0")
 else:
     install_requires.append("python-dateutil>=1.5.0,<2.0.0")
 
@@ -86,8 +86,6 @@ if platform.system() == "Windows":
 else:
     console_scripts.append('celeryd = celery.bin.celeryd:main')
 
-
-print(repr(install_requires))
 setup(
     name="celery",
     version=distmeta.__version__,
@@ -119,6 +117,7 @@ setup(
         "Programming Language :: Python :: 2.5",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3"
     ],
     entry_points={
         'console_scripts': console_scripts,

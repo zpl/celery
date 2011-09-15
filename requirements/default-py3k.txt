@@ -1,0 +1,4 @@
+python-dateutil>=2.0.0
+anyjson>=0.3.1
+pytz
+-e git://github.com/ask/kombu.git@2.0-devel#egg=kombu
