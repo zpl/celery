@@ -93,6 +93,7 @@ class DictAttribute(object):
     if sys.version_info >= (3, 0):
         items = _iterate_items
     else:
+
         def items(self):
             return list(self._iterate_items())
 

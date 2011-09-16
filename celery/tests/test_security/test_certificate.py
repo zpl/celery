@@ -1,8 +1,7 @@
+from __future__ import absolute_import
+
 from celery.exceptions import SecurityError
-
 from celery.security.certificate import Certificate, CertStore
-
-from celery.tests.utils import unittest
 
 from . import CERT1, CERT2, KEY1
 from .case import SecurityCase

@@ -54,7 +54,8 @@ class ColorFormatter(logging.Formatter):
             # by foreign logger instances.
             # (processName is always supported by Python 2.7)
             if "processName" not in record.__dict__:
-                process_name = current_process and current_process()._name or ""
+                process_name = (current_process and
+                                current_process()._name or "")
                 record.__dict__["processName"] = process_name
         return safe_str(logging.Formatter.format(self, record))
 

@@ -49,7 +49,6 @@ class Worker(object):
     def _fork_and_exec(self):
         pid = os.fork()
         if pid == 0:
-            from celery import current_app
             current_app.worker_main(["celeryd", "--loglevel=DEBUG",
                                                 "-n", self.hostname])
             os._exit(0)

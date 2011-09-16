@@ -86,6 +86,11 @@ def flake8(options):
     complexity = getattr(options, "complexity", 22)
     sh("""flake8 celery | perl -mstrict -mwarnings -nle'
         my $ignore = m/too complex \((\d+)\)/ && $1 le %s;
+        if ($ignore) {
+            $ignore = m{processes/pool\.py|
+                        CursesMonitor.draw|
+                        MultiTool.shutdown_nodes}xsg;
+        }
         if (! $ignore) { print STDERR; our $FOUND_FLAKE = 1 }
     }{exit $FOUND_FLAKE;
         '""" % (complexity, ), ignore_error=noerror)

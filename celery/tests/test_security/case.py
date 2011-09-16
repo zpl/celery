@@ -7,6 +7,6 @@ class SecurityCase(unittest.TestCase):
 
     def setUp(self):
         try:
-            from OpenSSL import crypto
+            from OpenSSL import crypto  # noqa
         except ImportError:
             raise SkipTest("OpenSSL.crypto not installed")

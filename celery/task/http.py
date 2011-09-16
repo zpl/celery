@@ -38,12 +38,14 @@ def maybe_utf8(value):
 
 
 if sys.version_info >= (3, 0):
+
     def utf8dict(tup):
         if not isinstance(tup, dict):
             return dict(tup)
         return tup
 else:
-    def utf8dict(tup):
+
+    def utf8dict(tup):  # noqa
         """With a dict's items() tuple return a new dict with any utf-8
         keys/values encoded."""
         return dict((key.encode("utf-8"), maybe_utf8(value))

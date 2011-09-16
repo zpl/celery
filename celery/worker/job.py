@@ -33,10 +33,12 @@ class InvalidTaskError(Exception):
 
 
 if sys.version_info >= (3, 0):
+
     def default_encode(obj):
         return obj
 else:
-    def default_encode(obj):
+
+    def default_encode(obj):  # noqa
         return unicode(obj, default_encoding())
 
 

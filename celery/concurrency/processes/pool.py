@@ -88,14 +88,15 @@ class LaxBoundedSemaphore(threading._Semaphore):
             while self._value < self._initial_value:
                 _Semaphore.release(self)
     else:
-        def release(self):
+
+        def release(self):  # noqa
             if self._Semaphore__value < self._initial_value:
                 _Semaphore.release(self)
             if __debug__:
                 self._note("%s.release: success, value=%s (unchanged)" % (
                     self, self._Semaphore__value))
 
-        def clear(self):
+        def clear(self):  # noqa
             while self._Semaphore__value < self._initial_value:
                 _Semaphore.release(self)
 
@@ -132,7 +133,8 @@ def soft_timeout_sighandler(signum, frame):
 #
 
 
-def worker(inqueue, outqueue, initializer=None, initargs=(), maxtasks=None):
+def worker(inqueue, outqueue, initializer=None, initargs=(),
+        maxtasks=None):
     pid = os.getpid()
     assert maxtasks is None or (type(maxtasks) == int and maxtasks > 0)
     put = outqueue.put
@@ -180,7 +182,7 @@ def worker(inqueue, outqueue, initializer=None, initargs=(), maxtasks=None):
         put((ACK, (job, i, time.time(), pid)))
         try:
             result = (True, func(*args, **kwds))
-        except Exception, e:
+        except Exception:
             result = (False, ExceptionInfo(sys.exc_info()))
         try:
             put((READY, (job, i, result)))
@@ -572,7 +574,8 @@ class Pool(object):
         w.start()
         return w
 
-    def _join_exited_workers(self, shutdown=False, lost_worker_timeout=10.0):
+    def _join_exited_workers(self, shutdown=False,
+            lost_worker_timeout=10.0):
         """Cleanup after any worker processes which have exited due to
         reaching their specified lifetime. Returns True if any workers were
         cleaned up.
