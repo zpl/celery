@@ -17,6 +17,7 @@ from ..execute.trace import TaskTrace
 from ..utils import kwdict
 from ..utils.functional import noop
 from ..utils.encoding import safe_repr, safe_str, default_encoding
+from ..utils.serialization import get_pickleable_exception
 from ..utils.text import truncate
 from ..utils.timeutils import maybe_iso8601, timezone
 
@@ -134,9 +135,8 @@ class WorkerTaskTrace(TaskTrace):
     def handle_failure(self, exc, type_, tb, strtb):
         """Handle exception."""
         if self._store_errors:
-            exc = self.task.backend.mark_as_failure(self.task_id, exc, strtb)
-        else:
-            exc = self.task.backend.prepare_exception(exc)
+            self.task.backend.mark_as_failure(self.task_id, exc, strtb)
+        exc = get_pickleable_exception(exc)
         return self.super.handle_failure(exc, type_, tb, strtb)
 
 
@@ -466,7 +466,7 @@ class TaskRequest(object):
                    "kwargs": safe_repr(self.kwargs)}
 
         self.logger.error(self.error_msg.strip(), context,
-                          exc_info=exc_info,
+                          exc_info=exc_info.exc_info,
                           extra={"data": {"id": self.task_id,
                                           "name": self.task_name,
                                           "hostname": self.hostname}})

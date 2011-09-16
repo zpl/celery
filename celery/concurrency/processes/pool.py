@@ -27,6 +27,7 @@ from multiprocessing import Process, cpu_count, TimeoutError
 from multiprocessing import util
 from multiprocessing.util import Finalize, debug
 
+from celery.datastructures import ExceptionInfo
 from celery.exceptions import SoftTimeLimitExceeded, TimeLimitExceeded
 from celery.exceptions import WorkerLostError
 
@@ -180,7 +181,7 @@ def worker(inqueue, outqueue, initializer=None, initargs=(), maxtasks=None):
         try:
             result = (True, func(*args, **kwds))
         except Exception, e:
-            result = (False, e)
+            result = (False, ExceptionInfo(sys.exc_info()))
         try:
             put((READY, (job, i, result)))
         except Exception, exc:
@@ -584,8 +585,12 @@ class Pool(object):
                 if not job.ready() and job._worker_lost]:
             now = now or time.time()
             if now - job._worker_lost > lost_worker_timeout:
-                err = WorkerLostError("Worker exited prematurely.")
-                job._set(None, (False, err))
+                exc_info = None
+                try:
+                    raise WorkerLostError("Worker exited prematurely")
+                except WorkerLostError:
+                    exc_info = ExceptionInfo(sys.exc_info())
+                job._set(None, (False, exc_info))
 
         if shutdown and not len(self._pool):
             raise WorkersJoined()

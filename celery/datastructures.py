@@ -181,6 +181,33 @@ class ConfigurationView(AttributeDictMixin):
         return list(self._iterate_values())
 
 
+class _Code(object):
+
+    def __init__(self, code):
+        self.co_filename = code.co_filename
+        self.co_name = code.co_name
+
+
+class _Frame(object):
+    Code = _Code
+
+    def __init__(self, frame):
+        self.f_globals = {"__file__": frame.f_globals["__file__"]}
+        self.f_code = self.Code(frame.f_code)
+
+
+class _Traceback(object):
+    Frame = _Frame
+
+    def __init__(self, tb):
+        self.tb_frame = self.Frame(tb.tb_frame)
+        self.tb_lineno = tb.tb_lineno
+        if tb.tb_next is None:
+            self.tb_next = None
+        else:
+            self.tb_next = _Traceback(tb.tb_next)
+
+
 class ExceptionInfo(object):
     """Exception wrapping an exception and its traceback.
 
@@ -188,16 +215,21 @@ class ExceptionInfo(object):
         :func:`sys.exc_info`.
 
     """
+    #: Exception type
+    type = None
 
-    #: The original exception.
+    #: The original exception instance.
     exception = None
 
-    #: A traceback form the point when :attr:`exception` was raised.
+    #: Pickleable traceback instance for use with :mod:`traceback`.
+    tb = None
+
+    #: String representation of the traceback.
     traceback = None
 
     def __init__(self, exc_info):
-        _, exception, _ = exc_info
-        self.exception = exception
+        self.type, self.exception, tb = exc_info
+        self.tb = _Traceback(tb)
         self.traceback = ''.join(traceback.format_exception(*exc_info))
 
     def __str__(self):
@@ -205,6 +237,10 @@ class ExceptionInfo(object):
 
     def __repr__(self):
         return "<ExceptionInfo: %r>" % (self.exception, )
+
+    @property
+    def exc_info(self):
+        return self.type, self.exception, self.tb
 
 
 def consume_queue(queue):
