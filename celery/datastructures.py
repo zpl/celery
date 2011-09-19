@@ -219,10 +219,10 @@ class ExceptionInfo(object):
     #: Exception type
     type = None
 
-    #: The original exception instance.
+    #: Exception instance.
     exception = None
 
-    #: Pickleable traceback instance for use with :mod:`traceback`.
+    #: Pickleable traceback instance for use with :mod:`traceback`
     tb = None
 
     #: String representation of the traceback.

@@ -336,7 +336,12 @@ class TimeoutHandler(PoolThread):
                 return
             debug('hard time limit exceeded for %i', i)
             # Remove from cache and set return value to an exception
-            job._set(i, (False, TimeLimitExceeded(hard_timeout)))
+            exc_info = None
+            try:
+                raise TimeLimitExceeded(hard_timeout)
+            except TimeLimitExceeded:
+                exc_info = sys.exc_info()
+            job._set(i, (False, ExceptionInfo(exc_info)))
 
             # Remove from _pool
             process, _index = _process_by_pid(job._worker_pid)
@@ -590,7 +595,7 @@ class Pool(object):
             if now - job._worker_lost > lost_worker_timeout:
                 exc_info = None
                 try:
-                    raise WorkerLostError("Worker exited prematurely")
+                    raise WorkerLostError("Worker exited prematurely.")
                 except WorkerLostError:
                     exc_info = ExceptionInfo(sys.exc_info())
                 job._set(None, (False, exc_info))

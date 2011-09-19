@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import with_statement
 
 from celery import states
@@ -360,7 +361,7 @@ class TestFailedTaskSetResult(TestTaskSetResult):
             t = it.next()
             self.assertEqual(t.get(), i)
         with self.assertRaises(KeyError):
-            t = it.next()    # need to do in two lines or 2to3 borks.
+            t = it.next()   # need to do this in two lines or 2to3 borks.
             t.get()
 
     def test_completed_count(self):

@@ -42,8 +42,8 @@ class ev_worker_online_offline(replay):
 
     def setup(self):
         self.events = [
-                Event("worker-online", hostname="utest1"),
-                Event("worker-offline", hostname="utest1"),
+            Event("worker-online", hostname="utest1"),
+            Event("worker-offline", hostname="utest1"),
         ]
 
 

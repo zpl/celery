@@ -24,6 +24,7 @@ from celery.result import AsyncResult
 from celery.task.base import Task
 from celery.utils.encoding import from_utf8
 from celery.utils import uuid
+from celery.utils.encoding import from_utf8
 from celery.worker.job import (WorkerTaskTrace, TaskRequest,
                                InvalidTaskError, execute_and_trace,
                                default_encode)
@@ -213,8 +214,8 @@ class test_TaskRequest(unittest.TestCase):
             raise RetryTaskError("foo", KeyError("moofoobar"))
         except:
             einfo = ExceptionInfo(sys.exc_info())
-        tw.on_failure(einfo)
-        self.assertIn("task-retried", tw.eventer.sent)
+            tw.on_failure(einfo)
+            self.assertIn("task-retried", tw.eventer.sent)
 
     def test_terminate__task_started(self):
         pool = Mock()
@@ -367,9 +368,9 @@ class test_TaskRequest(unittest.TestCase):
             raise WorkerLostError("do re mi")
         except WorkerLostError:
             exc_info = ExceptionInfo(sys.exc_info())
-        tw.on_failure(exc_info)
-        self.assertEqual(mytask.backend.get_status(tw.task_id),
-                         states.FAILURE)
+            tw.on_failure(exc_info)
+            self.assertEqual(mytask.backend.get_status(tw.task_id),
+                             states.FAILURE)
 
         mytask.ignore_result = True
         try:
@@ -389,8 +390,8 @@ class test_TaskRequest(unittest.TestCase):
                 raise KeyError("foo")
             except KeyError:
                 exc_info = ExceptionInfo(sys.exc_info())
-            tw.on_failure(exc_info)
-            self.assertTrue(tw.acknowledged)
+                tw.on_failure(exc_info)
+                self.assertTrue(tw.acknowledged)
         finally:
             mytask.acks_late = False
 
@@ -598,7 +599,7 @@ class test_TaskRequest(unittest.TestCase):
             logfh = WhateverIO()
             tw.logger.handlers = []
             tw.logger = setup_logger(logfile=logfh, loglevel=logging.INFO,
-                                    root=False)
+                                     root=False)
 
             app.conf.CELERY_SEND_TASK_ERROR_EMAILS = True
 

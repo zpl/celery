@@ -3,6 +3,12 @@ from __future__ import absolute_import, with_statement
 from functools import wraps
 from threading import Lock
 
+try:
+    from collections import Sequence
+except ImportError:
+    # <= Py2.5
+    Sequence = (list, tuple)  # noqa
+
 from celery.datastructures import LRUCache
 
 KEYWORD_MARK = object()
@@ -11,9 +17,16 @@ __all__ = ["firstmethod",
            "padlist",
            "promise",
            "mpromise",
+           "maybe_list",
            "maybe_promise",
            "noop",
            "memoize"]
+
+
+def maybe_list(l):
+    if isinstance(l, Sequence):
+        return l
+    return [l]
 
 
 def padlist(container, size, default=None):

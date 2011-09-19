@@ -1,5 +1,6 @@
 ############## py3k #########################################################
 import sys
+
 try:
     from UserList import UserList       # noqa
 except ImportError:
@@ -24,7 +25,6 @@ else:
     except ImportError:
         from StringIO import StringIO   # noqa
     BytesIO = WhateverIO = StringIO     # noqa
-
 
 ############## collections.OrderedDict ######################################
 try:
