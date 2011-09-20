@@ -23,7 +23,6 @@ from celery.exceptions import RetryTaskError, NotRegistered, WorkerLostError
 from celery.log import setup_logger
 from celery.result import AsyncResult
 from celery.task.base import Task
-from celery.utils.encoding import from_utf8
 from celery.utils import uuid
 from celery.utils.encoding import from_utf8
 from celery.worker.job import (WorkerTaskTrace, TaskRequest,

@@ -1,12 +1,17 @@
-# Keys and certificates for tests (KEY1 is a private key of CERT1, etc.)
-# Generated with:
-#
-# openssl genrsa -des3 -passout pass:test -out key1.key 1024
-# openssl req -new -key key1.key -out key1.csr -passin pass:test
-# cp key1.key key1.key.org
-# openssl rsa -in key1.key.org -out key1.key -passin pass:test
-# openssl x509 -req -days 365 -in cert1.csr -signkey key1.key -out cert1.crt
-# rm key1.key.org cert1.csr
+from __future__ import absolute_import
+"""
+Keys and certificates for tests (KEY1 is a private key of CERT1, etc.)
+
+Generated with::
+
+    $ openssl genrsa -des3 -passout pass:test -out key1.key 1024
+    $ openssl req -new -key key1.key -out key1.csr -passin pass:test
+    $ cp key1.key key1.key.org
+    $ openssl rsa -in key1.key.org -out key1.key -passin pass:test
+    $ openssl x509 -req -days 365 -in cert1.csr -signkey key1.key -out cert1.crt
+    $ rm key1.key.org cert1.csr
+
+"""
 
 KEY1 = """-----BEGIN RSA PRIVATE KEY-----
 MIICXgIBAAKBgQDCsmLC+eqL4z6bhtv0nzbcnNXuQrZUoh827jGfDI3kxNZ2LbEy

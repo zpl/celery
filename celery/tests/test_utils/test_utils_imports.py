@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from celery.utils.imports import get_full_cls_name, get_cls_by_name
 from celery.tests.utils import unittest
 
