@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import with_statement
 
 import os
@@ -183,7 +184,7 @@ class test_App(unittest.TestCase):
         class Dispatcher(object):
             sent = []
 
-            def send(self, type, **fields):
+            def publish(self, type, fields, **kwargs):
                 self.sent.append((type, fields))
 
         conn = self.app.broker_connection()
@@ -198,18 +199,17 @@ class test_App(unittest.TestCase):
         assert conn.transport_cls == "memory"
 
         ex = Exchange("foo_exchange")
-        prod = self.app.amqp.TaskProducer(conn, exchange=ex)
+        dispatcher = Dispatcher()
+        prod = self.app.amqp.TaskProducer(conn, exchange=ex,
+                                          event_dispatcher=dispatcher)
         self.assertIn(ex, declared_entities[prod.connection])
 
-        dispatcher = Dispatcher()
         self.assertTrue(prod.send_task("footask", (), {},
                                        exchange=Exchange("moo_exchange"),
-                                       routing_key="moo_exchange",
-                                       event_dispatcher=dispatcher))
+                                       routing_key="moo_exchange"))
         self.assertTrue(dispatcher.sent)
         self.assertEqual(dispatcher.sent[0][0], "task-sent")
         self.assertTrue(prod.send_task("footask", (), {},
-                                       event_dispatcher=dispatcher,
                                        exchange=Exchange("bar_exchange"),
                                        routing_key="bar_exchange"))
         self.assertIn(Exchange("bar_exchange"),
@@ -236,7 +236,8 @@ class test_defaults(unittest.TestCase):
             self.assertFalse(defaults.str_to_bool(s))
         for s in ("true", "yes", "1"):
             self.assertTrue(defaults.str_to_bool(s))
-        self.assertRaises(TypeError, defaults.str_to_bool, "unsure")
+        with self.assertRaises(TypeError):
+            defaults.str_to_bool("unsure")
 
 
 class test_debugging_utils(unittest.TestCase):

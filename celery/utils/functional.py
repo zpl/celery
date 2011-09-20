@@ -1,9 +1,16 @@
-from __future__ import absolute_import, with_statement
+from __future__ import absolute_import
+from __future__ import with_statement
 
 from functools import wraps
 from threading import Lock
 
 from kombu.utils.functional import promise, maybe_promise
+
+try:
+    from collections import Sequence
+except ImportError:
+    # <= Py2.5
+    Sequence = (list, tuple)  # noqa
 
 from ..datastructures import LRUCache
 
@@ -13,9 +20,16 @@ __all__ = ["firstmethod",
            "padlist",
            "promise",
            "mpromise",
+           "maybe_list",
            "maybe_promise",
            "noop",
            "memoize"]
+
+
+def maybe_list(l):
+    if isinstance(l, Sequence):
+        return l
+    return [l]
 
 
 def padlist(container, size, default=None):

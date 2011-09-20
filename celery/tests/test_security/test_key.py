@@ -1,13 +1,13 @@
-from celery.exceptions import SecurityError
+from __future__ import absolute_import
 
+from celery.exceptions import SecurityError
 from celery.security.key import PrivateKey
 
-from celery.tests.utils import unittest
-
 from . import CERT1, KEY1, KEY2
+from .case import SecurityCase
 
 
-class TestKey(unittest.TestCase):
+class TestKey(SecurityCase):
 
     def test_valid_private_key(self):
         PrivateKey(KEY1)

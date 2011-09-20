@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from celery.task import backend_cleanup
 from celery.tests.utils import unittest
 

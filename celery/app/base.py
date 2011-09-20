@@ -275,8 +275,9 @@ class BaseApp(object):
                     alias = url
                 else:
                     args.insert(0, url)
-        if not len(args):
-            kwargs = dict(brokers[alias], **kwargs)
+        kwargs = dict(brokers[alias], **kwargs)
+        if args:
+            kwargs.pop("hostname", None)
         return self.amqp.BrokerConnection(*args, **kwargs)
 
     @contextmanager

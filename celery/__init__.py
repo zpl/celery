@@ -33,3 +33,6 @@ if not os.environ.get("CELERY_NO_EVAL", False):
         return current_app()
 
     current_app = Proxy(_get_current_app)
+
+    def bugreport():
+        return current_app.bugreport()

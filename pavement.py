@@ -86,9 +86,34 @@ def flake8(options):
     complexity = getattr(options, "complexity", 22)
     sh("""flake8 celery | perl -mstrict -mwarnings -nle'
         my $ignore = m/too complex \((\d+)\)/ && $1 le %s;
+        if ($ignore) {
+            $ignore = m{processes/pool\.py|
+                        CursesMonitor.draw|
+                        MultiTool.shutdown_nodes}xsg;
+        }
         if (! $ignore) { print STDERR; our $FOUND_FLAKE = 1 }
     }{exit $FOUND_FLAKE;
         '""" % (complexity, ), ignore_error=noerror)
+
+
+@task
+@cmdopts([
+    ("noerror", "E", "Ignore errors"),
+])
+def flakeplus(options):
+    noerror = getattr(options, "noerror", False)
+    sh("python contrib/release/flakeplus.py celery",
+       ignore_error=noerror)
+
+
+@task
+@cmdopts([
+    ("noerror", "E", "Ignore errors")
+])
+def flakes(options):
+    flake8(options)
+    flakeplus(options)
+
 
 @task
 def clean_readme(options):
@@ -155,7 +180,7 @@ def gitcleanforce(options):
 
 
 @task
-@needs("flake8", "autodoc", "verifyindex",
+@needs("flakes", "autodoc", "verifyindex",
        "verifyconfigref", "test", "gitclean")
 def releaseok(options):
     pass

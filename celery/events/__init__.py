@@ -188,7 +188,8 @@ class EventReceiver(ConsumerMixin):
         return [Consumer(queues=[self.queue],
                          callbacks=[self._receive], no_ack=True)]
 
-    def on_consume_ready(self, connection, channel, wakeup=True, **kwargs):
+    def on_consume_ready(self, connection, channel, consumers,
+            wakeup=True, **kwargs):
         if wakeup:
             self.wakeup_workers(channel=channel)
 

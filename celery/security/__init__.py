@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import with_statement
+
 from kombu.serialization import unregister, SerializerNotInstalled
 
 from .. import current_app
@@ -37,6 +40,7 @@ def setup_security():
             "CELERY_SECURITY_CERT_STORE options are required "
             "settings when using the auth serializer")
 
-    with open(key) as kf, open(cert) as cf:
-        register_auth(kf.read(), cf.read(), store)
+    with open(key) as kf:
+        with open(cert) as cf:
+            register_auth(kf.read(), cf.read(), store)
     _disable_insecure_serializers()

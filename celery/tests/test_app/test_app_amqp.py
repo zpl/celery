@@ -1,12 +1,12 @@
+from __future__ import absolute_import
 from __future__ import with_statement
 
 from kombu import Exchange, Queue
 from kombu import pools
 from mock import Mock
 
-from celery.tests.utils import AppCase
-
 from celery.app.amqp import MSG_OPTIONS, extract_msg_options
+from celery.tests.utils import AppCase
 
 
 class TestMsgOptions(AppCase):
@@ -34,12 +34,12 @@ class test_TaskProducer(AppCase):
     def test_ensure_declare_queue(self, q="x1242112"):
         producer = self.app.amqp.TaskProducer(Mock())
         self.app.amqp.queues.add(Queue(q, Exchange(q), q))
-        producer._declare_queue(q, retry=True)
+        producer.send_task("txxx", (), {}, queue=q, retry=True)
         self.assertTrue(producer.connection.ensure.call_count)
 
     def test_ensure_declare_exchange(self, e=Exchange("x9248311")):
         producer = self.app.amqp.TaskProducer(Mock())
-        producer._declare_exchange(e, retry=True)
+        producer.send_task("txxx", (), {}, exchange=e, retry=True)
         self.assertTrue(producer.connection.ensure.call_count)
 
     def test_retry_policy(self):
@@ -56,12 +56,13 @@ class test_TaskProducer(AppCase):
 class test_ProducerPool(AppCase):
 
     def test_setup_nolimit(self):
+        pools.reset()
         conf = self.app.conf
         prev, conf.BROKER_POOL_LIMIT = conf.BROKER_POOL_LIMIT, None
         pools.set_limit(None)
         try:
             pool = self.app.amqp.producers[self.app.broker_connection()]
-            self.assertIsNone(pool.limit)
+            self.assertEqual(pool.limit, 0)
             self.assertFalse(pool._resource.queue)
 
             r1 = pool.acquire()
@@ -75,6 +76,7 @@ class test_ProducerPool(AppCase):
             pools.set_limit(prev)
 
     def test_setup(self):
+        pools.reset()
         conf = self.app.conf
         prev, conf.BROKER_POOL_LIMIT = conf.BROKER_POOL_LIMIT, 10
         pools.set_limit(10)

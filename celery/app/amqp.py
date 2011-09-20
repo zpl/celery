@@ -9,6 +9,8 @@ AMQ related functionality.
 :license: BSD, see LICENSE for more details.
 
 """
+from __future__ import absolute_import
+
 from datetime import datetime, timedelta
 
 from kombu import BrokerConnection, Consumer, Exchange, Producer, Queue
@@ -329,9 +331,13 @@ class AMQP(object):
         return TaskProducer(connection,
                             *args, **self.app.merge(defaults, kwargs))
 
-    def get_task_consumer(self, channel, **kwargs):
-        """Return consumer configured to consume from all active queues."""
-        return self.Consumer(channel,
+    def get_task_consumer(self, connection, **kwargs):
+        """Return consumer configured to consume from all active queues.
+
+        :param connection: Connection or channel.
+
+        """
+        return self.Consumer(connection,
                              queues=self.queues.consume_from.values(),
                              **kwargs)
 

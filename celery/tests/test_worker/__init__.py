@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import with_statement
 
 import socket
@@ -112,7 +113,8 @@ class test_QoS(unittest.TestCase):
         self.assertEqual(qos.increment(-30), 14)
         self.assertEqual(qos.decrement(7), 7)
         self.assertEqual(qos.decrement(), 6)
-        self.assertRaises(AssertionError, qos.decrement, 10)
+        with self.assertRaises(AssertionError):
+            qos.decrement(10)
 
     def test_qos_disabled_increment_decrement(self):
         qos = self._QoS(0)
@@ -215,12 +217,8 @@ class test_Consumer(unittest.TestCase):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
                            send_events=False)
         l.qos = QoS(l.task_consumer, 10, l.logger)
-        info = l.info
+        info = l.information
         self.assertEqual(info["prefetch_count"], 10)
-        self.assertFalse(info["broker"])
-
-        l.connection = current_app.broker_connection()
-        info = l.info
         self.assertTrue(info["broker"])
 
     def test_start_when_closed(self):
@@ -233,27 +231,17 @@ class test_Consumer(unittest.TestCase):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
                            send_events=False)
 
-        l.reset_connection()
         self.assertIsInstance(l.connection, BrokerConnection)
 
         l._state = RUN
         l.event_dispatcher = None
         l.stop_consumers(close_connection=False)
-        self.assertTrue(l.connection)
 
         l._state = RUN
-        l.stop_consumers()
-        self.assertIsNone(l.connection)
-        self.assertIsNone(l.task_consumer)
-
-        l.reset_connection()
-        self.assertIsInstance(l.connection, BrokerConnection)
         l.stop_consumers()
 
         l.stop()
         l.close_connection()
-        self.assertIsNone(l.connection)
-        self.assertIsNone(l.task_consumer)
 
     def test_close_connection(self):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
@@ -314,9 +302,9 @@ class test_Consumer(unittest.TestCase):
                       logger.error.call_args[0][0])
 
     def test_on_decode_error(self):
-        logger = Mock()
-        l = MyKombuConsumer(self.ready_queue, self.eta_schedule, logger,
+        l = MyKombuConsumer(self.ready_queue, self.eta_schedule, None,
                            send_events=False)
+        l.critical = Mock()
 
         class MockMessage(Mock):
             content_type = "application/x-msgpack"
@@ -327,7 +315,7 @@ class test_Consumer(unittest.TestCase):
         l.on_decode_error(message, KeyError("foo"))
         self.assertTrue(message.ack.call_count)
         self.assertIn("Can't decode message body",
-                      logger.critical.call_args[0][0])
+                      l.critical.call_args[0][0])
 
     def test_receieve_message(self):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
@@ -358,72 +346,10 @@ class test_Consumer(unittest.TestCase):
         l = MockConsumer(self.ready_queue, self.eta_schedule, self.logger,
                              send_events=False, pool=BasePool())
         l.connection_errors = (KeyError, )
-        self.assertRaises(SyntaxError, l.start)
+        with self.assertRaises(SyntaxError):
+            l.start()
         l.heart.stop()
         l.priority_timer.stop()
-
-    def test_consume_messages_ignores_socket_timeout(self):
-
-        class Connection(current_app.broker_connection().__class__):
-            obj = None
-
-            def drain_events(self, **kwargs):
-                self.obj.connection = None
-                raise socket.timeout(10)
-
-        l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
-                            send_events=False)
-        l.connection = Connection()
-        l.task_consumer = Mock()
-        l.connection.obj = l
-        l.qos = QoS(l.task_consumer, 10, l.logger)
-        l.consume_messages()
-
-    def test_consume_messages_when_socket_error(self):
-
-        class Connection(current_app.broker_connection().__class__):
-            obj = None
-
-            def drain_events(self, **kwargs):
-                self.obj.connection = None
-                raise socket.error("foo")
-
-        l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
-                            send_events=False)
-        l._state = RUN
-        c = l.connection = Connection()
-        l.connection.obj = l
-        l.task_consumer = Mock()
-        l.qos = QoS(l.task_consumer, 10, l.logger)
-        with self.assertRaises(socket.error):
-            l.consume_messages()
-
-        l._state = CLOSE
-        l.connection = c
-        l.consume_messages()
-
-    def test_consume_messages(self):
-
-        class Connection(current_app.broker_connection().__class__):
-            obj = None
-
-            def drain_events(self, **kwargs):
-                self.obj.connection = None
-
-        l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
-                             send_events=False)
-        l.connection = Connection()
-        l.connection.obj = l
-        l.task_consumer = Mock()
-        l.qos = QoS(l.task_consumer, 10, l.logger)
-
-        l.consume_messages()
-        l.consume_messages()
-        self.assertTrue(l.task_consumer.consume.call_count)
-        l.task_consumer.qos.assert_called_with(prefetch_count=10)
-        l.qos.decrement()
-        l.consume_messages()
-        l.task_consumer.qos.assert_called_with(prefetch_count=9)
 
     def test_maybe_conn_error(self):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
@@ -433,8 +359,8 @@ class test_Consumer(unittest.TestCase):
         l.maybe_conn_error(Mock(side_effect=AttributeError("foo")))
         l.maybe_conn_error(Mock(side_effect=KeyError("foo")))
         l.maybe_conn_error(Mock(side_effect=SyntaxError("foo")))
-        self.assertRaises(IndexError, l.maybe_conn_error,
-                Mock(side_effect=IndexError("foo")))
+        with self.assertRaises(IndexError):
+            l.maybe_conn_error(Mock(side_effect=IndexError("foo")))
 
     def test_apply_eta_task(self):
         from celery.worker import state
@@ -475,22 +401,19 @@ class test_Consumer(unittest.TestCase):
     def test_on_control(self):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
                              send_events=False)
-        l.pidbox_node = Mock()
-        l.reset_pidbox_node = Mock()
+        node = Mock()
+        l.on_control(node, "foo", "bar")
+        node.handle_message.assert_called_with("foo", "bar")
 
-        l.on_control("foo", "bar")
-        l.pidbox_node.handle_message.assert_called_with("foo", "bar")
+        node = Mock()
+        node.handle_message.side_effect = KeyError("foo")
+        l.on_control(node, "foo", "bar")
+        node.handle_message.assert_called_with("foo", "bar")
 
-        l.pidbox_node = Mock()
-        l.pidbox_node.handle_message.side_effect = KeyError("foo")
-        l.on_control("foo", "bar")
-        l.pidbox_node.handle_message.assert_called_with("foo", "bar")
-
-        l.pidbox_node = Mock()
-        l.pidbox_node.handle_message.side_effect = ValueError("foo")
-        l.on_control("foo", "bar")
-        l.pidbox_node.handle_message.assert_called_with("foo", "bar")
-        l.reset_pidbox_node.assert_called_with()
+        node = Mock()
+        node.handle_message.side_effect = ValueError("foo")
+        l.on_control(node, "foo", "bar")
+        node.handle_message.assert_called_with("foo", "bar")
 
     def test_revoke(self):
         ready_queue = FastQueue()
@@ -514,7 +437,8 @@ class test_Consumer(unittest.TestCase):
 
         l.event_dispatcher = Mock()
         self.assertFalse(l.receive_message(m.decode(), m))
-        self.assertRaises(Empty, self.ready_queue.get_nowait)
+        with self.assertRaises(Empty):
+            self.ready_queue.get_nowait()
         self.assertTrue(self.eta_schedule.empty())
 
     def test_receieve_message_ack_raises(self):
@@ -532,7 +456,8 @@ class test_Consumer(unittest.TestCase):
             self.assertFalse(l.receive_message(m.decode(), m))
             self.assertTrue(log)
             self.assertIn("unknown message", log[0].message.args[0])
-        self.assertRaises(Empty, self.ready_queue.get_nowait)
+        with self.assertRaises(Empty):
+            self.ready_queue.get_nowait()
         self.assertTrue(self.eta_schedule.empty())
         m.ack.assert_called_with()
         self.assertTrue(l.logger.critical.call_count)
@@ -548,44 +473,37 @@ class test_Consumer(unittest.TestCase):
                            eta=(datetime.now() +
                                timedelta(days=1)).isoformat())
 
-        l.reset_connection()
-        p = l.app.conf.BROKER_CONNECTION_RETRY
-        l.app.conf.BROKER_CONNECTION_RETRY = False
-        try:
-            l.reset_connection()
-        finally:
-            l.app.conf.BROKER_CONNECTION_RETRY = p
-        l.stop_consumers()
-        l.event_dispatcher = Mock()
-        l.receive_message(m.decode(), m)
-        l.eta_schedule.stop()
-        in_hold = self.eta_schedule.queue[0]
-        self.assertEqual(len(in_hold), 3)
-        eta, priority, entry = in_hold
-        task = entry.args[0]
-        self.assertIsInstance(task, TaskRequest)
-        self.assertEqual(task.task_name, foo_task.name)
-        self.assertEqual(task.execute(), 2 * 4 * 8)
-        self.assertRaises(Empty, self.ready_queue.get_nowait)
+        with current_app.broker_connection() as conn:
+            l.stop_consumers()
+            l.get_consumers(None, conn.default_channel)
+            l.event_dispatcher = Mock()
+            l.receive_message(m.decode(), m)
+            l.eta_schedule.stop()
+            in_hold = self.eta_schedule.queue[0]
+            self.assertEqual(len(in_hold), 3)
+            eta, priority, entry = in_hold
+            task = entry.args[0]
+            self.assertIsInstance(task, TaskRequest)
+            self.assertEqual(task.task_name, foo_task.name)
+            self.assertEqual(task.execute(), 2 * 4 * 8)
+            with self.assertRaises(Empty):
+                self.ready_queue.get_nowait()
 
     def test_reset_pidbox_node(self):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
                           send_events=False)
-        l.pidbox_node = Mock()
-        chan = l.pidbox_node.channel = Mock()
-        l.connection = Mock()
-        chan.close.side_effect = socket.error("foo")
-        l.connection_errors = (socket.error, )
-        l.reset_pidbox_node()
-        chan.close.assert_called_with()
+        with current_app.broker_connection() as conn:
+            with l._pidbox_consumer(conn, conn.default_channel):
+                pass
 
     def test_reset_pidbox_node_green(self):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
                           send_events=False)
         l.pool = Mock()
         l.pool.is_green = True
-        l.reset_pidbox_node()
-        l.pool.spawn_n.assert_called_with(l._green_pidbox_node)
+        with current_app.broker_connection() as conn:
+            with l._green_pidbox_consumer(conn, conn.default_channel):
+                self.assertTrue(l.pool.spawn_n.call_count)
 
     def test__green_pidbox_node(self):
         l = MyKombuConsumer(self.ready_queue, self.eta_schedule, self.logger,
@@ -593,6 +511,12 @@ class test_Consumer(unittest.TestCase):
         l.pidbox_node = Mock()
 
         connections = []
+
+        class Pool(object):
+            spawned = False
+
+            def spawn_n(self, *args, **kwargs):
+                self.spawned = True
 
         class Connection(object):
 
@@ -611,15 +535,11 @@ class test_Consumer(unittest.TestCase):
                 self.closed = True
 
         l.connection = Mock()
+        l.pool = Pool()
         l._open_connection = lambda: Connection(obj=l)
-        l._green_pidbox_node()
+        with l._green_pidbox_consumer(Connection(obj=l), None):
+            self.assertTrue(l.pool.spawned)
 
-        l.pidbox_node.listen.assert_called_with(callback=l.on_control)
-        self.assertTrue(l.broadcast_consumer)
-        l.broadcast_consumer.consume.assert_called_with()
-
-        self.assertIsNone(l.connection)
-        self.assertTrue(connections[0].closed)
 
     def test_start__consume_messages(self):
 
@@ -654,7 +574,8 @@ class test_Consumer(unittest.TestCase):
                 raise KeyError("foo")
 
         l.consume_messages = raises_KeyError
-        self.assertRaises(KeyError, l.start)
+        with self.assertRaises(KeyError):
+            l.start()
         self.assertTrue(init_callback.call_count)
         self.assertEqual(l.iterations, 1)
         self.assertEqual(l.qos.prev, l.qos.value)
@@ -667,15 +588,10 @@ class test_Consumer(unittest.TestCase):
         l.broadcast_consumer = Mock()
         l.connection = BrokerConnection()
         l.consume_messages = Mock(side_effect=socket.error("foo"))
-        self.assertRaises(socket.error, l.start)
+        with self.assertRaises(socket.error):
+            l.start()
         self.assertTrue(init_callback.call_count)
         self.assertTrue(l.consume_messages.call_count)
-
-    def test_reset_connection_with_no_node(self):
-
-        l = MainConsumer(self.ready_queue, self.eta_schedule, self.logger)
-        self.assertEqual(None, l.pool)
-        l.reset_connection()
 
 
 class test_WorkController(AppCase):
@@ -801,7 +717,8 @@ class test_WorkController(AppCase):
         task = TaskRequest.from_message(m, m.decode())
         worker.components = []
         worker._state = worker.RUN
-        self.assertRaises(KeyboardInterrupt, worker.process_task, task)
+        with self.assertRaises(KeyboardInterrupt):
+            worker.process_task(task)
         self.assertEqual(worker._state, worker.TERMINATE)
 
     def test_process_task_raise_SystemTerminate(self):
@@ -814,7 +731,8 @@ class test_WorkController(AppCase):
         task = TaskRequest.from_message(m, m.decode())
         worker.components = []
         worker._state = worker.RUN
-        self.assertRaises(SystemExit, worker.process_task, task)
+        with self.assertRaises(SystemExit):
+            worker.process_task(task)
         self.assertEqual(worker._state, worker.TERMINATE)
 
     def test_process_task_raise_regular(self):
@@ -833,7 +751,8 @@ class test_WorkController(AppCase):
         stc = Mock()
         stc.start.side_effect = SystemTerminate()
         worker1.components = [stc]
-        self.assertRaises(SystemExit, worker1.start)
+        with self.assertRaises(SystemExit):
+            worker1.start()
         self.assertTrue(stc.terminate.call_count)
 
         worker2 = self.create_worker()
@@ -841,7 +760,8 @@ class test_WorkController(AppCase):
         sec.start.side_effect = SystemExit()
         sec.terminate = None
         worker2.components = [sec]
-        self.assertRaises(SystemExit, worker2.start)
+        with self.assertRaises(SystemExit):
+            worker2.start()
         self.assertTrue(sec.stop.call_count)
 
     def test_state_db(self):

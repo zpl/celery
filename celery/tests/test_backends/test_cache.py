@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import with_statement
 
 import sys
@@ -52,10 +53,9 @@ class test_CacheBackend(unittest.TestCase):
         try:
             raise KeyError("foo")
         except KeyError, exception:
-            pass
-        tb.mark_as_failure(tid3, exception)
-        self.assertEqual(tb.get_status(tid3), states.FAILURE)
-        self.assertIsInstance(tb.get_result(tid3), KeyError)
+            tb.mark_as_failure(tid3, exception)
+            self.assertEqual(tb.get_status(tid3), states.FAILURE)
+            self.assertIsInstance(tb.get_result(tid3), KeyError)
 
     def test_mget(self):
         tb = CacheBackend(backend="memory://")
@@ -82,8 +82,8 @@ class test_CacheBackend(unittest.TestCase):
         self.assertEqual(tb.expires, 10)
 
     def test_unknown_backend_raises_ImproperlyConfigured(self):
-        self.assertRaises(ImproperlyConfigured,
-                          CacheBackend, backend="unknown://")
+        with self.assertRaises(ImproperlyConfigured):
+            CacheBackend(backend="unknown://")
 
 
 class MyClient(DummyClient):

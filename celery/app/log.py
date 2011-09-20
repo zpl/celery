@@ -13,6 +13,8 @@ from ..utils.log import (ColorFormatter, ensure_process_aware_logger,
                          reset_multiprocessing_logger)
 from ..utils.term import colored
 
+is_py3k = sys.version_info >= (3, 0)
+
 
 class Logging(object):
     #: The logging subsystem is only configured once per process.
@@ -53,7 +55,8 @@ class Logging(object):
         if colorize is None:
             colorize = self.supports_color(logfile)
         reset_multiprocessing_logger()
-        ensure_process_aware_logger()
+        if not is_py3k:
+            ensure_process_aware_logger()
         receivers = signals.setup_logging.send(sender=None,
                         loglevel=loglevel, logfile=logfile,
                         format=format, colorize=colorize)
@@ -149,9 +152,9 @@ class Logging(object):
         """
         proxy = LoggingProxy(logger, loglevel)
         if stdout:
-            sys.stdout = proxy
+            sys.stdout = sys.__stdout__ = proxy
         if stderr:
-            sys.stderr = proxy
+            sys.stderr = sys.__stderr__ = proxy
         return proxy
 
     def _setup_logger(self, logger, logfile, format, colorize,

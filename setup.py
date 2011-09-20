@@ -48,12 +48,11 @@ try:
 except ImportError:
     install_requires.append("importlib")
 install_requires.extend([
-    "python-dateutil>=1.5.0,<2.0.0",
     "anyjson>=0.3.1",
-    "kombu>=2.0.0<3.0.0",
+    "kombu",
 ])
 if is_py3k:
-    install_requires.append("python-dateutil>2.0.0")
+    install_requires.append("python-dateutil>=2.0.0")
 else:
     install_requires.append("python-dateutil>=1.5.0,<2.0.0")
 
@@ -87,7 +86,6 @@ if platform.system() == "Windows":
 else:
     console_scripts.append('celeryd = celery.bin.celeryd:main')
 
-
 setup(
     name="celery",
     version=distmeta.__version__,
@@ -119,6 +117,7 @@ setup(
         "Programming Language :: Python :: 2.5",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
     ],
     entry_points={
         'console_scripts': console_scripts,

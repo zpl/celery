@@ -79,13 +79,13 @@ class ScheduleEntry(object):
     def _default_now(self):
         return datetime.utcnow()
 
-    def next(self, last_run_at=None):
+    def _next_instance(self, last_run_at=None):
         """Returns a new instance of the same class, but with
         its date and count fields updated."""
         return self.__class__(**dict(self,
                                 last_run_at=last_run_at or datetime.utcnow(),
                                 total_run_count=self.total_run_count + 1))
-    __next__ = next  # for 2to3
+    __next__ = next = _next_instance  # for 2to3
 
     def update(self, other):
         """Update values from another entry.
@@ -367,8 +367,8 @@ class Service(object):
         self.schedule_filename = schedule_filename or \
                                     app.conf.CELERYBEAT_SCHEDULE_FILENAME
 
-        self._shutdown = threading.Event()
-        self._stopped = threading.Event()
+        self._is_shutdown = threading.Event()
+        self._is_stopped = threading.Event()
 
     def start(self, embedded_process=False):
         self.logger.info("Celerybeat: Starting...")
@@ -381,24 +381,24 @@ class Service(object):
             platforms.set_process_title("celerybeat")
 
         try:
-            while not self._shutdown.isSet():
+            while not self._is_shutdown.isSet():
                 interval = self.scheduler.tick()
                 self.logger.debug("Celerybeat: Waking up %s.",
                                    humanize_seconds(interval, prefix="in "))
                 time.sleep(interval)
         except (KeyboardInterrupt, SystemExit):
-            self._shutdown.set()
+            self._is_shutdown.set()
         finally:
             self.sync()
 
     def sync(self):
         self.scheduler.close()
-        self._stopped.set()
+        self._is_stopped.set()
 
     def stop(self, wait=False):
         self.logger.info("Celerybeat: Shutting down...")
-        self._shutdown.set()
-        wait and self._stopped.wait()  # block until shutdown done.
+        self._is_shutdown.set()
+        wait and self._is_stopped.wait()  # block until shutdown done.
 
     def get_scheduler(self, lazy=False):
         filename = self.schedule_filename

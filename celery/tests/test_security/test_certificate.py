@@ -1,13 +1,13 @@
-from celery.exceptions import SecurityError
+from __future__ import absolute_import
 
+from celery.exceptions import SecurityError
 from celery.security.certificate import Certificate, CertStore
 
-from celery.tests.utils import unittest
-
 from . import CERT1, CERT2, KEY1
+from .case import SecurityCase
 
 
-class TestCertificate(unittest.TestCase):
+class TestCertificate(SecurityCase):
 
     def test_valid_certificate(self):
         Certificate(CERT1)
@@ -21,7 +21,7 @@ class TestCertificate(unittest.TestCase):
         self.assertRaises(SecurityError, Certificate, KEY1)
 
 
-class TestCertStore(unittest.TestCase):
+class TestCertStore(SecurityCase):
 
     def test_itercerts(self):
         cert1 = Certificate(CERT1)

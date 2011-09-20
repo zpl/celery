@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import sys
 import smtplib
 
@@ -80,6 +82,42 @@ class Mailer(object):
 
 
 class ErrorMail(object):
+    """Defines how and when task error e-mails should be sent.
+
+    :param task: The task instance that raised the error.
+
+    :attr:`subject` and :attr:`body` are format strings which
+    are passed a context containing the following keys:
+
+    * name
+
+        Name of the task.
+
+    * id
+
+        UUID of the task.
+
+    * exc
+
+        String representation of the exception.
+
+    * args
+
+        Positional arguments.
+
+    * kwargs
+
+        Keyword arguments.
+
+    * traceback
+
+        String representation of the traceback.
+
+    * hostname
+
+        Worker hostname.
+
+    """
 
     # pep8.py borks on a inline signature separator and
     # says "trailing whitespace" ;)
@@ -112,6 +150,8 @@ celeryd at %%(hostname)s.
         self.email_body = kwargs.get("body", self.body)
 
     def should_send(self, context, exc):
+        """Returns true or false depending on if a task error mail
+        should be sent for this type of error."""
         return True
 
     def format_subject(self, context):
