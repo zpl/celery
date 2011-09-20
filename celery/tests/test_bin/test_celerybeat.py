@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import with_statement
+
 import logging
 import sys
 
@@ -98,8 +101,8 @@ class test_Beat(AppCase):
         clock = MockService()
         MockService.in_sync = False
         handlers = self.psig(b.install_sync_handler, clock)
-        self.assertRaises(SystemExit, handlers["SIGINT"],
-                          "SIGINT", object())
+        with self.assertRaises(SystemExit):
+            handlers["SIGINT"]("SIGINT", object())
         self.assertTrue(MockService.in_sync)
         MockService.in_sync = False
 
@@ -112,7 +115,8 @@ class test_Beat(AppCase):
         b = beatapp.Beat()
         b.redirect_stdouts = False
         b.setup_logging()
-        self.assertRaises(AttributeError, getattr, sys.stdout, "logger")
+        with self.assertRaises(AttributeError):
+            sys.stdout.logger
 
     @redirect_stdouts
     def test_logs_errors(self, stdout, stderr):

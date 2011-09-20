@@ -61,7 +61,8 @@ class TestEventDispatcher(unittest.TestCase):
         eventer.enabled = True
         eventer.producer.raise_on_publish = True
         eventer.buffer_while_offline = False
-        self.assertRaises(KeyError, eventer.send, "Event X")
+        with self.assertRaises(KeyError):
+            eventer.send("Event X")
         eventer.buffer_while_offline = True
         for ev in evs:
             eventer.send(ev)
@@ -148,9 +149,11 @@ class TestEventReceiver(unittest.TestCase):
             self.assertEqual(consumer.callbacks[0], r._receive)
 
             it = r.itercapture(timeout=0.0001, wakeup=False)
-            self.assertRaises(socket.timeout, it.next)
-            self.assertRaises(socket.timeout,
-                              r.capture, timeout=0.00001)
+            with self.assertRaises(socket.timeout):
+                it.next()
+
+            with self.assertRaises(socket.timeout):
+                r.capture(timeout=0.00001)
 
     def test_itercapture_limit(self):
         connection = self.app.broker_connection()

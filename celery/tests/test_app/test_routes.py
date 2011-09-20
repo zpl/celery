@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import with_statement
+
 from functools import wraps
 
 from celery import current_app
@@ -64,7 +67,8 @@ class test_MapRoute(unittest.TestCase):
     def test_expand_route_not_found(self):
         expand = E(current_app.amqp.queues)
         route = routes.MapRoute({"a": {"queue": "x"}})
-        self.assertRaises(QueueNotFound, expand, route.route_for_task("a"))
+        with self.assertRaises(QueueNotFound):
+            expand(route.route_for_task("a"))
 
 
 class test_lookup_route(unittest.TestCase):

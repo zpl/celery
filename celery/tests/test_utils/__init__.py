@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+
 import pickle
-from celery.tests.utils import unittest
 
 from celery import utils
 from celery.utils.functional import promise, mpromise, maybe_promise
 from celery.utils.functional import padlist, firstmethod
 from celery.utils.text import abbr, abbrtask, truncate
+from celery.tests.utils import unittest
 
 
 def double(x):
