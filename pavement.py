@@ -107,6 +107,15 @@ def flakeplus(options):
 
 
 @task
+@cmdopts([
+    ("noerror", "E", "Ignore errors")
+])
+def flakes(options):
+    flake8(options)
+    flakeplus(options)
+
+
+@task
 def clean_readme(options):
     path("README").unlink()
     path("README.rst").unlink()
@@ -171,7 +180,7 @@ def gitcleanforce(options):
 
 
 @task
-@needs("flake8", "autodoc", "verifyindex",
+@needs("flakes", "autodoc", "verifyindex",
        "verifyconfigref", "test", "gitclean")
 def releaseok(options):
     pass
