@@ -63,7 +63,8 @@ class Worker(object):
             max_tasks_per_child=None, queues=None, events=None, db=None,
             include=None, app=None, pidfile=None,
             redirect_stdouts=None, redirect_stdouts_level=None,
-            autoscale=None, scheduler_cls=None, pool=None, **kwargs):
+            autoscale=None, scheduler_cls=None, pool=None, agents=None,
+            **kwargs):
         self.app = app = app_or_default(app)
         conf = app.conf
         self.concurrency = (concurrency or
@@ -97,6 +98,7 @@ class Worker(object):
         self.include = [] if include is None else include
         self.pidfile = pidfile
         self.autoscale = None
+        self.agents = agents
         if autoscale:
             max_c, _, min_c = autoscale.partition(",")
             self.autoscale = [int(max_c), min_c and int(min_c) or 0]
@@ -235,7 +237,8 @@ class Worker(object):
                                 task_time_limit=self.task_time_limit,
                                 task_soft_time_limit=self.task_soft_time_limit,
                                 autoscale=self.autoscale,
-                                pool_cls=self.pool)
+                                pool_cls=self.pool,
+                                agents=self.agents)
         self.install_platform_tweaks(worker)
         worker.start()
 

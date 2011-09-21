@@ -13,7 +13,7 @@ from .. import concurrency as _concurrency
 from .. import platforms, signals
 from ..app import app_or_default
 from ..exceptions import SystemTerminate
-from ..utils.functional import noop
+from ..utils.functional import maybe_list, noop
 from ..utils.imports import instantiate
 
 from . import state
@@ -106,7 +106,7 @@ class WorkController(object):
             pool_putlocks=None, db=None, prefetch_multiplier=None,
             eta_scheduler_precision=None, disable_rate_limits=None,
             autoscale=None, autoscaler_cls=None, scheduler_cls=None,
-            app=None):
+            agents=None, app=None):
 
         self.app = app_or_default(app)
         conf = self.app.conf
@@ -163,6 +163,15 @@ class WorkController(object):
             self.ready_queue.put = self.process_task
         else:
             self.ready_queue = TaskBucket(task_registry=self.app.tasks)
+
+        # Agents
+        if agents:
+            from .agents import AgentWrapper
+            if isinstance(agents, basestring):
+                agents = agents.split(",")
+            agents = [AgentWrapper(instantiate(agent,
+                                               self.app.broker_connection()))
+                        for agent in maybe_list(agents)]
 
         self.logger.debug("Instantiating thread components...")
 
@@ -231,12 +240,13 @@ class WorkController(object):
         # The order is important here;
         #   the first in the list is the first to start,
         # and they must be stopped in reverse order.
-        self.components = filter(None, (self.pool,
+        self.components = filter(None, [self.pool,
                                         self.mediator,
                                         self.scheduler,
                                         self.beat,
-                                        self.autoscaler,
-                                        self.consumer))
+                                        self.autoscaler]
+                                     +  maybe_list(agents)
+                                     + [self.consumer])
 
     def start(self):
         """Starts the workers main loop."""
@@ -253,7 +263,11 @@ class WorkController(object):
             raise
         except SystemExit:
             self.stop()
-            raise
+            try:
+                raise
+            except TypeError:
+                # eventlet borks here saying that the exception is None(?)
+                sys.exit()
         except BaseException:
             self.stop()
             try:

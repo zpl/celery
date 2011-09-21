@@ -21,6 +21,10 @@
 
     Set custom hostname.
 
+.. cmdoption:: -A, --agent
+
+    List of additional actor agents to start.
+
 .. cmdoption:: -B, --beat
 
     Also run the `celerybeat` periodic task scheduler. Please note that
@@ -123,6 +127,9 @@ class WorkerCommand(Command):
             Option('-n', '--hostname', default=None,
                 action="store", dest="hostname",
                 help="Set custom host name. E.g. 'foo.example.com'."),
+            Option('-A', '--agents',
+                action="store", dest="agents", default=None,
+                help="Additional actor agents to start."),
             Option('-B', '--beat', default=False,
                 action="store_true", dest="run_clockservice",
                 help="Also run the celerybeat periodic task scheduler. "
