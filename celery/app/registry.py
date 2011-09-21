@@ -9,12 +9,11 @@ from ..exceptions import NotRegistered
 
 
 class TaskRegistry(UserDict):
-    data = {}
 
     NotRegistered = NotRegistered
 
     def __init__(self, *args, **kwargs):
-        self.app = kwargs.pop("app", None)
+        self.data = {}
 
     def register(self, task):
         """Register a task in the task registry.
@@ -50,9 +49,12 @@ class TaskRegistry(UserDict):
 
     def pop(self, key, *args):
         try:
-            return self.data.pop(self, key, *args)
+            return self.data.pop(key, *args)
         except KeyError:
             raise self.NotRegistered(key)
+
+
+tasks = TaskRegistry()
 
 
 def _unpickle_task(name):

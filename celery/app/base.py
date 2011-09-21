@@ -21,7 +21,7 @@ from kombu.clocks import LamportClock
 from .. import datastructures
 from .. import platforms
 from ..utils import cached_property, lpmerge
-from ..utils.imports import instantiate
+from ..utils.imports import instantiate, get_cls_by_name
 
 from .defaults import DEFAULTS, find_deprecated_settings, NAMESPACES
 
@@ -96,7 +96,7 @@ class BaseApp(object):
     loader_cls = "celery.loaders.app.AppLoader"
     log_cls = "celery.app.log.Logging"
     control_cls = "celery.app.control.Control"
-    registry_cls = "celery.app.registry.TaskRegistry"
+    registry_cls = "celery.app.registry.tasks"
 
     def __init__(self, main=None, loader=None, backend=None,
             amqp=None, events=None, log=None, control=None,
@@ -110,7 +110,7 @@ class BaseApp(object):
         self.control_cls = control or self.control_cls
         self.set_as_current = set_as_current
         self.clock = LamportClock()
-        self._tasks = instantiate(self.registry_cls, app=self)
+        self._tasks = get_cls_by_name(self.registry_cls)
         self._tasks.update(tasks or {})
         self.on_init()
 

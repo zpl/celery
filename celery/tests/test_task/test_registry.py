@@ -37,7 +37,7 @@ class TestTaskRegistry(unittest.TestCase):
 
     def test_task_registry(self):
         r = TaskRegistry()
-        self.assertIsInstance(r, dict,
+        self.assertTrue(hasattr(r, "__getitem__"),
                 "TaskRegistry is mapping")
 
         self.assertRegisterUnregisterCls(r, TestTask)

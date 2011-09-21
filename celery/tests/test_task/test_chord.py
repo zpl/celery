@@ -40,7 +40,7 @@ class test_unlock_chord_task(AppCase):
             from celery.task import sets
             result = Mock(attrs=dict(ready=lambda: True,
                                     join=lambda **kw: [2, 4, 8, 6]))
-            TaskSetResult.restore = lambda setid: result
+            TaskSetResult.restore = lambda setid, **kw: result
             subtask, sets.subtask = sets.subtask, passthru
             try:
                 unlock("setid", callback)
@@ -56,7 +56,7 @@ class test_unlock_chord_task(AppCase):
         with patch_unlock_retry() as (unlock, retry):
             callback = Mock()
             result = Mock(attrs=dict(ready=lambda: False))
-            TaskSetResult.restore = lambda setid: result
+            TaskSetResult.restore = lambda setid, **kw: result
             unlock("setid", callback, interval=10, max_retries=30)
             self.assertFalse(callback.delay.call_count)
             # did retry
@@ -69,22 +69,27 @@ class test_unlock_chord_task(AppCase):
 class test_chord(AppCase):
 
     def test_apply(self):
+        Chord = Mock()
 
         class chord(chords.chord):
-            Chord = Mock()
+
+            def __init__(self, *args, **kwargs):
+                super(chord, self).__init__(*args, **kwargs)
+                self.Chord = Chord
 
         x = chord(add.subtask((i, i)) for i in xrange(10))
         body = add.subtask((2, ))
         result = x(body)
         self.assertEqual(result.task_id, body.options["task_id"])
-        self.assertTrue(chord.Chord.apply_async.call_count)
+        self.assertTrue(Chord.apply_async.call_count)
 
 
 class test_Chord_task(AppCase):
 
     def test_run(self):
+        Chord = self.app.tasks["celery.chord"].__class__
 
-        class Chord(chords.Chord):
+        class Chord(Chord):
             backend = Mock()
 
         body = dict()
