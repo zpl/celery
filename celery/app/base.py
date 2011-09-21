@@ -109,9 +109,9 @@ class BaseApp(object):
         self.log_cls = log or self.log_cls
         self.control_cls = control or self.control_cls
         self.set_as_current = set_as_current
-        self.registry_cls = self.registry_cls if tasks is None else tasks
         self.clock = LamportClock()
         self._tasks = instantiate(self.registry_cls, app=self)
+        self._tasks.update(tasks or {})
         self.on_init()
 
     def on_init(self):

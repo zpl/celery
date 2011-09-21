@@ -45,10 +45,10 @@ class AppPickler(object):
         return self.build_standard_kwargs(*args)
 
     def build_standard_kwargs(self, main, changes, loader, backend, amqp,
-            events, log, control):
+            events, log, control, tasks):
         return dict(main=main, loader=loader, backend=backend, amqp=amqp,
                     changes=changes, events=events, log=log, control=control,
-                    set_as_current=False)
+                    tasks=tasks, set_as_current=False)
 
     def construct(self, cls, **kwargs):
         return cls(**kwargs)
@@ -222,7 +222,8 @@ class App(base.BaseApp):
                 self.amqp_cls,
                 self.events_cls,
                 self.log_cls,
-                self.control_cls)
+                self.control_cls,
+                self._tasks)
 
 
 #: The "default" loader is the default loader used by old applications.

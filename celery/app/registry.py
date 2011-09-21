@@ -3,16 +3,18 @@ from __future__ import absolute_import
 
 import inspect
 
+from UserDict import UserDict
+
 from ..exceptions import NotRegistered
 
 
-class TaskRegistry(dict):
+class TaskRegistry(UserDict):
+    data = {}
 
     NotRegistered = NotRegistered
 
     def __init__(self, *args, **kwargs):
         self.app = kwargs.pop("app", None)
-        dict.__init__(self, *args)
 
     def register(self, task):
         """Register a task in the task registry.
@@ -42,13 +44,13 @@ class TaskRegistry(dict):
 
     def __getitem__(self, key):
         try:
-            return dict.__getitem__(self, key)
+            return self.data[key]
         except KeyError:
             raise self.NotRegistered(key)
 
     def pop(self, key, *args):
         try:
-            return dict.pop(self, key, *args)
+            return self.data.pop(self, key, *args)
         except KeyError:
             raise self.NotRegistered(key)
 

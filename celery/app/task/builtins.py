@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+from celery.utils import uuid
+
 _builtins = []
 
 
@@ -25,13 +27,36 @@ def add_unlock_chord_task(app):
             max_retries=None):
         from ...result import TaskSetResult
         from ...task.sets import subtask
-        result = TaskSetResult.restore(setid)
+        result = TaskSetResult.restore(setid, backend=app.backend)
         if result.ready():
-
             subtask(callback).delay(result.join(propagate=propagate))
             result.delete()
         else:
             _unlock_chord.retry(countdown=interval, max_retries=max_retries)
+
+
+@builtin_task
+def add_Chord_task(app):
+    from ...task.sets import TaskSet
+
+    class Chord(app.Task):
+        name = "celery.chord"
+
+        def run(self, set, body, interval=1, max_retries=None,
+                propagate=False, **kwargs):
+            if not isinstance(set, TaskSet):
+                set = self.app.TaskSet(set)
+            r = []
+            setid = uuid()
+            for task in set.tasks:
+                tid = uuid()
+                task.options.update(task_id=tid, chord=body)
+                r.append(self.app.AsyncResult(tid))
+            self.app.TaskSetResult(setid, r).save()
+            self.backend.on_chord_apply(setid, body, interval,
+                                        max_retries=max_retries,
+                                        propagate=propagate)
+            return set.apply_async(taskset_id=setid)
 
 
 def load_builtins(app):

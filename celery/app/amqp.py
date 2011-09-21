@@ -199,12 +199,12 @@ class TaskProducer(Producer):
         publish(body, exchange=exchange, **extract_msg_options(options))
 
     def send_task(self, name, args=None, kwargs=None,
-            countdown=None, eta=None, id=None, taskset_id=None,
+            countdown=None, eta=None, task_id=None, taskset_id=None,
             expires=None, event_dispatcher=None, now=None,
             retries=0, chord=None, **options):
         """Send task message."""
 
-        id = id or uuid()
+        task_id = task_id or uuid()
         args = args or []
         kwargs = kwargs or {}
         if not isinstance(args, (list, tuple)):
@@ -221,7 +221,7 @@ class TaskProducer(Producer):
         expires = expires and expires.isoformat()
 
         body = {"task": name,
-                "id": id,
+                "id": task_id,
                 "args": args or [],
                 "kwargs": kwargs or {},
                 "retries": retries or 0,
@@ -236,10 +236,10 @@ class TaskProducer(Producer):
         signals.task_sent.send(sender=name, **body)
         if event_dispatcher:
             event_dispatcher.send("task-sent",
-                            uuid=id, name=name,
+                            uuid=task_id, name=name,
                             args=repr(args), kwargs=repr(kwargs),
                             retries=retries, eta=eta, expires=expires)
-        return id
+        return task_id
 
     def _declare_queue(self, name, retry=False, retry_policy={}):
         queue = self.app.queues[name](self.channel)
