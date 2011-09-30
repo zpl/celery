@@ -4,6 +4,8 @@ import sys
 
 from datetime import datetime
 
+from kombu.common import entry_to_queue
+
 from ...platforms import signals as _signals
 from ...utils import timeutils
 from ...utils.encoding import safe_repr
@@ -243,7 +245,7 @@ def add_consumer(panel, queue=None, exchange=None, exchange_type="direct",
                            exchange_type=exchange_type,
                            routing_key=routing_key,
                            **options)
-        cset.add_consumer_from_dict(**declaration)
+        cset.add_queue(entry_to_queue(**declaration))
         cset.consume()
         panel.logger.info("Started consuming from %r", declaration)
         return {"ok": "started consuming from %s" % (queue, )}
