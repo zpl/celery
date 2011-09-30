@@ -1,5 +1,14 @@
+"""
+
+celery.worker
+=============
+
+This is the Celery worker process.
+
+"""
 from __future__ import absolute_import
 
+import atexit
 import logging
 import socket
 import sys
@@ -18,6 +27,8 @@ from ..utils.imports import instantiate
 
 from . import state
 from .buckets import TaskBucket, FastQueue
+
+__all__ = ["WorkController"]
 
 RUN = 0x1
 CLOSE = 0x2
@@ -153,9 +164,8 @@ class WorkController(object):
         self._finalize_db = None
 
         if self.db:
-            persistence = state.Persistent(self.db)
-            self._finalize_db = Finalize(persistence, persistence.save,
-                                         exitpriority=5)
+            self._persistence = state.Persistent(self.db)
+            atexit.register(self._persistence.save)
 
         # Queues
         if self.disable_rate_limits:
@@ -255,6 +265,9 @@ class WorkController(object):
             self.stop()
             raise
         except BaseException:
+            self.stop()
+            raise
+        except:
             self.stop()
             try:
                 raise

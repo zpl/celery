@@ -1,9 +1,19 @@
+"""
+celery.routes
+=============
+
+Contains utilities for working with task routes (e.g.
+:setting:`CELERY_ROUTES`).
+
+"""
 from __future__ import absolute_import
 
 from ..exceptions import QueueNotFound
 from ..utils import lpmerge
 from ..utils.functional import firstmethod, mpromise
 from ..utils.imports import instantiate
+
+_all__ = ["MapRoute", "Router", "prepare"]
 
 _first_route = firstmethod("route_for_task")
 

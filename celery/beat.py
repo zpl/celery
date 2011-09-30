@@ -1,3 +1,11 @@
+"""
+
+celery.beat
+===========
+
+The Celery periodic task scheduler.
+
+"""
 from __future__ import absolute_import
 
 import errno
@@ -23,6 +31,9 @@ from .utils import cached_property
 from .utils.functional import maybe_promise
 from .utils.imports import instantiate
 from .utils.timeutils import humanize_seconds
+
+__all__ = ["SchedulingError", "ScheduleEntry", "Scheduler",
+           "Service", "EmbeddedService"]
 
 
 class SchedulingError(Exception):

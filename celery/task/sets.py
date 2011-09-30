@@ -1,3 +1,11 @@
+"""
+
+celery.task.sets
+================
+
+Creating and applying task groups.
+
+"""
 from __future__ import absolute_import
 from __future__ import with_statement
 
@@ -6,6 +14,8 @@ from ..app import app_or_default
 from ..datastructures import AttributeDict
 from ..utils import cached_property, reprcall, uuid
 from ..utils.compat import UserList
+
+__all__ = ["subtask", "TaskSet"]
 
 
 class subtask(AttributeDict):
