@@ -20,6 +20,9 @@ try:
 except ImportError:
     cpickle = None  # noqa
 
+from .encoding import safe_repr
+
+
 if sys.version_info < (2, 6):  # pragma: no cover
     # cPickle is broken in Python <= 2.6.
     # It unsafely and incorrectly uses relative instead of absolute imports,
@@ -38,7 +41,7 @@ else:
 #: List of base classes we probably don't want to reduce to.
 unwanted_base_classes = (StandardError, Exception, BaseException, object)
 
-__all__ = ["subclass_exception", "find_nearest_unpickleable_exception",
+__all__ = ["subclass_exception", "find_nearest_pickleable_exception",
            "create_exception_cls", "UnpickleableExceptionWrapper",
            "get_pickleable_exception", "get_pickled_exception"]
 
@@ -132,21 +135,26 @@ class UnpickleableExceptionWrapper(Exception):
     #: The arguments for the original exception.
     exc_args = None
 
-    def __init__(self, exc_module, exc_cls_name, exc_args):
+    def __init__(self, exc_module, exc_cls_name, exc_args, text=None):
         self.exc_module = exc_module
         self.exc_cls_name = exc_cls_name
         self.exc_args = exc_args
-        Exception.__init__(self, exc_module, exc_cls_name, exc_args)
+        self.text = text
+        Exception.__init__(self, exc_module, exc_cls_name, exc_args, text)
+
+    def restore(self):
+        return create_exception_cls(self.exc_cls_name,
+                                    self.exc_module)(*self.exc_args)
+
+    def __str__(self):
+        return self.text
 
     @classmethod
     def from_exception(cls, exc):
         return cls(exc.__class__.__module__,
                    exc.__class__.__name__,
-                   getattr(exc, "args", []))
-
-    def restore(self):
-        return create_exception_cls(self.exc_cls_name,
-                                    self.exc_module)(*self.exc_args)
+                   getattr(exc, "args", []),
+                   safe_repr(exc))
 
 
 def get_pickleable_exception(exc):

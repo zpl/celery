@@ -12,6 +12,7 @@ from __future__ import absolute_import
 import errno
 import os
 import platform as _platform
+import shlex
 import signal as _signal
 import sys
 
@@ -27,6 +28,10 @@ __all__ = ["LockFailed", "get_fdmax", "create_pidlock",
            "setegid", "seteuid", "set_effective_user", "Signals",
            "set_process_title", "set_mp_process_title",
            "pyimplementation", "system", "architecture", "python_version"]
+
+SYSTEM = _platform.system()
+IS_OSX = SYSTEM == "Darwin"
+IS_WINDOWS = SYSTEM == "Windows"
 
 DAEMON_UMASK = 0
 DAEMON_WORKDIR = "/"
@@ -507,3 +512,11 @@ def set_mp_process_title(progname, info=None, hostname=None):
     else:
         return set_process_title("%s:%s" % (progname,
                                             current_process().name), info=info)
+
+
+def shellsplit(s, posix=True):
+    # posix= option to shlex.split first available in Python 2.6+
+    lexer = shlex.shlex(s, posix=not IS_WINDOWS)
+    lexer.whitespace_split = True
+    lexer.commenters = ''
+    return list(lexer)

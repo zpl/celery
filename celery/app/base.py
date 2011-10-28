@@ -86,9 +86,9 @@ class Settings(datastructures.ConfigurationView):
 
 class BaseApp(object):
     """Base class for apps."""
-    SYSTEM = platforms.system()
-    IS_OSX = SYSTEM == "Darwin"
-    IS_WINDOWS = SYSTEM == "Windows"
+    SYSTEM = platforms.SYSTEM
+    IS_OSX = platforms.IS_OSX
+    IS_WINDOWS = platforms.IS_WINDOWS
 
     amqp_cls = "celery.app.amqp.AMQP"
     backend_cls = None

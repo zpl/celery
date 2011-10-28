@@ -11,8 +11,8 @@ from celery import Celery
 from celery import app as _app
 from celery.app import defaults
 from celery.app.base import BaseApp
-from celery.platforms import pyimplementation
 from celery.loaders.base import BaseLoader
+from celery.platforms import pyimplementation
 from celery.utils.serialization import pickle
 
 from celery.tests import config

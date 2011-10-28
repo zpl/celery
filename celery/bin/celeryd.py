@@ -108,7 +108,8 @@ class WorkerCommand(Command):
                 default=conf.CELERYD_POOL,
                 action="store", dest="pool", type="str",
                 help="Pool implementation: "
-                     "processes (default), eventlet or gevent."),
+                     "processes (default), eventlet, gevent, "
+                     "solo or threads."),
             Option('--purge', '--discard', default=False,
                 action="store_true", dest="purge",
                 help="Purge all waiting tasks from the queue before the "

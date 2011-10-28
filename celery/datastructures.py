@@ -13,7 +13,6 @@ import time
 import traceback
 
 from itertools import chain
-from Queue import Empty
 from threading import RLock
 
 from kombu.utils import limits as _limits
@@ -345,10 +344,10 @@ class LRUCache(UserDict):
         return self.data.keys()
 
     def values(self):
-        return self.data.values()
+        return list(self.itervalues())
 
     def items(self):
-        return self.data.items()
+        return list(self.iteritems())
 
     def __setitem__(self, key, value):
         # remove least recently used key.
@@ -359,3 +358,17 @@ class LRUCache(UserDict):
 
     def __iter__(self):
         return self.data.iterkeys()
+
+    def iteritems(self):
+        for k in self.data:
+            try:
+                yield (k, self.data[k])
+            except KeyError:
+                pass
+
+    def itervalues(self):
+        for k in self.data:
+            try:
+                yield self.data[k]
+            except KeyError:
+                pass
