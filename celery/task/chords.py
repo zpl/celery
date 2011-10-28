@@ -1,7 +1,17 @@
+"""
+
+celery.task.chords
+==================
+
+Task chords (task set callbacks).
+
+"""
 from __future__ import absolute_import
 
 from ..app import app_or_default
 from ..utils import uuid
+
+__all__ = ["chord"]
 
 
 class chord(object):

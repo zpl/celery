@@ -1,7 +1,7 @@
-from __future__ import absolute_import
-from __future__ import with_statement
-
 """
+
+celery.worker.consumer
+======================
 
 This module contains the component responsible for consuming messages
 from the broker, processing the messages and keeping the broker connections
@@ -70,6 +70,9 @@ up and running.
   early, *then* close the connection.
 
 """
+from __future__ import absolute_import
+from __future__ import with_statement
+
 import socket
 import sys
 import threading
@@ -87,6 +90,8 @@ from . import state
 from .job import TaskRequest, InvalidTaskError
 from .control.registry import Panel
 from .heartbeat import Heart
+
+__all__ = ["QoS", "Consumer"]
 
 RUN = 0x1
 CLOSE = 0x2
@@ -243,6 +248,8 @@ class Consumer(object):
 
     #: The process mailbox (kombu pidbox node).
     pidbox_node = None
+    _pidbox_node_shutdown = None   # used for greenlets
+    _pidbox_node_stopped = None    # used for greenlets
 
     #: The current worker pool instance.
     pool = None
@@ -442,20 +449,22 @@ class Consumer(object):
 
     def close_connection(self):
         """Closes the current broker connection and all open channels."""
+
+        # We must set self.connection to None here, so
+        # that the green pidbox thread exits.
+        connection, self.connection = self.connection, None
+
         if self.task_consumer:
             self._debug("Closing consumer channel...")
             self.maybe_conn_error(self.task_consumer.cancel)
             self.task_consumer = \
                     self.maybe_conn_error(self.task_consumer.channel.close)
 
-        if self.broadcast_consumer:
-            self._debug("Closing broadcast channel...")
-            self.broadcast_consumer = \
-                self.maybe_conn_error(self.broadcast_consumer.channel.close)
+        self.stop_pidbox_node()
 
-        if self.connection:
+        if connection:
             self._debug("Closing broker connection...")
-            self.connection = self.maybe_conn_error(self.connection.close)
+            self.maybe_conn_error(connection.close)
 
     def stop_consumers(self, close_connection=True):
         """Stop consuming tasks and broadcast commands, also stops
@@ -508,6 +517,7 @@ class Consumer(object):
 
     def reset_pidbox_node(self):
         """Sets up the process mailbox."""
+        self.stop_pidbox_node()
         # close previously opened channel if any.
         if self.pidbox_node.channel:
             try:
@@ -522,20 +532,37 @@ class Consumer(object):
                                         callback=self.on_control)
         self.broadcast_consumer.consume()
 
+    def stop_pidbox_node(self):
+        if self._pidbox_node_stopped:
+            self._pidbox_node_shutdown.set()
+            self._debug("Waiting for broadcast thread to shutdown...")
+            self._pidbox_node_stopped.wait()
+            self._pidbox_node_stopped = self._pidbox_node_shutdown = None
+        elif self.broadcast_consumer:
+            self._debug("Closing broadcast channel...")
+            self.broadcast_consumer = \
+                self.maybe_conn_error(self.broadcast_consumer.channel.close)
+
     def _green_pidbox_node(self):
         """Sets up the process mailbox when running in a greenlet
         environment."""
-        conn = self._open_connection()
-        self.pidbox_node.channel = conn.channel()
-        self.broadcast_consumer = self.pidbox_node.listen(
-                                        callback=self.on_control)
-        self.broadcast_consumer.consume()
-
+        # THIS CODE IS TERRIBLE
+        # Luckily work has already started rewriting the Consumer for 3.0.
+        self._pidbox_node_shutdown = threading.Event()
+        self._pidbox_node_stopped = threading.Event()
         try:
-            while self.connection:  # main connection still open?
-                conn.drain_events()
+            with self._open_connection() as conn:
+                self.pidbox_node.channel = conn.default_channel
+                self.broadcast_consumer = self.pidbox_node.listen(
+                                            callback=self.on_control)
+                with self.broadcast_consumer:
+                    while not self._pidbox_node_shutdown.isSet():
+                        try:
+                            conn.drain_events(timeout=1.0)
+                        except socket.timeout:
+                            pass
         finally:
-            conn.close()
+            self._pidbox_node_stopped.set()
 
     def reset_connection(self):
         """Re-establish the broker connection and set up consumers,

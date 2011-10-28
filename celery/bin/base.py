@@ -137,21 +137,31 @@ class Command(object):
                            option_list=(self.preload_options +
                                         self.get_options()))
 
+    def prepare_preload_options(self, options):
+        """Optional handler to do additional processing of preload options.
+
+        Configuration must not have been initialized
+        until after this is called.
+
+        """
+        pass
+
     def setup_app_from_commandline(self, argv):
         preload_options = self.parse_preload_options(argv)
-        app = (preload_options.pop("app", None) or
+        self.prepare_preload_options(preload_options)
+        app = (preload_options.get("app") or
                os.environ.get("CELERY_APP") or
                self.app)
-        loader = (preload_options.pop("loader", None) or
+        loader = (preload_options.get("loader") or
                   os.environ.get("CELERY_LOADER") or
                   "default")
-        broker = preload_options.pop("broker", None)
+        broker = preload_options.get("broker", None)
         if broker:
             if "://" in broker:
                 os.environ["CELERY_BROKER_URL"] = broker
             else:
                 os.environ["CELERY_BROKER_DEFAULT"] = broker
-        config_module = preload_options.pop("config_module", None)
+        config_module = preload_options.get("config_module", None)
         if config_module:
             os.environ["CELERY_CONFIG_MODULE"] = config_module
         if app:
@@ -202,7 +212,7 @@ class Command(object):
         return Celery(*args, **kwargs)
 
 
-def daemon_options(default_pidfile, default_logfile=None):
+def daemon_options(default_pidfile=None, default_logfile=None):
     return (
         Option('-f', '--logfile', default=default_logfile,
                action="store", dest="logfile",

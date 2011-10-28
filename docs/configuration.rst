@@ -232,10 +232,10 @@ the :setting:`CELERY_RESULT_ENGINE_OPTIONS` setting::
 .. setting:: CELERY_RESULT_DB_SHORT_LIVED_SESSIONS
     CELERY_RESULT_DB_SHORT_LIVED_SESSIONS = True
 
-Short lived sessions are disabled by default.  If enabled they can drastically reduce 
-performance, especially on systems processing lots of tasks.  This option is useful 
-on low-traffic workers that experience errors as a result of cached database connections 
-going stale through inactivity.  For example, intermittent errors like 
+Short lived sessions are disabled by default.  If enabled they can drastically reduce
+performance, especially on systems processing lots of tasks.  This option is useful
+on low-traffic workers that experience errors as a result of cached database connections
+going stale through inactivity.  For example, intermittent errors like
 `(OperationalError) (2006, 'MySQL server has gone away')` can be fixed by enabling
 short lived sessions.  This option only affects the database backend.
 
@@ -296,7 +296,7 @@ Example configuration
 .. code-block:: python
 
     CELERY_RESULT_BACKEND = "amqp"
-    CELERY_AMQP_TASK_RESULT_EXPIRES = 18000  # 5 hours.
+    CELERY_TASK_RESULT_EXPIRES = 18000  # 5 hours.
 
 .. _conf-cache-result-backend:
 

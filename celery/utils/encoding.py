@@ -1,3 +1,12 @@
+"""
+celery.utils.encoding
+=====================
+
+Utilities to encode text, and to safely emit text from running
+applications without crashing with the infamous :exc:`UnicodeDecodeError`
+exception.
+
+"""
 from __future__ import absolute_import
 
 from kombu.utils.encoding import (safe_str, safe_repr,  # noqa

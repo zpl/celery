@@ -2,10 +2,7 @@
 celery.datastructures
 =====================
 
-Custom data structures.
-
-:copyright: (c) 2009 - 2011 by Ask Solem.
-:license: BSD, see LICENSE for more details.
+Custom types and data structures.
 
 """
 from __future__ import absolute_import
@@ -16,12 +13,15 @@ import time
 import traceback
 
 from itertools import chain
-from Queue import Empty
 from threading import RLock
 
 from kombu.utils import limits as _limits
 
 from .utils.compat import UserDict, OrderedDict
+
+__all__ = ["AttributeDictMixin", "AttributeDict", "DictAttribute",
+           "ConfigurationView", "ExceptionInfo", "LimitedSet",
+           "LRUCache", "TokenBucket"]
 
 TokenBucket = _limits.TokenBucket
 
@@ -197,7 +197,7 @@ class _Frame(object):
         self.f_code = self.Code(frame.f_code)
 
 
-class _Traceback(object):
+class Traceback(object):
     Frame = _Frame
 
     def __init__(self, tb):
@@ -206,7 +206,7 @@ class _Traceback(object):
         if tb.tb_next is None:
             self.tb_next = None
         else:
-            self.tb_next = _Traceback(tb.tb_next)
+            self.tb_next = Traceback(tb.tb_next)
 
 
 class ExceptionInfo(object):
@@ -230,7 +230,7 @@ class ExceptionInfo(object):
 
     def __init__(self, exc_info):
         self.type, self.exception, tb = exc_info
-        self.tb = _Traceback(tb)
+        self.tb = Traceback(tb)
         self.traceback = ''.join(traceback.format_exception(*exc_info))
 
     def __str__(self):
@@ -242,30 +242,6 @@ class ExceptionInfo(object):
     @property
     def exc_info(self):
         return self.type, self.exception, self.tb
-
-
-def consume_queue(queue):
-    """Iterator yielding all immediately available items in a
-    :class:`Queue.Queue`.
-
-    The iterator stops as soon as the queue raises :exc:`Queue.Empty`.
-
-    *Examples*
-
-        >>> q = Queue()
-        >>> map(q.put, range(4))
-        >>> list(consume_queue(q))
-        [0, 1, 2, 3]
-        >>> list(consume_queue(q))
-        []
-
-    """
-    get = queue.get_nowait
-    while 1:
-        try:
-            yield get()
-        except Empty:
-            break
 
 
 class LimitedSet(object):
@@ -368,10 +344,10 @@ class LRUCache(UserDict):
         return self.data.keys()
 
     def values(self):
-        return self.data.values()
+        return list(self.itervalues())
 
     def items(self):
-        return self.data.items()
+        return list(self.iteritems())
 
     def __setitem__(self, key, value):
         # remove least recently used key.
@@ -382,3 +358,17 @@ class LRUCache(UserDict):
 
     def __iter__(self):
         return self.data.iterkeys()
+
+    def iteritems(self):
+        for k in self.data:
+            try:
+                yield (k, self.data[k])
+            except KeyError:
+                pass
+
+    def itervalues(self):
+        for k in self.data:
+            try:
+                yield self.data[k]
+            except KeyError:
+                pass

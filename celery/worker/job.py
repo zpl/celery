@@ -1,3 +1,13 @@
+"""
+
+celery.worker.job
+=================
+
+This module defines the :class:`TaskRequest` class,
+which specifies how tasks are executed and task state is
+published.
+
+"""
 from __future__ import absolute_import
 
 import os
@@ -23,6 +33,9 @@ from ..utils.timeutils import maybe_iso8601, timezone
 
 from . import state
 
+__all__ = ["InvalidTaskError", "WorkerTaskTrace",
+           "execute_and_trace", "TaskRequest"]
+
 #: Keys to keep from the message delivery info.  The values
 #: of these keys must be pickleable.
 WANTED_DELIVERY_INFO = ("exchange", "routing_key", "consumer_tag", )
@@ -30,6 +43,7 @@ WANTED_DELIVERY_INFO = ("exchange", "routing_key", "consumer_tag", )
 
 class InvalidTaskError(Exception):
     """The task has invalid data or is not properly constructed."""
+    pass
 
 
 if sys.version_info >= (3, 0):
@@ -272,14 +286,20 @@ class TaskRequest(object):
         delivery_info = dict((key, delivery_info.get(key))
                                 for key in WANTED_DELIVERY_INFO)
 
-        kwargs = body["kwargs"]
+        kwargs = body.get("kwargs", {})
         if not hasattr(kwargs, "items"):
             raise InvalidTaskError("Task keyword arguments is not a mapping.")
+        try:
+            task_name = body["task"]
+            task_id = body["id"]
+        except KeyError, exc:
+            raise InvalidTaskError(
+                "Task message is missing required field %r" % (exc, ))
 
-        return cls(task_name=body["task"],
-                   task_id=body["id"],
+        return cls(task_name=task_name,
+                   task_id=task_id,
                    taskset_id=body.get("taskset", None),
-                   args=body["args"],
+                   args=body.get("args", []),
                    kwargs=kwdict(kwargs),
                    chord=body.get("chord"),
                    retries=body.get("retries", 0),

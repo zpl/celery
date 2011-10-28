@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+
+celery.task
+===========
+
+Creating tasks and subtasks
+
+"""
 from __future__ import absolute_import
 
 from .. import current_app
@@ -8,7 +16,8 @@ from .base import Task, PeriodicTask
 from .sets import TaskSet, subtask
 from .chords import chord
 
-__all__ = ["Task", "TaskSet", "PeriodicTask", "subtask", "chord"]
+__all__ = ["Task", "TaskSet", "PeriodicTask", "subtask", "chord", "group"]
+group = TaskSet
 
 
 def task(*args, **kwargs):
