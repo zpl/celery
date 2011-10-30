@@ -1,16 +1,18 @@
+# -*- coding: utf-8 -*-
 """
+    celery.registry
+    ~~~~~~~~~~~~~~~
 
-celery.registry
-===============
+    Registry of available tasks.
+    See module :mod:`celery.app.registry`.
 
-Registry of available tasks.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
 
 from . import current_app
 from .local import Proxy
-
-__all__ = ["tasks"]
 
 tasks = Proxy(lambda: current_app.tasks)

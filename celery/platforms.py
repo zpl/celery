@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
 """
+    celery.platforms
+    ~~~~~~~~~~~~~~~~
 
-celery.platforms
-================
+    Utilities dealing with platform specifics: signals, daemonization,
+    users, groups, and so on.
 
-Utilities dealing with platform specifics: signals, daemonization, users &
-groups, etc.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -22,12 +25,6 @@ _setproctitle = try_import("setproctitle")
 resource = try_import("resource")
 pwd = try_import("pwd")
 grp = try_import("grp")
-
-__all__ = ["LockFailed", "get_fdmax", "create_pidlock",
-           "DaemonContext", "detached", "parse_uid", "parse_gid",
-           "setegid", "seteuid", "set_effective_user", "Signals",
-           "set_process_title", "set_mp_process_title",
-           "pyimplementation", "system", "architecture", "python_version"]
 
 SYSTEM = _platform.system()
 IS_OSX = SYSTEM == "Darwin"

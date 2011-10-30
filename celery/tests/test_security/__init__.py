@@ -8,7 +8,8 @@ Generated with::
     $ openssl req -new -key key1.key -out key1.csr -passin pass:test
     $ cp key1.key key1.key.org
     $ openssl rsa -in key1.key.org -out key1.key -passin pass:test
-    $ openssl x509 -req -days 365 -in cert1.csr -signkey key1.key -out cert1.crt
+    $ openssl x509 -req -days 365 -in cert1.csr \
+              -signkey key1.key -out cert1.crt
     $ rm key1.key.org cert1.csr
 
 """

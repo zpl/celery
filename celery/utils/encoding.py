@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
 """
-celery.utils.encoding
-=====================
+    celery.utils.encoding
+    ~~~~~~~~~~~~~~~~~~~~~
 
-Utilities to encode text, and to safely emit text from running
-applications without crashing with the infamous :exc:`UnicodeDecodeError`
-exception.
+    Utilities to encode text, and to safely emit text from running
+    applications without crashing with the infamous :exc:`UnicodeDecodeError`
+    exception.
+
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import

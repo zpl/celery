@@ -199,15 +199,15 @@ Important Notes
 * The :setting:`CELERY_TASK_ERROR_WHITELIST` setting has been replaced
   by a more flexible approach (Issue #447).
 
-  The Mail sending logic is now available as ``Task.ErrorMail``.
-  The actual implementation is in :mod:`celery.utils.mail`.
+    The error mail sending logic is now available as ``Task.ErrorMail``,
+    with the implementation (for reference) in :mod:`celery.utils.mail`.
 
-  The error mail class can be sub-classed to gain complete control
-  of when error messages are sent, thus removing the need for a separate
-  white-list setting.
+    The error mail class can be sub-classed to gain complete control
+    of when error messages are sent, thus removing the need for a separate
+    white-list setting.
 
-  The :setting:`CELERY_TASK_ERROR_WHITELIST` setting has been deprecated,
-  and will be removed completely in version 3.0.
+    The :setting:`CELERY_TASK_ERROR_WHITELIST` setting has been deprecated,
+    and will be removed completely in version 3.0.
 
 * Additional Deprecations
 
@@ -334,7 +334,7 @@ News
 
 * The :setting:`CELERYBEAT_MAX_LOOP_INTERVAL` setting was not respected.
 
-* ``inspect.registered_tasks`` renamed to ``inspect.tasks`` for naming
+* ``inspect.registered_tasks`` renamed to ``inspect.registered`` for naming
   consistency.
 
     The previous name is still available as an alias.
@@ -412,7 +412,7 @@ News
     If you'd like to contribute to Celery you should read this
     guide: http://ask.github.com/celery/contributing.html
 
-    We are looking for contributors of all skill levels, so don't
+    We are looking for contributors at all skill levels, so don't
     hesitate!
 
 * Now depends on Kombu 1.3.1

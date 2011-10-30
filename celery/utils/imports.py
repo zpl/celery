@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 from __future__ import with_statement
 
@@ -7,13 +8,6 @@ import os
 import sys
 
 from contextlib import contextmanager
-
-__all__ = ["get_full_cls_name",
-           "get_cls_by_name",
-           "instantiate",
-           "cwd_in_path",
-           "find_module",
-           "import_from_cwd"]
 
 
 def get_full_cls_name(cls):

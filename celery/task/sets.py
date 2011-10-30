@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 """
+    celery.task.sets
+    ~~~~~~~~~~~~~~~~
 
-celery.task.sets
-================
+    Creating and applying groups of tasks.
 
-Creating and applying task groups.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -14,8 +17,6 @@ from ..app import app_or_default
 from ..datastructures import AttributeDict
 from ..utils import cached_property, reprcall, uuid
 from ..utils.compat import UserList
-
-__all__ = ["subtask", "TaskSet"]
 
 
 class subtask(AttributeDict):
@@ -90,6 +91,12 @@ class subtask(AttributeDict):
         return current_app.tasks[self.task]
 
 
+def maybe_subtask(t):
+    if not isinstance(t, subtask):
+        return subtask(t)
+    return t
+
+
 class TaskSet(UserList):
     """A task containing several subtasks, making it possible
     to track how many, or when all of the tasks have been completed.
@@ -109,7 +116,7 @@ class TaskSet(UserList):
 
     def __init__(self, tasks=None, app=None):
         self.app = app_or_default(app)
-        self.data = list(tasks or [])
+        self.data = [maybe_subtask(t) for t in tasks or []]
         self.total = len(self.tasks)
 
     def apply_async(self, connection=None, producer=None, taskset_id=None,

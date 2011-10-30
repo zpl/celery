@@ -1,17 +1,18 @@
+# -*- coding: utf-8 -*-
 """
+    celery.task.chords
+    ~~~~~~~~~~~~~~~~~~
 
-celery.task.chords
-==================
+    Chords (task set callbacks).
 
-Task chords (task set callbacks).
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
 
 from ..app import app_or_default
 from ..utils import uuid
-
-__all__ = ["chord"]
 
 
 class chord(object):

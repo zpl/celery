@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
 """
-celery.utils.compat
-===================
+    celery.utils.compat
+    ~~~~~~~~~~~~~~~~~~~
 
-Backward compatible implementations of features
-only available in later Python versions.
+    Backward compatible implementations of features
+    only available in newer Python versions.
+
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -155,14 +159,14 @@ try:
 except ImportError:
     LoggerAdapter = _CompatLoggerAdapter  # noqa
 
-############## itertools.izip_longest #######################################
+############## itertools.zip_longest #######################################
 
 try:
-    from itertools import izip_longest
+    from itertools import izip_longest as zip_longest
 except ImportError:
     import itertools
 
-    def izip_longest(*args, **kwds):  # noqa
+    def zip_longest(*args, **kwds):  # noqa
         fillvalue = kwds.get("fillvalue")
 
         def sentinel(counter=([fillvalue] * (len(args) - 1)).pop):

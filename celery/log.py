@@ -1,11 +1,4 @@
-"""
-
-celery.log
-==========
-
-Logging utilities.
-
-"""
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 from . import current_app

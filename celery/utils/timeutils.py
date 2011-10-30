@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 """
+    celery.utils.timeutils
+    ~~~~~~~~~~~~~~~~~~~~~~
 
-celery.utils.timeutils
-======================
+    This module contains various utilities relating to dates and times.
 
-This module contains various utilties relating to time and date.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -20,10 +23,6 @@ try:
     import pytz
 except ImportError:
     pytz = None  # noqa
-
-__all__ = ["maybe_timedelta", "timedelta_seconds", "delta_resolution",
-           "remaining", "rate", "weekday", "humanize_seconds",
-           "maybe_iso8601", "UnknownTimezone", "timezone"]
 
 DAYNAMES = "sun", "mon", "tue", "wed", "thu", "fri", "sat"
 WEEKDAYS = dict((name, dow) for name, dow in zip(DAYNAMES, range(7)))

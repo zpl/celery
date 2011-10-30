@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 """
+    celery.beat
+    ~~~~~~~~~~~
 
-celery.beat
-===========
+    The Celery periodic task scheduler.
 
-The Celery periodic task scheduler.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -31,9 +34,6 @@ from .utils import cached_property
 from .utils.functional import maybe_promise
 from .utils.imports import instantiate
 from .utils.timeutils import humanize_seconds
-
-__all__ = ["SchedulingError", "ScheduleEntry", "Scheduler",
-           "Service", "EmbeddedService"]
 
 
 class SchedulingError(Exception):
