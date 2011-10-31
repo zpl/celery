@@ -5,7 +5,7 @@ from datetime import datetime
 
 import sqlalchemy as sa
 
-from .. import states
+from ... import states
 
 from .session import ResultModelBase
 

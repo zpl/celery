@@ -3,13 +3,14 @@ from __future__ import absolute_import
 
 from datetime import datetime
 
-from .. import states
-from ..db.models import Task, TaskSet
-from ..db.session import ResultSession
-from ..exceptions import ImproperlyConfigured
-from ..utils.timeutils import maybe_timedelta
+from ... import states
+from ...exceptions import ImproperlyConfigured
+from ...utils.timeutils import maybe_timedelta
 
-from .base import BaseDictBackend
+from ..base import BaseDictBackend
+from .models import Task, TaskSet
+from .session import ResultSession
+
 
 
 def _sqlalchemy_installed():

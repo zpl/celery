@@ -41,8 +41,8 @@
     celery.events.snapshot
     celery.events.cursesmon
     celery.events.dumper
-    celery.db.models
-    celery.db.session
+    celery.backends.database.models
+    celery.backends.database.session
     celery.platforms
     celery.security
     celery.security.certificate
