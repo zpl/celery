@@ -10,7 +10,7 @@ from .serialization import register_auth
 
 
 def _disable_insecure_serializers(whitelist=[]):
-    for name in set("pickle", "json", "yaml", "msgpack") - set(whitelist):
+    for name in set(["pickle", "json", "yaml", "msgpack"]) - set(whitelist):
         try:
             unregister(name)
         except SerializerNotInstalled:
