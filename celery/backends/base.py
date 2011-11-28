@@ -13,7 +13,7 @@ from .. import states
 from ..datastructures import LRUCache
 from ..exceptions import TimeoutError, TaskRevokedError
 from ..utils import timeutils
-from ..utils.encoding import from_utf8
+from ..utils.encoding import ensure_bytes, from_utf8
 from ..utils.serialization import (get_pickled_exception,
                                    get_pickleable_exception,
                                    create_exception_cls)
@@ -39,6 +39,9 @@ class BaseBackend(object):
     #: in `ResultSet.iterate`. as opposed to the `interval`
     #: argument which is for each pass.
     subpolling_interval = None
+
+    #: If true the backend must implement :meth:`get_many`.
+    supports_native_join = False
 
     def __init__(self, *args, **kwargs):
         from ..app import app_or_default
@@ -200,11 +203,12 @@ class BaseBackend(object):
         raise NotImplementedError(
                 "reload_taskset_result is not supported by this backend.")
 
-    def on_chord_part_return(self, task):
+    def on_chord_part_return(self, task, propagate=False):
         pass
 
-    def on_chord_apply(self, setid, body, *args, **kwargs):
+    def on_chord_apply(self, setid, body, result=None, **kwargs):
         from ..registry import tasks
+        kwargs["result"] = [r.task_id for r in result]
         tasks["celery.chord_unlock"].apply_async((setid, body, ), kwargs,
                                                  countdown=1)
 
@@ -297,6 +301,7 @@ class BaseDictBackend(BaseBackend):
 class KeyValueStoreBackend(BaseDictBackend):
     task_keyprefix = "celery-task-meta-"
     taskset_keyprefix = "celery-taskset-meta-"
+    chord_keyprefix = "chord-unlock-"
 
     def get(self, key):
         raise NotImplementedError("Must implement the get method.")
@@ -312,11 +317,15 @@ class KeyValueStoreBackend(BaseDictBackend):
 
     def get_key_for_task(self, task_id):
         """Get the cache key for a task by id."""
-        return self.task_keyprefix + task_id
+        return ensure_bytes(self.task_keyprefix) + ensure_bytes(task_id)
 
     def get_key_for_taskset(self, taskset_id):
-        """Get the cache key for a task by id."""
-        return self.taskset_keyprefix + taskset_id
+        """Get the cache key for a taskset by id."""
+        return ensure_bytes(self.taskset_keyprefix) + ensure_bytes(taskset_id)
+
+    def get_key_for_chord(self, taskset_id):
+        """Get the cache key for the chord waiting on taskset with given id."""
+        return ensure_bytes(self.chord_keyprefix) + ensure_bytes(taskset_id)
 
     def _strip_prefix(self, key):
         for prefix in self.task_keyprefix, self.taskset_keyprefix:

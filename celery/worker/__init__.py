@@ -14,10 +14,10 @@ from __future__ import absolute_import
 import atexit
 import logging
 import socket
+import sys
 import threading
 import traceback
 
-from kombu.syn import blocking
 from kombu.utils.finalize import Finalize
 
 from .. import beat
@@ -262,10 +262,14 @@ class WorkController(object):
                 self.logger.debug("Starting thread %s...",
                                   component.__class__.__name__)
                 self._running = i + 1
-                blocking(component.start)
+                component.start()
         except SystemTerminate:
             self.terminate()
-        except:
+        except Exception, exc:
+            self.logger.error("Unrecoverable error: %r" % (exc, ),
+                              exc_info=sys.exc_info())
+            self.stop()
+        except (KeyboardInterrupt, SystemExit):
             self.stop()
 
         # Will only get here if running green,
@@ -291,12 +295,12 @@ class WorkController(object):
     def stop(self, in_sighandler=False):
         """Graceful shutdown of the worker server."""
         if not in_sighandler or self.pool.signal_safe:
-            blocking(self._shutdown, warm=True)
+            self._shutdown(warm=True)
 
     def terminate(self, in_sighandler=False):
         """Not so graceful shutdown of the worker server."""
         if not in_sighandler or self.pool.signal_safe:
-            blocking(self._shutdown, warm=False)
+            self._shutdown(warm=False)
 
     def _shutdown(self, warm=True):
         what = (warm and "stopping" or "terminating").capitalize()

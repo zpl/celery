@@ -12,7 +12,6 @@ from .models import Task, TaskSet
 from .session import ResultSession
 
 
-
 def _sqlalchemy_installed():
     try:
         import sqlalchemy

@@ -1,15 +1,15 @@
 from __future__ import absolute_import
 from __future__ import with_statement
 
-from mock import patch
-from contextlib import contextmanager
-
 from celery import current_app
+from celery import result
 from celery.task import chords
-from celery.task import task, TaskSet
+from celery.task import sets
 from celery.tests.utils import AppCase, Mock
 
-passthru = lambda x: x
+
+def passthru(x):
+    return x
 
 
 @current_app.task
@@ -17,50 +17,63 @@ def add(x, y):
     return x + y
 
 
-@contextmanager
-def patch_unlock_retry():
-    unlock = current_app.tasks["celery.chord_unlock"]
-    retry = Mock()
-    prev, unlock.retry = unlock.retry, retry
-    yield unlock, retry
-    unlock.retry = prev
+@current_app.task
+def callback(r):
+    return r
+
+
+class TSR(result.TaskSetResult):
+    is_ready = True
+    value = [2, 4, 8, 6]
+
+    def ready(self):
+        return self.is_ready
+
+    def join(self, **kwargs):
+        return self.value
+
+    def join_native(self, **kwargs):
+        return self.value
 
 
 class test_unlock_chord_task(AppCase):
 
-    @patch("celery.result.TaskSetResult")
-    def test_unlock_ready(self, TaskSetResult):
+    def test_unlock_ready(self):
+        callback.apply_async = Mock()
 
-        @task
-        def callback(*args, **kwargs):
-            pass
+        unlock = self.app.tasks["celery.chord_unlock"]
+        retry = unlock.retry = Mock()
 
-        callback.delay = Mock()
-        with patch_unlock_retry() as (unlock, retry):
-            from celery.task import sets
-            result = Mock(attrs=dict(ready=lambda: True,
-                                    join=lambda **kw: [2, 4, 8, 6]))
-            TaskSetResult.restore = lambda setid, **kw: result
-            subtask, sets.subtask = sets.subtask, passthru
-            try:
-                unlock("setid", callback)
-            finally:
-                sets.subtask = subtask
-            result.delete.assert_called_with()
-            callback.delay.assert_called_with([2, 4, 8, 6])
-            # did not retry
-            self.assertFalse(retry.call_count)
+        body = callback.subtask()
+        pts, result.TaskSetResult = result.TaskSetResult, TSR
+        subtask, sets.subtask = sets.subtask, passthru
+        try:
+            unlock("setid", body, result=[1, 2, 3])
+        finally:
+            sets.subtask = subtask
+            result.TaskSetResult = pts
+        callback.apply_async.assert_called_with(([2, 4, 8, 6], ), {})
+        # did not retry
+        self.assertFalse(retry.call_count)
 
-    @patch("celery.result.TaskSetResult")
-    def test_when_not_ready(self, TaskSetResult):
-        with patch_unlock_retry() as (unlock, retry):
-            callback = Mock()
-            result = Mock(attrs=dict(ready=lambda: False))
-            TaskSetResult.restore = lambda setid, **kw: result
-            unlock("setid", callback, interval=10, max_retries=30)
-            self.assertFalse(callback.delay.call_count)
+    def test_when_not_ready(self):
+        callback.apply_async = Mock()
+        unlock = self.app.tasks["celery.chord_unlock"]
+        retry = unlock.retry = Mock()
+
+        class NeverReady(TSR):
+            is_ready = False
+
+        pts, result.TaskSetResult = result.TaskSetResult, NeverReady
+        try:
+            unlock("setid", callback.subtask, interval=10,
+                            max_retries=30, result=[1, 2, 3])
+            self.assertFalse(callback.apply_async.call_count)
             # did retry
-            unlock.retry.assert_called_with(countdown=10, max_retries=30)
+            retry.assert_called_with(countdown=10,
+                                     max_retries=30)
+        finally:
+            result.TaskSetResult = pts
 
     def test_is_in_registry(self):
         self.assertIn("celery.chord_unlock", current_app.tasks)
@@ -93,6 +106,7 @@ class test_Chord_task(AppCase):
             backend = Mock()
 
         body = dict()
-        Chord()(TaskSet(add.subtask((i, i)) for i in xrange(5)), body)
+        Chord()(self.app.TaskSet(add.subtask((i, i))
+                                    for i in xrange(5)), body)
         Chord()([add.subtask((i, i)) for i in xrange(5)], body)
         self.assertEqual(Chord.backend.on_chord_apply.call_count, 2)

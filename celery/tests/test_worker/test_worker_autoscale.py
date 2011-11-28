@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import logging
+import sys
 
 from time import time
 
@@ -53,7 +54,7 @@ class test_Autoscaler(unittest.TestCase):
             alive = True
             joined = False
 
-            def isAlive(self):
+            def is_alive(self):
                 return self.alive
 
             def join(self, timeout=None):
@@ -90,7 +91,7 @@ class test_Autoscaler(unittest.TestCase):
         class Scaler(autoscale.Autoscaler):
             scale_called = False
 
-            def scale(self):
+            def body(self):
                 self.scale_called = True
                 self._is_shutdown.set()
 
@@ -116,17 +117,40 @@ class test_Autoscaler(unittest.TestCase):
         x.scale_down(1)
         self.assertTrue(x.logger.debug.call_count)
 
+    def test_update_and_force(self):
+        x = autoscale.Autoscaler(self.pool, 10, 3, logger=logger)
+        self.assertEqual(x.processes, 3)
+        x.force_scale_up(5)
+        self.assertEqual(x.processes, 8)
+        x.update(5, None)
+        self.assertEqual(x.processes, 5)
+        x.force_scale_down(3)
+        self.assertEqual(x.processes, 2)
+        x.update(3, None)
+        self.assertEqual(x.processes, 3)
+
+    def test_info(self):
+        x = autoscale.Autoscaler(self.pool, 10, 3, logger=logger)
+        info = x.info()
+        self.assertEqual(info['max'], 10)
+        self.assertEqual(info['min'], 3)
+        self.assertEqual(info['current'], 3)
+
     @patch("os._exit")
     def test_thread_crash(self, _exit):
 
         class _Autoscaler(autoscale.Autoscaler):
 
-            def scale(self):
+            def body(self):
                 self._is_shutdown.set()
                 raise OSError("foo")
-
         x = _Autoscaler(self.pool, 10, 3, logger=logger)
-        x.logger = Mock()
-        x.run()
+
+        stderr = Mock()
+        p, sys.stderr = sys.stderr, stderr
+        try:
+            x.run()
+        finally:
+            sys.stderr = p
         _exit.assert_called_with(1)
-        self.assertTrue(x.logger.error.call_count)
+        self.assertTrue(stderr.write.call_count)

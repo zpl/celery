@@ -24,6 +24,8 @@ from ..utils import text
 from . import routes as _routes
 
 # UTC timezone mark.
+# Defaults to local in 2.5, and UTC in 3.x.
+TZ_LOCAL = 0x0
 TZ_UTC = 0x1
 
 #: List of known options to a Kombu producers send method.

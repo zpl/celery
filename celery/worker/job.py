@@ -29,9 +29,9 @@ from ..execute.trace import TaskTrace
 from ..utils import kwdict
 from ..utils.functional import noop
 from ..utils.encoding import safe_repr, safe_str, default_encoding
-from ..utils.serialization import get_pickleable_exception
 from ..utils.text import truncate
 from ..utils.timeutils import maybe_iso8601, timezone
+from ..utils.serialization import get_pickleable_exception
 
 from . import state
 

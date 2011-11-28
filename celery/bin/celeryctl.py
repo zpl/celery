@@ -10,11 +10,11 @@ from textwrap import wrap
 
 from anyjson import deserialize
 
-from .. import __version__
-from ..app import app_or_default, current_app
-from ..utils import term
+from celery import __version__
+from celery.app import app_or_default, current_app
+from celery.utils import term
 
-from .base import Command as CeleryCommand
+from celery.bin.base import Command as CeleryCommand
 
 
 commands = {}
@@ -242,7 +242,7 @@ class inspect(Command):
 
     def run(self, *args, **kwargs):
         self.quiet = kwargs.get("quiet", False)
-        self.show_body = kwargs.get("show_body", False)
+        self.show_body = kwargs.get("show_body", True)
         if not args:
             raise Error("Missing inspect command. See --help")
         command = args[0]

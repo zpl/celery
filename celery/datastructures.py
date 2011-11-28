@@ -193,7 +193,9 @@ class _Frame(object):
     Code = _Code
 
     def __init__(self, frame):
-        self.f_globals = {"__file__": frame.f_globals["__file__"]}
+        self.f_globals = {
+            "__file__": frame.f_globals.get("__file__", "__main__"),
+        }
         self.f_code = self.Code(frame.f_code)
 
 
@@ -374,3 +376,11 @@ class LRUCache(UserDict):
             except KeyError:
                 pass
     itervalues = _iterate_values
+
+    def incr(self, key, delta=1):
+        with self.mutex:
+            # this acts as memcached does- store as a string, but return a
+            # integer as long as it exists and we can cast it
+            newval = int(self.data.pop(key)) + delta
+            self[key] = str(newval)
+            return newval

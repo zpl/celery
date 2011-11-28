@@ -29,9 +29,9 @@ import os
 
 from functools import partial
 
-from ..platforms import detached
+from celery.platforms import detached
 
-from .base import Command, Option, daemon_options
+from celery.bin.base import Command, Option, daemon_options
 
 
 class BeatCommand(Command):
@@ -77,11 +77,7 @@ class BeatCommand(Command):
                 default=None,
                 action="store", dest="scheduler_cls",
                 help="Scheduler class. Default is "
-                     "celery.beat.PersistentScheduler"),
-            Option('-l', '--loglevel',
-                default=conf.CELERYBEAT_LOG_LEVEL,
-                action="store", dest="loglevel",
-                help="Loglevel. One of DEBUG/INFO/WARNING/ERROR/CRITICAL."))
+                     "celery.beat.PersistentScheduler"))
 
 
 def main():

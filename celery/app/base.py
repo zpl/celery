@@ -226,6 +226,7 @@ class BaseApp(object):
         :keyword connect_timeout: or the ``connect_timeout`` field of the
             default broker.
         :keyword transport: or the ``transport`` field of the default broker.
+        :keyword transport_options: Additional transport-specific options.
 
         :returns :class:`kombu.connection.BrokerConnection`:
 
