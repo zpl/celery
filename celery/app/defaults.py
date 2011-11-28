@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+    celery.app.defaults
+    ~~~~~~~~~~~~~~~~~~~
+
+    Configuration introspection and defaults.
+
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
+
+"""
 from __future__ import absolute_import
 
 import sys
@@ -65,7 +76,7 @@ NAMESPACES = {
         "CONNECTION_RETRY": Option(True, type="bool", key="connection_retry"),
         "CONNECTION_MAX_RETRIES": Option(100, type="int",
                                          key="connection_max_retries"),
-        "POOL_LIMIT": Option(None, type="int", key=None),
+        "POOL_LIMIT": Option(10, type="int", key=None),
         "USE_SSL": Option(False, type="bool", key="ssl"),
         "TRANSPORT": Option(None, type="string", key="transport"),
         "TRANSPORT_OPTIONS": Option({}, type="dict", key="transport_options"),
@@ -98,6 +109,7 @@ NAMESPACES = {
         "REDIS_PORT": Option(None, type="int"),
         "REDIS_DB": Option(None, type="int"),
         "REDIS_PASSWORD": Option(None, type="string"),
+        "REDIS_MAX_CONNECTIONS": Option(None, type="int"),
         "RESULT_BACKEND": Option(None, type="string"),
         "RESULT_DB_SHORT_LIVED_SESSIONS": Option(False, type="bool"),
         "RESULT_DBURI": Option(),
@@ -124,6 +136,9 @@ NAMESPACES = {
         "REDIRECT_STDOUTS": Option(True, type="bool"),
         "REDIRECT_STDOUTS_LEVEL": Option("WARNING"),
         "QUEUES": Option(None, type="dict"),
+        "SECURITY_KEY": Option(None, type="string"),
+        "SECURITY_CERTIFICATE": Option(None, type="string"),
+        "SECURITY_CERT_STORE": Option(None, type="string"),
     },
     "CELERYD": {
         "AUTOSCALER": Option("celery.worker.autoscale.Autoscaler"),

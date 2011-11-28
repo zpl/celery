@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 """
+    celery.utils.functional
+    ~~~~~~~~~~~~~~~~~~~~~~~
 
-celery.utils.functional
-=======================
+    Utilities for functions.
 
-Functional utilities.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -20,18 +23,7 @@ except ImportError:
 
 from celery.datastructures import LRUCache
 
-__all__ = ["maybe_list", "memoize"]
-
 KEYWORD_MARK = object()
-
-__all__ = ["firstmethod",
-           "padlist",
-           "promise",
-           "mpromise",
-           "maybe_list",
-           "maybe_promise",
-           "noop",
-           "memoize"]
 
 
 def maybe_list(l):

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 import logging
@@ -76,7 +77,7 @@ class BasePool(object):
             soft_timeout=None, timeout=None, **compat):
         """Equivalent of the :func:`apply` built-in function.
 
-        Callbacks should optimally return as soon as possible ince
+        Callbacks should optimally return as soon as possible since
         otherwise the thread which handles the result will get blocked.
 
         """

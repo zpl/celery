@@ -36,6 +36,8 @@ class AMQPBackend(BaseDictBackend):
 
     BacklogLimitExceeded = BacklogLimitExceeded
 
+    supports_native_join = True
+
     def __init__(self, connection=None, exchange=None, exchange_type=None,
             persistent=None, serializer=None, auto_delete=True,
             **kwargs):
@@ -52,7 +54,7 @@ class AMQPBackend(BaseDictBackend):
                                       type=exchange_type,
                                       delivery_mode=delivery_mode,
                                       durable=self.persistent,
-                                      auto_delete=auto_delete)
+                                      auto_delete=False)
         self.serializer = serializer or conf.CELERY_RESULT_SERIALIZER
         self.auto_delete = auto_delete
 

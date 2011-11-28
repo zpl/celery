@@ -1,20 +1,22 @@
+# -*- coding: utf-8 -*-
 """
+    celery.worker.autoscale
+    ~~~~~~~~~~~~~~~~~~~~~~~
 
-celery.worker.autoscale
-=======================
+    This module implements the internal thread responsible
+    for growing and shrinking the pool according to the
+    current autoscale settings.
 
-This module implements the internal thread responsible
-for growing and shrinking the pool according to the
-current autoscale settings.
+    The autoscale thread is only enabled if autoscale
+    has been enabled on the command line.
 
-The autoscale thread is only enabled if autoscale
-has been enabled on the command line.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
 from __future__ import with_statement
 
-import os
 import sys
 import threading
 import traceback
@@ -22,15 +24,14 @@ import traceback
 from time import sleep, time
 
 from . import state
+from ..utils.threads import bgThread
 
-__all__ = ["Autoscaler"]
 
-
-class Autoscaler(threading.Thread):
+class Autoscaler(bgThread):
 
     def __init__(self, pool, max_concurrency, min_concurrency=0,
             keepalive=30, logger=None):
-        threading.Thread.__init__(self)
+        super(Autoscaler, self).__init__()
         self.pool = pool
         self.mutex = threading.Lock()
         self.max_concurrency = max_concurrency
@@ -38,14 +39,10 @@ class Autoscaler(threading.Thread):
         self.keepalive = keepalive
         self.logger = logger
         self._last_action = None
-        self._is_shutdown = threading.Event()
-        self._is_stopped = threading.Event()
-        self.setDaemon(True)
-        self.setName(self.__class__.__name__)
 
         assert self.keepalive, "can't scale down too fast."
 
-    def scale(self):
+    def body(self):
         with self.mutex:
             current = min(self.qty, self.max_concurrency)
             if current > self.processes:
@@ -53,6 +50,8 @@ class Autoscaler(threading.Thread):
             elif current < self.processes:
                 self.scale_down(
                     (self.processes - current) - self.min_concurrency)
+        sleep(1.0)
+    scale = body  # XXX compat
 
     def update(self, max=None, min=None):
         with self.mutex:
@@ -107,23 +106,6 @@ class Autoscaler(threading.Thread):
         if time() - self._last_action > self.keepalive:
             self._last_action = time()
             self._shrink(n)
-
-    def run(self):
-        while not self._is_shutdown.isSet():
-            try:
-                self.scale()
-                sleep(1.0)
-            except Exception, exc:
-                self.logger.error("Thread Autoscaler crashed: %r", exc,
-                                  exc_info=sys.exc_info())
-                os._exit(1)
-        self._is_stopped.set()
-
-    def stop(self):
-        self._is_shutdown.set()
-        self._is_stopped.wait()
-        if self.isAlive():
-            self.join(1e10)
 
     def info(self):
         return {"max": self.max_concurrency,

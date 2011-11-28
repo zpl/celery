@@ -22,15 +22,19 @@ def add_backend_cleanup_task(app):
 
 @builtin_task
 def add_unlock_chord_task(app):
+
     @app.task(name="celery.chord_unlock", max_retries=None)
     def _unlock_chord(setid, callback, interval=1, propagate=False,
-            max_retries=None):
-        from ...result import TaskSetResult
+            max_retries=None, result=None):
+        from ...result import AsyncResult, TaskSetResult
         from ...task.sets import subtask
-        result = TaskSetResult.restore(setid, backend=app.backend)
+
+        result = TaskSetResult(setid, map(AsyncResult, result))
         if result.ready():
-            subtask(callback).delay(result.join(propagate=propagate))
-            result.delete()
+            j = result.join
+            if result.supports_native_join:
+                j = result.join_native
+            subtask(callback).delay(j(propagate=propagate))
         else:
             _unlock_chord.retry(countdown=interval, max_retries=max_retries)
 
@@ -52,10 +56,11 @@ def add_Chord_task(app):
                 tid = uuid()
                 task.options.update(task_id=tid, chord=body)
                 r.append(self.app.AsyncResult(tid))
-            self.app.TaskSetResult(setid, r).save()
-            self.backend.on_chord_apply(setid, body, interval,
+            self.backend.on_chord_apply(setid, body,
+                                        interval=interval,
                                         max_retries=max_retries,
-                                        propagate=propagate)
+                                        propagate=propagate,
+                                        result=r)
             return set.apply_async(taskset_id=setid)
 
 

@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 """
+    celery.utils.mail
+    ~~~~~~~~~~~~~~~~~
 
-celery.utils.mail
-=================
+    How task error emails are formatted and sent.
 
-How task error emails are formatted and sent.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
-
 from __future__ import absolute_import
 
 import sys
@@ -18,8 +20,6 @@ except ImportError:
     from email.MIMEText import MIMEText  # noqa
 
 supports_timeout = sys.version_info >= (2, 6)
-
-__all__ = ["SendmailWarning", "Message", "Mailer", "ErrorMail"]
 
 
 class SendmailWarning(UserWarning):

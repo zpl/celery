@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """camqadm
 
 .. program:: camqadm
@@ -18,7 +18,7 @@ from amqplib import client_0_8 as amqp
 from ..app import app_or_default
 from ..utils.functional import padlist
 
-from .base import Command
+from celery.bin.base import Command
 
 # Valid string -> bool coercions.
 BOOLS = {"1": True, "0": False,

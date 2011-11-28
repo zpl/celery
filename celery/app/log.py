@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 import logging
@@ -150,9 +151,9 @@ class Logging(object):
         """
         proxy = LoggingProxy(logger, loglevel)
         if stdout:
-            sys.stdout = sys.__stdout__ = proxy
+            sys.stdout = proxy
         if stderr:
-            sys.stderr = sys.__stderr__ = proxy
+            sys.stderr = proxy
         return proxy
 
     def _setup_logger(self, logger, logfile, format, colorize,

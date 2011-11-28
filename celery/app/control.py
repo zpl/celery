@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 from __future__ import with_statement
 
@@ -51,8 +52,9 @@ class Inspect(object):
     def revoked(self):
         return self._request("dump_revoked")
 
-    def registered_tasks(self):
+    def registered(self):
         return self._request("dump_tasks")
+    registered_tasks = registered
 
     def enable_events(self):
         return self._request("enable_events")

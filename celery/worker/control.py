@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 """
+    celery.worker.control
+    ~~~~~~~~~~~~~~~~~~~~~
 
-celery.worker.control.builtins
-==============================
+    Remote control commands.
 
-This module contains the built-in remote control commands.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -14,23 +17,24 @@ from datetime import datetime
 
 from kombu.common import entry_to_queue
 
-from ...platforms import signals as _signals
-from ...utils import timeutils
-from ...utils.encoding import safe_repr
-from .. import state
-from ..state import revoked
+from ..platforms import signals as _signals
+from ..utils import timeutils
+from ..utils.encoding import safe_repr
+from ..utils.compat import UserDict
 
-from .registry import Panel
-
-__all__ = ["revoke", "enable_events", "disable_events",
-           "heartbeat", "rate_limit", "time_limit", "stats",
-           "dump_schedule", "dump_reserved", "dump_active",
-           "dump_revoked", "dump_tasks", "ping",
-           "pool_grow", "pool_shrink", "autoscale",
-           "shutdown", "add_consumer", "cancel_consumer",
-           "active_queues"]
+from . import state
+from .state import revoked
 
 TASK_INFO_FIELDS = ("exchange", "routing_key", "rate_limit")
+
+
+class Panel(UserDict):
+    data = dict()  # Global registry.
+
+    @classmethod
+    def register(cls, method, name=None):
+        cls.data[name or method.__name__] = method
+        return method
 
 
 @Panel.register

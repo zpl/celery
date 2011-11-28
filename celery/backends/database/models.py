@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 from datetime import datetime
 
 import sqlalchemy as sa
 
-from .. import states
+from ... import states
 
 from .session import ResultModelBase
 

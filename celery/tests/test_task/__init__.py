@@ -310,8 +310,8 @@ class test_tasks(unittest.TestCase):
 
         # With eta.
         presult2 = t1.apply_async(kwargs=dict(name="George Costanza"),
-                                eta=datetime.utcnow() + timedelta(days=1),
-                                expires=datetime.utcnow() + timedelta(days=2))
+                            eta=datetime.utcnow() + timedelta(days=1),
+                            expires=datetime.utcnow() + timedelta(days=2))
 
         self.assertNextTaskDataEqual(consumer, presult2, t1.name,
                 name="George Costanza", test_eta=True, test_expires=True)
@@ -337,6 +337,7 @@ class test_tasks(unittest.TestCase):
         request.foo = 32
         self.assertEqual(request.get("foo"), 32)
         self.assertEqual(request.get("bar", 36), 36)
+        request.clear()
 
     def test_task_class_repr(self):
         task = self.createTaskCls("T1", "c.unittest.t.repr")
@@ -345,9 +346,10 @@ class test_tasks(unittest.TestCase):
     def test_after_return(self):
         task = self.createTaskCls("T1", "c.unittest.t.after_return")()
         task.backend = Mock()
-        task.request.chord = 123
+        task.request.chord = return_True_task.subtask()
         task.after_return("SUCCESS", 1.0, "foobar", (), {}, None)
         task.backend.on_chord_part_return.assert_called_with(task)
+        task.request.clear()
 
     def test_send_task_sent_event(self):
         T1 = self.createTaskCls("T1", "c.unittest.t.t1")

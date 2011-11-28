@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
 """
+    celery.platforms
+    ~~~~~~~~~~~~~~~~
 
-celery.platforms
-================
+    Utilities dealing with platform specifics: signals, daemonization,
+    users, groups, and so on.
 
-Utilities dealing with platform specifics: signals, daemonization, users &
-groups, etc.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -22,12 +25,6 @@ _setproctitle = try_import("setproctitle")
 resource = try_import("resource")
 pwd = try_import("pwd")
 grp = try_import("grp")
-
-__all__ = ["LockFailed", "get_fdmax", "create_pidlock",
-           "DaemonContext", "detached", "parse_uid", "parse_gid",
-           "setegid", "seteuid", "set_effective_user", "Signals",
-           "set_process_title", "set_mp_process_title",
-           "pyimplementation", "system", "architecture", "python_version"]
 
 SYSTEM = _platform.system()
 IS_OSX = SYSTEM == "Darwin"
@@ -204,11 +201,13 @@ def create_pidlock(pidfile):
 
 class DaemonContext(object):
     _is_open = False
+    workdir = DAEMON_WORKDIR
+    umask = DAEMON_UMASK
 
-    def __init__(self, pidfile=None, workdir=DAEMON_WORKDIR,
-            umask=DAEMON_UMASK, **kwargs):
-        self.workdir = workdir
-        self.umask = umask
+    def __init__(self, pidfile=None, workdir=None,
+            umask=None, **kwargs):
+        self.workdir = workdir or self.workdir
+        self.umask = self.umask if umask is None else umask
 
     def open(self):
         if not self._is_open:
@@ -288,7 +287,9 @@ def detached(logfile=None, pidfile=None, uid=None, gid=None, umask=0,
     workdir = os.getcwd() if workdir is None else workdir
 
     signals.reset("SIGCLD")  # Make sure SIGCLD is using the default handler.
-    set_effective_user(uid=uid, gid=gid)
+    if not os.geteuid():
+        # no point trying to setuid unless we're root.
+        maybe_drop_privileges(uid=uid, gid=gid)
 
     # Since without stderr any errors will be silently suppressed,
     # we need to know that we have access to the logfile.
@@ -335,29 +336,82 @@ def parse_gid(gid):
         raise
 
 
+def _setgroups_hack(groups):
+    """:fun:`setgroups` may have a platform-dependent limit,
+    and it is not always possible to know in advance what this limit
+    is, so we use this ugly hack stolen from glibc."""
+    groups = groups[:]
+
+    while 1:
+        try:
+            return os.setgroups(groups)
+        except ValueError:   # error from Python's check.
+            if len(groups) <= 1:
+                raise
+            groups[:] = groups[:-1]
+        except OSError, exc:  # error from the OS.
+            if exc.errno != errno.EINVAL or len(groups) <= 1:
+                raise
+            groups[:] = groups[:-1]
+
+
+def setgroups(groups):
+    max_groups = None
+    try:
+        max_groups = os.sysconf("SC_NGROUPS_MAX")
+    except:
+        pass
+    try:
+        return _setgroups_hack(groups[:max_groups])
+    except OSError, exc:
+        if exc.errno != errno.EPERM:
+            raise
+        if any(group not in groups for group in os.getgroups()):
+            # we shouldn't be allowed to change to this group.
+            raise
+
+
+def initgroups(uid, gid):
+    if grp and pwd:
+        username = pwd.getpwuid(uid)[0]
+        if hasattr(os, "initgroups"):  # Python 2.7+
+            return os.initgroups(username, gid)
+        groups = [gr.gr_gid for gr in grp.getgrall()
+                                if username in gr.gr_mem]
+        setgroups(groups)
+
+
 def setegid(gid):
     """Set effective group id."""
     gid = parse_gid(gid)
-    if gid != os.getgid():
+    if gid != os.getegid():
         os.setegid(gid)
 
 
 def seteuid(uid):
     """Set effective user id."""
     uid = parse_uid(uid)
-    if uid != os.getuid():
+    if uid != os.geteuid():
         os.seteuid(uid)
 
 
-def set_effective_user(uid=None, gid=None):
+def setgid(gid):
+    os.setgid(parse_gid(gid))
+
+
+def setuid(uid):
+    os.setuid(parse_uid(uid))
+
+
+def maybe_drop_privileges(uid=None, gid=None):
     """Change process privileges to new user/group.
 
-    If UID and GID is set the effective user/group is set.
+    If UID and GID is specified, the real user/group is changed.
 
-    If only UID is set, the effective user is set, and the group is
-    set to the users primary group.
+    If only UID is specified, the real user is changed, and the group is
+    changed to the users primary group.
 
-    If only GID is set, the effective group is set.
+    If only GID is specified, only the group is changed.
 
     """
     uid = uid and parse_uid(uid)
@@ -367,10 +421,15 @@ def set_effective_user(uid=None, gid=None):
         # If GID isn't defined, get the primary GID of the user.
         if not gid and pwd:
             gid = pwd.getpwuid(uid).pw_gid
-        setegid(gid)
-        seteuid(uid)
+        # Must set the GID before initgroups(), as setgid()
+        # is known to zap the group list on some platforms.
+        setgid(gid)
+        initgroups(uid, gid)
+
+        # at last:
+        setuid(uid)
     else:
-        gid and setegid(gid)
+        gid and setgid(gid)
 
 
 class Signals(object):

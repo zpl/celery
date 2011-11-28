@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 import os
@@ -113,8 +114,10 @@ class Command(object):
                    and os.path.expanduser(a) or a, argv)
         if not self.supports_args and args:
             sys.stderr.write(
-                "\nUnrecognized command line arguments: %r\n" % (
+                "\nUnrecognized command line arguments: %s\n" % (
                     ", ".join(args), ))
+            import traceback
+            traceback.print_stack(file=sys.stderr)
             sys.stderr.write("\nTry --help?\n")
             sys.exit(1)
         return self.run(*args, **vars(options))

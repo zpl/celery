@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
 """
-celery.result
-=============
+    celery.result
+    ~~~~~~~~~~~~~
 
-Task results/state, and result groups.
+    Task results/state and groups of results.
+
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -20,19 +24,16 @@ from .exceptions import TimeoutError
 from .app.registry import _unpickle_task
 from .utils.compat import OrderedDict
 
-__all__ = ["BaseAsyncResult", "AsyncResult", "ResultSet",
-           "TaskSetResult", "EagerResult"]
-
 
 def _unpickle_result(task_id, task_name):
     return _unpickle_task(task_name).AsyncResult(task_id)
 
 
-class BaseAsyncResult(object):
-    """Base class for pending result, supports custom task result backend.
+class AsyncResult(object):
+    """Query task state.
 
     :param task_id: see :attr:`task_id`.
-    :param backend: see :attr:`backend`.
+    :keyword backend: see :attr:`backend`.
 
     """
 
@@ -45,10 +46,10 @@ class BaseAsyncResult(object):
     #: The task result backend to use.
     backend = None
 
-    def __init__(self, task_id, backend, task_name=None, app=None):
+    def __init__(self, task_id, backend=None, task_name=None, app=None):
         self.app = app_or_default(app)
         self.task_id = task_id
-        self.backend = backend
+        self.backend = backend or self.app.backend
         self.task_name = task_name
 
     def forget(self):
@@ -122,7 +123,7 @@ class BaseAsyncResult(object):
         return hash(self.task_id)
 
     def __repr__(self):
-        return "<AsyncResult: %s>" % self.task_id
+        return "<AsyncResult: %s>" % (self.task_id, )
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -192,23 +193,7 @@ class BaseAsyncResult(object):
     def status(self):
         """Deprecated alias of :attr:`state`."""
         return self.state
-
-
-class AsyncResult(BaseAsyncResult):
-    """Pending task result using the default backend.
-
-    :param task_id: The task uuid.
-
-    """
-
-    #: Task result store backend to use.
-    backend = None
-
-    def __init__(self, task_id, backend=None, task_name=None, app=None):
-        app = app_or_default(app)
-        backend = backend or app.backend
-        super(AsyncResult, self).__init__(task_id, backend,
-                                          task_name=task_name, app=app)
+BaseAsyncResult = AsyncResult  # for backwards compatibility.
 
 
 class ResultSet(object):
@@ -449,6 +434,10 @@ class ResultSet(object):
         """Deprecated alias to :attr:`results`."""
         return self.results
 
+    @property
+    def supports_native_join(self):
+        return self.results[0].backend.supports_native_join
+
 
 class TaskSetResult(ResultSet):
     """An instance of this class is returned by
@@ -468,13 +457,14 @@ class TaskSetResult(ResultSet):
     #: List/iterator of results in the taskset
     results = None
 
-    def __init__(self, taskset_id, results=None, **kwargs):
+    def __init__(self, taskset_id, results=None, app=None, **kwargs):
         self.taskset_id = taskset_id
 
         # XXX previously the "results" arg was named "subtasks".
         if "subtasks" in kwargs:
             results = kwargs["subtasks"]
-        super(TaskSetResult, self).__init__(results, **kwargs)
+        self.app = app_or_default(app)
+        self.results = results
 
     def save(self, backend=None):
         """Save taskset result for later retrieval using :meth:`restore`.

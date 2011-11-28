@@ -88,8 +88,9 @@ def flake8(options):
         my $ignore = m/too complex \((\d+)\)/ && $1 le %s;
         if ($ignore) {
             $ignore = m{processes/pool\.py|
-                        CursesMonitor.draw|
-                        MultiTool.shutdown_nodes}xsg;
+                        CursesMonitor\.draw|
+                        WorkController\.__init__|
+                        MultiTool\.shutdown_nodes}xsg;
         }
         if (! $ignore) { print STDERR; our $FOUND_FLAKE = 1 }
     }{exit $FOUND_FLAKE;
@@ -131,8 +132,9 @@ def readme(options):
 
 @task
 def bump(options):
-    sh("bump -c celery")
-
+    sh("contrib/release/bump_version.py \
+            celery/__init__.py docs/includes/introduction.txt \
+            --before-commit='paver readme'")
 
 @task
 @cmdopts([

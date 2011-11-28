@@ -1,39 +1,48 @@
 from __future__ import absolute_import
 
-from base64 import b64encode, b64decode
+import base64
 
-import anyjson
-
-from kombu.serialization import registry
+from kombu.serialization import registry, encode, decode
 
 from ..exceptions import SecurityError
+from ..utils.encoding import bytes_to_str, str_to_bytes
 
 from .certificate import Certificate, FSCertStore
 from .key import PrivateKey
 
 
+def b64encode(s):
+    return bytes_to_str(base64.b64encode(str_to_bytes(s)))
+
+
+def b64decode(s):
+    return base64.b64decode(str_to_bytes(s))
+
+
 class SecureSerializer(object):
 
     def __init__(self, key=None, cert=None, cert_store=None,
-                       serialize=anyjson.serialize,
-                       deserialize=anyjson.deserialize):
+            digest="sha1", serializer="json"):
         self._key = key
         self._cert = cert
         self._cert_store = cert_store
-        self._serialize = serialize
-        self._deserialize = deserialize
+        self._digest = digest
+        self._serializer = serializer
 
     def serialize(self, data):
         """serialize data structure into string"""
         assert self._key is not None
         assert self._cert is not None
         try:
-            data = self._serialize(data)
-            signature = b64encode(self._key.sign(data))
-            signer = self._cert.get_id()
-            return self._serialize(dict(data=data,
-                                        signer=signer,
-                                        signature=signature))
+            content_type, content_encoding, body = encode(
+                    data, serializer=self._serializer)
+            # What we sign is the serialized body, not the body itself.
+            # this way the receiver doesn't have to decode the contents
+            # to verify the signature (and thus avoiding potential flaws
+            # in the decoding step).
+            return self._pack(body, content_type, content_encoding,
+                              signature=self._key.sign(body, self._digest),
+                              signer=self._cert.get_id())
         except Exception, exc:
             raise SecurityError("Unable to serialize: %r" % (exc, ))
 
@@ -41,22 +50,36 @@ class SecureSerializer(object):
         """deserialize data structure from string"""
         assert self._cert_store is not None
         try:
-            data = self._deserialize(data)
-            signature = b64decode(data["signature"])
-            signer = data["signer"]
-            data = data["data"]
-            self._cert_store[signer].verify(data, signature)
-            return self._deserialize(data)
+            payload = self._unpack(data)
+            signature, signer, body = (payload["signature"],
+                                       payload["signer"],
+                                       payload["body"])
+            self._cert_store[signer].verify(body,
+                                            signature, self._digest)
         except Exception, exc:
             raise SecurityError("Unable to deserialize: %r" % (exc, ))
 
+        return decode(body, payload["content_type"],
+                            payload["content_encoding"], force=True)
 
-def register_auth(key=None, cert=None, store=None):
+    def _pack(self, body, content_type, content_encoding, signer, signature,
+            sep='\x00\x01'):
+        return b64encode(sep.join([signer, signature,
+                                   content_type, content_encoding, body]))
+
+    def _unpack(self, payload, sep='\x00\x01',
+            fields=("signer", "signature", "content_type",
+                    "content_encoding", "body")):
+        return dict(zip(fields, b64decode(payload).split(sep)))
+
+
+def register_auth(key=None, cert=None, store=None, digest="sha1",
+        serializer="json"):
     """register security serializer"""
     s = SecureSerializer(key and PrivateKey(key),
                          cert and Certificate(cert),
                          store and FSCertStore(store),
-                         anyjson.serialize, anyjson.deserialize)
+                         digest=digest, serializer=serializer)
     registry.register("auth", s.serialize, s.deserialize,
                       content_type="application/data",
                       content_encoding="utf-8")

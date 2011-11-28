@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
 """
-celery.app.base
-===============
+    celery.app.base
+    ~~~~~~~~~~~~~~~
 
-Application Base Class.
+    Application Base Class.
 
-:copyright: (c) 2009 - 2011 by Ask Solem.
-:license: BSD, see LICENSE for more details.
+    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
@@ -225,6 +226,7 @@ class BaseApp(object):
         :keyword connect_timeout: or the ``connect_timeout`` field of the
             default broker.
         :keyword transport: or the ``transport`` field of the default broker.
+        :keyword transport_options: Additional transport-specific options.
 
         :returns :class:`kombu.connection.BrokerConnection`:
 

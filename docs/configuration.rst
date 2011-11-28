@@ -183,8 +183,9 @@ Can be one of the following:
 CELERY_RESULT_SERIALIZER
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Result message serialization format.  Default is `"pickle"`. See
-:ref:`executing-serializers`.
+Result serialization format.  Default is `"pickle"`. See
+:ref:`executing-serializers` for information about supported
+serialization formats.
 
 .. _conf-database-result-backend:
 
@@ -426,6 +427,14 @@ CELERY_REDIS_PASSWORD
 
 Password used to connect to the database.
 
+.. setting:: CELERY_REDIS_MAX_CONNECTIONS
+
+CELERY_REDIS_MAX_CONNECTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Maximum number of connections available in the Redis connection
+pool used for sending and retrieving results.
+
 Example configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -638,17 +647,17 @@ setting.  By default the alias named ``default`` is used.
 BROKER_URL
 ~~~~~~~~~~
 
-Default broker URL.  This must be an URL in the format of::
+Default broker URL.  This must be an URL in the form of::
 
     transport://userid:password@hostname:port/virtual_host
 
-If this setting is defined it will override a subset of the
-other ``BROKER`` options, these options are :setting:`BROKER_HOST`,
-:setting:`BROKER_USER`, :setting:`BROKER_PASSWORD`, :setting:`BROKER_PORT`,
-and :setting:`BROKER_VHOST`.  The query part of the URL can also be used
-to set options, e.g.::
+Only the scheme part (``transport://``) is required, the rest
+is optional, and defaults to the specific transports default values.
 
-    amqp://localhost/myvhost?ssl=1
+If this setting is defined it will override a subset of the
+other ``BROKER`` options. These options are :setting:`BROKER_HOST`,
+:setting:`BROKER_USER`, :setting:`BROKER_PASSWORD`, :setting:`BROKER_PORT`,
+and :setting:`BROKER_VHOST`.
 
 See the Kombu documentation for more information about broker URLs,
 and see the :setting:`BROKER_TRANSPORT` settings for more information about
@@ -721,13 +730,16 @@ BROKER_POOL_LIMIT
 
 The maximum number of connections that can be open in the connection pool.
 
-A good default value could be 10, or more if you're using eventlet/gevent
-or lots of threads.
+The pool is enabled by default since version 2.5, with a default limit of ten
+connections.  This number can be tweaked depending on the number of
+threads/greenthreads (eventlet/gevent) using a connection.  For example
+running eventlet with 1000 greenlets that use a connection to the broker,
+contention can arise and you should consider increasing the limit.
 
 If set to :const:`None` or 0 the connection pool will be disabled and
 connections will be established and closed for every use.
 
-**Disabled by default.**
+Default (since 2.5) is to use a pool of 10 connections.
 
 .. setting:: BROKER_CONNECTION_TIMEOUT
 
@@ -1392,10 +1404,47 @@ suffix `.db` may be appended to the file name (depending on Python version).
 Can also be set via the :option:`--schedule` argument to
 :mod:`~celery.bin.celerybeat`.
 
+.. _conf-security:
+
+Security
+--------
+
+.. setting:: CELERY_SECURITY_KEY
+
+CELERY_SECURITY_KEY
+~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.5
+
+The relative or absolute path to a file containing the private key
+used to sign messages when :ref:`message-signing` is used.
+
+.. setting:: CELERY_SECURITY_CERTIFICATE
+
+CELERY_SECURITY_CERTIFICATE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.5
+
+The relative or absolute path to an X.509 certificate file
+used to sign messages when :ref:`message-signing` is used.
+
+.. setting:: CELERY_SECURITY_CERT_STORE
+
+CELERY_SECURITY_CERT_STORE
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.5
+
+The directory containing X.509 certificates used for
+:ref:`message signing`.  Can be a glob with wildcards,
+(for example :file:`/etc/certs/*.pem`).
+
+
 .. _conf-custom-components:
 
-Custom Worker Component Classes
--------------------------------
+Custom Component Classes (advanced)
+-----------------------------------
 
 .. setting:: CELERYD_POOL
 
@@ -1444,4 +1493,3 @@ CELERYD_ETA_SCHEDULER
 Name of the ETA scheduler class used by the worker.
 Default is :class:`celery.utils.timer2.Timer`, or one overrided
 by the pool implementation.
-
