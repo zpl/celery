@@ -5,7 +5,7 @@
 
     Utility functions.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -21,14 +21,15 @@ from functools import wraps
 from pprint import pprint
 
 from kombu.utils import cached_property, gen_unique_id, kwdict  # noqa
+from kombu.utils import reprcall, reprkwargs                    # noqa
+from kombu.utils.functional import promise, maybe_promise       # noqa
 uuid = gen_unique_id
 
 from ..exceptions import CPendingDeprecationWarning, CDeprecationWarning
 
 from .compat import StringIO
-from .encoding import safe_repr as _safe_repr
-from .imports import get_full_cls_name
-from .log import LOG_LEVELS  # noqa
+from .imports import qualname
+from .log import LOG_LEVELS    # noqa
 
 PENDING_DEPRECATION_FMT = """
     %(description)s is scheduled for deprecation in \
@@ -67,7 +68,7 @@ def deprecated(description=None, deprecation=None, removal=None,
 
         @wraps(fun)
         def __inner(*args, **kwargs):
-            warn_deprecated(description=description or get_full_cls_name(fun),
+            warn_deprecated(description=description or qualname(fun),
                             deprecation=deprecation,
                             removal=removal,
                             alternative=alternative)
@@ -80,6 +81,42 @@ def lpmerge(L, R):
     """Left precedent dictionary merge.  Keeps values from `l`, if the value
     in `r` is :const:`None`."""
     return dict(L, **dict((k, v) for k, v in R.iteritems() if v is not None))
+
+
+def first(predicate, iterable):
+    """Returns the first element in `iterable` that `predicate` returns a
+    :const:`True` value for."""
+    for item in iterable:
+        if predicate(item):
+            return item
+
+
+def chunks(it, n):
+    """Split an iterator into chunks with `n` elements each.
+
+    Examples
+
+        # n == 2
+        >>> x = chunks(iter([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), 2)
+        >>> list(x)
+        [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9], [10]]
+
+        # n == 3
+        >>> x = chunks(iter([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), 3)
+        >>> list(x)
+        [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10]]
+
+    """
+    for first in it:
+        yield [first] + list(islice(it, n - 1))
+
+
+def is_iterable(obj):
+    try:
+        iter(obj)
+    except TypeError:
+        return False
+    return True
 
 
 def mattrgetter(*attrs):
@@ -123,11 +160,21 @@ def cry():  # pragma: no cover
     return out.getvalue()
 
 
-def reprkwargs(kwargs, sep=', ', fmt="%s=%s"):
-    return sep.join(fmt % (k, _safe_repr(v)) for k, v in kwargs.iteritems())
+def uniq(it):
+    seen = set()
+    for obj in it:
+        if obj not in seen:
+            yield obj
+            seen.add(obj)
 
 
-def reprcall(name, args=(), kwargs=(), sep=', '):
-    return "%s(%s%s%s)" % (name, sep.join(map(_safe_repr, args)),
-                           (args and kwargs) and sep or "",
-                           reprkwargs(kwargs, sep))
+def maybe_reraise():
+    """Reraise if an exception is currently being handled, or return
+    otherwise."""
+    type_, exc, tb = sys.exc_info()
+    try:
+        if tb:
+            raise type_, exc, tb
+    finally:
+        # see http://docs.python.org/library/sys.html#sys.exc_info
+        del(tb)

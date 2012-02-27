@@ -41,12 +41,106 @@ It should contain all you need to run a basic Celery set-up.
     CELERYD_CONCURRENCY = 10
 
     CELERY_ANNOTATIONS = {"tasks.add": {"rate_limit": "10/s"}}
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 
 Common Configuration Directives
 ===============================
 
+<<<<<<< HEAD
 Time and date settings
 ----------------------
+=======
+.. _conf-datetime:
+
+Time and date settings
+----------------------
+
+.. setting:: CELERY_ENABLE_UTC
+
+CELERY_ENABLE_UTC
+~~~~~~~~~~~~~~~~~
+
+If enabled dates and times in messages will be converted to use
+the UTC timezone.
+
+Note that workers running Celery versions below 2.5 will assume a local
+timezone for all messages, so only enable if all workers have been
+upgraded.
+
+Disabled by default.  UTC will be enabled by default in version 3.0.
+
+.. setting:: CELERY_TIMEZONE
+
+CELERY_TIMEZONE
+---------------
+
+Configure Celery to use a custom time zone.
+The timezone value can be any time zone supported by the :mod:`pytz`
+library.  :mod:`pytz` must be installed for the selected zone
+to be used.
+
+If not set then the systems default local time zone is used.
+
+.. _conf-tasks:
+
+Task settings
+-------------
+
+.. setting:: CELERY_ANNOTATIONS
+
+CELERY_ANNOTATIONS
+~~~~~~~~~~~~~~~~~~
+
+This setting can be used to rewrite any task attribute from the
+configuration.  The setting can be a dict, or a list of annotation
+objects that filter for tasks and return a map of attributes
+to change.
+
+
+This will change the ``rate_limit`` attribute for the ``tasks.add``
+task:
+
+.. code-block:: python
+
+    CELERY_ANNOTATIONS = {"tasks.add": {"rate_limit": "10/s"}}
+
+or change the same for all tasks:
+
+.. code-block:: python
+
+    CELERY_ANNOTATIONS = {"*": {"rate_limit": "10/s"}}
+
+
+You can change methods too, for example the ``on_failure`` handler:
+
+.. code-block:: python
+
+    def my_on_failure(self, exc, task_id, args, kwargs, einfo):
+        print("Oh no! Task failed: %r" % (exc, ))
+
+    CELERY_ANNOTATIONS = {"*": {"on_failure": my_on_failure}}
+
+
+If you need more flexibility then you can use objects
+instead of a dict to choose which tasks to annotate:
+
+.. code-block:: python
+
+    class MyAnnotate(object):
+
+        def annotate(self, task):
+            if task.name.startswith("tasks."):
+                return {"rate_limit": "10/s"}
+
+    CELERY_ANNOTATIONS = (MyAnnotate(), {...})
+
+
+
+.. _conf-concurrency:
+>>>>>>> master
 
 .. setting:: CELERY_TIMEZONE
 
@@ -167,6 +261,10 @@ Can be one of the following:
     Send results back as AMQP messages
     See :ref:`conf-amqp-result-backend`.
 
+* cassandra
+    Use `Cassandra`_ to store the results.
+    See :ref:`conf-cassandra-result-backend`.
+
 .. warning:
 
     While the AMQP result backend is very efficient, you must make sure
@@ -177,6 +275,7 @@ Can be one of the following:
 .. _`MongoDB`: http://mongodb.org
 .. _`Redis`: http://code.google.com/p/redis/
 .. _`Tokyo Tyrant`: http://1978th.net/tokyotyrant/
+.. _`Cassandra`: http://cassandra.apache.org/
 
 .. setting:: CELERY_RESULT_SERIALIZER
 
@@ -496,6 +595,83 @@ Example configuration
         "taskmeta_collection": "my_taskmeta_collection",
     }
 
+.. _conf-cassandra-result-backend:
+
+Cassandra backend settings
+--------------------------
+
+.. note::
+
+    The Cassandra backend requires the :mod:`pycassa` library:
+    http://pypi.python.org/pypi/pycassa/
+
+    To install the pycassa package use `pip` or `easy_install`::
+
+        $ pip install pycassa
+
+This backend requires the following configuration directives to be set.
+
+.. setting:: CASSANDRA_SERVERS
+
+CASSANDRA_SERVERS
+~~~~~~~~~~~~~~~~~
+
+List of ``host:port`` Cassandra servers. e.g. ``["localhost:9160]"``.
+
+.. setting:: CASSANDRA_KEYSPACE
+
+CASSANDRA_KEYSPACE
+~~~~~~~~~~~~~~~~~~
+
+The keyspace in which to store the results. e.g. ``"tasks_keyspace"``.
+
+.. setting:: CASSANDRA_COLUMN_FAMILY
+
+CASSANDRA_COLUMN_FAMILY
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The column family in which to store the results. eg ``"tasks"``
+
+.. setting:: CASSANDRA_READ_CONSISTENCY
+
+CASSANDRA_READ_CONSISTENCY
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The read consistency used. Values can be ``"ONE"``, ``"QUORUM"`` or ``"ALL"``.
+
+.. setting:: CASSANDRA_WRITE_CONSISTENCY
+
+CASSANDRA_WRITE_CONSISTENCY
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The write consistency used. Values can be ``"ONE"``, ``"QUORUM"`` or ``"ALL"``.
+
+.. setting:: CASSANDRA_DETAILED_MODE
+
+CASSANDRA_DETAILED_MODE
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Enable or disable detailed mode. Default is :const:`False`.
+This mode allows to use the power of Cassandra wide columns to
+store all states for a task as a wide column, instead of only the last one.
+
+To use this mode, you need to configure your ColumnFamily to
+use the ``TimeUUID`` type as a comparator::
+
+    create column family task_results with comparator = TimeUUIDType;
+
+Example configuration
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    CASSANDRA_SERVERS = ["localhost:9160"]
+    CASSANDRA_KEYSPACE = "celery"
+    CASSANDRA_COLUMN_FAMILY = "task_results"
+    CASSANDRA_READ_CONSISTENCY = "ONE"
+    CASSANDRA_WRITE_CONSISTENCY = "ONE"
+    CASSANDRA_DETAILED_MODE = True
+
 .. _conf-messaging:
 
 Message Routing
@@ -580,7 +756,7 @@ CELERY_DEFAULT_DELIVERY_MODE
 Can be `transient` or `persistent`.  The default is to send
 persistent messages.
 
-.. _conf-broker-connection:
+.. _conf-broker-settings:
 
 Broker Settings
 ---------------
@@ -996,6 +1172,24 @@ A sequence of modules to import when the celery daemon starts.
 This is used to specify the task modules to import, but also
 to import signal handlers and additional remote control commands, etc.
 
+.. setting:: CELERYD_FORCE_EXECV
+
+CELERYD_FORCE_EXECV
+~~~~~~~~~~~~~~~~~~~
+
+On Unix the processes pool will fork, so that child processes
+start with the same memory as the parent process.
+
+This can cause problems as there is a known deadlock condition
+with pthread locking primitives when `fork()` is combined with threads.
+
+You should enable this setting if you are experiencing hangs (deadlocks),
+especially in combination with time limits or having a max tasks per child limit.
+
+This option will be enabled by default in a later version.
+
+This is not a problem on Windows, as it does not have `fork()`.
+
 .. setting:: CELERYD_MAX_TASKS_PER_CHILD
 
 CELERYD_MAX_TASKS_PER_CHILD
@@ -1072,6 +1266,8 @@ CELERY_SEND_TASK_ERROR_EMAILS
 The default value for the `Task.send_error_emails` attribute, which if
 set to :const:`True` means errors occurring during task execution will be
 sent to :setting:`ADMINS` by email.
+
+Disabled by default.
 
 .. setting:: ADMINS
 
@@ -1351,6 +1547,7 @@ Can be one of :const:`DEBUG`, :const:`INFO`, :const:`WARNING`,
 
 Default is :const:`WARNING`.
 
+<<<<<<< HEAD
 .. setting:: CELERYD_ETA_SCHEDULER_PRECISION
 
 CELERYD_ETA_SCHEDULER_PRECISION
@@ -1404,6 +1601,8 @@ suffix `.db` may be appended to the file name (depending on Python version).
 Can also be set via the :option:`--schedule` argument to
 :mod:`~celery.bin.celerybeat`.
 
+=======
+>>>>>>> master
 .. _conf-security:
 
 Security
@@ -1437,14 +1636,26 @@ CELERY_SECURITY_CERT_STORE
 .. versionadded:: 2.5
 
 The directory containing X.509 certificates used for
-:ref:`message signing`.  Can be a glob with wildcards,
+:ref:`message-signing`.  Can be a glob with wildcards,
 (for example :file:`/etc/certs/*.pem`).
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 .. _conf-custom-components:
 
 Custom Component Classes (advanced)
 -----------------------------------
+
+.. setting:: CELERYD_BOOT_STEPS
+
+CELERYD_BOOT_STEPS
+~~~~~~~~~~~~~~~~~~
+
+This setting enables you to add additional components to the worker process.
+It should be a list of module names with :class:`celery.abstract.Component`
+classes, that augments functionality in the worker.
 
 .. setting:: CELERYD_POOL
 
@@ -1468,6 +1679,16 @@ CELERYD_AUTOSCALER
 Name of the autoscaler class to use.
 
 Default is ``"celery.worker.autoscale.Autoscaler"``.
+
+.. setting:: CELERYD_AUTORELOADER
+
+CELERYD_AUTORELOADER
+~~~~~~~~~~~~~~~~~~~~
+
+Name of the autoreloader class used by the worker to reload
+Python modules and files that have changed.
+
+Default is: ``"celery.worker.autoreload.Autoreloader"``.
 
 .. setting:: CELERYD_CONSUMER
 
@@ -1493,3 +1714,201 @@ CELERYD_ETA_SCHEDULER
 Name of the ETA scheduler class used by the worker.
 Default is :class:`celery.utils.timer2.Timer`, or one overrided
 by the pool implementation.
+<<<<<<< HEAD
+=======
+
+.. _conf-celerybeat:
+
+Periodic Task Server: celerybeat
+--------------------------------
+
+.. setting:: CELERYBEAT_SCHEDULE
+
+CELERYBEAT_SCHEDULE
+~~~~~~~~~~~~~~~~~~~
+
+The periodic task schedule used by :mod:`~celery.bin.celerybeat`.
+See :ref:`beat-entries`.
+
+.. setting:: CELERYBEAT_SCHEDULER
+
+CELERYBEAT_SCHEDULER
+~~~~~~~~~~~~~~~~~~~~
+
+The default scheduler class.  Default is
+`"celery.beat.PersistentScheduler"`.
+
+Can also be set via the :option:`-S` argument to
+:mod:`~celery.bin.celerybeat`.
+
+.. setting:: CELERYBEAT_SCHEDULE_FILENAME
+
+CELERYBEAT_SCHEDULE_FILENAME
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Name of the file used by `PersistentScheduler` to store the last run times
+of periodic tasks.  Can be a relative or absolute path, but be aware that the
+suffix `.db` may be appended to the file name (depending on Python version).
+
+Can also be set via the :option:`--schedule` argument to
+:mod:`~celery.bin.celerybeat`.
+
+.. setting:: CELERYBEAT_MAX_LOOP_INTERVAL
+
+CELERYBEAT_MAX_LOOP_INTERVAL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The maximum number of seconds :mod:`~celery.bin.celerybeat` can sleep
+between checking the schedule.  Default is 300 seconds (5 minutes).
+
+
+.. _conf-celerymon:
+
+Monitor Server: celerymon
+-------------------------
+
+
+.. setting:: CELERYMON_LOG_FORMAT
+
+CELERYMON_LOG_FORMAT
+~~~~~~~~~~~~~~~~~~~~
+
+The format to use for log messages.
+
+Default is `[%(asctime)s: %(levelname)s/%(processName)s] %(message)s`
+
+See the Python :mod:`logging` module for more information about log
+formats.
+
+.. _conf-deprecated:
+
+Deprecated Settings
+-------------------
+
+These settings have been deprecated and should no longer used,
+as they will be removed in future versions.
+
+.. setting:: CELERY_AMQP_TASK_RESULT_EXPIRES
+
+CELERY_AMQP_TASK_RESULT_EXPIRES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. deprecated:: 2.5
+
+The time in seconds of which the task result queues should expire.
+
+This setting is deprecated, and will be removed in version 3.0.
+Please use :setting:`CELERY_TASK_RESULT_EXPIRES` instead.
+
+.. note::
+
+    AMQP result expiration requires RabbitMQ versions 2.1.0 or higher.
+
+.. setting:: CELERY_TASK_ERROR_WHITELIST
+
+CELERY_TASK_ERROR_WHITELIST
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. deprecated:: 2.5
+
+A white list of exceptions to send error emails for.
+
+This option is pending deprecation and is scheduled for removal
+in version 3.0.
+
+.. setting:: CELERYD_LOG_FILE
+
+CELERYD_LOG_FILE
+~~~~~~~~~~~~~~~~
+
+.. deprecated:: 2.4
+
+This option is deprecated and is scheduled for removal in version 3.0.
+Please use the :option:`--logfile` argument instead.
+
+The default file name the worker daemon logs messages to.  Can be overridden
+using the :option:`--logfile` option to :mod:`~celery.bin.celeryd`.
+
+The default is :const:`None` (`stderr`)
+
+.. setting:: CELERYD_LOG_LEVEL
+
+CELERYD_LOG_LEVEL
+~~~~~~~~~~~~~~~~~
+
+.. deprecated:: 2.4
+
+This option is deprecated and is scheduled for removal in version 3.0.
+Please use the :option:`--loglevel` argument instead.
+
+Worker log level, can be one of :const:`DEBUG`, :const:`INFO`, :const:`WARNING`,
+:const:`ERROR` or :const:`CRITICAL`.
+
+Can also be set via the :option:`--loglevel` argument to
+:mod:`~celery.bin.celeryd`.
+
+See the :mod:`logging` module for more information.
+
+.. setting:: CELERYBEAT_LOG_FILE
+
+CELERYBEAT_LOG_FILE
+~~~~~~~~~~~~~~~~~~~
+
+.. deprecated:: 2.4
+
+This option is deprecated and is scheduled for removal in version 3.0.
+Please use the :option:`--logfile` argument instead.
+
+The default file name to log messages to.  Can be overridden using
+the `--logfile` option to :mod:`~celery.bin.celerybeat`.
+
+The default is :const:`None` (`stderr`).
+
+.. setting:: CELERYBEAT_LOG_LEVEL
+
+CELERYBEAT_LOG_LEVEL
+~~~~~~~~~~~~~~~~~~~~
+
+.. deprecated:: 2.4
+
+This option is deprecated and is scheduled for removal in version 3.0.
+Please use the :option:`--loglevel` argument instead.
+
+Logging level. Can be any of :const:`DEBUG`, :const:`INFO`, :const:`WARNING`,
+:const:`ERROR`, or :const:`CRITICAL`.
+
+Can also be set via the :option:`--loglevel` argument to
+:mod:`~celery.bin.celerybeat`.
+
+See the :mod:`logging` module for more information.
+
+.. setting:: CELERYMON_LOG_FILE
+
+CELERYMON_LOG_FILE
+~~~~~~~~~~~~~~~~~~
+
+.. deprecated:: 2.4
+
+This option is deprecated and is scheduled for removal in version 3.0.
+Please use the :option:`--logfile` argument instead.
+
+The default file name to log messages to.  Can be overridden using
+the :option:`--logfile` argument to `celerymon`.
+
+The default is :const:`None` (`stderr`)
+
+.. setting:: CELERYMON_LOG_LEVEL
+
+CELERYMON_LOG_LEVEL
+~~~~~~~~~~~~~~~~~~~
+
+.. deprecated:: 2.4
+
+This option is deprecated and is scheduled for removal in version 3.0.
+Please use the :option:`--loglevel` argument instead.
+
+Logging level. Can be any of :const:`DEBUG`, :const:`INFO`, :const:`WARNING`,
+:const:`ERROR`, or :const:`CRITICAL`.
+
+See the :mod:`logging` module for more information.
+>>>>>>> master

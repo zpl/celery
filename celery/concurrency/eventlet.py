@@ -102,6 +102,7 @@ class Timer(timer2.Timer):
 class TaskPool(base.BasePool):
     Timer = Timer
 
+    rlimit_safe = False
     signal_safe = False
     is_green = True
 
@@ -110,6 +111,7 @@ class TaskPool(base.BasePool):
         from eventlet.greenpool import GreenPool
         self.Pool = GreenPool
         self.getcurrent = greenthread.getcurrent
+        self.getpid = lambda: id(greenthread.getcurrent())
         self.spawn_n = greenthread.spawn_n
 
         super(TaskPool, self).__init__(*args, **kwargs)
@@ -130,4 +132,4 @@ class TaskPool(base.BasePool):
                 target=target, args=args, kwargs=kwargs)
         self._pool.spawn_n(apply_target, target, args, kwargs,
                            callback, accept_callback,
-                           self.getcurrent)
+                           self.getpid)

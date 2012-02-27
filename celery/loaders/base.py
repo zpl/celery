@@ -5,7 +5,7 @@
 
     Loader base class.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -14,9 +14,11 @@ from __future__ import absolute_import
 import importlib
 import os
 import re
+import traceback
 import warnings
 
 from anyjson import deserialize
+from datetime import datetime
 
 from ..datastructures import DictAttribute
 from ..exceptions import ImproperlyConfigured
@@ -24,6 +26,7 @@ from ..utils import cached_property
 from ..utils.imports import (get_cls_by_name,
                              import_from_cwd as _import_from_cwd)
 from ..utils.functional import maybe_list
+from ..utils.encoding import safe_str
 
 BUILTIN_MODULES = frozenset(["celery.task"])
 
@@ -61,6 +64,10 @@ class BaseLoader(object):
     def __init__(self, app=None, **kwargs):
         from ..app import app_or_default
         self.app = app_or_default(app)
+        self.task_modules = set()
+
+    def now(self):
+        return datetime.utcnow()
 
     def on_task_init(self, task_id, task):
         """This method is called before a task is executed."""
@@ -80,6 +87,7 @@ class BaseLoader(object):
         pass
 
     def import_task_module(self, module):
+        self.task_modules.add(module)
         return self.import_from_cwd(module)
 
     def import_module(self, module, package=None):
@@ -179,7 +187,8 @@ class BaseLoader(object):
             use_ssl=False, use_tls=False):
         try:
             message = self.mail.Message(sender=sender, to=to,
-                                        subject=subject, body=body)
+                                        subject=safe_str(subject),
+                                        body=safe_str(body))
             mailer = self.mail.Mailer(host=host, port=port,
                                       user=user, password=password,
                                       timeout=timeout, use_ssl=use_ssl,
@@ -189,8 +198,9 @@ class BaseLoader(object):
             if not fail_silently:
                 raise
             warnings.warn(self.mail.SendmailWarning(
-                "Mail could not be sent: %r %r" % (
-                    exc, {"To": to, "Subject": subject})))
+                "Mail could not be sent: %r %r\n%r" % (
+                    exc, {"To": to, "Subject": subject},
+                    traceback.format_stack())))
 
     @property
     def conf(self):

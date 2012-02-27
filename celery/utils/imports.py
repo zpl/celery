@@ -9,14 +9,25 @@ import sys
 
 from contextlib import contextmanager
 
-
-def get_full_cls_name(cls):
-    """With a class, get its full module and class name."""
-    return ".".join([cls.__module__,
-                     cls.__name__])
+from .compat import reload
 
 
-def get_cls_by_name(name, aliases={}, imp=None, package=None, **kwargs):
+if sys.version_info >= (3, 3):
+
+    def qualname(obj):
+        return obj.__qualname__
+
+else:
+
+    def qualname(obj):  # noqa
+        if not hasattr(obj, "__name__") and hasattr(obj, "__class__"):
+            return qualname(obj.__class__)
+
+        return '.'.join([obj.__module__, obj.__name__])
+
+
+def get_cls_by_name(name, aliases={}, imp=None, package=None,
+        sep='.', **kwargs):
     """Get class by name.
 
     The name should be the full dot-separated path to the class::
@@ -27,6 +38,10 @@ def get_cls_by_name(name, aliases={}, imp=None, package=None, **kwargs):
 
         celery.concurrency.processes.TaskPool
                                     ^- class name
+
+    or using ':' to separate module and symbol::
+
+        celery.concurrency.processes:TaskPool
 
     If `aliases` is provided, a dict containing short name/long name
     mappings, the name is looked up in the aliases first.
@@ -53,14 +68,18 @@ def get_cls_by_name(name, aliases={}, imp=None, package=None, **kwargs):
         return name                                 # already a class
 
     name = aliases.get(name) or name
-    module_name, _, cls_name = name.rpartition(".")
+    sep = ':' if ':' in name else sep
+    module_name, _, cls_name = name.rpartition(sep)
     if not module_name and package:
         module_name = package
     try:
         module = imp(module_name, package=package, **kwargs)
     except ValueError, exc:
-        raise ValueError("Couldn't import %r: %s" % (name, exc))
+        raise ValueError, ValueError(
+                "Couldn't import %r: %s" % (name, exc)), sys.exc_info()[2]
     return getattr(module, cls_name)
+
+get_symbol_by_name = get_cls_by_name
 
 
 def instantiate(name, *args, **kwargs):
@@ -88,6 +107,10 @@ def cwd_in_path():
                 pass
 
 
+class NotAPackage(Exception):
+    pass
+
+
 def find_module(module, path=None, imp=None):
     """Version of :func:`imp.find_module` supporting dots."""
     if imp is None:
@@ -97,7 +120,11 @@ def find_module(module, path=None, imp=None):
             last = None
             parts = module.split(".")
             for i, part in enumerate(parts[:-1]):
-                path = imp(".".join(parts[:i + 1])).__path__
+                mpart = imp(".".join(parts[:i + 1]))
+                try:
+                    path = mpart.__path__
+                except AttributeError:
+                    raise NotAPackage(module)
                 last = _imp.find_module(parts[i + 1], path)
             return last
         return _imp.find_module(module)
@@ -114,3 +141,10 @@ def import_from_cwd(module, imp=None, package=None):
         imp = importlib.import_module
     with cwd_in_path():
         return imp(module, package=package)
+
+
+def reload_from_cwd(module, reloader=None):
+    if reloader is None:
+        reloader = reload
+    with cwd_in_path():
+        return reloader(module)

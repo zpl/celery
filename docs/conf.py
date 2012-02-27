@@ -50,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Celery'
-copyright = u'2009-2011, Ask Solem & Contributors'
+copyright = u'2009-2012, Ask Solem & Contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -103,8 +103,7 @@ html_sidebars = {
 
 ### Issuetracker
 
-if False: #not os.environ.get("SKIP_ISSUES"):
-    # Issue tracker is not working, just hangs
+if False:
     issuetracker = "github"
     issuetracker_project = "ask/celery"
     issuetracker_issue_pattern = r'[Ii]ssue #(\d+)'

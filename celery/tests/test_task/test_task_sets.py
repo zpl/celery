@@ -7,7 +7,7 @@ from celery.app import app_or_default
 from celery.task import Task
 from celery.task.sets import subtask, TaskSet
 
-from celery.tests.utils import unittest
+from celery.tests.utils import Case
 
 
 class MockTask(Task):
@@ -25,7 +25,7 @@ class MockTask(Task):
         return (args, kwargs, options)
 
 
-class test_subtask(unittest.TestCase):
+class test_subtask(Case):
 
     def test_behaves_like_type(self):
         s = subtask("tasks.add", (2, 2), {"cache": True},
@@ -98,7 +98,12 @@ class test_subtask(unittest.TestCase):
         self.assertDictEqual(dict(cls(*args)), dict(s))
 
 
-class test_TaskSet(unittest.TestCase):
+class test_TaskSet(Case):
+
+    def test_task_arg_can_be_iterable__compat(self):
+        ts = TaskSet([MockTask.subtask((i, i))
+                        for i in (2, 4, 8)])
+        self.assertEqual(len(ts), 3)
 
     def test_respects_ALWAYS_EAGER(self):
         app = app_or_default()

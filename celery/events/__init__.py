@@ -7,7 +7,7 @@
     in the worker (and clients if :setting:`CELERY_SEND_TASK_SENT_EVENT`
     is enabled), used for monitoring purposes.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -19,9 +19,11 @@ import socket
 import threading
 
 from collections import deque
+from contextlib import contextmanager
 
-from kombu import Exchange, Producer, Queue
+from kombu import Consumer, Exchange, Producer, Queue
 from kombu.mixins import ConsumerMixin
+from kombu.common import eventloop
 
 from ..app import app_or_default
 from ..utils import uuid
@@ -75,6 +77,8 @@ class EventDispatcher(object):
         self.producer = None
         self._outbound_buffer = deque()
         self.serializer = serializer or self.app.conf.CELERY_EVENT_SERIALIZER
+        self.on_enabled = set()
+        self.on_disabled = set()
 
         self.enabled = enabled
         if self.enabled:
@@ -92,11 +96,15 @@ class EventDispatcher(object):
                                  exchange=event_exchange,
                                  serializer=self.serializer)
         self.enabled = True
+        for callback in self.on_enabled:
+            callback()
 
     def disable(self):
         if self.enabled:
             self.enabled = False
             self.close()
+            for callback in self.on_disabled:
+                callback()
 
     def send(self, type, **fields):
         """Send event.
@@ -166,6 +174,23 @@ class EventReceiver(ConsumerMixin):
     def itercapture(self, limit=None, timeout=None, wakeup=True):
         return self.consume(limit=limit, timeout=timeout, wakeup=wakeup)
 
+    def process(self, type, event):
+        """Process the received event by dispatching it to the appropriate
+        handler."""
+        handler = self.handlers.get(type) or self.handlers.get("*")
+        handler and handler(event)
+
+    @contextmanager
+    def consumer(self, wakeup=True):
+        """Create event consumer."""
+        consumer = Consumer(self.connection,
+                            queues=[self.queue], no_ack=True)
+        consumer.register_callback(self._receive)
+        with consumer:
+            if wakeup:
+                self.wakeup_workers(channel=consumer.channel)
+            yield consumer
+
     def capture(self, limit=None, timeout=None, wakeup=True):
         """Open up a consumer capturing events.
 
@@ -194,6 +219,10 @@ class EventReceiver(ConsumerMixin):
         self.app.control.broadcast("heartbeat",
                                    connection=self.connection,
                                    channel=channel)
+
+    def drain_events(self, **kwargs):
+        for _ in eventloop(self.connection, **kwargs):
+            pass
 
     def _receive(self, body, message):
         type = body.pop("type").lower()

@@ -10,7 +10,7 @@
     The autoscale thread is only enabled if autoscale
     has been enabled on the command line.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -24,7 +24,24 @@ import traceback
 from time import sleep, time
 
 from . import state
+from ..abstract import StartStopComponent
 from ..utils.threads import bgThread
+
+
+class WorkerComponent(StartStopComponent):
+    name = "worker.autoscaler"
+    requires = ("pool", )
+
+    def __init__(self, w, **kwargs):
+        self.enabled = w.autoscale
+        w.autoscaler = None
+
+    def create(self, w):
+        scaler = w.autoscaler = self.instantiate(w.autoscaler_cls, w.pool,
+                                    max_concurrency=w.max_concurrency,
+                                    min_concurrency=w.min_concurrency,
+                                    logger=w.logger)
+        return scaler
 
 
 class Autoscaler(bgThread):

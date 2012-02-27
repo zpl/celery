@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import os
 import sys
 import threading
+import traceback
 
 _Thread = threading.Thread
 _Event = threading._Event
@@ -10,19 +11,19 @@ _Event = threading._Event
 
 class Event(_Event):
 
-    if not hasattr(_Event, "is_set"):
+    if not hasattr(_Event, "is_set"):     # pragma: no cover
         is_set = _Event.isSet
 
 
 class Thread(_Thread):
 
-    if not hasattr(_Thread, "is_alive"):
+    if not hasattr(_Thread, "is_alive"):  # pragma: no cover
         is_alive = _Thread.isAlive
 
-    if not hasattr(_Thread, "daemon"):
+    if not hasattr(_Thread, "daemon"):    # pragma: no cover
         daemon = property(_Thread.isDaemon, _Thread.setDaemon)
 
-    if not hasattr(_Thread, "name"):
+    if not hasattr(_Thread, "name"):      # pragma: no cover
         name = property(_Thread.getName, _Thread.setName)
 
 
@@ -38,8 +39,9 @@ class bgThread(Thread):
     def body(self):
         raise NotImplementedError("subclass responsibility")
 
-    def on_crash(self, msg, *fmt, **kwargs):
+    def on_crash(self, exc_info, msg, *fmt, **kwargs):
         sys.stderr.write((msg + "\n") % fmt)
+        traceback.print_exception(*exc_info, file=sys.stderr)
 
     def run(self):
         shutdown = self._is_shutdown
@@ -47,7 +49,7 @@ class bgThread(Thread):
             try:
                 self.body()
             except Exception, exc:
-                self.on_crash("%r crashed: %r", self.name, exc, exc_info=True)
+                self.on_crash(sys.exc_info(), "%r crashed: %r", self.name, exc)
                 # exiting by normal means does not work here, so force exit.
                 os._exit(1)
         try:

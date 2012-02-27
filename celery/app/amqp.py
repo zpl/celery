@@ -5,13 +5,13 @@
 
     AMQ related functionality.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from kombu import BrokerConnection, Consumer, Exchange, Producer, Queue
 from kombu import pools
@@ -23,15 +23,10 @@ from ..utils import text
 
 from . import routes as _routes
 
-# UTC timezone mark.
-# Defaults to local in 2.5, and UTC in 3.x.
-TZ_LOCAL = 0x0
-TZ_UTC = 0x1
-
 #: List of known options to a Kombu producers send method.
 #: Used to extract the message related options out of any `dict`.
 MSG_OPTIONS = ("mandatory", "priority", "immediate", "routing_key",
-                "serializer", "delivery_mode", "compression")
+               "serializer", "delivery_mode", "compression")
 
 #: Human readable queue declaration.
 QUEUE_FORMAT = """
@@ -164,7 +159,7 @@ def maybe_exchange(exchange, exchange_type):
 
 
 class TaskProducer(Producer):
-    auto_declare = True
+    auto_declare = False
     retry = False
     retry_policy = None
 
@@ -175,7 +170,8 @@ class TaskProducer(Producer):
                                         self.retry_policy or {})
         kwargs["exchange"] = maybe_exchange(kwargs.get("exchange"),
                                             kwargs.get("exchange_type"))
-        super(TaskProducer, self).__init__(connection.default_channel,
+        self.utc = kwargs.pop("enable_utc", False)
+        super(TaskProducer, self).__init__(connection,
                                            *args, **kwargs)
 
     def declare(self):
@@ -214,10 +210,10 @@ class TaskProducer(Producer):
         if not isinstance(kwargs, dict):
             raise ValueError("task kwargs must be a dictionary")
         if countdown:                           # Convert countdown to ETA.
-            now = now or datetime.utcnow()
+            now = now or self.app.now()
             eta = now + timedelta(seconds=countdown)
-        if isinstance(expires, int):
-            now = now or datetime.utcnow()
+        if isinstance(expires, (int, float)):
+            now = now or self.app.now()
             expires = now + timedelta(seconds=expires)
         eta = eta and eta.isoformat()
         expires = expires and expires.isoformat()
@@ -229,13 +225,14 @@ class TaskProducer(Producer):
                 "retries": retries or 0,
                 "eta": eta,
                 "expires": expires,
-                "tz": TZ_UTC,
+                "utc": self.utc,
                 "taskset": taskset_id,
                 "chord": chord}
 
         self._send_task(body, **options)
 
         signals.task_sent.send(sender=name, **body)
+
         if event_dispatcher:
             event_dispatcher.send("task-sent",
                             uuid=task_id, name=name,
@@ -328,10 +325,12 @@ class AMQP(object):
         """
         conf = self.app.conf
         defaults = {"serializer": conf.CELERY_TASK_SERIALIZER,
+                    "compression": conf.CELERY_MESSAGE_COMPRESSION,
                     "retry": conf.CELERY_TASK_PUBLISH_RETRY,
                     "retry_policy": conf.CELERY_TASK_PUBLISH_RETRY_POLICY,
-                    "app": self}
-        return TaskProducer(*args, **self.app.merge(defaults, kwargs))
+                    "enable_utc": True,
+                    "app": self.app}
+        return TaskPublisher(*args, **self.app.merge(defaults, kwargs))
 
     def get_task_consumer(self, connection, queues=None, **kwargs):
         """Return consumer configured to consume from all active queues."""

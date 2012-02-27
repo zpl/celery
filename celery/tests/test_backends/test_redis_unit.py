@@ -11,7 +11,7 @@ from celery.task import subtask
 from celery.utils import cached_property, uuid
 from celery.utils.timeutils import timedelta_seconds
 
-from celery.tests.utils import unittest
+from celery.tests.utils import Case
 
 
 class Redis(object):
@@ -33,6 +33,10 @@ class Redis(object):
 
     def get(self, key):
         return self.keyspace.get(key)
+
+    def setex(self, key, value, expires):
+        self.set(key, value)
+        self.expire(key, expires)
 
     def set(self, key, value):
         self.keyspace[key] = value
@@ -56,7 +60,7 @@ class redis(object):
             pass
 
 
-class test_RedisBackend(unittest.TestCase):
+class test_RedisBackend(Case):
 
     def get_backend(self):
         from celery.backends import redis

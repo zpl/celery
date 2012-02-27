@@ -6,7 +6,7 @@
     Utilities dealing with platform specifics: signals, daemonization,
     users, groups, and so on.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -21,10 +21,22 @@ import sys
 
 from .local import try_import
 
+from kombu.utils.limits import TokenBucket
+
 _setproctitle = try_import("setproctitle")
 resource = try_import("resource")
 pwd = try_import("pwd")
 grp = try_import("grp")
+
+EX_OK = getattr(os, "EX_OK", 0)
+EX_FAILURE = 1
+EX_UNAVAILABLE = getattr(os, "EX_UNAVAILABLE", 69)
+EX_USAGE = getattr(os, "EX_USAGE", 64)
+
+try:
+    from multiprocessing.process import current_process
+except ImportError:
+    current_process = None  # noqa
 
 SYSTEM = _platform.system()
 IS_OSX = SYSTEM == "Darwin"
@@ -37,6 +49,7 @@ DAEMON_REDIRECT_TO = getattr(os, "devnull", "/dev/null")
 system = _platform.system
 architecture = _platform.architecture
 python_version = _platform.python_version
+_setps_bucket = TokenBucket(0.5)  # 30/m, every 2 seconds
 
 
 def pyimplementation():
@@ -93,7 +106,7 @@ class PIDFile(object):
         try:
             self.write_pid()
         except OSError, exc:
-            raise LockFailed(str(exc))
+            raise LockFailed, LockFailed(str(exc)), sys.exc_info()[2]
         return self
     __enter__ = acquire
 
@@ -556,21 +569,27 @@ def set_process_title(progname, info=None):
     return proctitle
 
 
-def set_mp_process_title(progname, info=None, hostname=None):
-    """Set the ps name using the multiprocessing process name.
+if os.environ.get("NOSETPS"):
 
-    Only works if :mod:`setproctitle` is installed.
+    def set_mp_process_title(*a, **k):
+        pass
+else:
 
-    """
-    if hostname:
-        progname = "%s@%s" % (progname, hostname.split(".")[0])
-    try:
-        from multiprocessing.process import current_process
-    except ImportError:
-        return set_process_title(progname, info=info)
-    else:
-        return set_process_title("%s:%s" % (progname,
-                                            current_process().name), info=info)
+    def set_mp_process_title(progname, info=None, hostname=None,  # noqa
+            rate_limit=False):
+        """Set the ps name using the multiprocessing process name.
+
+        Only works if :mod:`setproctitle` is installed.
+
+        """
+        if not rate_limit or _setps_bucket.can_consume(1):
+            if hostname:
+                progname = "%s@%s" % (progname, hostname.split(".")[0])
+            if current_process is not None:
+                return set_process_title(
+                    "%s:%s" % (progname, current_process().name), info=info)
+            else:
+                return set_process_title(progname, info=info)
 
 
 def shellsplit(s, posix=True):

@@ -5,7 +5,7 @@
 
     Remote control commands.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -238,6 +238,12 @@ def pool_shrink(panel, n=1, **kwargs):
     else:
         panel.consumer.pool.shrink(n)
     return {"ok": "terminated worker processes"}
+
+
+@Panel.register
+def pool_restart(panel, modules=None, reload=False, reloader=None, **kwargs):
+    panel.consumer.controller.reload(modules, reload, reloader=reloader)
+    return {"ok": "reload started"}
 
 
 @Panel.register

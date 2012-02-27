@@ -5,7 +5,7 @@
 
     Tasks Implementation.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -17,11 +17,13 @@ import sys
 import threading
 
 from ... import current_app
+from ... import states
 from ...datastructures import ExceptionInfo
 from ...exceptions import MaxRetriesExceededError, RetryTaskError
-from ...execute.trace import TaskTrace
+from ...execute.trace import eager_trace_task
 from ...result import EagerResult
-from ...utils import mattrgetter, uuid
+from ...utils import maybe_reraise ,mattrgetter, uuid
+from ...utils.imports import instantiate
 from ...utils.mail import ErrorMail
 
 from ..registry import _unpickle_task
@@ -30,7 +32,7 @@ extract_exec_options = mattrgetter("queue", "routing_key",
                                    "exchange", "immediate",
                                    "mandatory", "priority",
                                    "serializer", "delivery_mode",
-                                   "compression")
+                                   "compression", "expires")
 
 
 class Context(threading.local):
@@ -60,6 +62,9 @@ class Context(threading.local):
         except AttributeError:
             return default
 
+    def __repr__(self):
+        return "<Context: %r>" % (vars(self, ))
+
 
 class TaskType(type):
     """Meta class for tasks.
@@ -77,11 +82,15 @@ class TaskType(type):
         app = attrs.get("app") or current_app
         task_module = attrs.get("__module__") or "__main__"
 
-        # Abstract class: abstract attribute should not be inherited.
+        if "__call__" in attrs:
+            # see note about __call__ below.
+            attrs["__defines_call__"] = True
+
+        # - Abstract class: abstract attribute should not be inherited.
         if attrs.pop("abstract", None) or not attrs.get("autoregister", True):
             return new(cls, name, bases, attrs)
 
-        # Automatically generate missing/empty name.
+        # - Automatically generate missing/empty name.
         autoname = False
         if not attrs.get("name"):
             try:
@@ -92,6 +101,23 @@ class TaskType(type):
             attrs["name"] = '.'.join([module_name, name])
             autoname = True
 
+        # - Automatically generate __call__.
+        # If this or none of its bases define __call__, we simply
+        # alias it to the ``run`` method, as
+        # this means we can skip a stacktrace frame :)
+        if not (attrs.get("__call__")
+                or any(getattr(b, "__defines_call__", False) for b in bases)):
+            try:
+                attrs["__call__"] = attrs["run"]
+            except KeyError:
+
+                # the class does not yet define run,
+                # so we can't optimize this case.
+                def __call__(self, *args, **kwargs):
+                    return self.run(*args, **kwargs)
+                attrs["__call__"] = __call__
+
+        # - Create and register class.
         # Because of the way import happens (recursively)
         # we may or may not be the first time the task tries to register
         # with the framework.  There should only be one class for each task
@@ -107,6 +133,7 @@ class TaskType(type):
 
         # decorate with annotations from config.
         app.annotate_task(task)
+
         return task
 
     def __repr__(cls):
@@ -122,6 +149,7 @@ class BaseTask(object):
 
     """
     __metaclass__ = TaskType
+    __tracer__ = None
 
     ErrorMail = ErrorMail
     MaxRetriesExceededError = MaxRetriesExceededError
@@ -241,8 +269,11 @@ class BaseTask(object):
     #: Default task expiry time.
     expires = None
 
-    def __call__(self, *args, **kwargs):
-        return self.run(*args, **kwargs)
+    #: The type of task *(no longer used)*.
+    type = "regular"
+
+    #: Execution strategy used, or the qualified name of one.
+    Strategy = "celery.worker.strategy:default"
 
     def __reduce__(self):
         return (_unpickle_task, (self.name, ), None)
@@ -250,6 +281,9 @@ class BaseTask(object):
     def run(self, *args, **kwargs):
         """The body of the task executed by workers."""
         raise NotImplementedError("Tasks must define the run method.")
+
+    def start_strategy(self, app, consumer):
+        return instantiate(self.Strategy, self, app, consumer)
 
     @classmethod
     def get_logger(self, loglevel=None, logfile=None, propagate=False,
@@ -337,9 +371,9 @@ class BaseTask(object):
         return self.apply_async(args, kwargs)
 
     @classmethod
-    def apply_async(self, args=None, kwargs=None, countdown=None,
-            eta=None, task_id=None, producer=None, connection=None,
-            router=None, expires=None, **options):
+    def apply_async(self, args=None, kwargs=None,
+            task_id=None, producer=None, connection=None,
+            router=None, queues=None, **options):
         """Apply tasks asynchronously by sending a message.
 
         :keyword args: The positional arguments to pass on to the
@@ -431,13 +465,9 @@ class BaseTask(object):
         producer = producer or publisher
 
         if conf.CELERY_ALWAYS_EAGER:
-            return self.apply(args, kwargs, task_id=task_id)
-
-        options.setdefault("compression",
-                           conf.CELERY_MESSAGE_COMPRESSION)
+            return self.apply(args, kwargs, task_id=task_id, **options)
         options = dict(extract_exec_options(self), **options)
         options = router.route(options, self.name, args, kwargs)
-        expires = expires or self.expires
 
         with app.acquire_producer(connection, producer, block=True) as prod:
             evd = None
@@ -446,8 +476,6 @@ class BaseTask(object):
                                             buffer_while_offline=False)
             task_id = prod.send_task(self.name, args, kwargs,
                                      task_id=task_id,
-                                     countdown=countdown,
-                                     eta=eta, expires=expires,
                                      event_dispatcher=evd,
                                      **options)
             return self.AsyncResult(task_id)
@@ -507,6 +535,7 @@ class BaseTask(object):
         # Not in worker or emulated by (apply/always_eager),
         # so just raise the original exception.
         if request.called_directly:
+            maybe_reraise()
             raise exc or RetryTaskError("Task can be retried", None)
 
         if delivery_info:
@@ -522,9 +551,11 @@ class BaseTask(object):
                         "eta": eta})
 
         if max_retries is not None and options["retries"] > max_retries:
-            raise exc or self.MaxRetriesExceededError(
-                            "Can't retry %s[%s] args:%s kwargs:%s" % (
-                                self.name, options["task_id"], args, kwargs))
+            if exc:
+                maybe_reraise()
+            raise self.MaxRetriesExceededError(
+                    "Can't retry %s[%s] args:%s kwargs:%s" % (
+                        self.name, options["task_id"], args, kwargs))
 
         # If task was executed eagerly using apply(),
         # then the retry must also be executed eagerly.
@@ -567,13 +598,14 @@ class BaseTask(object):
                    "logfile": options.get("logfile"),
                    "loglevel": options.get("loglevel", 0),
                    "delivery_info": {"is_eager": True}}
-        trace = TaskTrace(task.name, task_id, args, kwargs,
-                          task=task, request=request, propagate=throw)
-        retval = trace.execute()
+        retval, info = eager_trace_task(task, task_id, args, kwargs,
+                                        request=request, propagate=throw)
         if isinstance(retval, ExceptionInfo):
             retval = retval.exception
-        return EagerResult(task_id, retval, trace.status,
-                           traceback=trace.strtb)
+        state, tb = states.SUCCESS, ''
+        if info is not None:
+            state, tb = info.state, info.strtb
+        return EagerResult(task_id, retval, state, traceback=tb)
 
     @classmethod
     def AsyncResult(self, task_id):
@@ -631,8 +663,7 @@ class BaseTask(object):
         The return value of this handler is ignored.
 
         """
-        if self.request.chord:
-            self.backend.on_chord_part_return(self)
+        pass
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         """Error handler.
@@ -676,7 +707,7 @@ class BaseTask(object):
     def execute(self, request, pool, loglevel, logfile, **kwargs):
         """The method the worker calls to execute the task.
 
-        :param request: A :class:`~celery.worker.job.TaskRequest`.
+        :param request: A :class:`~celery.worker.job.Request`.
         :param pool: A task pool.
         :param loglevel: Current loglevel.
         :param logfile: Name of the currently used logfile.

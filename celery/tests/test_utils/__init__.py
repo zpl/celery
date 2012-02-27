@@ -1,19 +1,58 @@
 from __future__ import absolute_import
-
-import pickle
+from __future__ import with_statement
 
 from celery import utils
 from celery.utils.functional import promise, mpromise, maybe_promise
 from celery.utils.functional import padlist, firstmethod
 from celery.utils.text import abbr, abbrtask, truncate
-from celery.tests.utils import unittest
+from celery.utils.threads import bgThread
+from celery.tests.utils import Case
 
 
 def double(x):
     return x * 2
 
 
-class test_utils(unittest.TestCase):
+class test_bgThread_interface(Case):
+
+    def test_body(self):
+        x = bgThread()
+        with self.assertRaises(NotImplementedError):
+            x.body()
+
+
+class test_chunks(Case):
+
+    def test_chunks(self):
+
+        # n == 2
+        x = utils.chunks(iter([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), 2)
+        self.assertListEqual(list(x),
+            [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9], [10]])
+
+        # n == 3
+        x = utils.chunks(iter([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), 3)
+        self.assertListEqual(list(x),
+            [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10]])
+
+        # n == 2 (exact)
+        x = utils.chunks(iter([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), 2)
+        self.assertListEqual(list(x),
+            [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]])
+
+
+class test_utils(Case):
+
+    def test_qualname(self):
+        Class = type("Fox", (object, ), {"__module__": "quick.brown"})
+        self.assertEqual(utils.qualname(Class), "quick.brown.Fox")
+        self.assertEqual(utils.qualname(Class()), "quick.brown.Fox")
+
+    def test_is_iterable(self):
+        for a in "f", ["f"], ("f", ), {"f": "f"}:
+            self.assertTrue(utils.is_iterable(a))
+        for b in object(), 1:
+            self.assertFalse(utils.is_iterable(b))
 
     def test_padlist(self):
         self.assertListEqual(padlist(["George", "Costanza", "NYC"], 3),
@@ -70,40 +109,7 @@ class test_utils(unittest.TestCase):
         self.assertIs(x.__delete__(None), x)
 
 
-class test_promise(unittest.TestCase):
-
-    def test__str__(self):
-        self.assertEqual(str(promise(lambda: "the quick brown fox")),
-                "the quick brown fox")
-
-    def test__repr__(self):
-        self.assertEqual(repr(promise(lambda: "fi fa fo")),
-                "'fi fa fo'")
-
-    def test_evaluate(self):
-        self.assertEqual(promise(lambda: 2 + 2)(), 4)
-        self.assertEqual(promise(lambda x: x * 4, 2), 8)
-        self.assertEqual(promise(lambda x: x * 8, 2)(), 16)
-
-    def test_cmp(self):
-        self.assertEqual(promise(lambda: 10), promise(lambda: 10))
-        self.assertNotEqual(promise(lambda: 10), promise(lambda: 20))
-
-    def test__reduce__(self):
-        x = promise(double, 4)
-        y = pickle.loads(pickle.dumps(x))
-        self.assertEqual(x(), y())
-
-    def test__deepcopy__(self):
-        from copy import deepcopy
-        x = promise(double, 4)
-        y = deepcopy(x)
-        self.assertEqual(x._fun, y._fun)
-        self.assertEqual(x._args, y._args)
-        self.assertEqual(x(), y())
-
-
-class test_mpromise(unittest.TestCase):
+class test_mpromise(Case):
 
     def test_is_memoized(self):
 
@@ -113,10 +119,3 @@ class test_mpromise(unittest.TestCase):
         self.assertTrue(p.evaluated)
         self.assertEqual(p(), 20)
         self.assertEqual(repr(p), "20")
-
-
-class test_maybe_promise(unittest.TestCase):
-
-    def test_evaluates(self):
-        self.assertEqual(maybe_promise(promise(lambda: 10)), 10)
-        self.assertEqual(maybe_promise(20), 20)

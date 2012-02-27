@@ -5,7 +5,7 @@
 
     The Celery periodic task scheduler.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -23,11 +23,10 @@ try:
 except ImportError:
     multiprocessing = None  # noqa
 
-from datetime import datetime
-
 from . import __version__
 from . import platforms
 from . import signals
+from . import current_app
 from .app import app_or_default
 from .schedules import maybe_schedule, crontab
 from .utils import cached_property
@@ -88,13 +87,13 @@ class ScheduleEntry(object):
         self.total_run_count = total_run_count or 0
 
     def _default_now(self):
-        return datetime.utcnow()
+        return current_app.now()
 
     def _next_instance(self, last_run_at=None):
         """Returns a new instance of the same class, but with
         its date and count fields updated."""
         return self.__class__(**dict(self,
-                                last_run_at=last_run_at or datetime.utcnow(),
+                                last_run_at=last_run_at or self._default_now(),
                                 total_run_count=self.total_run_count + 1))
     __next__ = next = _next_instance  # for 2to3
 
@@ -172,7 +171,7 @@ class Scheduler(object):
         is_due, next_time_to_run = entry.is_due()
 
         if is_due:
-            self.logger.debug("Scheduler: Sending due task %s", entry.task)
+            self.logger.info("Scheduler: Sending due task %s", entry.task)
             try:
                 result = self.apply_async(entry)
             except Exception, exc:
@@ -228,8 +227,9 @@ class Scheduler(object):
                                         connection=self.connection,
                                         **entry.options)
         except Exception, exc:
-            raise SchedulingError("Couldn't apply scheduled task %s: %s" % (
-                    entry.name, exc))
+            raise SchedulingError, SchedulingError(
+                "Couldn't apply scheduled task %s: %s" % (
+                    entry.name, exc)), sys.exc_info()[2]
 
         if self.should_sync():
             self._do_sync()
@@ -270,7 +270,7 @@ class Scheduler(object):
 
     def merge_inplace(self, b):
         schedule = self.schedule
-        A, B = set(schedule.keys()), set(b.keys())
+        A, B = set(schedule), set(b)
 
         # Remove items from disk not in the schedule anymore.
         for key in A ^ B:

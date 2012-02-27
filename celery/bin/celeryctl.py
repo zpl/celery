@@ -2,6 +2,9 @@
 from __future__ import absolute_import
 from __future__ import with_statement
 
+if __name__ == "__main__" and __package__ is None:
+    __package__ = "celery.bin.celeryctl"
+
 import sys
 
 from optparse import OptionParser, make_option as Option
@@ -10,18 +13,34 @@ from textwrap import wrap
 
 from anyjson import deserialize
 
-from celery import __version__
-from celery.app import app_or_default, current_app
-from celery.utils import term
+from .. import __version__
+from ..app import app_or_default, current_app
+from ..platforms import EX_OK, EX_FAILURE, EX_UNAVAILABLE, EX_USAGE
+from ..utils import term
+from ..utils.timeutils import maybe_iso8601
 
-from celery.bin.base import Command as CeleryCommand
+from ..bin.base import Command as CeleryCommand
 
+HELP = """
+Type '%(prog_name)s <command> --help' for help using
+a specific command.
+
+Available commands:
+%(commands)s
+"""
 
 commands = {}
 
 
 class Error(Exception):
-    pass
+
+    def __init__(self, reason, status=EX_FAILURE):
+        self.reason = reason
+        self.status = status
+        super(Error, self).__init__(reason, status)
+
+    def __str__(self):
+        return self.reason
 
 
 def command(fun, name=None):
@@ -47,18 +66,25 @@ class Command(object):
 
     def __call__(self, *args, **kwargs):
         try:
-            self.run(*args, **kwargs)
+            ret = self.run(*args, **kwargs)
         except Error, exc:
             self.error(self.colored.red("Error: %s" % exc))
+            return exc.status
+
+        return ret if ret is not None else EX_OK
+
+    def show_help(self, command):
+        self.run_from_argv(self.prog_name, [command, "--help"])
+        return EX_USAGE
 
     def error(self, s):
-        return self.out(s, fh=sys.stderr)
+        self.out(s, fh=sys.stderr)
 
     def out(self, s, fh=sys.stdout):
         s = str(s)
         if not s.endswith("\n"):
             s += "\n"
-        sys.stdout.write(s)
+        fh.write(s)
 
     def create_parser(self, prog_name, command):
         return OptionParser(prog=prog_name,
@@ -73,7 +99,7 @@ class Command(object):
         self.parser = self.create_parser(self.prog_name, self.command)
         options, args = self.parser.parse_args(self.arglist)
         self.colored = term.colored(enabled=not options.no_color)
-        self(*args, **options.__dict__)
+        return self(*args, **options.__dict__)
 
     def run(self, *args, **kwargs):
         raise NotImplementedError()
@@ -156,12 +182,16 @@ class apply(Command):
         if isinstance(kwargs, basestring):
             kwargs = deserialize(kwargs)
 
-        # Expires can be int.
+        # Expires can be int/float.
         expires = kw.get("expires") or None
         try:
-            expires = int(expires)
+            expires = float(expires)
         except (TypeError, ValueError):
-            pass
+            # or a string describing an ISO 8601 datetime.
+            try:
+                expires = maybe_iso8601(expires)
+            except (TypeError, ValueError):
+                pass
 
         res = self.app.send_task(name, args=args, kwargs=kwargs,
                                  countdown=kw.get("countdown"),
@@ -169,7 +199,7 @@ class apply(Command):
                                  queue=kw.get("queue"),
                                  exchange=kw.get("exchange"),
                                  routing_key=kw.get("routing_key"),
-                                 eta=kw.get("eta"),
+                                 eta=maybe_iso8601(kw.get("eta")),
                                  expires=expires)
         self.out(res.task_id)
 apply = command(apply)
@@ -269,7 +299,8 @@ class inspect(Command):
                                      callback=on_reply)
         replies = getattr(i, command)(*args[1:])
         if not replies:
-            raise Error("No nodes replied within time constraint.")
+            raise Error("No nodes replied within time constraint.",
+                        status=EX_UNAVAILABLE)
         return replies
 
     def say(self, direction, title, body=""):
@@ -296,12 +327,109 @@ class status(Command):
                           no_color=kwargs.get("no_color", False)) \
                     .run("ping", **dict(kwargs, quiet=True, show_body=False))
         if not replies:
-            raise Error("No nodes replied within time constraint")
+            raise Error("No nodes replied within time constraint",
+                        status=EX_UNAVAILABLE)
         nodecount = len(replies)
         if not kwargs.get("quiet", False):
             self.out("\n%s %s online." % (nodecount,
                                           nodecount > 1 and "nodes" or "node"))
 status = command(status)
+
+
+class migrate(Command):
+
+    def usage(self, command):
+        return "%%prog %s <source_url> <dest_url>" % (command, )
+
+    def on_migrate_task(self, state, body, message):
+        self.out("Migrating task %s/%s: %s[%s]" % (
+            state.count, state.strtotal, body["task"], body["id"]))
+
+    def run(self, *args, **kwargs):
+        if len(args) != 2:
+            return self.show_help("migrate")
+        from kombu import BrokerConnection
+        from ..contrib.migrate import migrate_tasks
+
+        migrate_tasks(BrokerConnection(args[0]),
+                      BrokerConnection(args[1]),
+                      callback=self.on_migrate_task)
+migrate = command(migrate)
+
+
+class shell(Command):
+    option_list = Command.option_list + (
+                Option("--ipython", "-I", action="store_true",
+                    dest="force_ipython", default=False,
+                    help="Force IPython."),
+                Option("--bpython", "-B", action="store_true",
+                    dest="force_bpython", default=False,
+                    help="Force bpython."),
+                Option("--python", "-P", action="store_true",
+                    dest="force_python", default=False,
+                    help="Force default Python shell."),
+                Option("--without-tasks", "-T", action="store_true",
+                    dest="without_tasks", default=False,
+                    help="Don't add tasks to locals."),
+    )
+
+    def run(self, force_ipython=False, force_bpython=False,
+            force_python=False, without_tasks=False, **kwargs):
+        from .. import registry
+        self.app.loader.import_default_modules()
+        self.locals = {"celery": self.app}
+
+        if not without_tasks:
+            self.locals.update(dict((task.__name__, task)
+                                for task in registry.tasks.itervalues()))
+
+        if force_python:
+            return self.invoke_fallback_shell()
+        elif force_bpython:
+            return self.invoke_bpython_shell()
+        elif force_ipython:
+            return self.invoke_ipython_shell()
+        return self.invoke_default_shell()
+
+    def invoke_default_shell(self):
+        try:
+            import IPython  # noqa
+        except ImportError:
+            try:
+                import bpython  # noqa
+            except ImportError:
+                return self.invoke_fallback_shell()
+            else:
+                return self.invoke_bpython_shell()
+        else:
+            return self.invoke_ipython_shell()
+
+    def invoke_fallback_shell(self):
+        import code
+        try:
+            import readline
+        except ImportError:
+            pass
+        else:
+            import rlcompleter
+            readline.set_completer(
+                    rlcompleter.Completer(self.locals).complete)
+            readline.parse_and_bind("tab:complete")
+        code.interact(local=self.locals)
+
+    def invoke_ipython_shell(self):
+        try:
+            from IPython.frontend.terminal import embed
+            embed.TerminalInteractiveShell(user_ns=self.locals).mainloop()
+        except ImportError:  # ipython < 0.11
+            from IPython.Shell import IPShell
+            IPShell(argv=[], user_ns=self.locals).mainloop()
+
+    def invoke_bpython_shell(self):
+        import bpython
+        bpython.embed(self.locals)
+
+shell = command(shell)
 
 
 class help(Command):
@@ -311,14 +439,11 @@ class help(Command):
 
     def run(self, *args, **kwargs):
         self.parser.print_help()
-        usage = ["",
-                "Type '%s <command> --help' for help on a "
-                "specific command." % (self.prog_name, ),
-                "",
-                "Available commands:"]
-        for command in list(sorted(commands.keys())):
-            usage.append("    %s" % command)
-        self.out("\n".join(usage))
+        self.out(HELP % {"prog_name": self.prog_name,
+                         "commands": "\n".join(indent(command)
+                                             for command in sorted(commands))})
+
+        return EX_USAGE
 help = command(help)
 
 
@@ -332,7 +457,7 @@ class celeryctl(CeleryCommand):
             cls, argv = self.commands["help"], ["help"]
         cls = self.commands.get(command) or self.commands["help"]
         try:
-            cls(app=self.app).run_from_argv(self.prog_name, argv)
+            return cls(app=self.app).run_from_argv(self.prog_name, argv)
         except Error:
             return self.execute("help", argv)
 
@@ -359,11 +484,18 @@ class celeryctl(CeleryCommand):
         return self.execute(command, argv)
 
 
+def determine_exit_status(ret):
+    if isinstance(ret, int):
+        return ret
+    return EX_OK if ret else EX_FAILURE
+
+
 def main():
     try:
-        celeryctl().execute_from_commandline()
+        sys.exit(determine_exit_status(
+            celeryctl().execute_from_commandline()))
     except KeyboardInterrupt:
-        pass
+        sys.exit(EX_FAILURE)
 
 if __name__ == "__main__":          # pragma: no cover
     main()

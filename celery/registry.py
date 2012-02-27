@@ -6,7 +6,7 @@
     Registry of available tasks.
     See module :mod:`celery.app.registry`.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """

@@ -25,16 +25,20 @@
 from __future__ import with_statement
 from __future__ import absolute_import
 
+if __name__ == "__main__" and __package__ is None:
+    __package__ = "celery.bin.celerybeat"
+
 import os
 
 from functools import partial
 
-from celery.platforms import detached
+from ..platforms import detached
 
-from celery.bin.base import Command, Option, daemon_options
+from .base import Command, Option, daemon_options
 
 
 class BeatCommand(Command):
+    enable_config_from_cmdline = True
     supports_args = False
     preload_options = (Command.preload_options
                      + daemon_options(default_pidfile="celerybeat.pid"))
@@ -77,7 +81,7 @@ class BeatCommand(Command):
                 default=None,
                 action="store", dest="scheduler_cls",
                 help="Scheduler class. Default is "
-                     "celery.beat.PersistentScheduler"))
+                     "celery.beat:PersistentScheduler"))
 
 
 def main():

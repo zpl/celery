@@ -16,7 +16,7 @@ from celery.platforms import pyimplementation
 from celery.utils.serialization import pickle
 
 from celery.tests import config
-from celery.tests.utils import (unittest, mask_modules, platform_pyimp,
+from celery.tests.utils import (Case, mask_modules, platform_pyimp,
                                 sys_platform, pypy_version)
 from celery.utils import uuid
 from celery.utils.mail import ErrorMail
@@ -39,7 +39,7 @@ def _get_test_config():
 test_config = _get_test_config()
 
 
-class test_App(unittest.TestCase):
+class test_App(Case):
 
     def setUp(self):
         self.app = Celery(set_as_current=False)
@@ -207,6 +207,7 @@ class test_App(unittest.TestCase):
                                        exchange=Exchange("moo_exchange"),
                                        routing_key="moo_exchange",
                                        event_dispatcher=dispatcher))
+        self.assertIn("moo_exchange", amqp._exchanges_declared)
         self.assertTrue(dispatcher.sent)
         self.assertEqual(dispatcher.sent[0][0], "task-sent")
         self.assertTrue(prod.send_task("footask", (), {},
@@ -224,13 +225,13 @@ class test_App(unittest.TestCase):
         self.assertTrue(x)
 
 
-class test_BaseApp(unittest.TestCase):
+class test_BaseApp(Case):
 
     def test_on_init(self):
         BaseApp()
 
 
-class test_defaults(unittest.TestCase):
+class test_defaults(Case):
 
     def test_str_to_bool(self):
         for s in ("false", "no", "0"):
@@ -241,7 +242,7 @@ class test_defaults(unittest.TestCase):
             defaults.str_to_bool("unsure")
 
 
-class test_debugging_utils(unittest.TestCase):
+class test_debugging_utils(Case):
 
     def test_enable_disable_trace(self):
         try:
@@ -253,7 +254,7 @@ class test_debugging_utils(unittest.TestCase):
             _app.disable_trace()
 
 
-class test_compilation(unittest.TestCase):
+class test_compilation(Case):
     _clean = ("celery.app.base", )
 
     def setUp(self):
@@ -269,7 +270,7 @@ class test_compilation(unittest.TestCase):
             __import__("celery.app.base")
 
 
-class test_pyimplementation(unittest.TestCase):
+class test_pyimplementation(Case):
 
     def test_platform_python_implementation(self):
         with platform_pyimp(lambda: "Xython"):

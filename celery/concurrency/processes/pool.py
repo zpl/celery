@@ -12,25 +12,27 @@ from __future__ import absolute_import
 # Imports
 #
 
-import os
-import sys
-import errno
-import threading
-import Queue
-import itertools
 import collections
-import time
-import signal
-import warnings
+import errno
+import itertools
 import logging
+import os
+import signal
+import sys
+import threading
+import time
+import Queue
+import warnings
 
-from multiprocessing import Process, cpu_count, TimeoutError
+from multiprocessing import cpu_count, TimeoutError, Event
 from multiprocessing import util
 from multiprocessing.util import Finalize, debug
 
 from celery.datastructures import ExceptionInfo
 from celery.exceptions import SoftTimeLimitExceeded, TimeLimitExceeded
 from celery.exceptions import WorkerLostError
+
+from .process import Process
 
 _Semaphore = threading._Semaphore
 
@@ -66,6 +68,15 @@ def mapstar(args):
 def error(msg, *args, **kwargs):
     if util._logger:
         util._logger.error(msg, *args, **kwargs)
+
+
+def safe_apply_callback(fun, *args):
+    if fun:
+        try:
+            fun(*args)
+        except BaseException, exc:
+            error("Pool callback raised exception: %r", exc,
+                  exc_info=sys.exc_info())
 
 
 class LaxBoundedSemaphore(threading._Semaphore):
@@ -135,7 +146,7 @@ def soft_timeout_sighandler(signum, frame):
 
 
 def worker(inqueue, outqueue, initializer=None, initargs=(),
-        maxtasks=None):
+           maxtasks=None, sentinel=None):
     # Re-init logging system.
     # Workaround for http://bugs.python.org/issue6721#msg140215
     # Python logging module uses RLock() objects which are broken after
@@ -178,6 +189,10 @@ def worker(inqueue, outqueue, initializer=None, initargs=(),
 
     completed = 0
     while maxtasks is None or (maxtasks and completed < maxtasks):
+        if sentinel is not None and sentinel.is_set():
+            debug('worker got sentinel -- exiting')
+            break
+
         try:
             ready, task = poll(1.0)
             if not ready:
@@ -517,7 +532,8 @@ class Pool(object):
     SoftTimeLimitExceeded = SoftTimeLimitExceeded
 
     def __init__(self, processes=None, initializer=None, initargs=(),
-            maxtasksperchild=None, timeout=None, soft_timeout=None):
+            maxtasksperchild=None, timeout=None, soft_timeout=None,
+            force_execv=False):
         self._setup_queues()
         self._taskqueue = Queue.Queue()
         self._cache = {}
@@ -527,6 +543,7 @@ class Pool(object):
         self._maxtasksperchild = maxtasksperchild
         self._initializer = initializer
         self._initargs = initargs
+        self._force_execv = force_execv
 
         if soft_timeout and SIG_SOFT_TIMEOUT is None:
             warnings.warn(UserWarning("Soft timeouts are not supported: "
@@ -544,6 +561,7 @@ class Pool(object):
             raise TypeError('initializer must be a callable')
 
         self._pool = []
+        self._poolctrl = {}
         for i in range(processes):
             self._create_worker_process()
 
@@ -581,16 +599,20 @@ class Pool(object):
             )
 
     def _create_worker_process(self):
+        sentinel = Event()
         w = self.Process(
+            force_execv=self._force_execv,
             target=worker,
             args=(self._inqueue, self._outqueue,
                     self._initializer, self._initargs,
-                    self._maxtasksperchild),
+                    self._maxtasksperchild,
+                    sentinel),
             )
         self._pool.append(w)
         w.name = w.name.replace('Process', 'PoolWorker')
         w.daemon = True
         w.start()
+        self._poolctrl[w.pid] = sentinel
         return w
 
     def _join_exited_workers(self, shutdown=False):
@@ -627,6 +649,7 @@ class Pool(object):
                 debug('Supervisor: worked %d joined' % i)
                 cleaned.append(worker.pid)
                 del self._pool[i]
+                del self._poolctrl[worker.pid]
         if cleaned:
             for job in self._cache.values():
                 for worker_pid in job.worker_pids():
@@ -798,11 +821,8 @@ class Pool(object):
             warnings.warn(UserWarning("Soft timeouts are not supported: "
                     "on this platform: It does not have the SIGUSR1 signal."))
             soft_timeout = None
-        if waitforslot and self._putlock is not None:
-            while 1:
-                if self._state != RUN or self._putlock.acquire(False):
-                    break
-                time.sleep(1.0)
+        if waitforslot and self._putlock is not None and self._state == RUN:
+            self._putlock.acquire()
         if self._state == RUN:
             result = ApplyResult(self._cache, callback,
                                  accept_callback, timeout_callback,
@@ -877,6 +897,10 @@ class Pool(object):
         for i, p in enumerate(self._pool):
             debug('joining worker %s/%s (%r)' % (i, len(self._pool), p, ))
             p.join()
+
+    def restart(self):
+        for e in self._poolctrl.itervalues():
+            e.set()
 
     @staticmethod
     def _help_stuff_finish(inqueue, task_handler, size):
@@ -1010,9 +1034,11 @@ class ApplyResult(object):
 
             # apply callbacks last
             if self._callback and self._success:
-                self._callback(self._value)
+                safe_apply_callback(
+                    self._callback, self._value)
             if self._errback and not self._success:
-                self._errback(self._value)
+                safe_apply_callback(
+                    self._errback, self._value)
         finally:
             self._mutex.release()
 
@@ -1025,7 +1051,8 @@ class ApplyResult(object):
             if self._ready:
                 self._cache.pop(self._job, None)
             if self._accept_callback:
-                self._accept_callback(pid, time_accepted)
+                safe_apply_callback(
+                    self._accept_callback, pid, time_accepted)
         finally:
             self._mutex.release()
 

@@ -77,10 +77,13 @@
 """
 from __future__ import absolute_import
 
+if "__main__" and __package__ is None:
+    __package__ = "celery.bin.celeryd"
+
 import sys
 
 try:
-    from multiprocessing import freeze_support
+    from celery.concurrency.processes.forking import freeze_support
 except ImportError:  # pragma: no cover
     freeze_support = lambda: True  # noqa
 
@@ -110,7 +113,7 @@ class WorkerCommand(Command):
                 help="Number of worker threads/processes"),
             Option('-P', '--pool',
                 default=conf.CELERYD_POOL,
-                action="store", dest="pool", type="str",
+                action="store", dest="pool_cls", type="str",
                 help="Pool implementation: "
                      "processes (default), eventlet, gevent, "
                      "solo or threads."),
@@ -132,13 +135,13 @@ class WorkerCommand(Command):
                 action="store", dest="agents", default=None,
                 help="Additional actor agents to start."),
             Option('-B', '--beat', default=False,
-                action="store_true", dest="run_clockservice",
+                action="store_true", dest="embed_clockservice",
                 help="Also run the celerybeat periodic task scheduler. "
                      "NOTE: Only one instance of celerybeat must be"
                      "running at any one time."),
             Option('-s', '--schedule',
                 default=conf.CELERYBEAT_SCHEDULE_FILENAME,
-                action="store", dest="schedule",
+                action="store", dest="schedule_filename",
                 help="Path to the schedule database if running with the -B "
                      "option. The extension '.db' will be appended to the "
                     "filename. Default: %s" % (
@@ -147,14 +150,14 @@ class WorkerCommand(Command):
                 default=None,
                 action="store", dest="scheduler_cls",
                 help="Scheduler class. Default is "
-                     "celery.beat.PersistentScheduler"),
+                     "celery.beat:PersistentScheduler"),
             Option('-S', '--statedb', default=conf.CELERYD_STATE_DB,
-                action="store", dest="db",
+                action="store", dest="state_db",
                 help="Path to the state database. The extension '.db' will "
                      "be appended to the filename. Default: %s" % (
                         conf.CELERYD_STATE_DB, )),
             Option('-E', '--events', default=conf.CELERY_SEND_EVENTS,
-                action="store_true", dest="events",
+                action="store_true", dest="send_events",
                 help="Send events so the worker can be monitored by "
                      "celeryev, celerymon and other monitors.."),
             Option('--time-limit',
@@ -179,39 +182,30 @@ class WorkerCommand(Command):
                 action="store", dest="include",
                 help="Comma separated list of additional modules to import. "
                  "Example: -I foo.tasks,bar.tasks"),
-            Option('--pidfile', default=None,
+            Option('--pidfile', dest="pidfile", default=None,
                 help="Optional file used to store the workers pid. "
                      "The worker will not start if this file already exists "
                      "and the pid is still alive."),
-            Option('--autoscale', default=None,
+            Option('--autoscale', dest="autoscale", default=None,
                 help="Enable autoscaling by providing "
                      "max_concurrency,min_concurrency. Example: "
                      "--autoscale=10,3 (always keep 3 processes, "
                      "but grow to 10 if necessary)."),
+            Option('--autoreload', dest="autoreload",
+                    action="store_true", default=False,
+                help="Enable autoreloading."),
         )
 
 
 def main():
+    # Fix for setuptools generated scripts, so that it will
+    # work with multiprocessing fork emulation.
+    # (see multiprocessing.forking.get_preparation_data())
+    if __name__ != "__main__":
+        sys.modules["__main__"] = sys.modules[__name__]
     freeze_support()
     worker = WorkerCommand()
     worker.execute_from_commandline()
-
-
-def windows_main():
-    sys.stderr.write("""
-
-The celeryd command does not work on Windows.
-
-Instead, please use:
-
-    ..> python -m celery.bin.celeryd
-
-You can also supply arguments:
-
-    ..> python -m celery.bin.celeryd --concurrency=10 --loglevel=DEBUG
-
-
-    """.strip())
 
 
 if __name__ == "__main__":          # pragma: no cover

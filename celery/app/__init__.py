@@ -5,7 +5,7 @@
 
     Celery Application.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -24,14 +24,20 @@ from ..utils.imports import instantiate
 from . import annotations
 from . import base
 
-# Apps with the :attr:`~celery.app.base.BaseApp.set_as_current` attribute
-# sets this, so it will always contain the last instantiated app,
-# and is the default app returned by :func:`app_or_default`.
-_tls = threading.local()
-_tls.current_app = None
+
+class _TLS(threading.local):
+    #: Apps with the :attr:`~celery.app.base.BaseApp.set_as_current` attribute
+    #: sets this, so it will always contain the last instantiated app,
+    #: and is the default app returned by :func:`app_or_default`.
+    current_app = None
+
+    #: The currently executing task.
+    current_task = None
+_tls = _TLS()
 
 
 class AppPickler(object):
+    """Default application pickler/unpickler."""
 
     def __call__(self, cls, *args):
         kwargs = self.build_kwargs(*args)
@@ -112,23 +118,25 @@ class App(base.BaseApp):
 
     def Worker(self, **kwargs):
         """Create new :class:`~celery.apps.worker.Worker` instance."""
-        return instantiate("celery.apps.worker.Worker", app=self, **kwargs)
+        return instantiate("celery.apps.worker:Worker", app=self, **kwargs)
+
+    def WorkController(self, **kwargs):
+        return instantiate("celery.worker:WorkController", app=self, **kwargs)
 
     def Beat(self, **kwargs):
         """Create new :class:`~celery.apps.beat.Beat` instance."""
-        return instantiate("celery.apps.beat.Beat", app=self, **kwargs)
+        return instantiate("celery.apps.beat:Beat", app=self, **kwargs)
 
     def TaskSet(self, *args, **kwargs):
         """Create new :class:`~celery.task.sets.TaskSet`."""
-        from ..task.sets import TaskSet
-        kwargs["app"] = self
-        return TaskSet(*args, **kwargs)
+        return instantiate("celery.task.sets:TaskSet",
+                           app=self, *args, **kwargs)
 
     def worker_main(self, argv=None):
         """Run :program:`celeryd` using `argv`.  Uses :data:`sys.argv`
         if `argv` is not specified."""
-        from ..bin.celeryd import WorkerCommand
-        return WorkerCommand(app=self).execute_from_commandline(argv)
+        return instantiate("celery.bin.celeryd:WorkerCommand", app=self) \
+                    .execute_from_commandline(argv)
 
     def task(self, *args, **options):
         """Decorator to create a task class out of any callable.
@@ -164,21 +172,14 @@ class App(base.BaseApp):
         def inner_create_task_cls(**options):
 
             def _create_task_cls(fun):
-                options["app"] = self
                 base = options.pop("base", None) or self.Task
 
-                @wraps(fun, assigned=("__module__", "__name__"))
-                def run(self, *args, **kwargs):
-                    return fun(*args, **kwargs)
-
-                # this was used previously for the magic kwargs.
-                # we leave it here in case someone depends on this.
-                run.argspec = getargspec(fun)
-
-                cls_dict = dict(options, run=run,
-                                __module__=fun.__module__,
-                                __doc__=fun.__doc__)
-                T = type(fun.__name__, (base, ), cls_dict)()
+                T = type(fun.__name__, (base, ), dict({
+                        "app": self,
+                        "accept_magic_kwargs": False,
+                        "run": staticmethod(fun),
+                        "__doc__": fun.__doc__,
+                        "__module__": fun.__module__}, **options))()
                 return self._tasks[T.name]  # global instance.
 
             return _create_task_cls
@@ -235,6 +236,10 @@ default_app = App("default", loader=default_loader, set_as_current=False)
 
 def current_app():
     return getattr(_tls, "current_app", None) or default_app
+
+
+def current_task():
+    return getattr(_tls, "current_task", None)
 
 
 def _app_or_default(app=None):

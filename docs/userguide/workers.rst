@@ -165,7 +165,7 @@ Only tasks that starts executing after the time limit change will be affected.
 Max tasks per child setting
 ===========================
 
-.. versionadded: 2.0
+.. versionadded:: 2.0
 
 With this option you can configure the maximum number of tasks
 a worker can execute before it's replaced by a new process.
@@ -175,6 +175,55 @@ for example from closed source C extensions.
 
 The option can be set using the `--maxtasksperchild` argument
 to `celeryd` or using the :setting:`CELERYD_MAX_TASKS_PER_CHILD` setting.
+
+.. _worker-autoreload:
+
+Autoreloading
+=============
+
+.. versionadded:: 2.5
+
+Starting :program:`celeryd` with the :option:`--autoreload` option will
+enable the worker to watch for file system changes to all imported task
+modules imported (and also any non-task modules added to the
+:setting:`CELERY_IMPORTS` setting or the :option:`-I|--include` option).
+
+This is an experimental feature intended for use in development only,
+using auto-reload in production is discouraged as the behavior of reloading
+a module in Python is undefined, and may cause hard to diagnose bugs and
+crashes.  Celery uses the same approach as the auto-reloader found in e.g.
+the Django ``runserver`` command.
+
+When auto-reload is enabled the worker starts an additional thread
+that watches for changes in the file system.  New modules are imported,
+and already imported modules are reloaded whenever a change is detected,
+and if the processes pool is used the child processes will finish the work
+they are doing and exit, so that they can be replaced by fresh processes
+effectively reloading the code.
+
+File system notification backends are pluggable, and it comes with three
+implementations:
+
+* inotify (Linux)
+
+    Used if the :mod:`pyinotify` library is installed.
+    If you are running on Linux this is the recommended implementation,
+    to install the :mod:`pyinotify` library you have to run the following
+    command::
+
+        $ pip install pyinotify
+
+* kqueue (OS X/BSD)
+
+* stat
+
+    The fallback implementation simply polls the files using ``stat`` and is very
+    expensive.
+
+You can force an implementation by setting the :envvar:`CELERYD_FSNOTIFY`
+environment variable::
+
+    $ env CELERYD_FSNOTIFY=stat celeryd -l info --autoreload
 
 .. _worker-remote-control:
 
@@ -354,6 +403,59 @@ a worker using :program:`celeryev`/:program:`celerymon`.
 
     >>> broadcast("enable_events")
     >>> broadcast("disable_events")
+
+Adding/Reloading modules
+------------------------
+
+.. versionadded:: 2.5
+
+The remote control command ``pool_restart`` sends restart requests to
+the workers child processes.  It is particularly useful for forcing
+the worker to import new modules, or for reloading already imported
+modules.  This command does not interrupt executing tasks.
+
+Example
+~~~~~~~
+
+Running the following command will result in the `foo` and `bar` modules
+being imported by the worker processes:
+
+.. code-block:: python
+
+    >>> from celery.task.control import broadcast
+    >>> broadcast("pool_restart", arguments={"modules": ["foo", "bar"]})
+
+Use the ``reload`` argument to reload modules it has already imported:
+
+.. code-block:: python
+
+    >>> broadcast("pool_restart", arguments={"modules": ["foo"],
+                                             "reload": True})
+
+If you don't specify any modules then all known tasks modules will
+be imported/reloaded:
+
+.. code-block:: python
+
+    >>> broadcast("pool_restart", arguments={"reload": True})
+
+The ``modules`` argument is a list of modules to modify. ``reload``
+specifies whether to reload modules if they have previously been imported.
+By default ``reload`` is disabled. The `pool_restart` command uses the
+Python :func:`reload` function to reload modules, or you can provide
+your own custom reloader by passing the ``reloader`` argument.
+
+.. note::
+
+    Module reloading comes with caveats that are documented in :func:`reload`.
+    Please read this documentation and make sure your modules are suitable
+    for reloading.
+
+.. seealso::
+
+    - http://pyunit.sourceforge.net/notes/reloading.html
+    - http://www.indelible.org/ink/python-reloading/
+    - http://docs.python.org/library/functions.html#reload
 
 .. _worker-custom-control-commands:
 

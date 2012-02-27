@@ -4,7 +4,11 @@
 
 .. image:: http://cloud.github.com/downloads/ask/celery/celery_128.png
 
+<<<<<<< HEAD
 :Version: 3.0.0a1
+=======
+:Version: 2.5.0
+>>>>>>> master
 :Web: http://celeryproject.org/
 :Download: http://pypi.python.org/pypi/celery/
 :Source: http://github.com/ask/celery/
@@ -28,15 +32,21 @@ Celery is used in production systems to process millions of tasks a day.
 
 Celery is written in Python, but the protocol can be implemented in any
 language.  It can also `operate with other languages using webhooks`_.
+There's also `RCelery` for the Ruby programming language, and a `PHP client`.
 
-The recommended message broker is `RabbitMQ`_, but `limited support`_ for
-`Redis`_, `Beanstalk`_, `MongoDB`_, `CouchDB`_ and
+The recommended message broker is `RabbitMQ`_, but support for
+`Redis`_, `MongoDB`_, Beanstalk`_, `Amazon SQS`_, `CouchDB`_ and
 databases (using `SQLAlchemy`_ or the `Django ORM`_) is also available.
 
 
-Celery is easy to integrate with `Django`_, `Pylons`_ and `Flask`_, using
+Celery is easy to integrate with `Django`_, `Pylons`_ `Flask`_, and `web2py`_, using
 the `django-celery`_, `celery-pylons`_ and `Flask-Celery`_ add-on packages.
+But Celery is only Python, and the integration packages is used mostly for
+convenience, Celery has also been successfully used with other frameworks and
+libraries, like `Pyramid`_ and `Bottle`_.
 
+.. _`RCelery`: http://leapfrogdevelopment.github.com/rcelery/
+.. _`PHP client`: https://github.com/gjedeer/celery-php
 .. _`RabbitMQ`: http://www.rabbitmq.com/
 .. _`Redis`: http://code.google.com/p/redis/
 .. _`SQLAlchemy`: http://www.sqlalchemy.org/
@@ -47,11 +57,16 @@ the `django-celery`_, `celery-pylons`_ and `Flask-Celery`_ add-on packages.
 .. _`Beanstalk`: http://kr.github.com/beanstalkd/
 .. _`MongoDB`: http://mongodb.org/
 .. _`CouchDB`: http://couchdb.apache.org/
+.. _`Amazon SQS`: http://aws.amazon.com/sqs/
 .. _`Pylons`: http://pylonshq.com/
 .. _`Flask`: http://flask.pocoo.org/
+.. _`web2py`: http://web2py.com/
+.. _`Bottle`: http://bottlepy.org/
+.. _`Pyramid`: http://docs.pylonsproject.org/en/latest/docs/pyramid.html
 .. _`django-celery`: http://pypi.python.org/pypi/django-celery
 .. _`celery-pylons`: http://pypi.python.org/pypi/celery-pylons
 .. _`Flask-Celery`: http://github.com/ask/flask-celery/
+.. _`web2py-celery`: http://code.google.com/p/web2py-celery/
 .. _`operate with other languages using webhooks`:
     http://ask.github.com/celery/userguide/remote-tasks.html
 .. _`limited support`:
@@ -111,7 +126,6 @@ Features
     +-----------------+----------------------------------------------------+
     | Fault-tolerant  | Excellent configurable error recovery when using   |
     |                 | `RabbitMQ`, ensures your tasks are never lost.     |
-    |                 | scenarios, and your tasks will never be lost.      |
     +-----------------+----------------------------------------------------+
     | Distributed     | Runs on one or more machines. Supports             |
     |                 | broker `clustering`_ and `HA`_ when used in        |
@@ -215,11 +229,45 @@ or from source.
 
 To install using `pip`,::
 
-    $ pip install Celery
+    $ pip install -U Celery
 
 To install using `easy_install`,::
 
-    $ easy_install Celery
+    $ easy_install -U Celery
+
+Bundles
+-------
+
+Celery also defines a group of bundles that can be used
+to install Celery and the dependencies for a given feature.
+
+The following bundles are available:
+
+:`celery-with-redis`_:
+    for using Redis as a broker.
+
+:`celery-with-mongodb`_:
+    for using MongoDB as a broker.
+
+:`django-celery-with-redis`_:
+    for Django, and using Redis as a broker.
+
+:`django-celery-with-mongodb`_:
+    for Django, and using MongoDB as a broker.
+
+:`bundle-celery`_:
+    convenience bundle installing *Celery* and related packages.
+
+.. _`celery-with-redis`:
+    http://pypi.python.org/pypi/celery-with-redis/
+.. _`celery-with-mongodb`:
+    http://pypi.python.org/pypi/celery-with-mongdb/
+.. _`django-celery-with-redis`:
+    http://pypi.python.org/pypi/django-celery-with-redis/
+.. _`django-celery-with-mongodb`:
+    http://pypi.python.org/pypi/django-celery-with-mongdb/
+.. _`bundle-celery`:
+    http://pypi.python.org/pypi/bundle-celery/
 
 .. _celery-installing-from-source:
 

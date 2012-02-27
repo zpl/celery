@@ -5,7 +5,7 @@
 
     Application Base Class.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -13,22 +13,26 @@ from __future__ import absolute_import
 from __future__ import with_statement
 
 import os
+import warnings
 
 from contextlib import contextmanager
 from copy import deepcopy
+from functools import wraps
 
 from kombu.clocks import LamportClock
 
 from .. import datastructures
 from .. import platforms
+from ..exceptions import AlwaysEagerIgnored
 from ..utils import cached_property, lpmerge
 from ..utils.imports import instantiate, get_cls_by_name
 
-from .defaults import DEFAULTS, find_deprecated_settings, NAMESPACES
+from .defaults import DEFAULTS, find_deprecated_settings, NAMESPACES, find
+
 
 import kombu
-if kombu.VERSION < (1, 3, 1):
-    raise ImportError("Celery requires Kombu version 1.3.1 or higher.")
+if kombu.VERSION < (2, 0):
+    raise ImportError("Celery requires Kombu version 1.1.0 or higher.")
 
 BUGREPORT_INFO = """
 platform -> system:%(system)s arch:%(arch)s imp:%(py_i)s
@@ -56,22 +60,6 @@ class Settings(datastructures.ConfigurationView):
                         for name, params in brokers.iteritems())
 
     @property
-    def BROKER_BACKEND(self):
-        """Deprecated compat alias to :attr:`BROKER_TRANSPORT`."""
-        return self.BROKER_TRANSPORT
-
-    @property
-    def BROKER_DEFAULT(self):
-        return (os.environ.get("CELERY_BROKER_DEFAULT") or
-                self.get("BROKER_DEFAULT"))
-
-    @property
-    def BROKER_HOST(self):
-        return (os.environ.get("CELERY_BROKER_URL") or
-                self.get("BROKER_URL") or
-                self.get("BROKER_HOST"))
-
-    @property
     def BROKER_TRANSPORT(self):
         """Resolves compat aliases :setting:`BROKER_BACKEND`
         and :setting:`CARROT_BACKEND`."""
@@ -80,9 +68,34 @@ class Settings(datastructures.ConfigurationView):
                 self.get("CARROT_BACKEND"))
 
     @property
+    def BROKER_DEFAULT(self):
+        return (os.environ.get("CELERY_BROKER_DEFAULT") or
+                self.get("BROKER_DEFAULT"))
+
+    @property
     def CELERY_RESULT_BACKEND(self):
         """Resolves deprecated alias ``CELERY_BACKEND``."""
         return self.get("CELERY_RESULT_BACKEND") or self.get("CELERY_BACKEND")
+
+    def BROKER_BACKEND(self):
+        """Deprecated compat alias to :attr:`BROKER_TRANSPORT`."""
+        return self.BROKER_TRANSPORT
+
+    @property
+    def BROKER_HOST(self):
+        return (os.environ.get("CELERY_BROKER_URL") or
+                self.get("BROKER_URL") or
+                self.get("BROKER_HOST"))
+
+    def find_option(self, name, namespace="celery"):
+        return find(name, namespace)
+
+    def get_by_parts(self, *parts):
+        return self["_".join(filter(None, parts))]
+
+    def find_value_for_key(self, name, namespace="celery"):
+        ns, key, _ = self.find_option(name, namespace=namespace)
+        return self.get_by_parts(ns, key)
 
 
 class BaseApp(object):
@@ -91,13 +104,15 @@ class BaseApp(object):
     IS_OSX = platforms.IS_OSX
     IS_WINDOWS = platforms.IS_WINDOWS
 
-    amqp_cls = "celery.app.amqp.AMQP"
+    amqp_cls = "celery.app.amqp:AMQP"
     backend_cls = None
-    events_cls = "celery.app.events.Events"
-    loader_cls = "celery.loaders.app.AppLoader"
-    log_cls = "celery.app.log.Logging"
-    control_cls = "celery.app.control.Control"
-    registry_cls = "celery.app.registry.tasks"
+    events_cls = "celery.app.events:Events"
+    loader_cls = "celery.loaders.app:AppLoader"
+    log_cls = "celery.app.log:Logging"
+    control_cls = "celery.app.control:Control"
+    registry_cls = "celery.app.registry:tasks"
+
+    _pool = None
 
     def __init__(self, main=None, loader=None, backend=None,
             amqp=None, events=None, log=None, control=None,
@@ -166,6 +181,10 @@ class BaseApp(object):
         :meth:`~celery.app.task.BaseTask.apply_async`.
 
         """
+        if self.conf.CELERY_ALWAYS_EAGER:
+            warnings.warn(AlwaysEagerIgnored(
+                "CELERY_ALWAYS_EAGER has no effect on send_task"))
+
         router = router or self.amqp.router
         result_cls = result_cls or self.AsyncResult
 
@@ -302,6 +321,9 @@ class BaseApp(object):
         find_deprecated_settings(c)
         return c
 
+    def now(self):
+        return self.loader.now()
+
     def mail_admins(self, subject, body, fail_silently=False):
         """Send an email to the admins in the :setting:`ADMINS` setting."""
         if self.conf.ADMINS:
@@ -316,6 +338,11 @@ class BaseApp(object):
                                        use_ssl=self.conf.EMAIL_USE_SSL,
                                        use_tls=self.conf.EMAIL_USE_TLS)
 
+    def select_queues(self, queues=None):
+        if queues:
+            return self.amqp.queues.select_subset(queues,
+                                    self.conf.CELERY_CREATE_MISSING_QUEUES)
+
     def merge(self, l, r):
         """Like `dict(a, **b)` except it will keep values from `a`
         if the value in `b` is :const:`None`."""
@@ -323,9 +350,9 @@ class BaseApp(object):
 
     def _get_backend(self):
         from ..backends import get_backend_cls
-        backend_cls = self.backend_cls or self.conf.CELERY_RESULT_BACKEND
-        backend_cls = get_backend_cls(backend_cls, loader=self.loader)
-        return backend_cls(app=self)
+        return get_backend_cls(
+                    self.backend_cls or self.conf.CELERY_RESULT_BACKEND,
+                    loader=self.loader)(app=self)
 
     def _get_config(self):
         return Settings({}, [self.prepare_config(self.loader.conf),

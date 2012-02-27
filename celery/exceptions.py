@@ -5,7 +5,7 @@
 
     This module contains Celery-specific exceptions.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -82,6 +82,14 @@ class TaskRevokedError(Exception):
 
 class NotConfigured(UserWarning):
     """Celery has not been configured, as no config module has been found."""
+
+
+class AlwaysEagerIgnored(UserWarning):
+    """send_task ignores CELERY_ALWAYS_EAGER option"""
+
+
+class InvalidTaskError(Exception):
+    """The task has invalid data or is not properly constructed."""
 
 
 class CPendingDeprecationWarning(PendingDeprecationWarning):

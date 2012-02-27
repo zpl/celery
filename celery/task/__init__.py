@@ -5,18 +5,21 @@
 
     Creating tasks, subtasks, sets and chords.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
 
 from .. import current_app
+from ..app import current_task as _current_task
 from ..local import Proxy
 
-from .base import Task, PeriodicTask  # noqa
-from .sets import TaskSet, subtask    # noqa
-from .chords import chord             # noqa
+from .base import Task, PeriodicTask        # noqa
+from .sets import group, TaskSet, subtask   # noqa
+from .chords import chord                   # noqa
+
+current = Proxy(_current_task)
 
 
 def task(*args, **kwargs):

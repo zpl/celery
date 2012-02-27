@@ -9,7 +9,12 @@ from celery.app import app_or_default
 from celery.app import control
 from celery.task import task
 from celery.utils import uuid
-from celery.tests.utils import unittest
+from celery.tests.utils import Case
+
+
+@task
+def mytask():
+    pass
 
 
 @task
@@ -46,7 +51,7 @@ def with_mock_broadcast(fun):
     return _resets
 
 
-class test_inspect(unittest.TestCase):
+class test_inspect(Case):
 
     def setUp(self):
         app = app_or_default()
@@ -118,7 +123,7 @@ class test_inspect(unittest.TestCase):
         self.assertIn("cancel_consumer", MockMailbox.sent)
 
 
-class test_Broadcast(unittest.TestCase):
+class test_Broadcast(Case):
 
     def setUp(self):
         self.app = app_or_default()

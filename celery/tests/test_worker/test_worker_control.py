@@ -1,25 +1,27 @@
 from __future__ import absolute_import
 from __future__ import with_statement
 
+import sys
 import socket
 
 from datetime import datetime, timedelta
 
 from kombu import pidbox
-from mock import Mock
+from mock import Mock, patch
 
 from celery import current_app
 from celery.datastructures import AttributeDict
 from celery.task import task
 from celery.utils import uuid
 from celery.utils.timer2 import Timer
+from celery.worker import WorkController as _WC
+from celery.worker import control
+from celery.worker import state
 from celery.worker.buckets import FastQueue
 from celery.worker.job import TaskRequest
-from celery.worker import state
 from celery.worker.state import revoked
-from celery.worker import control
 from celery.worker.control import Panel
-from celery.tests.utils import unittest
+from celery.tests.utils import Case
 
 hostname = socket.gethostname()
 
@@ -37,8 +39,8 @@ class Consumer(object):
 
     def __init__(self):
         self.ready_queue = FastQueue()
-        self.ready_queue.put(TaskRequest(task_name=mytask.name,
-                                         task_id=uuid(),
+        self.ready_queue.put(TaskRequest(mytask.name,
+                                         uuid(),
                                          args=(2, 2),
                                          kwargs={}))
         self.eta_schedule = Timer()
@@ -54,7 +56,7 @@ class Consumer(object):
         return {"xyz": "XYZ"}
 
 
-class test_ControlPanel(unittest.TestCase):
+class test_ControlPanel(Case):
 
     def setUp(self):
         self.app = current_app
@@ -377,3 +379,64 @@ class test_ControlPanel(unittest.TestCase):
                                              "routing_key": "x"})
         self.assertEqual(r, "pong")
         self.assertDictEqual(replies[0], {panel.hostname: "pong"})
+
+    def test_pool_restart(self):
+        consumer = Consumer()
+        consumer.controller = _WC()
+        consumer.controller.pool.restart = Mock()
+        panel = self.create_panel(consumer=consumer)
+        panel.app = self.app
+        _import = panel.app.loader.import_from_cwd = Mock()
+        _reload = Mock()
+
+        panel.handle("pool_restart", {"reloader": _reload})
+        self.assertTrue(consumer.controller.pool.restart.called)
+        self.assertFalse(_reload.called)
+        self.assertFalse(_import.called)
+
+    def test_pool_restart_import_modules(self):
+        consumer = Consumer()
+        consumer.controller = _WC()
+        consumer.controller.pool.restart = Mock()
+        panel = self.create_panel(consumer=consumer)
+        panel.app = self.app
+        _import = consumer.controller.app.loader.import_from_cwd = Mock()
+        _reload = Mock()
+
+        panel.handle("pool_restart", {"modules": ["foo", "bar"],
+                                      "reloader": _reload})
+
+        self.assertTrue(consumer.controller.pool.restart.called)
+        self.assertFalse(_reload.called)
+        self.assertEqual([(("foo",), {}), (("bar",), {})],
+                          _import.call_args_list)
+
+    def test_pool_restart_relaod_modules(self):
+        consumer = Consumer()
+        consumer.controller = _WC()
+        consumer.controller.pool.restart = Mock()
+        panel = self.create_panel(consumer=consumer)
+        panel.app = self.app
+        _import = panel.app.loader.import_from_cwd = Mock()
+        _reload = Mock()
+
+        with patch.dict(sys.modules, {"foo": None}):
+            panel.handle("pool_restart", {"modules": ["foo"],
+                                          "reload": False,
+                                          "reloader": _reload})
+
+            self.assertTrue(consumer.controller.pool.restart.called)
+            self.assertFalse(_reload.called)
+            self.assertFalse(_import.called)
+
+            _import.reset_mock()
+            _reload.reset_mock()
+            consumer.controller.pool.restart.reset_mock()
+
+            panel.handle("pool_restart", {"modules": ["foo"],
+                                          "reload": True,
+                                          "reloader": _reload})
+
+            self.assertTrue(consumer.controller.pool.restart.called)
+            self.assertTrue(_reload.called)
+            self.assertFalse(_import.called)

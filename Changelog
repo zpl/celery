@@ -18,8 +18,6 @@
 Important Notes
 ---------------
 
-* Now depends on Kombu 2.0.0
-
 * The deprecated `celery.decorators` module has been removed as scheduled.
 
     Instead of::
@@ -90,31 +88,37 @@ Important Notes
 
     [List alternatives here]
 
-News
-====
-
-* Secure serializer support.
-
-    [Need to write something about this here:]
-
-* New :setting:`CELERY_ANNOTATIONS` setting can change arbitrary task
-  attributes from the configuration.
-
-.. _version-2.5.0
+.. _version-2.5.0:
 
 2.5.0
 =====
-:status: DEVELOPMENT
-:branch: master
+:release-date: 2012-02-24 04:00 P.M GMT
+:by: Ask Solem
 
-* Adds Chord support for the memcached backend (Issue #533).
+See :ref:`whatsnew-2.5`.
 
-    Contributed by Dan McGee.
+Since the changelog has gained considerable size, we decided to
+do things differently this time: by having separate "what's new"
+documents for major version changes.
 
-* The `--uid` argument to daemons now uses ``initgroups()`` to set
-  groups to all the groups the user is a member of.
+Bugfix releases will still be found in the changelog.
 
-    Fix contributed by Łukasz Oleś.
+.. _version-2.4.5:
+
+2.4.5
+=====
+:release-date: 2011-12-02 05:00 P.M GMT
+:by: Ask Solem
+
+* Periodic task interval schedules were accidentally rounded down,
+  resulting in some periodic tasks being executed early.
+
+* Logging of humanized times in the celerybeat log is now more detailed.
+
+* New :ref:`brokers` section in the Getting Started part of the Documentation
+
+    This replaces the old :ref:`tut-otherqueues` tutorial, and adds
+    documentation for MongoDB, Beanstalk and CouchDB.
 
 .. _version-2.4.4:
 

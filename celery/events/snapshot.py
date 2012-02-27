@@ -9,13 +9,15 @@
     implementation of this writing the snapshots to a database
     in :mod:`djcelery.snapshots` in the `django-celery` distribution.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
 
 import atexit
+
+from kombu.utils.limits import TokenBucket
 
 from .. import platforms
 from ..app import app_or_default

@@ -5,7 +5,7 @@
 
     Scheduler for Python functions.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -189,10 +189,9 @@ class Timer(Thread):
         try:
             entry()
         except Exception, exc:
-            typ, val, tb = einfo = sys.exc_info()
-            if not self.schedule.handle_error(einfo):
+            if not self.schedule.handle_error(sys.exc_info()):
                 warnings.warn(TimedFunctionFailed(repr(exc))),
-                traceback.print_exception(typ, val, tb)
+                traceback.print_stack()
 
     def _next_entry(self):
         with self.not_empty:

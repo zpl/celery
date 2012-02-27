@@ -6,6 +6,9 @@
 """
 from __future__ import absolute_import
 
+if __name__ == "__main__" and __package__ is None:
+    __package__ = "celery.bin.celeryctl"
+
 import cmd
 import sys
 import shlex
@@ -18,7 +21,7 @@ from amqplib import client_0_8 as amqp
 from ..app import app_or_default
 from ..utils.functional import padlist
 
-from celery.bin.base import Command
+from .base import Command
 
 # Valid string -> bool coercions.
 BOOLS = {"1": True, "0": False,
@@ -249,7 +252,7 @@ class AMQShell(cmd.Cmd):
         say("unknown syntax: '%s'. how about some 'help'?" % line)
 
     def get_names(self):
-        return set(self.builtins.keys() + self.amqp.keys())
+        return set(self.builtins) | set(self.amqp)
 
     def completenames(self, text, *ignored):
         """Return all commands starting with `text`, for tab-completion."""

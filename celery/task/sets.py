@@ -5,7 +5,7 @@
 
     Creating and applying groups of tasks.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -147,6 +147,10 @@ class TaskSet(UserList):
     def _sync_results(self, taskset_id):
         return [task.apply(taskset_id=taskset_id) for task in self.tasks]
 
-    @property
-    def tasks(self):
+    def _get_tasks(self):
         return self.data
+
+    def _set_tasks(self, tasks):
+        self.data = tasks
+    tasks = property(_get_tasks, _set_tasks)
+group = TaskSet

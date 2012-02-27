@@ -5,7 +5,7 @@
 
     Task webhooks implementation.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -70,7 +70,8 @@ def extract_response(raw_response):
     try:
         payload = deserialize(raw_response)
     except ValueError, exc:
-        raise InvalidResponseError(str(exc))
+        raise InvalidResponseError, InvalidResponseError(
+                str(exc)), sys.exc_info()[2]
 
     status = payload["status"]
     if status == "success":

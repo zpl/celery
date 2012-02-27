@@ -5,7 +5,7 @@
 
     Configuration introspection and defaults.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
@@ -15,6 +15,8 @@ import sys
 
 from collections import deque
 from datetime import timedelta
+
+from ..utils.functional import memoize
 
 is_jython = sys.platform.startswith("java")
 is_pypy = hasattr(sys, "pypy_version_info")
@@ -81,6 +83,14 @@ NAMESPACES = {
         "TRANSPORT": Option(None, type="string", key="transport"),
         "TRANSPORT_OPTIONS": Option({}, type="dict", key="transport_options"),
     },
+    "CASSANDRA": {
+        "COLUMN_FAMILY": Option(None, type="string"),
+        "DETAILED_MODE": Option(False, type="bool"),
+        "KEYSPACE": Option(None, type="string"),
+        "READ_CONSISTENCY": Option(None, type="string"),
+        "SERVERS": Option(None, type="list"),
+        "WRITE_CONSISTENCY": Option(None, type="string"),
+    },
     "CELERY": {
         "ACKS_LATE": Option(False, type="bool"),
         "ALWAYS_EAGER": Option(False, type="bool"),
@@ -99,6 +109,7 @@ NAMESPACES = {
         "DEFAULT_EXCHANGE_TYPE": Option("direct"),
         "DEFAULT_DELIVERY_MODE": Option(2, type="string"),
         "EAGER_PROPAGATES_EXCEPTIONS": Option(False, type="bool"),
+        "ENABLE_UTC": Option(False, type="bool"),
         "EVENT_SERIALIZER": Option("json"),
         "IMPORTS": Option((), type="tuple"),
         "IGNORE_RESULT": Option(False, type="bool"),
@@ -142,9 +153,12 @@ NAMESPACES = {
     },
     "CELERYD": {
         "AUTOSCALER": Option("celery.worker.autoscale.Autoscaler"),
+        "AUTORELOADER": Option("celery.worker.autoreload.Autoreloader"),
+        "BOOT_STEPS": Option((), type="tuple"),
         "CONCURRENCY": Option(0, type="int"),
         "ETA_SCHEDULER": Option(None, type="string"),
         "ETA_SCHEDULER_PRECISION": Option(1.0, type="float"),
+        "FORCE_EXECV": Option(False, type="bool"),
         "HIJACK_ROOT_LOGGER": Option(True, type="bool"),
         "CONSUMER": Option("celery.worker.consumer.Consumer"),
         "LOG_FORMAT": Option(DEFAULT_PROCESS_LOG_FMT),
@@ -195,6 +209,7 @@ def flatten(d, ns=""):
                 stack.append((name + key + '_', value))
             else:
                 yield name + key, value
+DEFAULTS = dict((key, value.default) for key, value in flatten(NAMESPACES))
 
 
 def find_deprecated_settings(source):
@@ -207,4 +222,21 @@ def find_deprecated_settings(source):
                             alternative=opt.alt)
 
 
-DEFAULTS = dict((key, value.default) for key, value in flatten(NAMESPACES))
+@memoize(maxsize=None)
+def find(name, namespace="celery"):
+    # - Try specified namespace first.
+    namespace = namespace.upper()
+    try:
+        return namespace, name.upper(), NAMESPACES[namespace][name.upper()]
+    except KeyError:
+        # - Try all the other namespaces.
+        for ns, keys in NAMESPACES.iteritems():
+            if ns.upper() == name.upper():
+                return None, ns, keys
+            elif isinstance(keys, dict):
+                try:
+                    return ns, name.upper(), keys[name.upper()]
+                except KeyError:
+                    pass
+    # - See if name is a qualname last.
+    return None, name.upper(), DEFAULTS[name.upper()]

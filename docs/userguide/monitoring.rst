@@ -42,6 +42,16 @@ or to get help for a specific command do::
 Commands
 ~~~~~~~~
 
+* **shell**: Drop into a Python shell.
+
+  The locals will include the ``celery`` variable, which is the current app.
+  Also all known tasks will be automatically added to locals (unless the
+  ``--without-tasks`` flag is set).
+
+  Uses Ipython, bpython, or regular python in that order if installed.
+  You can force an implementation using ``--force-ipython|-I``,
+  ``--force-bpython|-B``, or ``--force-python|-P``.
+
 * **status**: List active nodes in this cluster
     ::
 
@@ -113,6 +123,14 @@ Commands
 
         $ celeryctl inspect disable_events
 
+* **migrate**: Migrate tasks from one broker to another (**EXPERIMENTAL**).
+  ::
+
+        $ celeryctl migrate redis://localhost amqp://localhost
+
+  This command will migrate all the tasks on one broker to another.
+  As this command is new and experimental you should be sure to have
+  a backup of the data before proceeding.
 
 .. note::
 
@@ -348,7 +366,7 @@ Finding the number of tasks in a queue::
 
 
     $ rabbitmqctl list_queues name messages messages_ready \
-                              messages_unacknowlged
+                              messages_unacknowledged
 
 
 Here `messages_ready` is the number of messages ready
@@ -369,6 +387,37 @@ Finding the amount of memory allocated to a queue::
 :Tip: Adding the ``-q`` option to `rabbitmqctl(1)`_ makes the output
       easier to parse.
 
+
+.. _monitoring-redis:
+
+Redis
+=====
+
+If you're using Redis as the broker, you can monitor the Celery cluster using
+the `redis-cli(1)` command to list lengths of queues.
+
+.. _monitoring-redis-queues:
+
+Inspecting queues
+-----------------
+
+Finding the number of tasks in a queue::
+
+    $ redis-cli -h HOST -p PORT -n DATABASE_NUMBER llen QUEUE_NAME
+
+The default queue is named `celery`. To get all available queues, invoke::
+
+    $ redis-cli -h HOST -p PORT -n DATABASE_NUMBER keys \*
+
+.. note::
+
+  If a list has no elements in Redis, it doesn't exist. Hence it won't show up
+  in the `keys` command output. `llen` for that list returns 0 in that case.
+  
+  On the other hand, if you're also using Redis for other purposes, the output
+  of the `keys` command will include unrelated values stored in the database.
+  The recommended way around this is to use a dedicated `DATABASE_NUMBER` for
+  Celery.
 
 .. _monitoring-munin:
 
@@ -407,7 +456,7 @@ and :program:`celeryev` to monitor the cluster.
 Snapshots
 ---------
 
-.. versionadded: 2.1
+.. versionadded:: 2.1
 
 Even a single worker can produce a huge amount of events, so storing
 the history of all events on disk may be very expensive.

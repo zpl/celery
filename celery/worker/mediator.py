@@ -12,19 +12,38 @@
     rate limits will also disable this machinery,
     and can improve performance.
 
-    :copyright: (c) 2009 - 2011 by Ask Solem.
+    :copyright: (c) 2009 - 2012 by Ask Solem.
     :license: BSD, see LICENSE for more details.
 
 """
 from __future__ import absolute_import
 
+import logging
 import sys
 import traceback
 
 from Queue import Empty
 
+from ..abstract import StartStopComponent
 from ..app import app_or_default
 from ..utils.threads import bgThread
+
+
+class WorkerComponent(StartStopComponent):
+    name = "worker.mediator"
+    requires = ("pool", "queues", )
+
+    def __init__(self, w, **kwargs):
+        w.mediator = None
+
+    def include_if(self, w):
+        return not w.disable_rate_limits or w.pool_cls.requires_mediator
+
+    def create(self, w):
+        m = w.mediator = self.instantiate(w.mediator_cls, w.ready_queue,
+                                          app=w.app, callback=w.process_task,
+                                          logger=w.logger)
+        return m
 
 
 class Mediator(bgThread):
@@ -40,6 +59,7 @@ class Mediator(bgThread):
         self.logger = logger or self.app.log.get_default_logger()
         self.ready_queue = ready_queue
         self.callback = callback
+        self._does_debug = self.logger.isEnabledFor(logging.DEBUG)
         super(Mediator, self).__init__()
 
     def body(self):
@@ -51,9 +71,10 @@ class Mediator(bgThread):
         if task.revoked():
             return
 
-        self.logger.debug(
-            "Mediator: Running callback for task: %s[%s]" % (
-                task.task_name, task.task_id))
+        if self._does_debug:
+            self.logger.debug(
+                "Mediator: Running callback for task: %s[%s]" % (
+                    task.task_name, task.task_id))
 
         try:
             self.callback(task)

@@ -7,7 +7,7 @@ This module contains the component responsible for consuming messages
 from the broker, processing the messages and keeping the broker connections
 up and running.
 
-:copyright: (c) 2009 - 2011 by Ask Solem.
+:copyright: (c) 2009 - 2012 by Ask Solem.
 :license: BSD, see LICENSE for more details.
 
 
@@ -34,7 +34,7 @@ up and running.
   a `task` key or a `control` key.
 
   If the message is a task, it verifies the validity of the message
-  converts it to a :class:`celery.worker.job.TaskRequest`, and sends
+  converts it to a :class:`celery.worker.job.Request`, and sends
   it to :meth:`~Consumer.on_task`.
 
   If the message is a control command the message is passed to
@@ -76,21 +76,22 @@ up and running.
 from __future__ import absolute_import
 from __future__ import with_statement
 
+import logging
 import socket
 import sys
 import threading
 import traceback
 import warnings
 
+from ..abstract import StartStopComponent
 from ..app import app_or_default
 from ..datastructures import AttributeDict
-from ..exceptions import NotRegistered
+from ..exceptions import InvalidTaskError
 from ..utils import timer2
 from ..utils.encoding import safe_repr
 from ..utils.functional import noop
 
 from . import state
-from .job import TaskRequest, InvalidTaskError
 from .control import Panel
 from .heartbeat import Heart
 
@@ -128,6 +129,25 @@ The full contents of the message body was:
 MESSAGE_REPORT_FMT = """\
 body: %s {content_type:%s content_encoding:%s delivery_info:%s}\
 """
+
+
+class Component(StartStopComponent):
+    name = "worker.consumer"
+    last = True
+
+    def create(self, w):
+        prefetch_count = w.concurrency * w.prefetch_multiplier
+        c = w.consumer = self.instantiate(
+                w.consumer_cls, w.ready_queue, w.scheduler,
+                logger=w.logger, hostname=w.hostname,
+                send_events=w.send_events,
+                init_callback=w.ready_callback,
+                initial_prefetch_count=prefetch_count,
+                pool=w.pool,
+                priority_timer=w.priority_timer,
+                app=w.app,
+                controller=w)
+        return c
 
 
 class QoS(object):
@@ -294,6 +314,14 @@ class Consumer(object):
         self.connection_errors = conninfo.connection_errors
         self.channel_errors = conninfo.channel_errors
 
+        self._does_info = self.logger.isEnabledFor(logging.INFO)
+        self.strategies = {}
+
+    def update_strategies(self):
+        S = self.strategies
+        for task in self.app.tasks.itervalues():
+            S[task.name] = task.start_strategy(self.app, self)
+
     def start(self):
         """Start the consumer.
 
@@ -309,7 +337,7 @@ class Consumer(object):
             try:
                 self.reset_connection()
                 self.consume_messages()
-            except self.connection_errors:
+            except self.connection_errors + self.channel_errors:
                 self.logger.error("Consumer: Connection to broker lost."
                                 + " Trying to re-establish the connection...",
                                 exc_info=sys.exc_info())
@@ -342,12 +370,14 @@ class Consumer(object):
         if task.revoked():
             return
 
-        self.logger.info("Got task from broker: %s", task.shortinfo())
+        if self._does_info:
+            self.logger.info("Got task from broker: %s", task.shortinfo())
 
         if self.event_dispatcher.enabled:
             self.event_dispatcher.send("task-received", uuid=task.task_id,
                     name=task.task_name, args=safe_repr(task.args),
-                    kwargs=safe_repr(task.kwargs), retries=task.retries,
+                    kwargs=safe_repr(task.kwargs),
+                    retries=task.request_dict.get("retries", 0),
                     eta=task.eta and task.eta.isoformat(),
                     expires=task.expires and task.expires.isoformat())
 
@@ -400,43 +430,26 @@ class Consumer(object):
         :param message: The kombu message object.
 
         """
-        # need to guard against errors occurring while acking the message.
-        def ack():
-            try:
-                message.ack()
-            except self.connection_errors + (AttributeError, ), exc:
-                self.logger.critical(
-                    "Couldn't ack %r: %s reason:%r",
-                        message.delivery_tag,
-                        self._message_report(body, message), exc)
-
         try:
-            body["task"]
+            name = body["task"]
         except (KeyError, TypeError):
             warnings.warn(RuntimeWarning(
                 "Received and deleted unknown message. Wrong destination?!? \
                 the full contents of the message body was: %s" % (
                  self._message_report(body, message), )))
-            ack()
+            message.ack_log_error(self.logger, self.connection_errors)
             return
 
         try:
-            task = TaskRequest.from_message(message, body, ack,
-                                            app=self.app,
-                                            logger=self.logger,
-                                            hostname=self.hostname,
-                                            eventer=self.event_dispatcher)
-
-        except NotRegistered, exc:
+            self.strategies[name](message, body, message.ack_log_error)
+        except KeyError, exc:
             self.logger.error(UNKNOWN_TASK_ERROR, exc, safe_repr(body),
                               exc_info=sys.exc_info())
-            ack()
+            message.ack_log_error(self.logger, self.connection_errors)
         except InvalidTaskError, exc:
             self.logger.error(INVALID_TASK_ERROR, str(exc), safe_repr(body),
                               exc_info=sys.exc_info())
-            ack()
-        else:
-            self.on_task(task)
+            message.ack_log_error(self.logger, self.connection_errors)
 
     def maybe_conn_error(self, fun):
         """Applies function but ignores any connection or channel
@@ -605,6 +618,9 @@ class Consumer(object):
 
         # Restart heartbeat thread.
         self.restart_heartbeat()
+
+        # reload all task's execution strategies.
+        self.update_strategies()
 
         # We're back!
         self._state = RUN
