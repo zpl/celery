@@ -97,7 +97,6 @@ class Worker(configurated):
         self.include = [] if include is None else include
         self.pidfile = pidfile
         self.autoscale = None
-        self.agents = agents
         self.autoreload = autoreload
         if autoscale:
             max_c, _, min_c = autoscale.partition(",")

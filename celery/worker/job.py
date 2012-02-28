@@ -174,7 +174,8 @@ class Request(object):
                         "hostname": hostname, "is_eager": False,
                         "delivery_info": self.delivery_info})
         result = pool.apply_async(execute_and_trace,
-                                  args=(self.name, self.id, self.args, self.kwargs),
+                                  args=(self.name, self.id,
+                                        self.args, self.kwargs),
                                   kwargs={"hostname": hostname,
                                           "request": request},
                                   accept_callback=self.on_accepted,

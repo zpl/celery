@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from ..app import app_or_default
+from .app import app_or_default
 
 import cl
 import cl.presence

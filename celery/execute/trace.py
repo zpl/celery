@@ -30,7 +30,6 @@ from .. import current_app
 from .. import states, signals
 from ..datastructures import ExceptionInfo
 from ..exceptions import RetryTaskError
-from ..registry import tasks
 from ..utils.serialization import get_pickleable_exception
 
 send_prerun = signals.task_prerun.send

@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import with_statement
 
 from celery import utils
-from celery.utils.functional import promise, mpromise, maybe_promise
+from celery.utils.functional import promise, mpromise
 from celery.utils.functional import padlist, firstmethod
 from celery.utils.text import abbr, abbrtask, truncate
 from celery.utils.threads import bgThread

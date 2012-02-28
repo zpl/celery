@@ -162,7 +162,7 @@ class test_App(Case):
         self.assertTrue(self.app.mail_admins("Subject", "Body"))
 
     def test_amqp_get_broker_info(self):
-        self.assertDictContainsSubset({"hostname": "",
+        self.assertDictContainsSubset({"hostname": "localhost",
                                        "userid": None,
                                        "password": None,
                                        "virtual_host": "/"},
@@ -200,14 +200,13 @@ class test_App(Case):
 
         ex = Exchange("foo_exchange")
         prod = self.app.amqp.TaskProducer(conn, exchange=ex)
-        self.assertIn(ex, declared_entities[prod.connection])
 
         dispatcher = Dispatcher()
         self.assertTrue(prod.send_task("footask", (), {},
                                        exchange=Exchange("moo_exchange"),
                                        routing_key="moo_exchange",
                                        event_dispatcher=dispatcher))
-        self.assertIn("moo_exchange", amqp._exchanges_declared)
+
         self.assertTrue(dispatcher.sent)
         self.assertEqual(dispatcher.sent[0][0], "task-sent")
         self.assertTrue(prod.send_task("footask", (), {},

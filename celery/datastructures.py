@@ -26,7 +26,6 @@ from .utils import uniq
 from .utils.compat import UserDict, OrderedDict
 
 
-
 class CycleError(Exception):
     """A cycle was detected in an acyclic graph."""
 

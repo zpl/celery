@@ -18,6 +18,7 @@ import traceback
 import warnings
 
 from functools import wraps
+from itertools import islice
 from pprint import pprint
 
 from kombu.utils import cached_property, gen_unique_id, kwdict  # noqa

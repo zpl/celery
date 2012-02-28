@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import with_statement
+
 from cl.g import blocking, Event, spawn
 from eventlet import Timeout
 
@@ -27,4 +30,3 @@ class AgentWrapper(object):
         self.agent.should_stop = True
         if join:
             self.join(timeout)
-

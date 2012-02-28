@@ -22,7 +22,7 @@ from ...datastructures import ExceptionInfo
 from ...exceptions import MaxRetriesExceededError, RetryTaskError
 from ...execute.trace import eager_trace_task
 from ...result import EagerResult
-from ...utils import maybe_reraise ,mattrgetter, uuid
+from ...utils import maybe_reraise, mattrgetter, uuid
 from ...utils.imports import instantiate
 from ...utils.mail import ErrorMail
 

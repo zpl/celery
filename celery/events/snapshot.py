@@ -21,7 +21,6 @@ from kombu.utils.limits import TokenBucket
 
 from .. import platforms
 from ..app import app_or_default
-from ..datastructures import TokenBucket
 from ..utils import timer2
 from ..utils.dispatch import Signal
 from ..utils.imports import instantiate

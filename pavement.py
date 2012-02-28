@@ -89,7 +89,6 @@ def flake8(options):
         if ($ignore) {
             $ignore = m{processes/pool\.py|
                         CursesMonitor\.draw|
-                        WorkController\.__init__|
                         MultiTool\.shutdown_nodes}xsg;
         }
         if (! $ignore) { print STDERR; our $FOUND_FLAKE = 1 }

@@ -42,3 +42,5 @@ if os.environ.get("MONGO_USER"):
 if os.environ.get("MONGO_PASSWORD"):
     CELERY_MONGODB_BACKEND_SETTINGS["password"] = \
         os.environ.get("MONGO_PASSWORD")
+
+BROKER_POOL_LIMIT = 1000

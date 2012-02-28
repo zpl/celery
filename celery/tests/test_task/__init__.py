@@ -10,7 +10,7 @@ from celery.exceptions import RetryTaskError
 from celery.execute import send_task
 from celery.result import EagerResult
 from celery.schedules import ParseException
-from celery.schedules import _is_iterable, crontab, crontab_parser
+from celery.schedules import crontab, crontab_parser
 from celery.utils import uuid
 from celery.utils.timeutils import parse_iso8601
 
@@ -125,15 +125,6 @@ class RetryTaskCustomExc(task.Task):
             except MyCustomException, exc:
                 kwargs.update({"kwarg": kwarg})
                 return self.retry(kwargs=kwargs, countdown=0, exc=exc)
-
-
-class test_utils(unittest.TestCase):
-
-    def test_is_iterable(self):
-        for a in "f", ["f"], ("f", ), {"f": "f"}:
-            self.assertTrue(_is_iterable(a))
-        for b in object(), 1:
-            self.assertFalse(_is_iterable(b))
 
 
 class test_task_retries(Case):

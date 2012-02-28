@@ -174,12 +174,6 @@ class EventReceiver(ConsumerMixin):
     def itercapture(self, limit=None, timeout=None, wakeup=True):
         return self.consume(limit=limit, timeout=timeout, wakeup=wakeup)
 
-    def process(self, type, event):
-        """Process the received event by dispatching it to the appropriate
-        handler."""
-        handler = self.handlers.get(type) or self.handlers.get("*")
-        handler and handler(event)
-
     @contextmanager
     def consumer(self, wakeup=True):
         """Create event consumer."""

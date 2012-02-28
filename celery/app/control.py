@@ -188,7 +188,9 @@ class Control(object):
     def broadcast(self, command, arguments=None, destination=None,
             connection=None, reply=False, timeout=1, limit=None,
             callback=None, channel=None):
+        print("+ACQUIRE CONN: %r" % (self.app.pool._dirty, ))
         with self.app.connection_or_acquire(connection) as conn:
+            print("+CONN ACQUIRED")
             if channel is None:
                 channel = conn.default_channel
             return self.mailbox(conn)._broadcast(command, arguments,

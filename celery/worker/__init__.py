@@ -30,7 +30,6 @@ from ..app.abstract import configurated, from_config
 from ..exceptions import SystemTerminate
 from ..utils.functional import maybe_list, noop
 from ..utils.imports import instantiate, qualname, reload_from_cwd
-from ..utils import qualname, reload_from_cwd
 
 from . import state
 from .buckets import TaskBucket, FastQueue
@@ -211,13 +210,13 @@ class WorkController(configurated):
         self.ready_callback = ready_callback
 
         # Agents
-        if agents:
+        if self.agents:
             from .agents import AgentWrapper
-            if isinstance(agents, basestring):
-                agents = agents.split(",")
-            agents = [AgentWrapper(instantiate(agent,
-                                               self.app.broker_connection()))
-                        for agent in maybe_list(agents)]
+            if isinstance(self.agents, basestring):
+                self.agents = self.agents.split(",")
+            self.agents = [AgentWrapper(instantiate(agent,
+                                            self.app.broker_connection()))
+                        for agent in maybe_list(self.agents)]
 
         self._finalize = Finalize(self, self.stop, exitpriority=1)
         self._finalize_db = None

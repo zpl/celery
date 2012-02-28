@@ -17,21 +17,18 @@ def mytask():
     pass
 
 
-@task
-def mytask():
-    pass
-
-
 class MockMailbox(Mailbox):
     sent = []
 
     def _publish(self, command, *args, **kwargs):
+        print("PUBLISHING")
         self.__class__.sent.append(command)
 
     def close(self):
         pass
 
     def _collect(self, *args, **kwargs):
+        print("COLLECTING")
         pass
 
 
@@ -138,7 +135,9 @@ class test_Broadcast(Case):
 
     @with_mock_broadcast
     def test_broadcast(self):
+        print("+DOING BROADCAST: %r" % (self.control.broadcast, ))
         self.control.broadcast("foobarbaz", arguments=[])
+        print("-DOING BROADCAST")
         self.assertIn("foobarbaz", MockMailbox.sent)
 
     @with_mock_broadcast

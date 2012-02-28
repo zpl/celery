@@ -241,7 +241,7 @@ class TaskProducer(Producer):
         return task_id
 
     def _declare_queue(self, name, retry=False, retry_policy={}):
-        queue = self.app.queues[name](self.channel)
+        queue = self.app.amqp.queues[name](self.channel)
         if retry:
             self.connection.ensure(queue, maybe_declare,
                                    **retry_policy)(queue, self.channel)
@@ -330,7 +330,7 @@ class AMQP(object):
                     "retry_policy": conf.CELERY_TASK_PUBLISH_RETRY_POLICY,
                     "enable_utc": True,
                     "app": self.app}
-        return TaskPublisher(*args, **self.app.merge(defaults, kwargs))
+        return TaskProducer(*args, **self.app.merge(defaults, kwargs))
 
     def get_task_consumer(self, connection, queues=None, **kwargs):
         """Return consumer configured to consume from all active queues."""

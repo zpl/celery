@@ -17,7 +17,6 @@ import warnings
 
 from contextlib import contextmanager
 from copy import deepcopy
-from functools import wraps
 
 from kombu.clocks import LamportClock
 
@@ -77,6 +76,7 @@ class Settings(datastructures.ConfigurationView):
         """Resolves deprecated alias ``CELERY_BACKEND``."""
         return self.get("CELERY_RESULT_BACKEND") or self.get("CELERY_BACKEND")
 
+    @property
     def BROKER_BACKEND(self):
         """Deprecated compat alias to :attr:`BROKER_TRANSPORT`."""
         return self.BROKER_TRANSPORT
