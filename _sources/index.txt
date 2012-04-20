@@ -14,12 +14,14 @@ Contents:
     :maxdepth: 1
 
     configuration
+    django
     cookbook/index
     django/index
     contributing
     community
     tutorials/index
     faq
+    whatsnew-2.6
     whatsnew-2.5
     changelog
     reference/index

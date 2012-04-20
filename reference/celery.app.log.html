@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.app.log &mdash; Celery 2.6.0a1 documentation</title>
+    <title>celery.app.log &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.task" href="celery.task.html" />
     <link rel="prev" title="celery.app.builtins" href="celery.app.builtins.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.app.builtins.html" title="celery.app.builtins"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -78,25 +78,6 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.app.log.Logging.get_default_logger">
-<tt class="descname">get_default_logger</tt><big>(</big><em>loglevel=None</em>, <em>name='celery'</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.get_default_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get default logger instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loglevel</strong> &#8211; Initial log level.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.app.log.Logging.get_task_logger">
-<tt class="descname">get_task_logger</tt><big>(</big><em>loglevel=None</em>, <em>name=None</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.get_task_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="celery.app.log.Logging.redirect_stdouts_to_logger">
 <tt class="descname">redirect_stdouts_to_logger</tt><big>(</big><em>logger</em>, <em>loglevel=None</em>, <em>stdout=True</em>, <em>stderr=True</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.redirect_stdouts_to_logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Redirect <tt class="xref py py-class docutils literal"><span class="pre">sys.stdout</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">sys.stderr</span></tt> to a
@@ -121,11 +102,14 @@ logging instance.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="celery.app.log.Logging.setup_handlers">
+<tt class="descname">setup_handlers</tt><big>(</big><em>logger</em>, <em>logfile</em>, <em>format</em>, <em>colorize</em>, <em>formatter=&lt;class 'celery.utils.log.ColorFormatter'&gt;</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_handlers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.app.log.Logging.setup_logger">
-<tt class="descname">setup_logger</tt><big>(</big><em>loglevel=None</em>, <em>logfile=None</em>, <em>format=None</em>, <em>colorize=None</em>, <em>name='celery'</em>, <em>root=True</em>, <em>app=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup the <a class="reference external" href="http://docs.python.org/dev/library/multiprocessing.html#multiprocessing" title="(in Python v3.3)"><tt class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></tt></a> logger.</p>
-<p>If <cite>logfile</cite> is not specified, then <cite>sys.stderr</cite> is used.</p>
-<p>Returns logger object.</p>
+<tt class="descname">setup_logger</tt><big>(</big><em>name='celery'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated: No longer used.</p>
 </dd></dl>
 
 <dl class="method">
@@ -134,8 +118,8 @@ logging instance.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.app.log.Logging.setup_task_logger">
-<tt class="descname">setup_task_logger</tt><big>(</big><em>loglevel=None</em>, <em>logfile=None</em>, <em>format=None</em>, <em>colorize=None</em>, <em>task_name=None</em>, <em>task_id=None</em>, <em>propagate=False</em>, <em>app=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_task_logger" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.app.log.Logging.setup_task_loggers">
+<tt class="descname">setup_task_loggers</tt><big>(</big><em>loglevel=None</em>, <em>logfile=None</em>, <em>format=None</em>, <em>colorize=None</em>, <em>propagate=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_task_loggers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup the task logger.</p>
 <p>If <cite>logfile</cite> is not specified, then <cite>sys.stderr</cite> is used.</p>
 <p>Returns logger object.</p>
@@ -144,6 +128,16 @@ logging instance.</p>
 <dl class="method">
 <dt id="celery.app.log.Logging.supports_color">
 <tt class="descname">supports_color</tt><big>(</big><em>logfile=None</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.supports_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="celery.app.log.TaskFormatter">
+<em class="property">class </em><tt class="descclassname">celery.app.log.</tt><tt class="descname">TaskFormatter</tt><big>(</big><em>msg</em>, <em>use_color=True</em><big>)</big><a class="headerlink" href="#celery.app.log.TaskFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="celery.app.log.TaskFormatter.format">
+<tt class="descname">format</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#celery.app.log.TaskFormatter.format" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -201,7 +195,7 @@ logging instance.</p>
         <li class="right" >
           <a href="celery.app.builtins.html" title="celery.app.builtins"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

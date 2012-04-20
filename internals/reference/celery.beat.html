@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.beat &mdash; Celery 2.6.0a1 documentation</title>
+    <title>celery.beat &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.backends" href="celery.backends.html" />
     <link rel="prev" title="celery.concurrency.threads‡ (minefield)" href="celery.concurrency.threads.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.concurrency.threads.html" title="celery.concurrency.threads‡ (minefield)"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -231,7 +231,7 @@ options).</p>
 
 <dl class="class">
 <dt id="celery.beat.Scheduler">
-<em class="property">class </em><tt class="descclassname">celery.beat.</tt><tt class="descname">Scheduler</tt><big>(</big><em>schedule=None</em>, <em>logger=None</em>, <em>max_interval=None</em>, <em>app=None</em>, <em>Publisher=None</em>, <em>lazy=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.beat.Scheduler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.beat.</tt><tt class="descname">Scheduler</tt><big>(</big><em>schedule=None</em>, <em>max_interval=None</em>, <em>app=None</em>, <em>Publisher=None</em>, <em>lazy=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.beat.Scheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scheduler for periodic tasks.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -239,7 +239,6 @@ options).</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>schedule</strong> &#8211; see <a class="reference internal" href="#celery.beat.Scheduler.schedule" title="celery.beat.Scheduler.schedule"><tt class="xref py py-attr docutils literal"><span class="pre">schedule</span></tt></a>.</li>
-<li><strong>logger</strong> &#8211; see <a class="reference internal" href="#celery.beat.Scheduler.logger" title="celery.beat.Scheduler.logger"><tt class="xref py py-attr docutils literal"><span class="pre">logger</span></tt></a>.</li>
 <li><strong>max_interval</strong> &#8211; see <a class="reference internal" href="#celery.beat.Scheduler.max_interval" title="celery.beat.Scheduler.max_interval"><tt class="xref py py-attr docutils literal"><span class="pre">max_interval</span></tt></a>.</li>
 </ul>
 </td>
@@ -289,13 +288,12 @@ options).</p>
 
 <dl class="attribute">
 <dt id="celery.beat.Scheduler.logger">
-<tt class="descname">logger</tt><em class="property"> = None</em><a class="headerlink" href="#celery.beat.Scheduler.logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Current logger.</p>
-</dd></dl>
+<tt class="descname">logger</tt><em class="property"> = &lt;logging.Logger object at 0x1072dd990&gt;</em><a class="headerlink" href="#celery.beat.Scheduler.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.beat.Scheduler.max_interval">
-<tt class="descname">max_interval</tt><em class="property"> = 1</em><a class="headerlink" href="#celery.beat.Scheduler.max_interval" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">max_interval</tt><em class="property"> = 300</em><a class="headerlink" href="#celery.beat.Scheduler.max_interval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maximum time to sleep between re-checking the schedule.</p>
 </dd></dl>
 
@@ -378,7 +376,7 @@ options).</p>
 
 <dl class="class">
 <dt id="celery.beat.Service">
-<em class="property">class </em><tt class="descclassname">celery.beat.</tt><tt class="descname">Service</tt><big>(</big><em>logger=None</em>, <em>max_interval=None</em>, <em>schedule_filename=None</em>, <em>scheduler_cls=None</em>, <em>app=None</em><big>)</big><a class="headerlink" href="#celery.beat.Service" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.beat.</tt><tt class="descname">Service</tt><big>(</big><em>max_interval=None</em>, <em>schedule_filename=None</em>, <em>scheduler_cls=None</em>, <em>app=None</em><big>)</big><a class="headerlink" href="#celery.beat.Service" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="celery.beat.Service.get_scheduler">
 <tt class="descname">get_scheduler</tt><big>(</big><em>lazy=False</em><big>)</big><a class="headerlink" href="#celery.beat.Service.get_scheduler" title="Permalink to this definition">¶</a></dt>
@@ -466,7 +464,7 @@ options).</p>
         <li class="right" >
           <a href="celery.concurrency.threads.html" title="celery.concurrency.threads‡ (minefield)"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

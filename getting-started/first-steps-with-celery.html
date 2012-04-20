@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>First steps with Celery &mdash; Celery 2.6.0a1 documentation</title>
+    <title>First steps with Celery &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../index.html" />
     <link rel="up" title="Getting Started" href="index.html" />
     <link rel="next" title="Resources" href="resources.html" />
     <link rel="prev" title="Using Beanstalk" href="brokers/beanstalk.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="brokers/beanstalk.html" title="Using Beanstalk"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
       </ul>
     </div>  
@@ -68,7 +68,7 @@
 
 </div>
     <div class="section" id="first-steps-with-celery">
-<span id="tut-celery"></span><h1>First steps with Celery<a class="headerlink" href="#first-steps-with-celery" title="Permalink to this headline">¶</a></h1>
+<span id="first-steps"></span><span id="tut-celery"></span><h1>First steps with Celery<a class="headerlink" href="#first-steps-with-celery" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#choosing-a-broker" id="id1">Choosing a Broker</a></li>
@@ -158,8 +158,8 @@ of these:</p>
 <div class="section" id="executing-the-task">
 <span id="celerytut-executing-task"></span><h2><a class="toc-backref" href="#id4">Executing the task</a><a class="headerlink" href="#executing-the-task" title="Permalink to this headline">¶</a></h2>
 <p>Whenever we want to execute our task, we use the
-<tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt> method of the task class.</p>
-<p>This is a handy shortcut to the <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt>
+<a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a> method of the task.</p>
+<p>This is a handy shortcut to the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>
 method which gives greater control of the task execution (see
 <a class="reference internal" href="../userguide/executing.html#guide-executing"><em>Executing Tasks</em></a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tasks</span> <span class="kn">import</span> <span class="n">add</span>
@@ -212,17 +212,25 @@ This time we&#8217;ll hold on to the <a class="reference internal" href="../refe
 <span class="go">True</span>
 </pre></div>
 </div>
-<p>If the task raises an exception, the return value of <cite>result.successful()</cite>
+<p>If the task raises an exception, the return value of <a class="reference internal" href="../reference/celery.result.html#celery.result.AsyncResult.successful" title="celery.result.AsyncResult.successful"><tt class="xref py py-meth docutils literal"><span class="pre">successful()</span></tt></a>
 will be <tt class="xref py py-const docutils literal"><span class="pre">False</span></tt>, and <cite>result.result</cite> will contain the exception instance
 raised by the task.</p>
 </div>
 <div class="section" id="configuration">
 <span id="celerytut-configuration"></span><h3><a class="toc-backref" href="#id6">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
-<p>Celery is very flexible and comes with many configuration options that
-can be set on your app directly, or by using dedicated configuration files.</p>
-<p>For example you can set the default value for the workers
+<p>Celery, like a consumer appliance doesn&#8217;t need much to be operated.
+It has an input and an output, where you must connect the input to a broker and maybe
+the output to a result backend if so wanted.  But if you look closely at the back
+there is a lid revealing lots of sliders, dials and buttons: this is the configuration.</p>
+<p>The default configuration should be good enough for most uses, but there
+are many things to tweak so that Celery works just the way you want it to.
+Reading about the options available is a good idea to get familiar with what
+can be configured, see the <a class="reference internal" href="../configuration.html#configuration"><em>Configuration and defaults</em></a> reference.</p>
+<p>The configuration can be set on the app directly (but not all at runtime)
+or by using a dedicated configuration module.
+As an example you can set the default value for the workers
 <tt class="docutils literal"><span class="pre">--concurrency</span></tt> argument, which is used to decide the number of pool worker
-processes, the name for this setting is <a class="reference internal" href="../configuration.html#std:setting-CELERYD_CONCURRENCY"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_CONCURRENCY</span></tt></a>:</p>
+processes, by changing the <a class="reference internal" href="../configuration.html#std:setting-CELERYD_CONCURRENCY"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_CONCURRENCY</span></tt></a> setting:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">CELERY_CONCURRENCY</span> <span class="o">=</span> <span class="mi">10</span>
 </pre></div>
 </div>
@@ -232,6 +240,16 @@ this module, historically called <tt class="docutils literal"><span class="pre">
 <tt class="xref py py-meth docutils literal"><span class="pre">config_from_obj()</span></tt> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s">&quot;celeryconfig&quot;</span><span class="p">)</span>
 </pre></div>
+</div>
+<p>A module named <tt class="docutils literal"><span class="pre">celeryconfig.py</span></tt> must then be available to load from the
+current directory or on the Python path, it could look like this:</p>
+<p><tt class="file docutils literal"><span class="pre">celeryconfig.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_CONCURRENCY</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>To verify that your configuration file works properly, and does&#8217;t
+contain any syntax errors, you can try to import it:</p>
+<div class="highlight-python"><pre>$ python -m celeryconfig</pre>
 </div>
 <p>For a complete reference of configuration options, see <a class="reference internal" href="../configuration.html#configuration"><em>Configuration and defaults</em></a>.</p>
 </div>
@@ -294,7 +312,7 @@ this module, historically called <tt class="docutils literal"><span class="pre">
         <li class="right" >
           <a href="brokers/beanstalk.html" title="Using Beanstalk"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" >Getting Started</a> &raquo;</li> 
       </ul>
     </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Contributors Guide to the Code &mdash; Celery 2.6.0a1 documentation</title>
+    <title>Contributors Guide to the Code &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../index.html" />
     <link rel="up" title="Internals" href="index.html" />
     <link rel="next" title="Celery Deprecation Timeline" href="deprecation.html" />
     <link rel="prev" title="Internals" href="index.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="Internals"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internals</a> &raquo;</li> 
       </ul>
     </div>  
@@ -152,7 +152,7 @@ if the end result is a better API.</p>
 <p class="last">Sometimes it makes sense to have a class mask as a function,
 and there is precedence for this in the stdlib (e.g.
 <tt class="xref py py-class docutils literal"><span class="pre">contextmanager</span></tt>).  Celery examples include
-<a class="reference internal" href="../reference/celery.task.sets.html#celery.task.sets.subtask" title="celery.task.sets.subtask"><tt class="xref py py-class docutils literal"><span class="pre">subtask</span></tt></a>, <a class="reference internal" href="../reference/celery.task.chords.html#celery.task.chords.chord" title="celery.task.chords.chord"><tt class="xref py py-class docutils literal"><span class="pre">chord</span></tt></a>,
+<tt class="xref py py-class docutils literal"><span class="pre">subtask</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">chord</span></tt>,
 <tt class="docutils literal"><span class="pre">inspect</span></tt>, <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.utils.functional.html#kombu.utils.functional.promise" title="(in Kombu v2.1)"><tt class="xref py py-class docutils literal"><span class="pre">promise</span></tt></a> and more..</p>
 </div>
 </div></blockquote>
@@ -189,8 +189,9 @@ as this means that they can be set by either instantiation or inheritance.</p>
 </pre></div>
 </div>
 <p>A subclass can change the default value:</p>
-<div class="highlight-python"><pre>TaskProducer(Producer):
-    serializer = "pickle"</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">TaskProducer</span><span class="p">(</span><span class="n">Producer</span><span class="p">):</span>
+    <span class="n">serializer</span> <span class="o">=</span> <span class="s">&quot;pickle&quot;</span>
+</pre></div>
 </div>
 <p>and the value can be set at instantiation:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">producer</span> <span class="o">=</span> <span class="n">TaskProducer</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="s">&quot;msgpack&quot;</span><span class="p">)</span>
@@ -259,7 +260,7 @@ for using Celery with frameworks that doesn&#8217;t have this limitation.</p>
 objects instead of importing things from celery submodules, this sadly
 also means that Celery essentially has two API&#8217;s.</p>
 <p>Here&#8217;s an example using Celery in single-mode:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.task</span> <span class="kn">import</span> <span class="n">task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">task</span>
 <span class="kn">from</span> <span class="nn">celery.task.control</span> <span class="kn">import</span> <span class="n">inspect</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">CeleryStats</span>
@@ -448,7 +449,7 @@ Much of it is there to be compatible across Python versions.</p>
         <li class="right" >
           <a href="index.html" title="Internals"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" >Internals</a> &raquo;</li> 
       </ul>
     </div>

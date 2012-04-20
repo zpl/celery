@@ -12,204 +12,125 @@
 :status: DEVELOPMENT
 :branch: master
 
-* Task registry is no longer a global.
+See :ref:`whatsnew-2.6`.
 
-* celery.task.Task is no longer bound to an app by default,
-  so configuration of the task is lazy.
+.. _version-2.5.2:
 
-* The @task decorator is now lazy when used with custom apps
+2.5.2
+=====
+:release-date: 2012-04-13 04:30 P.M GMT
 
-    If ``accept_magic_kwargs`` is enabled (herby called "compat mode"), the task
-    decorator executes inline like before, however for custom apps the @task
-    decorator now returns a special PromiseProxy object that is only evaluated
-    on access.
+.. _v252-news:
 
-    All promises will be evaluated when `app.finalize` is called, or implicitly
-    when the task registry is first used.
+News
+----
 
-* chain: Chain tasks together using callbacks under the hood.
+- Now depends on Kombu 2.1.5.
 
-    .. code-block:: python
+- Django documentation has been moved to the main Celery docs.
 
-        from celery.task import chain
+    See :ref:`django`.
 
-        # (2 + 2) * 8 / 2
-        res = chain(add.subtask((4, 4)),
-                    mul.subtask((8, )),
-                    div.subtask((2,))).apply_async()
-        res.get() == 16
+- New :signal:`celeryd_init` signal can be used to configure workers
+  by hostname.
 
-        res.parent.get() == 32
+- Signal.connect can now be used as a decorator.
 
-        res.parent.parent.get() == 4
-
-
-* The Celery instance can now be created with a broker URL
+    Example:
 
     .. code-block:: python
 
-        celery = Celery(broker="redis://")
+        from celery.signals import task_sent
 
-* Result backends can now be set using an URL
+        @task_sent.connect
+        def on_task_sent(**kwargs):
+            print("sent task: %r" % (kwargs, ))
 
-    Currently only supported by redis.  Example use::
+- Invalid task messages are now rejected instead of acked.
 
-        CELERY_RESULT_BACKEND = "redis://localhost/1"
+    This means that they will be moved to the dead-letter queue
+    introduced in the latest RabbitMQ version (but must be enabled
+    manually, consult the RabbitMQ documentation).
 
-* Heartbeat frequency now every 5s, and frequency sent with event
+- Internal logging calls has been cleaned up to work
+  better with tools like Sentry.
 
-    The heartbeat frequency is now available in the worker event messages,
-    so that clients can decide when to consider workers offline based on
-    this value.
+    Contributed by David Cramer.
 
-* Module celery.actors has been removed, and will be part of cl instead.
+- New method ``subtask.clone()`` can be used to clone an existing
+  subtask with augmented arguments/options.
 
-* Introduces new ``celery`` command, which is an entrypoint for all other
-  commands.
+    Example:
 
-    The main for this command can be run by calling ``celery.start()``.
+    .. code-block:: python
 
-* Tasks can now have callbacks and errbacks, and dependencies are recorded
+        >>> s = add.subtask((5, ))
+        >>> new = s.clone(args=(10, ), countdown=5})
+        >>> new.args
+        (10, 5)
 
-    - The task message format have been updated with two new extension keys
+        >>> new.options
+        {"countdown": 5}
 
-        Both keys can be empty/undefined or a list of subtasks.
+- Chord callbacks are now triggered in eager mode.
 
-        - ``callbacks``
+.. _v252-fixes:
 
-            Applied if the task exits successfully, with the result
-            of the task as an argument.
+Fixes
+-----
 
-        - ``errbacks``
+- Programs now verifies that the pidfile is actually written correctly
+  (Issue #641).
 
-            Applied if an error occurred while executing the task,
-            with the uuid of the task as an argument.  Since it may not be possible
-            to serialize the exception instance, it passes the uuid of the task
-            instead.  The uuid can then be used to retrieve the exception and
-            traceback of the task from the result backend.
+    Hopefully this will crash the worker immediately if the system
+    is out of space to store the complete pidfile.
 
-   - ``link`` and ``link_error`` keyword arguments has been added
-      to ``apply_async``.
+    In addition, we now verify that existing pidfiles contain
+    a new line so that a partially written pidfile is detected as broken,
+    as before doing:
 
-        The value passed can be either a subtask or a list of
-        subtasks:
+        echo -n "1" > celeryd.pid
 
-        .. code-block:: python
+    would cause celeryd to think that an existing instance was already
+    running (init has pid 1 after all).
 
-            add.apply_async((2, 2), link=mul.subtask())
-            add.apply_async((2, 2), link=[mul.subtask(), echo.subtask()])
+- Fixed 2.5 compatibility issue with use of print_exception.
 
-        Example error callback:
+    Fix contributed by Martin Melin.
 
-        .. code-block:: python
+- Fixed 2.5 compatibility issue with imports.
 
-            @task
-            def error_handler(uuid):
-                result = AsyncResult(uuid)
-                exc = result.get(propagate=False)
-                print("Task %r raised exception: %r\n%r" % (
-                    exc, result.traceback))
+    Fix contributed by Iurii Kriachko.
 
-            >>> add.apply_async((2, 2), link_error=error_handler)
+- All programs now fix up ``__package__`` when called as main.
 
-    - We now track what subtasks a task sends, and some result backends
-      supports retrieving this information.
+    This fixes compatibility with Python 2.5.
 
-        - task.request.children
+    Fix contributed by Martin Melin.
 
-            Contains the result instances of the subtasks
-            the currently executing task has applied.
+- celeryctl can now be configured on the command line.
 
-        - AsyncResult.children
+    Like with celeryd it is now possible to configure celery settings
+    on the command line for celeryctl::
 
-            Returns the tasks dependencies, as a list of
-            ``AsyncResult``/``ResultSet`` instances.
+        $ celeryctl -- broker.pool_limit=30
 
-        - AsyncResult.iterdeps
+- Version dependency for python-dateutil fixed to be strict.
 
-            Recursively iterates over the tasks dependencies,
-            yielding `(parent, node)` tuples.
+    Fix contributed by Thomas Meson.
 
-            Raises IncompleteStream if any of the dependencies
-            has not returned yet.
+- ``Task.__call__`` is now optimized away in the task tracer
+  rather than when the task class is created.
 
-       - AsyncResult.graph
+    This fixes a bug where a custom __call__  may mysteriously disappear.
 
-            A ``DependencyGraph`` of the tasks dependencies.
-            This can also be used to convert to dot format:
+- Autoreload's inotify support has been improved.
 
-            .. code-block:: python
+    Contributed by Mher Movsisyan.
 
-                with open("graph.dot") as fh:
-                    result.graph.to_dot(fh)
+- The Django broker documentation has been improved.
 
-            which can than be used to produce an image::
-
-                $ dot -Tpng graph.dot -o graph.png
-
-* Bugreport now available as a command and broadcast command
-
-    - Get it from a Python repl::
-
-        >>> import celery
-        >>> print(celery.bugreport())
-
-    - Use celeryctl::
-
-        $ celeryctl report
-
-    - Get it from remote workers::
-
-        $ celeryctl inspect report
-
-* Module ``celery.log`` moved to :mod:`celery.app.log`.
-* Module ``celery.task.control`` moved to :mod:`celery.app.control`.
-
-* Adds :meth:`AsyncResult.get_leaf`
-
-    Waits and returns the result of the leaf subtask.
-    That is the last node found when traversing the graph,
-    but this means that the graph can be 1-dimensional only (in effect
-    a list).
-
-* Adds ``subtask.link(subtask)`` + ``subtask.link_error(subtask)``
-
-    Shortcut to ``s.options.setdefault("link", []).append(subtask)``
-
-* Adds ``subtask.flatten_links()``
-
-    Returns a flattened list of all dependencies (recursively)
-
-* ``AsyncResult.task_id`` renamed to ``AsyncResult.id``
-
-* ``TasksetResult.taskset_id`` renamed to ``.id``
-
-
-
-
-Internals
----------
-
-* Compat modules are now generated dynamically upon use.
-
-    These modules are ``celery.messaging``, ``celery.log``,
-    ``celery.decorators`` and ``celery.registry``.
-
-* :mod:`celery.utils` refactored into multiple modules:
-
-    :mod:`celery.utils.text`
-    :mod:`celery.utils.imports`
-    :mod:`celery.utils.functional`
-
-* Now using :mod:`kombu.utils.encoding` instead of
-  `:mod:`celery.utils.encoding`.
-
-* Renamed module ``celery.routes`` -> :mod:`celery.app.routes`.
-
-* Renamed package ``celery.db`` -> :mod:`celery.backends.database`.
-
-* Renamed module ``celery.abstract`` -> :mod:`celery.worker.abstract`.
-
+- Removed confusing warning at top of routing user guide.
 
 .. _version-2.5.1:
 
@@ -544,7 +465,7 @@ News
 * Now handles missing fields in task messages as documented in the message
   format documentation.
 
-    * Missing required field throws :exc:`InvalidTaskError`
+    * Missing required field throws :exc:`~@InvalidTaskError`
     * Missing args/kwargs is assumed empty.
 
     Contributed by Chris Chamberlin.
@@ -2102,7 +2023,7 @@ Fixes
 * celeryd: Now sends the `task-retried` event for retried tasks.
 
 * celeryd: Now honors ignore result for
-  :exc:`~celery.exceptions.WorkerLostError` and timeout errors.
+  :exc:`~@WorkerLostError` and timeout errors.
 
 * celerybeat: Fixed :exc:`UnboundLocalError` in celerybeat logging
   when using logging setup signals.
@@ -2409,7 +2330,7 @@ News
         ...                  expires=datetime.now() + timedelta(days=1)
 
     When a worker receives a task that has been expired it will be
-    marked as revoked (:exc:`celery.exceptions.TaskRevokedError`).
+    marked as revoked (:exc:`~@TaskRevokedError`).
 
 * Changed the way logging is configured.
 
@@ -2521,7 +2442,7 @@ News
   `remaining_estimate` (*Optimization*).
 
 * celeryd:  Store :state:`FAILURE` result if the
-   :exc:`~celery.exceptions.WorkerLostError` exception occurs (worker process
+   :exc:`~@WorkerLostError` exception occurs (worker process
    disappeared).
 
 * celeryd: Store :state:`FAILURE` result if one of the `*TimeLimitExceeded`
@@ -3258,7 +3179,7 @@ Backward incompatible changes
 * Default (python) loader now prints warning on missing `celeryconfig.py`
   instead of raising :exc:`ImportError`.
 
-    celeryd raises :exc:`~celery.exceptions.ImproperlyConfigured` if the configuration
+    celeryd raises :exc:`~@ImproperlyConfigured` if the configuration
     is not set up. This makes it possible to use `--help` etc., without having a
     working configuration.
 
@@ -3478,7 +3399,7 @@ News
 
     * :setting:`CELERYD_SOFT_TASK_TIME_LIMIT`
 
-        Soft time limit. The :exc:`celery.exceptions.SoftTimeLimitExceeded`
+        Soft time limit. The :exc:`~@SoftTimeLimitExceeded`
         exception will be raised when this is exceeded.  The task can catch
         this to e.g. clean up before the hard time limit comes.
 
@@ -3581,7 +3502,7 @@ News
     the process is terminated and replaced by a new one.
 
 * Revoked tasks now marked with state :state:`REVOKED`, and `result.get()`
-  will now raise :exc:`~celery.exceptions.TaskRevokedError`.
+  will now raise :exc:`~@TaskRevokedError`.
 
 * :func:`celery.task.control.ping` now works as expected.
 
@@ -4604,7 +4525,7 @@ Changes
 * The services now sets informative process names (as shown in `ps`
   listings) if the :mod:`setproctitle` module is installed.
 
-* :exc:`celery.exceptions.NotRegistered` now inherits from :exc:`KeyError`,
+* :exc:`~@NotRegistered` now inherits from :exc:`KeyError`,
   and `TaskRegistry.__getitem__`+`pop` raises `NotRegistered` instead
 
 * You can set the loader via the :envvar:`CELERY_LOADER` environment variable.

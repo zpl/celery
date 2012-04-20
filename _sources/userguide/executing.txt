@@ -13,17 +13,17 @@
 Basics
 ======
 
-Executing a task is done with :meth:`~celery.task.Base.Task.apply_async`,
-and the shortcut: :meth:`~celery.task.Base.Task.delay`.
+Executing a task is done with :meth:`~@Task.apply_async`,
+or its shortcut: :meth:`~@Task.delay`.
 
-`delay` is simple and convenient, as it looks like calling a regular
+:meth:`~@Task.delay` is simple and convenient, as it looks like calling a regular
 function:
 
 .. code-block:: python
 
     Task.delay(arg1, arg2, kwarg1="x", kwarg2="y")
 
-The same using `apply_async` is written like this:
+The same using :meth:`~@Task.apply_async` is written like this:
 
 .. code-block:: python
 
@@ -32,7 +32,7 @@ The same using `apply_async` is written like this:
 
 While `delay` is convenient, it doesn't give you as much control as using
 `apply_async`.  With `apply_async` you can override the execution options
-available as attributes on the `Task` class (see :ref:`task-options`).
+available as attributes on the :class:`~@Task` class (see :ref:`task-options`).
 In addition you can set countdown/eta, task expiry, provide a custom broker
 connection and more.
 
@@ -41,18 +41,21 @@ called `add`, returning the sum of two positional arguments:
 
 .. code-block:: python
 
-    @task
+    @celery.task
     def add(x, y):
         return x + y
 
 .. note::
 
-    You can also execute a task by name using
-    :func:`~celery.execute.send_task`, if you don't have access to the
-    task class::
+    If the task is not registered in the current process
+    then you can also execute a task by name.
 
-        >>> from celery.execute import send_task
-        >>> result = send_task("tasks.add", [2, 2])
+    You do this by using the :meth:`@send_task` method of
+    the celery instance
+
+    .. code-block:: python
+
+        >>> result = celery.send_task("tasks.add", [2, 2])
         >>> result.get()
         4
 
@@ -111,7 +114,7 @@ either as seconds after task publish, or a specific date and time using
 
 
 When a worker receives an expired task it will mark
-the task as :state:`REVOKED` (:exc:`~celery.exceptions.TaskRevokedError`).
+the task as :state:`REVOKED` (:exc:`~@TaskRevokedError`).
 
 .. _executing-serializers:
 
@@ -181,12 +184,12 @@ be available for the worker.
 The client uses the following order to decide which serializer
 to use when sending a task:
 
-    1. The `serializer` argument to `apply_async`
-    2. The tasks `serializer` attribute
+    1. The `serializer` argument to :meth:`~@Task.apply_async`
+    2. The :attr:`@-Task.serializer` attribute
     3. The default :setting:`CELERY_TASK_SERIALIZER` setting.
 
 
-* Using the `serializer` argument to `apply_async`:
+* Using the `serializer` argument to :meth:`~@Task.apply_async`:
 
 .. code-block:: python
 
@@ -194,8 +197,8 @@ to use when sending a task:
 
 .. _executing-connections:
 
-Connections and connection timeouts.
-====================================
+Connections
+===========
 
 .. admonition:: Automatic Pool Support
 
@@ -212,40 +215,28 @@ publisher:
 
 .. code-block:: python
 
-    numbers = [(2, 2), (4, 4), (8, 8), (16, 16)]
 
     results = []
-    publisher = add.get_publisher()
-    try:
-        for args in numbers:
-            res = add.apply_async(args=args, publisher=publisher)
-            results.append(res)
-    finally:
-        publisher.close()
-        publisher.connection.close()
-
+    with add.app.pool.acquire(block=True) as connection:
+        with add.get_publisher(connection) as publisher:
+            try:
+                for args in numbers:
+                    res = add.apply_async(args=args, publisher=publisher)
+                    results.append(res)
     print([res.get() for res in results])
 
 
-.. note::
-
-    This particular example is better expressed as a task set.
-    See :ref:`sets-taskset`.  Tasksets already reuses connections.
-
-
-The connection timeout is the number of seconds to wait before giving up
-on establishing the connection.  You can set this by using the
-`connect_timeout` argument to `apply_async`:
+Though this particular example is much better expressed as a group:
 
 .. code-block:: python
 
-    add.apply_async([10, 10], connect_timeout=3)
+    >>> from celery import group
 
-Or if you handle the connection manually:
+    >>> numbers = [(2, 2), (4, 4), (8, 8), (16, 16)]
+    >>> res = group(add.subtask(n) for i in numbers).apply_async()
 
-.. code-block:: python
-
-    publisher = add.get_publisher(connect_timeout=3)
+    >>> res.get()
+    [4, 8, 16, 32]
 
 .. _executing-routing:
 

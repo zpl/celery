@@ -1,4 +1,5 @@
 .. _tut-celery:
+.. _first-steps:
 
 ========================
  First steps with Celery
@@ -71,7 +72,7 @@ Let's create the file :file:`tasks.py`:
     if __name__ == "__main__":
         celery.start()
 
-The first argument to :class:`Celery` is the name of the current module,
+The first argument to :class:`~celery.app.Celery` is the name of the current module,
 this is needed so that names can be automatically generated, the second
 argument is the broker keyword argument which specifies the URL of the
 message broker we want to use.
@@ -110,9 +111,9 @@ Executing the task
 ==================
 
 Whenever we want to execute our task, we use the
-:meth:`~celery.task.base.Task.delay` method of the task class.
+:meth:`~@Task.delay` method of the task.
 
-This is a handy shortcut to the :meth:`~celery.task.base.Task.apply_async`
+This is a handy shortcut to the :meth:`~@Task.apply_async`
 method which gives greater control of the task execution (see
 :ref:`guide-executing`).
 
@@ -122,7 +123,7 @@ method which gives greater control of the task execution (see
 The task should now be executed by the worker you started earlier,
 and you can verify that by looking at the workers console output.
 
-Applying a task returns an :class:`~celery.result.AsyncResult` instance,
+Applying a task returns an :class:`~@AsyncResult` instance,
 which can be used to check the state of the task, wait for the task to finish
 or get its return value (or if the task failed, the exception and traceback).
 But this isn't enabled by default, and you have to configure Celery to
@@ -151,7 +152,7 @@ you can configure::
 To read more about result backends please see :ref:`task-result-backends`.
 
 Now with the result backend configured, let's execute the task again.
-This time we'll hold on to the :class:`~celery.result.AsyncResult`::
+This time we'll hold on to the :class:`~@AsyncResult`::
 
     >>> result = add.delay(4, 4)
 
@@ -172,7 +173,7 @@ Here's some examples of what you can do when you have results::
     >>> result.successful() # returns True if the task didn't end in failure.
     True
 
-If the task raises an exception, the return value of `result.successful()`
+If the task raises an exception, the return value of :meth:`~@AsyncResult.successful`
 will be :const:`False`, and `result.result` will contain the exception instance
 raised by the task.
 
@@ -181,12 +182,21 @@ raised by the task.
 Configuration
 -------------
 
-Celery is very flexible and comes with many configuration options that
-can be set on your app directly, or by using dedicated configuration files.
+Celery, like a consumer appliance doesn't need much to be operated.
+It has an input and an output, where you must connect the input to a broker and maybe
+the output to a result backend if so wanted.  But if you look closely at the back
+there is a lid revealing lots of sliders, dials and buttons: this is the configuration.
 
-For example you can set the default value for the workers
+The default configuration should be good enough for most uses, but there
+are many things to tweak so that Celery works just the way you want it to.
+Reading about the options available is a good idea to get familiar with what
+can be configured, see the :ref:`configuration` reference.
+
+The configuration can be set on the app directly (but not all at runtime)
+or by using a dedicated configuration module.
+As an example you can set the default value for the workers
 ``--concurrency`` argument, which is used to decide the number of pool worker
-processes, the name for this setting is :setting:`CELERYD_CONCURRENCY`:
+processes, by changing the :setting:`CELERYD_CONCURRENCY` setting:
 
 .. code-block:: python
 
@@ -200,6 +210,18 @@ this module, historically called ``celeryconfig.py``, with the
 .. code-block:: python
 
     celery.config_from_object("celeryconfig")
+
+A module named ``celeryconfig.py`` must then be available to load from the
+current directory or on the Python path, it could look like this:
+
+:file:`celeryconfig.py`::
+
+    CELERY_CONCURRENCY = 10
+
+To verify that your configuration file works properly, and does't
+contain any syntax errors, you can try to import it::
+
+    $ python -m celeryconfig
 
 For a complete reference of configuration options, see :ref:`configuration`.
 

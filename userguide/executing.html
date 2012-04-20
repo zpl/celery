@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Executing Tasks &mdash; Celery 2.6.0a1 documentation</title>
+    <title>Executing Tasks &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../index.html" />
     <link rel="up" title="User Guide" href="index.html" />
     <link rel="next" title="Workers Guide" href="workers.html" />
     <link rel="prev" title="Tasks" href="tasks.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="tasks.html" title="Tasks"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">User Guide</a> &raquo;</li> 
       </ul>
     </div>  
@@ -75,43 +75,43 @@
 <li><a class="reference internal" href="#eta-and-countdown" id="id2">ETA and countdown</a></li>
 <li><a class="reference internal" href="#expiration" id="id3">Expiration</a></li>
 <li><a class="reference internal" href="#serializers" id="id4">Serializers</a></li>
-<li><a class="reference internal" href="#connections-and-connection-timeouts" id="id5">Connections and connection timeouts.</a></li>
+<li><a class="reference internal" href="#connections" id="id5">Connections</a></li>
 <li><a class="reference internal" href="#routing-options" id="id6">Routing options</a></li>
 <li><a class="reference internal" href="#amqp-options" id="id7">AMQP options</a></li>
 </ul>
 </div>
 <div class="section" id="basics">
 <span id="executing-basics"></span><h2><a class="toc-backref" href="#id1">Basics</a><a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
-<p>Executing a task is done with <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt>,
-and the shortcut: <tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt>.</p>
-<p><cite>delay</cite> is simple and convenient, as it looks like calling a regular
+<p>Executing a task is done with <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>,
+or its shortcut: <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a>.</p>
+<p><a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a> is simple and convenient, as it looks like calling a regular
 function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Task</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="n">kwarg1</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="n">kwarg2</span><span class="o">=</span><span class="s">&quot;y&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The same using <cite>apply_async</cite> is written like this:</p>
+<p>The same using <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a> is written like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Task</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">],</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;kwarg1&quot;</span><span class="p">:</span> <span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="s">&quot;kwarg2&quot;</span><span class="p">:</span> <span class="s">&quot;y&quot;</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>While <cite>delay</cite> is convenient, it doesn&#8217;t give you as much control as using
 <cite>apply_async</cite>.  With <cite>apply_async</cite> you can override the execution options
-available as attributes on the <cite>Task</cite> class (see <a class="reference internal" href="tasks.html#task-options"><em>Task options</em></a>).
+available as attributes on the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask" title="celery.app.task.BaseTask"><tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt></a> class (see <a class="reference internal" href="tasks.html#task-options"><em>Task options</em></a>).
 In addition you can set countdown/eta, task expiry, provide a custom broker
 connection and more.</p>
 <p>Let&#8217;s go over these in more detail.  All the examples uses a simple task
 called <cite>add</cite>, returning the sum of two positional arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>You can also execute a task by name using
-<tt class="xref py py-func docutils literal"><span class="pre">send_task()</span></tt>, if you don&#8217;t have access to the
-task class:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery.execute</span> <span class="kn">import</span> <span class="n">send_task</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">send_task</span><span class="p">(</span><span class="s">&quot;tasks.add&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<p>If the task is not registered in the current process
+then you can also execute a task by name.</p>
+<p>You do this by using the <a class="reference internal" href="../reference/celery.html#celery.Celery.send_task" title="celery.Celery.send_task"><tt class="xref py py-meth docutils literal"><span class="pre">send_task()</span></tt></a> method of
+the celery instance</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">send_task</span><span class="p">(</span><span class="s">&quot;tasks.add&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 <span class="go">4</span>
 </pre></div>
@@ -215,20 +215,20 @@ be available for the worker.</p>
 to use when sending a task:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>The <cite>serializer</cite> argument to <cite>apply_async</cite></li>
-<li>The tasks <cite>serializer</cite> attribute</li>
+<li>The <cite>serializer</cite> argument to <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a></li>
+<li>The <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.serializer" title="celery.app.task.BaseTask.serializer"><tt class="xref py py-attr docutils literal"><span class="pre">Task.serializer</span></tt></a> attribute</li>
 <li>The default <a class="reference internal" href="../configuration.html#std:setting-CELERY_TASK_SERIALIZER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_SERIALIZER</span></tt></a> setting.</li>
 </ol>
 </div></blockquote>
 <ul class="simple">
-<li>Using the <cite>serializer</cite> argument to <cite>apply_async</cite>:</li>
+<li>Using the <cite>serializer</cite> argument to <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>:</li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">serializer</span><span class="o">=</span><span class="s">&quot;json&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="connections-and-connection-timeouts">
-<span id="executing-connections"></span><h2><a class="toc-backref" href="#id5">Connections and connection timeouts.</a><a class="headerlink" href="#connections-and-connection-timeouts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="connections">
+<span id="executing-connections"></span><h2><a class="toc-backref" href="#id5">Connections</a><a class="headerlink" href="#connections" title="Permalink to this headline">¶</a></h2>
 <div class="admonition-automatic-pool-support admonition">
 <p class="first admonition-title">Automatic Pool Support</p>
 <p>Since version 2.3 there is support for automatic connection pools,
@@ -239,34 +239,24 @@ to reuse connections.</p>
 </div>
 <p>You can handle the connection manually by creating a
 publisher:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">numbers</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">)]</span>
-
-<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">publisher</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">get_publisher</span><span class="p">()</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">publisher</span><span class="o">=</span><span class="n">publisher</span><span class="p">)</span>
-        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-<span class="k">finally</span><span class="p">:</span>
-    <span class="n">publisher</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">publisher</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
+<div class="highlight-python"><div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="n">add</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">add</span><span class="o">.</span><span class="n">get_publisher</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span> <span class="k">as</span> <span class="n">publisher</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">publisher</span><span class="o">=</span><span class="n">publisher</span><span class="p">)</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 <span class="k">print</span><span class="p">([</span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">results</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This particular example is better expressed as a task set.
-See <a class="reference internal" href="tasksets.html#sets-taskset"><em>Groups</em></a>.  Tasksets already reuses connections.</p>
-</div>
-<p>The connection timeout is the number of seconds to wait before giving up
-on establishing the connection.  You can set this by using the
-<cite>connect_timeout</cite> argument to <cite>apply_async</cite>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Or if you handle the connection manually:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">publisher</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">get_publisher</span><span class="p">(</span><span class="n">connect_timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<p>Though this particular example is much better expressed as a group:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">group</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">)</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">[4, 8, 16, 32]</span>
 </pre></div>
 </div>
 </div>
@@ -402,7 +392,7 @@ if the task cannot be routed to a worker immediately.</p>
         <li class="right" >
           <a href="tasks.html" title="Tasks"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" >User Guide</a> &raquo;</li> 
       </ul>
     </div>

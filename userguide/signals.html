@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Signals &mdash; Celery 2.6.0a1 documentation</title>
+    <title>Signals &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../index.html" />
     <link rel="up" title="User Guide" href="index.html" />
     <link rel="next" title="Configuration and defaults" href="../configuration.html" />
     <link rel="prev" title="Concurrency with Eventlet" href="concurrency/eventlet.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="concurrency/eventlet.html" title="Concurrency with Eventlet"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">User Guide</a> &raquo;</li> 
       </ul>
     </div>  
@@ -119,22 +119,24 @@ to augment behavior of certain actions.</p>
 <p>Several kinds of events trigger signals, you can connect to these signals
 to perform actions as they trigger.</p>
 <p>Example connecting to the <a class="reference internal" href="#std:signal-task_sent"><tt class="xref std std-signal docutils literal"><span class="pre">task_sent</span></tt></a> signal:</p>
-<div class="highlight-python"><pre>from celery.signals import task_sent
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.signals</span> <span class="kn">import</span> <span class="n">task_sent</span>
 
-@task_sent.connect
-def task_sent_handler(sender=None, task_id=None, task=None, args=None,
-                      kwargs=None, \*\*kwds):
-    print("Got signal task_sent for task id %s" % (task_id, ))</pre>
+<span class="nd">@task_sent.connect</span>
+<span class="k">def</span> <span class="nf">task_sent_handler</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                      <span class="n">kwargs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \<span class="o">*</span>\<span class="o">*</span><span class="n">kwds</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Got signal task_sent for task id </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="p">))</span>
+</pre></div>
 </div>
 <p>Some signals also have a sender which you can filter by. For example the
 <a class="reference internal" href="#std:signal-task_sent"><tt class="xref std std-signal docutils literal"><span class="pre">task_sent</span></tt></a> signal uses the task name as a sender, so you can
 connect your handler to be called only when tasks with name <cite>&#8220;tasks.add&#8221;</cite>
 has been sent by providing the <cite>sender</cite> argument to
 <a class="reference internal" href="../internals/reference/celery.utils.dispatch.signal.html#celery.utils.dispatch.signal.Signal.connect" title="celery.utils.dispatch.signal.Signal.connect"><tt class="xref py py-class docutils literal"><span class="pre">connect</span></tt></a>:</p>
-<div class="highlight-python"><pre>@task_sent.connect(task_sent_handler, sender="tasks.add")
-def task_sent_handler(sender=None, task_id=None, task=None, args=None,
-                      kwargs=None, \*\*kwds):
-    print("Got signal task_sent for task id %s" % (task_id, ))</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@task_sent.connect</span><span class="p">(</span><span class="n">task_sent_handler</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="s">&quot;tasks.add&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">task_sent_handler</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                      <span class="n">kwargs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \<span class="o">*</span>\<span class="o">*</span><span class="n">kwds</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Got signal task_sent for task id </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="p">))</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="signal-ref">
@@ -588,7 +590,7 @@ Used to augment logging configuration.</p>
         <li class="right" >
           <a href="concurrency/eventlet.html" title="Concurrency with Eventlet"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" >User Guide</a> &raquo;</li> 
       </ul>
     </div>

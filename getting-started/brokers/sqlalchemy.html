@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using SQLAlchemy &mdash; Celery 2.6.0a1 documentation</title>
+    <title>Using SQLAlchemy &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../../index.html" />
     <link rel="up" title="Brokers" href="index.html" />
     <link rel="next" title="Using the Django Database" href="django.html" />
     <link rel="prev" title="Using Redis" href="redis.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="redis.html" title="Using Redis"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Getting Started</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Brokers</a> &raquo;</li> 
       </ul>
@@ -75,33 +75,26 @@
 </div>
 <div class="section" id="configuration">
 <span id="broker-sqlalchemy-configuration"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
-<p>This transport uses only the <a class="reference internal" href="../../configuration.html#std:setting-BROKER_HOST"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_HOST</span></tt></a> setting, which have to be
+<p>Celery needs to know the location of your database, which should be the usual
+SQLAlchemy connection string, but with &#8216;sqla+&#8217; prepended to it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+sqlite:///celerydb.sqlite&quot;</span>
+</pre></div>
+</div>
+<p>This transport uses only the <a class="reference internal" href="../../configuration.html#std:setting-BROKER_URL"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_URL</span></tt></a> setting, which have to be
 an SQLAlchemy database URI.</p>
-<ol class="arabic">
-<li><p class="first">Set your broker transport:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_TRANSPORT</span> <span class="o">=</span> <span class="s">&quot;sqlalchemy&quot;</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Configure the database URI:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_HOST</span> <span class="o">=</span> <span class="s">&quot;sqlite:///celerydb.sqlite&quot;</span>
-</pre></div>
-</div>
-</li>
-</ol>
-<p>Please see <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#supported-databases">SQLAlchemy: Supported Databases</a> for a table of supported databases.
-Some other <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#database-urls">SQLAlchemy Connection String</a>, examples:</p>
+<p>Please see <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#supported-databases">SQLAlchemy: Supported Databases</a> for a table of supported databases.</p>
+<p>Here&#8217;s a list of examples using a selection of other <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#database-urls">SQLAlchemy Connection String</a>&#8216;s:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># sqlite (filename)</span>
-<span class="n">BROKER_HOST</span> <span class="o">=</span> <span class="s">&quot;sqlite:///celerydb.sqlite&quot;</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+sqlite:///celerydb.sqlite&quot;</span>
 
 <span class="c"># mysql</span>
-<span class="n">BROKER_HOST</span> <span class="o">=</span> <span class="s">&quot;mysql://scott:tiger@localhost/foo&quot;</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+mysql://scott:tiger@localhost/foo&quot;</span>
 
 <span class="c"># postgresql</span>
-<span class="n">BROKER_HOST</span> <span class="o">=</span> <span class="s">&quot;postgresql://scott:tiger@localhost/mydatabase&quot;</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+postgresql://scott:tiger@localhost/mydatabase&quot;</span>
 
 <span class="c"># oracle</span>
-<span class="n">BROKER_HOST</span> <span class="o">=</span> <span class="s">&quot;oracle://scott:tiger@127.0.0.1:1521/sidname&quot;</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+oracle://scott:tiger@127.0.0.1:1521/sidname&quot;</span>
 </pre></div>
 </div>
 <div class="section" id="results">
@@ -175,7 +168,7 @@ multiple times).</li>
         <li class="right" >
           <a href="redis.html" title="Using Redis"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Getting Started</a> &raquo;</li>
           <li><a href="index.html" >Brokers</a> &raquo;</li> 
       </ul>

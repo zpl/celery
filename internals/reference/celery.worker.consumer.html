@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.worker.consumer &mdash; Celery 2.6.0a1 documentation</title>
+    <title>celery.worker.consumer &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.worker.job" href="celery.worker.job.html" />
     <link rel="prev" title="celery.worker" href="celery.worker.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.worker.html" title="celery.worker"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -179,7 +179,7 @@ early, <em>then</em> close the connection.</p>
 
 <dl class="class">
 <dt id="celery.worker.consumer.Consumer">
-<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">Consumer</tt><big>(</big><em>ready_queue</em>, <em>eta_schedule</em>, <em>logger</em>, <em>init_callback=&lt;function noop at 0x101a5e8c0&gt;</em>, <em>send_events=False</em>, <em>hostname=None</em>, <em>initial_prefetch_count=2</em>, <em>pool=None</em>, <em>app=None</em>, <em>priority_timer=None</em>, <em>controller=None</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">Consumer</tt><big>(</big><em>ready_queue</em>, <em>eta_schedule</em>, <em>init_callback=&lt;function noop at 0x1019d5b90&gt;</em>, <em>send_events=False</em>, <em>hostname=None</em>, <em>initial_prefetch_count=2</em>, <em>pool=None</em>, <em>app=None</em>, <em>priority_timer=None</em>, <em>controller=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Listen for messages received from the broker and
 move them to the ready queue for task processing.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -272,12 +272,6 @@ re-established.</p>
 <dt id="celery.worker.consumer.Consumer.initial_prefetch_count">
 <tt class="descname">initial_prefetch_count</tt><em class="property"> = 0</em><a class="headerlink" href="#celery.worker.consumer.Consumer.initial_prefetch_count" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initial QoS prefetch count for the task channel.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.consumer.Consumer.logger">
-<tt class="descname">logger</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.consumer.Consumer.logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>The logger instance to use.  Defaults to the default Celery logger.</p>
 </dd></dl>
 
 <dl class="method">
@@ -457,7 +451,7 @@ connection.</td>
 
 <dl class="class">
 <dt id="celery.worker.consumer.QoS">
-<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">QoS</tt><big>(</big><em>consumer</em>, <em>initial_value</em>, <em>logger</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.QoS" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">QoS</tt><big>(</big><em>consumer</em>, <em>initial_value</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.QoS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quality of Service for Channel.</p>
 <p>For thread-safe increment/decrement of a channels prefetch count value.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -467,7 +461,6 @@ connection.</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>consumer</strong> &#8211; A <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.messaging.html#kombu.messaging.Consumer" title="(in Kombu v2.1)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.messaging.Consumer</span></tt></a> instance.</li>
 <li><strong>initial_value</strong> &#8211; Initial prefetch count value.</li>
-<li><strong>logger</strong> &#8211; Logger used to log debug messages.</li>
 </ul>
 </td>
 </tr>
@@ -517,6 +510,11 @@ when necessary.</p>
 <tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">UNKNOWN_TASK_ERROR</tt><em class="property"> = 'Received unregistered task of type %s.\nThe message has been ignored and discarded.\n\nDid you remember to import the module containing this task?\nOr maybe you are using relative imports?\nPlease see http://bit.ly/gLye1c for more information.\n\nThe full contents of the message body was:\n%s\n'</em><a class="headerlink" href="#celery.worker.consumer.UNKNOWN_TASK_ERROR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Error message for when an unregistered task is received.</p>
 </dd></dl>
+
+<dl class="function">
+<dt id="celery.worker.consumer.debug">
+<tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">debug</tt><big>(</big><em>msg</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 </div>
@@ -572,7 +570,7 @@ when necessary.</p>
         <li class="right" >
           <a href="celery.worker.html" title="celery.worker"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

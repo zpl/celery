@@ -414,7 +414,7 @@ If you don't use the results for a task, make sure you set the
 
 .. code-block python
 
-    @task(ignore_result=True)
+    @celery.task(ignore_result=True)
     def mytask():
         ...
 
@@ -457,6 +457,22 @@ How can I reuse the same connection when applying tasks?
 **Answer**: See the :setting:`BROKER_POOL_LIMIT` setting.
 The connection pool is enabled by default since version 2.5.
 
+.. _faq-sudo-subprocess:
+
+Sudo in a :mod:`subprocess` returns :const:`None`
+-------------------------------------------------
+
+There is a sudo configuration option that makes it illegal for process
+without a tty to run sudo::
+
+    Defaults requiretty
+
+If you have this configuration in your :file:`/etc/sudoers` file then
+tasks will not be able to call sudo when celeryd is running as a daemon.
+If you want to enable that, then you need to remove the line from sudoers.
+
+See: http://timelordz.com/wiki/Apache_Sudo_Commands
+
 .. _faq-deletes-unknown-tasks:
 
 Why do workers delete tasks from the queue if they are unable to process them?
@@ -492,7 +508,7 @@ How can I get the task id of the current task?
 
 **Answer**: The current id and more is available in the task request::
 
-    @task
+    @celery.task
     def mytask():
         cache.set(mytask.request.id, "Running")
 
@@ -534,7 +550,7 @@ Also, a common pattern is to use callback tasks:
 
 .. code-block:: python
 
-    @task()
+    @celery.task()
     def add(x, y, callback=None):
         result = x + y
         if callback:
@@ -542,7 +558,7 @@ Also, a common pattern is to use callback tasks:
         return result
 
 
-    @task(ignore_result=True)
+    @celery.task(ignore_result=True)
     def log_result(result, **kwargs):
         logger = log_result.get_logger(**kwargs)
         logger.info("log_result got: %s" % (result, ))
@@ -651,7 +667,7 @@ this is rarely the case. Imagine the following task:
 
 .. code-block:: python
 
-    @task()
+    @celery.task()
     def process_upload(filename, tmpfile):
         # Increment a file count stored in a database
         increment_file_counter()
@@ -764,7 +780,7 @@ celeryd keeps spawning processes at startup
 **Answer**: This is a known issue on Windows.
 You have to start celeryd with the command::
 
-    $ python -m celeryd.bin.celeryd
+    $ python -m celery.bin.celeryd
 
 Any additional arguments can be appended to this command.
 

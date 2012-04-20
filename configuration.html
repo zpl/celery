@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration and defaults &mdash; Celery 2.6.0a1 documentation</title>
+    <title>Configuration and defaults &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="index.html" />
     <link rel="next" title="Cookbook" href="cookbook/index.html" />
     <link rel="prev" title="Signals" href="userguide/signals.html" /> 
   </head>
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="userguide/signals.html" title="Signals"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0a1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0a3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -897,6 +897,14 @@ especially in combination with time limits or having a max tasks per child limit
 <p>This option will be enabled by default in a later version.</p>
 <p>This is not a problem on Windows, as it does not have <cite>fork()</cite>.</p>
 </div>
+<div class="section" id="celeryd-worker-lost-wait">
+<span id="std:setting-CELERYD_WORKER_LOST_WAIT"></span><h4>CELERYD_WORKER_LOST_WAIT<a class="headerlink" href="#celeryd-worker-lost-wait" title="Permalink to this headline">¶</a></h4>
+<p>In some cases a worker may be killed without proper cleanup,
+and the worker may have published a result before terminating.
+This value specifies how long we wait for any missing results before
+raising a <tt class="xref py py-exc docutils literal"><span class="pre">WorkerLostError</span></tt> exception.</p>
+<p>Default is 10.0</p>
+</div>
 <div class="section" id="celeryd-max-tasks-per-child">
 <span id="std:setting-CELERYD_MAX_TASKS_PER_CHILD"></span><h4>CELERYD_MAX_TASKS_PER_CHILD<a class="headerlink" href="#celeryd-max-tasks-per-child" title="Permalink to this headline">¶</a></h4>
 <p>Maximum number of tasks a pool worker process can execute before
@@ -910,14 +918,13 @@ be killed and replaced with a new one when this is exceeded.</p>
 <div class="section" id="celeryd-task-soft-time-limit">
 <span id="std:setting-CELERYD_TASK_SOFT_TIME_LIMIT"></span><h4>CELERYD_TASK_SOFT_TIME_LIMIT<a class="headerlink" href="#celeryd-task-soft-time-limit" title="Permalink to this headline">¶</a></h4>
 <p>Task soft time limit in seconds.</p>
-<p>The <a class="reference internal" href="reference/celery.exceptions.html#celery.exceptions.SoftTimeLimitExceeded" title="celery.exceptions.SoftTimeLimitExceeded"><tt class="xref py py-exc docutils literal"><span class="pre">SoftTimeLimitExceeded</span></tt></a> exception will be
+<p>The <tt class="xref py py-exc docutils literal"><span class="pre">SoftTimeLimitExceeded</span></tt> exception will be
 raised when this is exceeded.  The task can catch this to
 e.g. clean up before the hard time limit comes.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.task</span> <span class="kn">import</span> <span class="n">task</span>
-<span class="kn">from</span> <span class="nn">celery.exceptions</span> <span class="kn">import</span> <span class="n">SoftTimeLimitExceeded</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.exceptions</span> <span class="kn">import</span> <span class="n">SoftTimeLimitExceeded</span>
 
-<span class="nd">@task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">mytask</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">do_work</span><span class="p">()</span>
@@ -1216,7 +1223,15 @@ suffix <cite>.db</cite> may be appended to the file name (depending on Python ve
 <div class="section" id="celerybeat-max-loop-interval">
 <span id="std:setting-CELERYBEAT_MAX_LOOP_INTERVAL"></span><h4>CELERYBEAT_MAX_LOOP_INTERVAL<a class="headerlink" href="#celerybeat-max-loop-interval" title="Permalink to this headline">¶</a></h4>
 <p>The maximum number of seconds <a class="reference internal" href="reference/celery.bin.celerybeat.html#module-celery.bin.celerybeat" title="celery.bin.celerybeat"><tt class="xref py py-mod docutils literal"><span class="pre">celerybeat</span></tt></a> can sleep
-between checking the schedule.  Default is 300 seconds (5 minutes).</p>
+between checking the schedule.</p>
+<p>The default for this value is scheduler specific.
+For the default celerybeat scheduler the value is 300 (5 minutes),
+but for e.g. the django-celery database scheduler it is 5 seconds
+because the schedule may be changed externally, and so it must take
+changes to the schedule into account.</p>
+<p>Also when running celerybeat embedded (<em class="xref std std-option">-B</em>) on Jython as a thread
+the max interval is overridden and set to 1 so that it&#8217;s possible
+to shut down in a timely manner.</p>
 </div>
 </div>
 <div class="section" id="monitor-server-celerymon">
@@ -1372,7 +1387,7 @@ Please use the <em class="xref std std-option">--loglevel</em> argument instead.
         <li class="right" >
           <a href="userguide/signals.html" title="Signals"
              >previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0a1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0a3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

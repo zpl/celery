@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.app.task &mdash; Celery 2.6.0a1 documentation</title>
+    <title>celery.app.task &mdash; Celery 2.6.0a3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0a1',
+        VERSION:     '2.6.0a3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.app.amqp" href="celery.app.amqp.html" />
     <link rel="prev" title="celery.app" href="celery.app.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.app.html" title="celery.app"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -243,29 +243,6 @@ instance, containing the traceback (if any).</li>
 </tbody>
 </table>
 <p>The return value of this handler is ignored.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.app.task.BaseTask.app">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">app</tt><a class="headerlink" href="#celery.app.task.BaseTask.app" title="Permalink to this definition">¶</a></dt>
-<dd><p>classmethod(function) -&gt; method</p>
-<p>Convert a function to be a class method.</p>
-<p>A class method receives the class as implicit first argument,
-just like an instance method receives the instance.
-To declare a class method, use this idiom:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>class C:</dt>
-<dd>def f(cls, arg1, arg2, ...): ...
-f = classmethod(f)</dd>
-</dl>
-</div></blockquote>
-<p>It can be called either on the class (e.g. C.f()) or on an instance
-(e.g. C().f()).  The instance is ignored except for its class.
-If a class method is called for a derived class, the derived class
-object is passed as the implied first argument.</p>
-<p>Class methods are different than C++ or Java static methods.
-If you want those, see the staticmethod builtin.</p>
 </dd></dl>
 
 <dl class="method">
@@ -494,7 +471,7 @@ connection after use:</p>
 
 <dl class="method">
 <dt id="celery.app.task.BaseTask.get_logger">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">get_logger</tt><big>(</big><em>loglevel=None</em>, <em>logfile=None</em>, <em>propagate=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.get_logger" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">get_logger</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.get_logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get task-aware logger object.</p>
 </dd></dl>
 
@@ -554,9 +531,9 @@ it will <strong>never</strong> stop retrying.</p>
 <dd><p>Name of the task.</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="method">
 <dt id="celery.app.task.BaseTask.on_bound">
-<em class="property">classmethod </em><tt class="descclassname">BaseTask.</tt><tt class="descname">on_bound</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.on_bound" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">on_bound</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.on_bound" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method can be defined to do additional actions when the
 task class is bound to an app.</p>
 </dd></dl>
@@ -727,6 +704,12 @@ to convey that the rest of the block will not be executed.</p>
 <dd><p>The body of the task executed by workers.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="celery.app.task.BaseTask.s">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">s</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.s" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">.s(*a,</span> <span class="pre">**k)</span> <span class="pre">-&gt;</span> <span class="pre">.subtask(a,</span> <span class="pre">k)</span></tt></p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.send_error_emails">
 <tt class="descclassname">BaseTask.</tt><tt class="descname">send_error_emails</tt><em class="property"> = False</em><a class="headerlink" href="#celery.app.task.BaseTask.send_error_emails" title="Permalink to this definition">¶</a></dt>
@@ -758,7 +741,7 @@ configured to ignore results.</p>
 <dl class="method">
 <dt id="celery.app.task.BaseTask.subtask">
 <tt class="descclassname">BaseTask.</tt><tt class="descname">subtask</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.subtask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns <a class="reference internal" href="celery.task.sets.html#celery.task.sets.subtask" title="celery.task.sets.subtask"><tt class="xref py py-class docutils literal"><span class="pre">subtask</span></tt></a> object for
+<dd><p>Returns <a class="reference internal" href="celery.html#celery.subtask" title="celery.subtask"><tt class="xref py py-class docutils literal"><span class="pre">subtask</span></tt></a> object for
 this task, wrapping arguments and execution options
 for a single task invocation.</p>
 </dd></dl>
@@ -865,7 +848,7 @@ running.</p>
         <li class="right" >
           <a href="celery.app.html" title="celery.app"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0a3 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>
