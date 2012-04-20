@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>What’s new in Celery 2.6 &mdash; Celery 2.6.0a3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/celery.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/issuetracker.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.6.0a3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Celery 2.6.0a3 documentation" href="index.html" />
+    <link rel="next" title="What’s new in Celery 2.5" href="whatsnew-2.5.html" />
+    <link rel="prev" title="Frequently Asked Questions" href="faq.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="whatsnew-2.5.html" title="What’s new in Celery 2.5"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="faq.html" title="Frequently Asked Questions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Celery 2.6.0a3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div class="deck">
+
+    
+        <p class="developmentversion">
+        This document is for Celery's development version, which can be
+        significantly different from previous releases. Get old docs here:
+
+        <a href="http://docs.celeryproject.org/en/latest/whatsnew-2.6.html">2.5</a>.
+        </p>
+        
+
+</div>
+    <div class="section" id="what-s-new-in-celery-2-6">
+<span id="whatsnew-2-6"></span><h1>What&#8217;s new in Celery 2.6<a class="headerlink" href="#what-s-new-in-celery-2-6" title="Permalink to this headline">¶</a></h1>
+<p>Celery aims to be a flexible and reliable, best-of-breed solution
+to process vast amounts of messages in a distributed fashion, while
+providing operations with the tools to maintain such a system.</p>
+<p>Celery has a large and diverse community of users and contributors,
+you should come join us <a class="reference internal" href="getting-started/resources.html#irc-channel"><em>on IRC</em></a>
+or <a class="reference internal" href="getting-started/resources.html#mailing-list"><em>our mailing-list</em></a>.</p>
+<p>To read more about Celery you should visit our <a class="reference external" href="http://celeryproject.org/">website</a>.</p>
+<p>While this version is backward compatible with previous versions
+it is important that you read the following section.</p>
+<p>If you use Celery in combination with Django you must also
+read the <a class="reference external" href="http://bit.ly/djcelery-26-changelog">django-celery changelog</a> and upgrade to <a href="#id7"><span class="problematic" id="id8">`django-celery 2.6`_</span></a>.</p>
+<p>This version is officially supported on CPython 2.5, 2.6, 2.7, 3.2 and 3.3,
+as well as PyPy and Jython.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#important-notes" id="id1">Important Notes</a><ul>
+<li><a class="reference internal" href="#internals" id="id2">Internals</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deprecations" id="id3">Deprecations</a></li>
+<li><a class="reference internal" href="#news" id="id4">News</a><ul>
+<li><a class="reference internal" href="#in-other-news" id="id5">In Other News</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fixes" id="id6">Fixes</a></li>
+</ul>
+</div>
+<div class="section" id="important-notes">
+<span id="v260-important"></span><h2><a class="toc-backref" href="#id1">Important Notes</a><a class="headerlink" href="#important-notes" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Task registry is no longer a global.</p>
+</li>
+<li><p class="first">celery.task.Task is no longer bound to an app by default,
+so configuration of the task is lazy.</p>
+</li>
+<li><p class="first">The &#64;task decorator is now lazy when used with custom apps</p>
+<blockquote>
+<div><p>If <tt class="docutils literal"><span class="pre">accept_magic_kwargs</span></tt> is enabled (herby called &#8220;compat mode&#8221;), the task
+decorator executes inline like before, however for custom apps the &#64;task
+decorator now returns a special PromiseProxy object that is only evaluated
+on access.</p>
+<p>All promises will be evaluated when <cite>app.finalize</cite> is called, or implicitly
+when the task registry is first used.</p>
+</div></blockquote>
+</li>
+<li><p class="first">chain: Chain tasks together using callbacks under the hood.</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">chain</span>
+
+<span class="c"># (2 + 2) * 8 / 2</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+            <span class="n">mul</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="p">)),</span>
+            <span class="n">div</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,)))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+<span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="mi">16</span>
+
+<span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="mi">32</span>
+
+<span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">The Celery instance can now be created with a broker URL</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s">&quot;redis://&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Result backends can now be set using an URL</p>
+<blockquote>
+<div><p>Currently only supported by redis.  Example use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&quot;redis://localhost/1&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Heartbeat frequency now every 5s, and frequency sent with event</p>
+<blockquote>
+<div><p>The heartbeat frequency is now available in the worker event messages,
+so that clients can decide when to consider workers offline based on
+this value.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Module celery.actors has been removed, and will be part of cl instead.</p>
+</li>
+<li><p class="first">Introduces new <tt class="docutils literal"><span class="pre">celery</span></tt> command, which is an entrypoint for all other
+commands.</p>
+<blockquote>
+<div><p>The main for this command can be run by calling <tt class="docutils literal"><span class="pre">celery.start()</span></tt>.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Tasks can now have callbacks and errbacks, and dependencies are recorded</p>
+<blockquote>
+<div><blockquote>
+<div><ul>
+<li><p class="first">The task message format have been updated with two new extension keys</p>
+<blockquote>
+<div><p>Both keys can be empty/undefined or a list of subtasks.</p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">callbacks</span></tt></p>
+<blockquote>
+<div><p>Applied if the task exits successfully, with the result
+of the task as an argument.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">errbacks</span></tt></p>
+<blockquote>
+<div><p>Applied if an error occurred while executing the task,
+with the uuid of the task as an argument.  Since it may not be possible
+to serialize the exception instance, it passes the uuid of the task
+instead.  The uuid can then be used to retrieve the exception and
+traceback of the task from the result backend.</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">link</span></tt> and <tt class="docutils literal"><span class="pre">link_error</span></tt> keyword arguments has been added</dt>
+<dd><p class="first">to <tt class="docutils literal"><span class="pre">apply_async</span></tt>.</p>
+<blockquote class="last">
+<div><p>The value passed can be either a subtask or a list of
+subtasks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link</span><span class="o">=</span><span class="n">mul</span><span class="o">.</span><span class="n">subtask</span><span class="p">())</span>
+<span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link</span><span class="o">=</span><span class="p">[</span><span class="n">mul</span><span class="o">.</span><span class="n">subtask</span><span class="p">(),</span> <span class="n">echo</span><span class="o">.</span><span class="n">subtask</span><span class="p">()])</span>
+</pre></div>
+</div>
+<p>Example error callback:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">error_handler</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AsyncResult</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
+    <span class="n">exc</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">propagate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Task </span><span class="si">%r</span><span class="s"> raised exception: </span><span class="si">%r</span><span class="se">\n</span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">exc</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">traceback</span><span class="p">))</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link_error</span><span class="o">=</span><span class="n">error_handler</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+</ul>
+<blockquote>
+<div><ul>
+<li><p class="first">We now track what subtasks a task sends, and some result backends
+supports retrieving this information.</p>
+<blockquote>
+<div><blockquote>
+<div><ul>
+<li><p class="first">task.request.children</p>
+<blockquote>
+<div><p>Contains the result instances of the subtasks
+the currently executing task has applied.</p>
+</div></blockquote>
+</li>
+<li><p class="first">AsyncResult.children</p>
+<blockquote>
+<div><p>Returns the tasks dependencies, as a list of
+<tt class="docutils literal"><span class="pre">AsyncResult</span></tt>/<tt class="docutils literal"><span class="pre">ResultSet</span></tt> instances.</p>
+</div></blockquote>
+</li>
+<li><p class="first">AsyncResult.iterdeps</p>
+<blockquote>
+<div><p>Recursively iterates over the tasks dependencies,
+yielding <cite>(parent, node)</cite> tuples.</p>
+<p>Raises IncompleteStream if any of the dependencies
+has not returned yet.</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<ul>
+<li><p class="first">AsyncResult.graph</p>
+<blockquote>
+<div><p>A <tt class="docutils literal"><span class="pre">DependencyGraph</span></tt> of the tasks dependencies.
+This can also be used to convert to dot format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;graph.dot&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_dot</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which can than be used to produce an image:</p>
+<div class="highlight-python"><pre>$ dot -Tpng graph.dot -o graph.png</pre>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p class="first">Bugreport now available as a command and broadcast command</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Get it from a Python repl:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">celery</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">celery</span><span class="o">.</span><span class="n">bugreport</span><span class="p">())</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Use celeryctl:</p>
+<div class="highlight-python"><pre>$ celeryctl report</pre>
+</div>
+</li>
+<li><p class="first">Get it from remote workers:</p>
+<div class="highlight-python"><pre>$ celeryctl inspect report</pre>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Module <tt class="docutils literal"><span class="pre">celery.log</span></tt> moved to <a class="reference internal" href="reference/celery.app.log.html#module-celery.app.log" title="celery.app.log"><tt class="xref py py-mod docutils literal"><span class="pre">celery.app.log</span></tt></a>.</p>
+</li>
+<li><p class="first">Module <tt class="docutils literal"><span class="pre">celery.task.control</span></tt> moved to <a class="reference internal" href="reference/celery.app.control.html#module-celery.app.control" title="celery.app.control"><tt class="xref py py-mod docutils literal"><span class="pre">celery.app.control</span></tt></a>.</p>
+</li>
+<li><p class="first">Adds <tt class="xref py py-meth docutils literal"><span class="pre">AsyncResult.get_leaf()</span></tt></p>
+<blockquote>
+<div><p>Waits and returns the result of the leaf subtask.
+That is the last node found when traversing the graph,
+but this means that the graph can be 1-dimensional only (in effect
+a list).</p>
+</div></blockquote>
+</li>
+<li><p class="first">Adds <tt class="docutils literal"><span class="pre">subtask.link(subtask)</span></tt> + <tt class="docutils literal"><span class="pre">subtask.link_error(subtask)</span></tt></p>
+<blockquote>
+<div><p>Shortcut to <tt class="docutils literal"><span class="pre">s.options.setdefault(&quot;link&quot;,</span> <span class="pre">[]).append(subtask)</span></tt></p>
+</div></blockquote>
+</li>
+<li><p class="first">Adds <tt class="docutils literal"><span class="pre">subtask.flatten_links()</span></tt></p>
+<blockquote>
+<div><p>Returns a flattened list of all dependencies (recursively)</p>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">AsyncResult.task_id</span></tt> renamed to <tt class="docutils literal"><span class="pre">AsyncResult.id</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">TasksetResult.taskset_id</span></tt> renamed to <tt class="docutils literal"><span class="pre">.id</span></tt></p>
+</li>
+</ul>
+<div class="section" id="internals">
+<h3><a class="toc-backref" href="#id2">Internals</a><a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">Compat modules are now generated dynamically upon use.</p>
+<blockquote>
+<div><p>These modules are <tt class="docutils literal"><span class="pre">celery.messaging</span></tt>, <tt class="docutils literal"><span class="pre">celery.log</span></tt>,
+<tt class="docutils literal"><span class="pre">celery.decorators</span></tt> and <tt class="docutils literal"><span class="pre">celery.registry</span></tt>.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><a class="reference internal" href="internals/reference/celery.utils.html#module-celery.utils" title="celery.utils"><tt class="xref py py-mod docutils literal"><span class="pre">celery.utils</span></tt></a> refactored into multiple modules:</p>
+<blockquote>
+<div><p><a class="reference internal" href="internals/reference/celery.utils.text.html#module-celery.utils.text" title="celery.utils.text"><tt class="xref py py-mod docutils literal"><span class="pre">celery.utils.text</span></tt></a>
+<a class="reference internal" href="internals/reference/celery.utils.imports.html#module-celery.utils.imports" title="celery.utils.imports"><tt class="xref py py-mod docutils literal"><span class="pre">celery.utils.imports</span></tt></a>
+<a class="reference internal" href="internals/reference/celery.utils.functional.html#module-celery.utils.functional" title="celery.utils.functional"><tt class="xref py py-mod docutils literal"><span class="pre">celery.utils.functional</span></tt></a></p>
+</div></blockquote>
+</li>
+<li><p class="first">Now using <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.utils.encoding.html#kombu.utils.encoding" title="(in Kombu v2.1)"><tt class="xref py py-mod docutils literal"><span class="pre">kombu.utils.encoding</span></tt></a> instead of
+<cite>:mod:`celery.utils.encoding</cite>.</p>
+</li>
+<li><p class="first">Renamed module <tt class="docutils literal"><span class="pre">celery.routes</span></tt> -&gt; <a class="reference internal" href="internals/reference/celery.app.routes.html#module-celery.app.routes" title="celery.app.routes"><tt class="xref py py-mod docutils literal"><span class="pre">celery.app.routes</span></tt></a>.</p>
+</li>
+<li><p class="first">Renamed package <tt class="docutils literal"><span class="pre">celery.db</span></tt> -&gt; <a class="reference internal" href="internals/reference/celery.backends.database.html#module-celery.backends.database" title="celery.backends.database"><tt class="xref py py-mod docutils literal"><span class="pre">celery.backends.database</span></tt></a>.</p>
+</li>
+<li><p class="first">Renamed module <tt class="docutils literal"><span class="pre">celery.abstract</span></tt> -&gt; <a class="reference internal" href="internals/reference/celery.worker.abstract.html#module-celery.worker.abstract" title="celery.worker.abstract"><tt class="xref py py-mod docutils literal"><span class="pre">celery.worker.abstract</span></tt></a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="deprecations">
+<span id="v260-deprecations"></span><h2><a class="toc-backref" href="#id3">Deprecations</a><a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="news">
+<span id="v260-news"></span><h2><a class="toc-backref" href="#id4">News</a><a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="in-other-news">
+<h3><a class="toc-backref" href="#id5">In Other News</a><a class="headerlink" href="#in-other-news" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Now depends on Kombu 2.1.4</li>
+</ul>
+</div>
+</div>
+<div class="section" id="fixes">
+<h2><a class="toc-backref" href="#id6">Fixes</a><a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="index.html">
+  <img class="logo" src="http://cloud.github.com/downloads/ask/celery/celery_128.png" alt="Logo"/>
+</a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="faq.html"
+                        title="previous chapter">Frequently Asked Questions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="whatsnew-2.5.html"
+                        title="next chapter">What&#8217;s new in Celery 2.5</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/whatsnew-2.6.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="whatsnew-2.5.html" title="What’s new in Celery 2.5"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="faq.html" title="Frequently Asked Questions"
+             >previous</a> |</li>
+        <li><a href="index.html">Celery 2.6.0a3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+    </div>
+  </body>
+</html>
