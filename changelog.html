@@ -2583,7 +2583,7 @@ at startup.</p>
 <li><p class="first">celeryev cursesmon: Set screen_delay to 10ms, so the screen refreshes more
 often.</p>
 </li>
-<li><p class="first">Fixed pickling errors when pickling <tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt> on older Python
+<li><p class="first">Fixed pickling errors when pickling <a class="reference internal" href="reference/celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> on older Python
 versions.</p>
 </li>
 <li><p class="first">celeryd: prefetch count was decremented by eta tasks even if there
@@ -3953,7 +3953,7 @@ the <a class="reference external" href="http://ask.github.com/celery/internals/d
 </li>
 </ul>
 <ul>
-<li><p class="first">The <cite>celery.task.rest</cite> module has been removed, use <a class="reference internal" href="userguide/remote-tasks.html#module-celery.task.http" title="celery.task.http"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.http</span></tt></a>
+<li><p class="first">The <cite>celery.task.rest</cite> module has been removed, use <a class="reference internal" href="reference/celery.task.http.html#module-celery.task.http" title="celery.task.http"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.http</span></tt></a>
 instead (as scheduled by the <a class="reference external" href="http://ask.github.com/celery/internals/deprecation.html">deprecation timeline</a>).</p>
 </li>
 <li><p class="first">It&#8217;s no longer allowed to skip the class name in loader names.
@@ -4732,7 +4732,7 @@ or <cite>{&#8220;failure&#8221;: message}</cite> on failure.</p>
 <blockquote>
 <div><p>Remote control commands are functions registered in the command
 registry. Registering a command is done using
-<tt class="xref py py-meth docutils literal"><span class="pre">celery.worker.control.Panel.register()</span></tt>:</p>
+<a class="reference internal" href="internals/reference/celery.worker.control.html#celery.worker.control.Panel.register" title="celery.worker.control.Panel.register"><tt class="xref py py-meth docutils literal"><span class="pre">celery.worker.control.Panel.register()</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.task.control</span> <span class="kn">import</span> <span class="n">Panel</span>
 
 <span class="nd">@Panel.register</span>
@@ -5339,7 +5339,7 @@ is set to <cite>4</cite> by default.</p>
 <li><p class="first">Improved support for webhook tasks.</p>
 <blockquote>
 <div><p><cite>celery.task.rest</cite> is now deprecated, replaced with the new and shiny
-<a class="reference internal" href="userguide/remote-tasks.html#module-celery.task.http" title="celery.task.http"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.http</span></tt></a>. With more reflective names, sensible interface,
+<a class="reference internal" href="reference/celery.task.http.html#module-celery.task.http" title="celery.task.http"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.http</span></tt></a>. With more reflective names, sensible interface,
 and it&#8217;s possible to override the methods used to perform HTTP requests.</p>
 </div></blockquote>
 </li>

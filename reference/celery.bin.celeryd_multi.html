@@ -157,8 +157,28 @@ celeryd -n xuzzy.myhost -c 3</pre>
 </div>
 <dl class="class">
 <dt id="celery.bin.celeryd_multi.MultiTool">
-<em class="property">class </em><tt class="descclassname">celery.bin.celeryd_multi.</tt><tt class="descname">MultiTool</tt><big>(</big><em>env=None</em>, <em>fh=None</em><big>)</big><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<em class="property">class </em><tt class="descclassname">celery.bin.celeryd_multi.</tt><tt class="descname">MultiTool</tt><big>(</big><em>env=None</em>, <em>fh=None</em>, <em>quiet=False</em>, <em>verbose=False</em>, <em>no_color=False</em>, <em>nosplash=False</em><big>)</big><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="celery.bin.celeryd_multi.MultiTool.DOWN">
+<tt class="descname">DOWN</tt><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool.DOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.bin.celeryd_multi.MultiTool.FAILED">
+<tt class="descname">FAILED</tt><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool.FAILED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.bin.celeryd_multi.MultiTool.OK">
+<tt class="descname">OK</tt><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool.OK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.bin.celeryd_multi.MultiTool.colored">
+<tt class="descname">colored</tt><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool.colored" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.bin.celeryd_multi.MultiTool.error">
 <tt class="descname">error</tt><big>(</big><em>msg=None</em><big>)</big><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool.error" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -255,7 +275,7 @@ celeryd -n xuzzy.myhost -c 3</pre>
 
 <dl class="method">
 <dt id="celery.bin.celeryd_multi.MultiTool.stop">
-<tt class="descname">stop</tt><big>(</big><em>argv</em>, <em>cmd</em><big>)</big><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool.stop" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">stop</tt><big>(</big><em>argv</em>, <em>cmd</em>, <em>retry=None</em>, <em>callback=None</em><big>)</big><a class="headerlink" href="#celery.bin.celeryd_multi.MultiTool.stop" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

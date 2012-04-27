@@ -74,7 +74,7 @@
 <em class="property">class </em><tt class="descclassname">celery.apps.worker.</tt><tt class="descname">Worker</tt><big>(</big><em>hostname=None</em>, <em>discard=False</em>, <em>embed_clockservice=False</em>, <em>queues=None</em>, <em>include=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>autoscale=None</em>, <em>autoreload=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="class">
 <dt id="celery.apps.worker.Worker.WorkController">
-<em class="property">class </em><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x1019d5b90&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x101b3fb90&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmanaged worker instance.</p>
 <dl class="attribute">
 <dt id="celery.apps.worker.Worker.WorkController.CLOSE">
@@ -357,18 +357,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="celery.apps.worker.cpu_count">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">cpu_count</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.cpu_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.apps.worker.get_process_name">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">get_process_name</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.get_process_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
 <dt id="celery.apps.worker.install_HUP_not_supported_handler">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_HUP_not_supported_handler</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_HUP_not_supported_handler" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_HUP_not_supported_handler</tt><big>(</big><em>worker</em>, <em>sig='SIGHUP'</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_HUP_not_supported_handler" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -378,32 +368,17 @@
 
 <dl class="function">
 <dt id="celery.apps.worker.install_rdb_handler">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_rdb_handler</tt><big>(</big><em>envvar='CELERY_RDBSIG'</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_rdb_handler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.apps.worker.install_worker_int_again_handler">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_worker_int_again_handler</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_worker_int_again_handler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.apps.worker.install_worker_int_handler">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_worker_int_handler</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_worker_int_handler" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_rdb_handler</tt><big>(</big><em>envvar='CELERY_RDBSIG'</em>, <em>sig='SIGUSR2'</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_rdb_handler" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="celery.apps.worker.install_worker_restart_handler">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_worker_restart_handler</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_worker_restart_handler" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_worker_restart_handler</tt><big>(</big><em>worker</em>, <em>sig='SIGHUP'</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_worker_restart_handler" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="celery.apps.worker.install_worker_term_handler">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_worker_term_handler</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_worker_term_handler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.apps.worker.install_worker_term_hard_handler">
-<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">install_worker_term_hard_handler</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.install_worker_term_hard_handler" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.apps.worker.on_SIGINT">
+<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">on_SIGINT</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.on_SIGINT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

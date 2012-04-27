@@ -77,10 +77,10 @@
 <dl class="class">
 <dt id="celery.concurrency.processes.TaskPool.Pool">
 <em class="property">class </em><tt class="descname">Pool</tt><big>(</big><em>processes=None</em>, <em>initializer=None</em>, <em>initargs=()</em>, <em>maxtasksperchild=None</em>, <em>timeout=None</em>, <em>soft_timeout=None</em>, <em>lost_worker_timeout=10.0</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class which supports an async version of the <cite>apply()</cite> builtin</p>
+<dd><p>Class which supports an async version of applying functions to arguments.</p>
 <dl class="class">
 <dt id="celery.concurrency.processes.TaskPool.Pool.Process">
-<em class="property">class </em><tt class="descname">Process</tt><big>(</big><em>group=None</em>, <em>target=None</em>, <em>name=None</em>, <em>args=()</em>, <em>kwargs={}</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.Process" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Process</tt><big>(</big><em>group=None</em>, <em>target=None</em>, <em>name=None</em>, <em>args=()</em>, <em>kwargs={}</em>, <em>daemon=None</em>, <em>**_kw</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.Process" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process objects represent activity that is run in a separate process</p>
 <p>The class is analagous to <cite>threading.Thread</cite></p>
 <dl class="attribute">
@@ -91,8 +91,7 @@
 <dl class="attribute">
 <dt id="celery.concurrency.processes.TaskPool.Pool.Process.daemon">
 <tt class="descname">daemon</tt><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.Process.daemon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return whether process is a daemon</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.concurrency.processes.TaskPool.Pool.Process.exitcode">
@@ -133,6 +132,13 @@
 <dt id="celery.concurrency.processes.TaskPool.Pool.Process.run">
 <tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.Process.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to be run in sub-process; can be overridden in sub-class</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.concurrency.processes.TaskPool.Pool.Process.sentinel">
+<tt class="descname">sentinel</tt><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.Process.sentinel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a file descriptor (Unix) or handle (Windows) suitable for
+waiting for process termination.</p>
 </dd></dl>
 
 <dl class="method">
@@ -199,13 +205,13 @@ to give the task a chance to clean up.</p>
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.apply">
 <tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">apply</tt><big>(</big><em>func</em>, <em>args=()</em>, <em>kwds={}</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Equivalent of <cite>apply()</cite> builtin</p>
+<dd><p>Equivalent of <cite>func(*args, **kwargs)</cite>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.apply_async">
-<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">apply_async</tt><big>(</big><em>func</em>, <em>args=()</em>, <em>kwds={}</em>, <em>callback=None</em>, <em>accept_callback=None</em>, <em>timeout_callback=None</em>, <em>waitforslot=False</em>, <em>error_callback=None</em>, <em>soft_timeout=None</em>, <em>timeout=None</em>, <em>lost_worker_timeout=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.apply_async" title="Permalink to this definition">¶</a></dt>
-<dd><p>Asynchronous equivalent of <cite>apply()</cite> builtin.</p>
+<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">apply_async</tt><big>(</big><em>func</em>, <em>args=()</em>, <em>kwds={}</em>, <em>callback=None</em>, <em>error_callback=None</em>, <em>accept_callback=None</em>, <em>timeout_callback=None</em>, <em>waitforslot=False</em>, <em>soft_timeout=None</em>, <em>timeout=None</em>, <em>lost_worker_timeout=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.apply_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asynchronous equivalent of <cite>apply()</cite> method.</p>
 <p>Callback is called when the functions return value is ready.
 The accept callback is called when the job is accepted to be executed.</p>
 <p>Simplified the flow is like this:</p>
@@ -231,14 +237,13 @@ The accept callback is called when the job is accepted to be executed.</p>
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.imap">
 <tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">imap</tt><big>(</big><em>func</em>, <em>iterable</em>, <em>chunksize=1</em>, <em>lost_worker_timeout=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.imap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Equivalent of <cite>itertools.imap()</cite> &#8211; can be MUCH slower
-than <cite>Pool.map()</cite></p>
+<dd><p>Equivalent of <cite>map()</cite> &#8211; can be MUCH slower than <cite>Pool.map()</cite>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.imap_unordered">
 <tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">imap_unordered</tt><big>(</big><em>func</em>, <em>iterable</em>, <em>chunksize=1</em>, <em>lost_worker_timeout=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.imap_unordered" title="Permalink to this definition">¶</a></dt>
-<dd><p>Like <cite>imap()</cite> method but ordering of results is arbitrary</p>
+<dd><p>Like <cite>imap()</cite> method but ordering of results is arbitrary.</p>
 </dd></dl>
 
 <dl class="method">
@@ -249,13 +254,14 @@ than <cite>Pool.map()</cite></p>
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.map">
 <tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">map</tt><big>(</big><em>func</em>, <em>iterable</em>, <em>chunksize=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.map" title="Permalink to this definition">¶</a></dt>
-<dd><p>Equivalent of <cite>map()</cite> builtin</p>
+<dd><p>Apply <cite>func</cite> to each element in <cite>iterable</cite>, collecting the results
+in a list that is returned.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.map_async">
-<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">map_async</tt><big>(</big><em>func</em>, <em>iterable</em>, <em>chunksize=None</em>, <em>callback=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.map_async" title="Permalink to this definition">¶</a></dt>
-<dd><p>Asynchronous equivalent of <cite>map()</cite> builtin</p>
+<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">map_async</tt><big>(</big><em>func</em>, <em>iterable</em>, <em>chunksize=None</em>, <em>callback=None</em>, <em>error_callback=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.map_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asynchronous equivalent of <cite>map()</cite> method.</p>
 </dd></dl>
 
 <dl class="method">
@@ -267,6 +273,20 @@ than <cite>Pool.map()</cite></p>
 <dt id="celery.concurrency.processes.TaskPool.Pool.shrink">
 <tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">shrink</tt><big>(</big><em>n=1</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.shrink" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.starmap">
+<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">starmap</tt><big>(</big><em>func</em>, <em>iterable</em>, <em>chunksize=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.starmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <cite>map()</cite> method but the elements of the <cite>iterable</cite> are expected to
+be iterables as well and will be unpacked as arguments. Hence
+<cite>func</cite> and (a, b) becomes func(a, b).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.starmap_async">
+<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">starmap_async</tt><big>(</big><em>func</em>, <em>iterable</em>, <em>chunksize=None</em>, <em>callback=None</em>, <em>error_callback=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.starmap_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asynchronous version of <cite>starmap()</cite> method.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.terminate">

@@ -14,6 +14,7 @@
     celery.worker.mediator
     celery.worker.buckets
     celery.worker.heartbeat
+    celery.worker.control
     celery.worker.state
     celery.worker.strategy
     celery.worker.autoreload
@@ -35,7 +36,6 @@
     celery.backends.mongodb
     celery.backends.redis
     celery.backends.cassandra
-    celery.backends.tyrant
     celery.task.trace
     celery.app.abstract
     celery.app.annotations
@@ -44,6 +44,7 @@
     celery.security.certificate
     celery.security.key
     celery.security.serialization
+    celery.security.utils
     celery.datastructures
     celery.events.snapshot
     celery.events.cursesmon
@@ -55,7 +56,6 @@
     celery.utils.term
     celery.utils.timeutils
     celery.utils.compat
-    celery.utils.patch
     celery.utils.serialization
     celery.utils.threads
     celery.utils.timer2

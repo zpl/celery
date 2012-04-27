@@ -160,16 +160,19 @@ the task decorator:</p>
     <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition-how-do-i-import-the-task-decorator admonition">
+<p class="first admonition-title">How do I import the task decorator?</p>
 <p>The task decorator is available on your Celery instance,
 if you don&#8217;t know what that is then please read <a class="reference internal" href="../getting-started/first-steps-with-celery.html#first-steps"><em>First steps with Celery</em></a>.</p>
 <p>If you&#8217;re using Django or are still using the &#8220;old&#8221; module based celery API,
 then you can import the task decorator like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">task</span>
+<div class="last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">task</span>
 
 <span class="nd">@task</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="context">

@@ -241,9 +241,12 @@ set to 5 minutes, it will take 5 minutes for the change to take
 effect, so you may consider lowering the value of
 <a class="reference internal" href="../configuration.html#std:setting-CELERYBEAT_MAX_LOOP_INTERVAL"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYBEAT_MAX_LOOP_INTERVAL</span></tt></a> if responsiveness is of
 importance to you.</p>
-<p>The default max loop interval may vary for different schedulers.
+<div class="admonition-scheduler-max-interval-variance admonition">
+<p class="first admonition-title">Scheduler max interval variance</p>
+<p class="last">The default max loop interval may vary for different schedulers.
 For the default scheduler the value is 5 minutes, but for e.g.
 the django-celery database scheduler the value is 5 seconds.</p>
+</div>
 </dd></dl>
 
 <dl class="method">

@@ -101,7 +101,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>id</strong> &#8211; see <a class="reference internal" href="#celery.result.AsyncResult.id" title="celery.result.AsyncResult.id"><tt class="xref py py-attr docutils literal"><span class="pre">id</span></tt></a>.</li>
-<li><strong>backend</strong> &#8211; see <a class="reference internal" href="#celery.result.AsyncResult.backend" title="celery.result.AsyncResult.backend"><tt class="xref py py-attr docutils literal"><span class="pre">backend</span></tt></a>.</li>
+<li><strong>backend</strong> &#8211; see <a class="reference internal" href="celery.html#backend" title="backend"><tt class="xref py py-attr docutils literal"><span class="pre">backend</span></tt></a>.</li>
 </ul>
 </td>
 </tr>
@@ -138,7 +138,7 @@
 <dt id="celery.result.AsyncResult.collect">
 <tt class="descclassname">AsyncResult.</tt><tt class="descname">collect</tt><big>(</big><em>intermediate=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.result.AsyncResult.collect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterator, like <a class="reference internal" href="#celery.result.AsyncResult.get" title="celery.result.AsyncResult.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> will wait for the task to complete,
-but will also follow <a class="reference internal" href="#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> and <a class="reference internal" href="#celery.result.ResultSet" title="celery.result.ResultSet"><tt class="xref py py-class docutils literal"><span class="pre">ResultSet</span></tt></a>
+but will also follow <a class="reference internal" href="celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> and <a class="reference internal" href="#celery.result.ResultSet" title="celery.result.ResultSet"><tt class="xref py py-class docutils literal"><span class="pre">ResultSet</span></tt></a>
 returned by the task, yielding for each result in the tree.</p>
 <p>An example would be having the following tasks:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@task</span>
@@ -396,7 +396,7 @@ be re-raised.</p>
 <dl class="attribute">
 <dt id="celery.result.BaseAsyncResult">
 <tt class="descclassname">celery.result.</tt><tt class="descname">BaseAsyncResult</tt><a class="headerlink" href="#celery.result.BaseAsyncResult" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a></p>
+<dd><p>alias of <a class="reference internal" href="celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
@@ -475,7 +475,7 @@ be re-raised.</p>
 <dl class="method">
 <dt id="celery.result.ResultSet.add">
 <tt class="descname">add</tt><big>(</big><em>result</em><big>)</big><a class="headerlink" href="#celery.result.ResultSet.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add <a class="reference internal" href="#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> as a new member of the set.</p>
+<dd><p>Add <a class="reference internal" href="celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> as a new member of the set.</p>
 <p>Does nothing if the result is already a member.</p>
 </dd></dl>
 
@@ -536,7 +536,7 @@ be re-raised.</p>
 <dt id="celery.result.ResultSet.get">
 <tt class="descname">get</tt><big>(</big><em>timeout=None</em>, <em>propagate=True</em>, <em>interval=0.5</em><big>)</big><a class="headerlink" href="#celery.result.ResultSet.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>See <a class="reference internal" href="#celery.result.ResultSet.join" title="celery.result.ResultSet.join"><tt class="xref py py-meth docutils literal"><span class="pre">join()</span></tt></a></p>
-<p>This is here for API compatibility with <a class="reference internal" href="#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a>,
+<p>This is here for API compatibility with <a class="reference internal" href="celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a>,
 in addition it uses <a class="reference internal" href="#celery.result.ResultSet.join_native" title="celery.result.ResultSet.join_native"><tt class="xref py py-meth docutils literal"><span class="pre">join_native()</span></tt></a> if available for the
 current result backend.</p>
 </dd></dl>

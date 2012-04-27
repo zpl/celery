@@ -95,7 +95,7 @@ as they happen.  Think of it like a <cite>tcpdump</cite> for Celery events.</p>
 </table>
 <dl class="class">
 <dt id="celery.events.dumper.Dumper">
-<em class="property">class </em><tt class="descclassname">celery.events.dumper.</tt><tt class="descname">Dumper</tt><a class="headerlink" href="#celery.events.dumper.Dumper" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.events.dumper.</tt><tt class="descname">Dumper</tt><big>(</big><em>out=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x1002821e0&gt;</em><big>)</big><a class="headerlink" href="#celery.events.dumper.Dumper" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="celery.events.dumper.Dumper.format_task_event">
 <tt class="descname">format_task_event</tt><big>(</big><em>hostname</em>, <em>timestamp</em>, <em>type</em>, <em>task</em>, <em>event</em><big>)</big><a class="headerlink" href="#celery.events.dumper.Dumper.format_task_event" title="Permalink to this definition">¶</a></dt>
@@ -106,16 +106,26 @@ as they happen.  Think of it like a <cite>tcpdump</cite> for Celery events.</p>
 <tt class="descname">on_event</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#celery.events.dumper.Dumper.on_event" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.events.dumper.Dumper.say">
+<tt class="descname">say</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#celery.events.dumper.Dumper.say" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="function">
 <dt id="celery.events.dumper.evdump">
-<tt class="descclassname">celery.events.dumper.</tt><tt class="descname">evdump</tt><big>(</big><em>app=None</em><big>)</big><a class="headerlink" href="#celery.events.dumper.evdump" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">celery.events.dumper.</tt><tt class="descname">evdump</tt><big>(</big><em>app=None</em>, <em>out=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x1002821e0&gt;</em><big>)</big><a class="headerlink" href="#celery.events.dumper.evdump" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="celery.events.dumper.humanize_type">
 <tt class="descclassname">celery.events.dumper.</tt><tt class="descname">humanize_type</tt><big>(</big><em>type</em><big>)</big><a class="headerlink" href="#celery.events.dumper.humanize_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.events.dumper.say">
+<tt class="descclassname">celery.events.dumper.</tt><tt class="descname">say</tt><big>(</big><em>msg</em>, <em>out=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x1002821e0&gt;</em><big>)</big><a class="headerlink" href="#celery.events.dumper.say" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

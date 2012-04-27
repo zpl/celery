@@ -135,6 +135,11 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="celery.backends.base.BaseBackend.fallback_chord_unlock">
+<tt class="descclassname">BaseBackend.</tt><tt class="descname">fallback_chord_unlock</tt><big>(</big><em>setid</em>, <em>body</em>, <em>result=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.fallback_chord_unlock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.backends.base.BaseBackend.forget">
 <tt class="descclassname">BaseBackend.</tt><tt class="descname">forget</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.forget" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -403,6 +408,11 @@ takes longer than <cite>timeout</cite> seconds.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="celery.backends.base.KeyValueStoreBackend.expire">
+<tt class="descname">expire</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.expire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.backends.base.KeyValueStoreBackend.get">
 <tt class="descname">get</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.get" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -430,9 +440,29 @@ takes longer than <cite>timeout</cite> seconds.</p>
 <tt class="descname">get_many</tt><big>(</big><em>task_ids</em>, <em>timeout=None</em>, <em>interval=0.5</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.get_many" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="celery.backends.base.KeyValueStoreBackend.implements_incr">
+<tt class="descname">implements_incr</tt><em class="property"> = False</em><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.implements_incr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.backends.base.KeyValueStoreBackend.incr">
+<tt class="descname">incr</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.incr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="celery.backends.base.KeyValueStoreBackend.mget">
 <tt class="descname">mget</tt><big>(</big><em>keys</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.mget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.backends.base.KeyValueStoreBackend.on_chord_apply">
+<tt class="descname">on_chord_apply</tt><big>(</big><em>setid</em>, <em>body</em>, <em>result=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.on_chord_apply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.backends.base.KeyValueStoreBackend.on_chord_part_return">
+<tt class="descname">on_chord_part_return</tt><big>(</big><em>task</em>, <em>propagate=False</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.on_chord_part_return" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

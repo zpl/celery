@@ -275,7 +275,7 @@ as synchronization is a required step for many parallel algorithms.</p>
 header has returned.  Each step in the header is executed as a task, in
 parallel, possibly on different nodes.  The callback is then applied with
 the return value of each task in the header.  The task id returned by
-<tt class="xref py py-meth docutils literal"><span class="pre">chord()</span></tt> is the id of the callback, so you can wait for it to complete
+<a class="reference internal" href="../reference/celery.html#chord" title="chord"><tt class="xref py py-meth docutils literal"><span class="pre">chord()</span></tt></a> is the id of the callback, so you can wait for it to complete
 and get the final return value (but remember to <a class="reference internal" href="tasks.html#task-synchronous-subtasks"><em>never have a task wait
 for other tasks</em></a>)</p>
 <div class="section" id="important-notes">

@@ -91,6 +91,11 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="celery.backends.redis.RedisBackend.expire">
+<tt class="descname">expire</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#celery.backends.redis.RedisBackend.expire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.backends.redis.RedisBackend.get">
 <tt class="descname">get</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#celery.backends.redis.RedisBackend.get" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -102,6 +107,16 @@
 </dd></dl>
 
 <dl class="attribute">
+<dt id="celery.backends.redis.RedisBackend.implements_incr">
+<tt class="descname">implements_incr</tt><em class="property"> = True</em><a class="headerlink" href="#celery.backends.redis.RedisBackend.implements_incr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.backends.redis.RedisBackend.incr">
+<tt class="descname">incr</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#celery.backends.redis.RedisBackend.incr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="celery.backends.redis.RedisBackend.max_connections">
 <tt class="descname">max_connections</tt><em class="property"> = None</em><a class="headerlink" href="#celery.backends.redis.RedisBackend.max_connections" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maximium number of connections in the pool.</p>
@@ -110,16 +125,6 @@
 <dl class="method">
 <dt id="celery.backends.redis.RedisBackend.mget">
 <tt class="descname">mget</tt><big>(</big><em>keys</em><big>)</big><a class="headerlink" href="#celery.backends.redis.RedisBackend.mget" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.redis.RedisBackend.on_chord_apply">
-<tt class="descname">on_chord_apply</tt><big>(</big><em>setid</em>, <em>body</em>, <em>result=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.redis.RedisBackend.on_chord_apply" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.redis.RedisBackend.on_chord_part_return">
-<tt class="descname">on_chord_part_return</tt><big>(</big><em>task</em>, <em>propagate=False</em><big>)</big><a class="headerlink" href="#celery.backends.redis.RedisBackend.on_chord_part_return" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

@@ -109,7 +109,7 @@ called <cite>add</cite>, returning the sum of two positional arguments:</p>
 <p class="first admonition-title">Note</p>
 <p>If the task is not registered in the current process
 then you can also execute a task by name.</p>
-<p>You do this by using the <a class="reference internal" href="../reference/celery.html#celery.Celery.send_task" title="celery.Celery.send_task"><tt class="xref py py-meth docutils literal"><span class="pre">send_task()</span></tt></a> method of
+<p>You do this by using the <tt class="xref py py-meth docutils literal"><span class="pre">send_task()</span></tt> method of
 the celery instance</p>
 <div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">send_task</span><span class="p">(</span><span class="s">&quot;tasks.add&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>

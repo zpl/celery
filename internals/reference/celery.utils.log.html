@@ -72,7 +72,7 @@
 <h1>celery.utils.log<a class="headerlink" href="#celery-utils-log" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-celery.utils.log"></span><dl class="class">
 <dt id="celery.utils.log.ColorFormatter">
-<em class="property">class </em><tt class="descclassname">celery.utils.log.</tt><tt class="descname">ColorFormatter</tt><big>(</big><em>msg</em>, <em>use_color=True</em><big>)</big><a class="headerlink" href="#celery.utils.log.ColorFormatter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.utils.log.</tt><tt class="descname">ColorFormatter</tt><big>(</big><em>fmt=None</em>, <em>use_color=True</em><big>)</big><a class="headerlink" href="#celery.utils.log.ColorFormatter" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.utils.log.ColorFormatter.COLORS">
 <tt class="descname">COLORS</tt><em class="property"> = {'blue': &lt;bound method colored.blue of ''&gt;, 'black': &lt;bound method colored.black of ''&gt;, 'yellow': &lt;bound method colored.yellow of ''&gt;, 'cyan': &lt;bound method colored.cyan of ''&gt;, 'green': &lt;bound method colored.green of ''&gt;, 'magenta': &lt;bound method colored.magenta of ''&gt;, 'white': &lt;bound method colored.white of ''&gt;, 'red': &lt;bound method colored.red of ''&gt;}</em><a class="headerlink" href="#celery.utils.log.ColorFormatter.COLORS" title="Permalink to this definition">¶</a></dt>
@@ -176,7 +176,8 @@ This is equivalent to calling <a class="reference internal" href="#celery.utils.
 <dl class="function">
 <dt id="celery.utils.log.ensure_process_aware_logger">
 <tt class="descclassname">celery.utils.log.</tt><tt class="descname">ensure_process_aware_logger</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.log.ensure_process_aware_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Make sure process name is recorded when loggers are used.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="celery.utils.log.get_logger">
