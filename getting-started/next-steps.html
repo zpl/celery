@@ -1,0 +1,611 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Next Steps &mdash; Celery 2.6.0rc2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/issuetracker.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.6.0rc2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
+    <link rel="up" title="Getting Started" href="index.html" />
+    <link rel="next" title="Resources" href="resources.html" />
+    <link rel="prev" title="First steps with Celery" href="first-steps-with-celery.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="resources.html" title="Resources"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="first-steps-with-celery.html" title="First steps with Celery"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div class="deck">
+
+    
+        <p class="developmentversion">
+        This document is for Celery's development version, which can be
+        significantly different from previous releases. Get old docs here:
+
+        <a href="http://docs.celeryproject.org/en/latest/getting-started/next-steps.html">2.5</a>.
+        </p>
+        
+
+</div>
+    <div class="section" id="next-steps">
+<h1>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="first-steps-with-celery.html#first-steps"><em>First steps with Celery</em></a> guide is intentionally minimal.  In this guide
+we will demonstrate what Celery offers in more detail, including
+how to add Celery support for your application and library.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#our-project" id="id1">Our Project</a><ul>
+<li><a class="reference internal" href="#proj-celery-py" id="id2"><tt class="file docutils literal"><span class="pre">proj/celery.py</span></tt></a></li>
+<li><a class="reference internal" href="#proj-tasks-py" id="id3"><tt class="file docutils literal"><span class="pre">proj/tasks.py</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#starting-the-worker" id="id4">Starting the worker</a></li>
+<li><a class="reference internal" href="#subtasks" id="id5">Subtasks</a><ul>
+<li><a class="reference internal" href="#partials" id="id6">Partials</a></li>
+<li><a class="reference internal" href="#groups" id="id7">Groups</a></li>
+<li><a class="reference internal" href="#map-starmap" id="id8">Map &amp; Starmap</a></li>
+<li><a class="reference internal" href="#chunking" id="id9">Chunking</a></li>
+<li><a class="reference internal" href="#chaining-tasks" id="id10">Chaining tasks</a><ul>
+<li><a class="reference internal" href="#graphs" id="id11">Graphs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chords" id="id12">Chords</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="our-project">
+<h2><a class="toc-backref" href="#id1">Our Project</a><a class="headerlink" href="#our-project" title="Permalink to this headline">¶</a></h2>
+<p>Project layout:</p>
+<div class="highlight-python"><pre>proj/__init__.py
+    /celery.py
+    /tasks.py</pre>
+</div>
+<div class="section" id="proj-celery-py">
+<h3><a class="toc-backref" href="#id2"><tt class="file docutils literal"><span class="pre">proj/celery.py</span></tt></a><a class="headerlink" href="#proj-celery-py" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+
+<span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s">&quot;amqp://&quot;</span><span class="p">,</span>
+                <span class="n">backend</span><span class="o">=</span><span class="s">&quot;amqp://&quot;</span><span class="p">,</span>
+                <span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;proj.tasks&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>In this module we created our <tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt> instance.  This is something
+referred to as the celery <em>app</em>.  Your project
+imports celery from this module to access Celery&#8217;s features.
+It&#8217;s possible to use several app instances at once, but that
+will not be covered in this tutorial.</p>
+<ul>
+<li><p class="first">The <tt class="docutils literal"><span class="pre">broker</span></tt> argument specifies the URL of the broker to use.</p>
+<blockquote>
+<div><p>See <a class="reference internal" href="first-steps-with-celery.html#celerytut-broker"><em>Choosing a Broker</em></a> for more information.</p>
+</div></blockquote>
+</li>
+<li><p class="first">The <tt class="docutils literal"><span class="pre">backend</span></tt> argument specifies the result backend to use,</p>
+<blockquote>
+<div><p>It&#8217;s used to keep track of task state and results.
+While results are disabled by default we use the amqp backend here
+to demonstrate how retrieving the results work, you may want to use
+a different backend for your application, as they all have different
+strenghts and weaknesses.  If you don&#8217;t need results it&#8217;s best
+to disable them.  Results can also be disabled for individual tasks
+by setting the <tt class="docutils literal"><span class="pre">&#64;task(ignore_result=True)</span></tt> option.</p>
+<p>See <a class="reference internal" href="first-steps-with-celery.html#celerytut-keeping-results"><em>Keeping Results</em></a> for more information.</p>
+</div></blockquote>
+</li>
+<li><p class="first">The <tt class="docutils literal"><span class="pre">include</span></tt> argument is a list of modules to import when
+the worker starts.  We need to add our tasks module here so
+that the worker is able to find our tasks.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="proj-tasks-py">
+<h3><a class="toc-backref" href="#id3"><tt class="file docutils literal"><span class="pre">proj/tasks.py</span></tt></a><a class="headerlink" href="#proj-tasks-py" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">from</span> <span class="nn">proj.celery</span> <span class="kn">import</span> <span class="n">celery</span>
+
+
+<span class="nd">@celery.task</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+
+<span class="nd">@celery.task</span>
+<span class="k">def</span> <span class="nf">mul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+
+
+<span class="nd">@celery.task</span>
+<span class="k">def</span> <span class="nf">xsum</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="starting-the-worker">
+<h2><a class="toc-backref" href="#id4">Starting the worker</a><a class="headerlink" href="#starting-the-worker" title="Permalink to this headline">¶</a></h2>
+<p>The <strong class="program">celery</strong> program can be used to start the worker:</p>
+<div class="highlight-python"><pre>$ celery worker --app=proj -l info</pre>
+</div>
+<p>The <a class="reference internal" href="../reference/celery.bin.base.html#cmdoption--app"><em class="xref std std-option">--app</em></a> argument specifies the Celery app instance to use,
+it must be in the form of <tt class="docutils literal"><span class="pre">module.path:celery</span></tt>, where the part before the colon
+is the name of the module, and the attribute name comes last.
+If a package name is specified instead it will automatically
+try to find a <tt class="docutils literal"><span class="pre">celery</span></tt> module in that package, and if the name
+is a module it will try to find a <tt class="docutils literal"><span class="pre">celery</span></tt> attribute in that module.
+This means that the following all results in the same:</p>
+<div class="highlight-python"><pre>$ celery --app=proj
+$ celery --app=proj.celery:
+$ celery --app=proj.celery:celery</pre>
+</div>
+</div>
+<div class="section" id="subtasks">
+<h2><a class="toc-backref" href="#id5">Subtasks</a><a class="headerlink" href="#subtasks" title="Permalink to this headline">¶</a></h2>
+<p>A <tt class="xref py py-func docutils literal"><span class="pre">subtask()</span></tt> wraps the signature of a single task invocation:
+arguments, keyword arguments and execution options.</p>
+<p>A subtask for the <tt class="docutils literal"><span class="pre">add</span></tt> task can be created like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">subtask</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subtask</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>or you can create one from the task itself:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>It takes the same arguments as the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And like there is a <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a> shortcut for <cite>apply_async</cite>
+there is a <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.s" title="celery.app.task.BaseTask.s"><tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt></a> shortcut for subtask:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">proj.tasks.add(2, 2)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>You can&#8217;t define options with <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.s" title="celery.app.task.BaseTask.s"><tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt></a>, but a chaining
+<tt class="docutils literal"><span class="pre">set</span></tt> call takes care of that:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">proj.tasks.add(2, 2)</span>
+</pre></div>
+</div>
+<div class="section" id="partials">
+<h3><a class="toc-backref" href="#id6">Partials</a><a class="headerlink" href="#partials" title="Permalink to this headline">¶</a></h3>
+<p>A subtask can be applied too:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Specifying additional args, kwargs or options to <tt class="docutils literal"><span class="pre">apply_async</span></tt>/<tt class="docutils literal"><span class="pre">delay</span></tt>
+creates partials:</p>
+<ul>
+<li><p class="first">Any arguments added will be prepended to the args in the signature:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">partial</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>          <span class="c"># incomplete signature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">partial</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>            <span class="c"># 2 + 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">partial</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="p">))</span>  <span class="c"># same</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Any keyword arguments added will be merged with the kwargs in the signature,
+with the new keyword arguments taking precedence:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>                    <span class="c"># -&gt; add(2, 2, debug=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;debug&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>  <span class="c"># same</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Any options added will be merged with the options in the signature,
+with the new options taking precedence:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># countdown is now 1</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>You can also clone subtasks to augment these:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">proj.tasks.add(2)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="p">),</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;debug&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+<span class="go">proj.tasks.add(2, 4, debug=True)</span>
+</pre></div>
+</div>
+<p>Partials are meant to be used with callbacks, any tasks linked or chord
+callbacks will be applied with the result of the parent task.
+Sometimes you want to specify a callback that does not take
+additional arguments, and in that case you can set the subtask
+to be immutable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">link</span><span class="p">(</span> <span class="n">reset_buffers</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">immutable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>Only the execution options can be set when a subtask is immutable,
+and it&#8217;s not possible to apply the subtask with partial args/kwargs.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>In this tutorial we use the prefix operator <cite>~</cite> to subtasks.
+You probably shouldn&#8217;t use it in your production code, but it&#8217;s a handy shortcut
+when testing with the Python shell:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="o">~</span><span class="n">subtask</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># is the same as</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subtask</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="groups">
+<h3><a class="toc-backref" href="#id7">Groups</a><a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h3>
+<p>A group can be used to execute several tasks in parallel.</p>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">group</span></tt> function takes a list of subtasks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">group</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">(proj.tasks.add(2, 2), proj.tasks.add(4, 4))</span>
+</pre></div>
+</div>
+<p>If you <strong>call</strong> the group, the tasks will be applied
+one after one in the current process, and a <a class="reference internal" href="../reference/celery.result.html#celery.result.TaskSetResult" title="celery.result.TaskSetResult"><tt class="xref py py-class docutils literal"><span class="pre">TaskSetResult</span></tt></a>
+instance is returned which can be used to keep track of the results,
+or tell how many tasks are ready and so on:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">g</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">[4, 8]</span>
+</pre></div>
+</div>
+<p>However, if you call <tt class="docutils literal"><span class="pre">apply_async</span></tt> on the group it will
+send a special grouping task, so that the action of applying
+the tasks happens in a worker instead of the current process:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">[4, 8]</span>
+</pre></div>
+</div>
+<p>Group also supports iterators:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">100</span><span class="p">))()</span>
+</pre></div>
+</div>
+<p>A group is a subclass instance, so it can be used in combination
+with other subtasks.</p>
+</div>
+<div class="section" id="map-starmap">
+<h3><a class="toc-backref" href="#id8">Map &amp; Starmap</a><a class="headerlink" href="#map-starmap" title="Permalink to this headline">¶</a></h3>
+<p><tt class="xref py py-class docutils literal"><span class="pre">map</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">starmap</span></tt> are built-in tasks
+that calls the task for every element in a sequence.</p>
+<p>They differ from group in that</p>
+<ul class="simple">
+<li>only one task message is sent</li>
+<li>the operation is sequential.</li>
+</ul>
+<p>For example using <tt class="docutils literal"><span class="pre">map</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="o">~</span><span class="n">xsum</span><span class="o">.</span><span class="n">map</span><span class="p">([</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+<span class="go">[45, 4950]</span>
+</pre></div>
+</div>
+<p>is the same as having a task doing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<span class="k">def</span> <span class="nf">temp</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">xsum</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">xsum</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">))]</span>
+</pre></div>
+</div>
+<p>and using <tt class="docutils literal"><span class="pre">starmap</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="o">~</span><span class="n">add</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+<span class="go">[0, 2, 4, 6, 8, 10, 12, 14, 16, 18]</span>
+</pre></div>
+</div>
+<p>is the same as having a task doing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<span class="k">def</span> <span class="nf">temp</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Both <tt class="docutils literal"><span class="pre">map</span></tt> and <tt class="docutils literal"><span class="pre">starmap</span></tt> are subtasks, so they can be used as
+other subtasks and combined in groups etc., for example
+to apply the starmap after 10 seconds:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="chunking">
+<h3><a class="toc-backref" href="#id9">Chunking</a><a class="headerlink" href="#chunking" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>&#8211; Chunking lets you divide a iterable of work into pieces,</dt>
+<dd>so that if you have one million objects, you can create
+10 tasks with hundred thousand objects each.</dd>
+</dl>
+<p>Some may worry that chunking your tasks results in a degradation
+of parallelism, but this is rarely true for a busy cluster
+and in practice since you are avoiding the overhead  of messaging
+it may considerably increase performance.</p>
+<p>To create a chunks subtask you can use <tt class="xref py py-meth docutils literal"><span class="pre">celery.Task.chunks()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As with <tt class="xref py py-class docutils literal"><span class="pre">group</span></tt> the act of <strong>calling</strong>
+the chunks will apply the tasks in the current process:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span> <span class="mi">10</span><span class="p">)()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">[[0, 2, 4, 6, 8, 10, 12, 14, 16, 18],</span>
+<span class="go"> [20, 22, 24, 26, 28, 30, 32, 34, 36, 38],</span>
+<span class="go"> [40, 42, 44, 46, 48, 50, 52, 54, 56, 58],</span>
+<span class="go"> [60, 62, 64, 66, 68, 70, 72, 74, 76, 78],</span>
+<span class="go"> [80, 82, 84, 86, 88, 90, 92, 94, 96, 98],</span>
+<span class="go"> [100, 102, 104, 106, 108, 110, 112, 114, 116, 118],</span>
+<span class="go"> [120, 122, 124, 126, 128, 130, 132, 134, 136, 138],</span>
+<span class="go"> [140, 142, 144, 146, 148, 150, 152, 154, 156, 158],</span>
+<span class="go"> [160, 162, 164, 166, 168, 170, 172, 174, 176, 178],</span>
+<span class="go"> [180, 182, 184, 186, 188, 190, 192, 194, 196, 198]]</span>
+</pre></div>
+</div>
+<p>while calling <tt class="docutils literal"><span class="pre">.apply_async</span></tt> will create a dedicated
+task so that the individual tasks are applied in a worker
+instead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can also convert chunks to a group:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">group</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>and with the group skew the countdown of each task by increments
+of one:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">group</span><span class="o">.</span><span class="n">skew</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">)()</span>
+</pre></div>
+</div>
+<p>which means that the first task will have a countdown of 1, the second
+a countdown of 2 and so on.</p>
+</div>
+<div class="section" id="chaining-tasks">
+<h3><a class="toc-backref" href="#id10">Chaining tasks</a><a class="headerlink" href="#chaining-tasks" title="Permalink to this headline">¶</a></h3>
+<p>Tasks can be linked together, which in practice means adding
+a callback task:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link</span><span class="o">=</span><span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p>The linked task will be applied with the result of its parent
+task as the first argument, which in the above case will result
+in <tt class="docutils literal"><span class="pre">mul(4,</span> <span class="pre">16)</span></tt> since the result is 4.</p>
+<p>The results will keep track of what subtasks a task applies,
+and this can be accessed from the result instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">children</span>
+<span class="go">[&lt;AsyncResult: 8c350acf-519d-4553-8a53-4ad3a5c5aeb4&gt;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">64</span>
+</pre></div>
+</div>
+<p>The result instance also has a <a class="reference internal" href="../reference/celery.result.html#celery.result.AsyncResult.collect" title="celery.result.AsyncResult.collect"><tt class="xref py py-meth docutils literal"><span class="pre">collect()</span></tt></a> method
+that treats the result as a graph, enabling you to iterate over
+the results:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+<span class="go">[(&lt;AsyncResult: 7b720856-dc5f-4415-9134-5c89def5664e&gt;, 4),</span>
+<span class="go"> (&lt;AsyncResult: 8c350acf-519d-4553-8a53-4ad3a5c5aeb4&gt;, 64)]</span>
+</pre></div>
+</div>
+<p>By default <a class="reference internal" href="../reference/celery.result.html#celery.result.AsyncResult.collect" title="celery.result.AsyncResult.collect"><tt class="xref py py-meth docutils literal"><span class="pre">collect()</span></tt></a> will raise an
+<a class="reference internal" href="../reference/celery.exceptions.html#celery.exceptions.IncompleteStream" title="celery.exceptions.IncompleteStream"><tt class="xref py py-exc docutils literal"><span class="pre">IncompleteStream</span></tt></a> exception if the graph is not fully
+formed (one of the tasks has not completed yet),
+but you can get an intermediate representation of the graph
+too:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">result</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">intermediate</span><span class="o">=</span><span class="bp">True</span><span class="p">)):</span>
+<span class="go">....</span>
+</pre></div>
+</div>
+<p>You can link together as many tasks as you like,
+and subtasks can be linked too:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">log_result</span><span class="o">.</span><span class="n">s</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>You can also add <em>error callbacks</em> using the <tt class="docutils literal"><span class="pre">link_error</span></tt> argument:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link_error</span><span class="o">=</span><span class="n">log_error</span><span class="o">.</span><span class="n">s</span><span class="p">())</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link_error</span><span class="o">=</span><span class="n">log_error</span><span class="o">.</span><span class="n">s</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Since exceptions can only be serialized when pickle is used
+the error callbacks take the id of the parent task as argument instead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">proj.celery</span> <span class="kn">import</span> <span class="n">celery</span>
+
+<span class="nd">@celery.task</span>
+<span class="k">def</span> <span class="nf">log_error</span><span class="p">(</span><span class="n">task_id</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">AsyncResult</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">propagate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>  <span class="c"># make sure result written.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;/var/errors/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="p">))</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;--</span><span class="se">\n\n</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">task_id</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">traceback</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>To make it even easier to link tasks together there is
+a special subtask called <tt class="xref py py-class docutils literal"><span class="pre">chain</span></tt> that lets
+you chain tasks together:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">mul</span>
+
+<span class="go"># (4 + 4) * 8 * 10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="go">proj.tasks.add(4, 4) | proj.tasks.mul(8)</span>
+</pre></div>
+</div>
+<p>Calling the chain will apply the tasks in the current process
+and return the result of the last task in the chain:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">640</span>
+</pre></div>
+</div>
+<p>And calling <tt class="docutils literal"><span class="pre">apply_async</span></tt> will create a dedicated
+task so that the act of applying the chain happens
+in a worker:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">640</span>
+</pre></div>
+</div>
+<p>It also sets <tt class="docutils literal"><span class="pre">parent</span></tt> attributes so that you can
+work your way up the chain to get intermediate results:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">64</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">8</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+<span class="go">&lt;AsyncResult: eeaad925-6778-4ad1-88c8-b2a63d017933&gt;</span>
+</pre></div>
+</div>
+<p>Chains can also be made using the <tt class="docutils literal"><span class="pre">|</span></tt> (pipe) operator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="graphs">
+<h4><a class="toc-backref" href="#id11">Graphs</a><a class="headerlink" href="#graphs" title="Permalink to this headline">¶</a></h4>
+<p>In addition you can work with the result graph as a
+<tt class="xref py py-class docutils literal"><span class="pre">DependencyGraph</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">10</span><span class="p">))()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">graph</span>
+<span class="go">285fa253-fcf8-42ef-8b95-0078897e83e6(1)</span>
+<span class="go">    463afec2-5ed4-4036-b22d-ba067ec64f52(0)</span>
+<span class="go">872c3995-6fa0-46ca-98c2-5a19155afcf0(2)</span>
+<span class="go">    285fa253-fcf8-42ef-8b95-0078897e83e6(1)</span>
+<span class="go">        463afec2-5ed4-4036-b22d-ba067ec64f52(0)</span>
+</pre></div>
+</div>
+<p>You can even convert these graphs to <em>dot</em> format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;graph.dot&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_dot</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and create images:</p>
+<div class="highlight-python"><pre>$ dot -Tpng graph.dot -o graph.png</pre>
+</div>
+<img alt="../_images/graph.png" src="../_images/graph.png" />
+</div>
+</div>
+<div class="section" id="chords">
+<h3><a class="toc-backref" href="#id12">Chords</a><a class="headerlink" href="#chords" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="../index.html">
+  <img class="logo" src="http://cloud.github.com/downloads/ask/celery/celery_128.png" alt="Logo"/>
+</a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="first-steps-with-celery.html"
+                        title="previous chapter">First steps with Celery</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="resources.html"
+                        title="next chapter">Resources</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/getting-started/next-steps.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="resources.html" title="Resources"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="first-steps-with-celery.html" title="First steps with Celery"
+             >previous</a> |</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+    </div>
+  </body>
+</html>
