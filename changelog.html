@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Change history &mdash; Celery 2.6.0rc1 documentation</title>
+    <title>Change history &mdash; Celery 2.6.0rc2 documentation</title>
     
     <link rel="stylesheet" href="_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.6.0rc1',
+        VERSION:     '2.6.0rc2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc1 documentation" href="index.html" />
+    <link rel="top" title="Celery 2.6.0rc2 documentation" href="index.html" />
     <link rel="next" title="API Reference" href="reference/index.html" />
     <link rel="prev" title="What’s new in Celery 2.5" href="whatsnew-2.5.html" /> 
   </head>
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="whatsnew-2.5.html" title="What’s new in Celery 2.5"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -502,7 +502,7 @@ documentation for MongoDB, Beanstalk and CouchDB.</p>
 <span id="v244-security-fixes"></span><h3><a class="toc-backref" href="#id126">Security Fixes</a><a class="headerlink" href="#security-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">[Security: <a class="reference external" href="http://github.com/ask/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
-real id&#8217;s when the <em class="xref std std-option">--uid</em>/<em class="xref std std-option">--gid</em> arguments to
+real id&#8217;s when the <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--uid"><em class="xref std std-option">--uid</em></a>/<a class="reference internal" href="reference/celery.bin.base.html#cmdoption--gid"><em class="xref std std-option">--gid</em></a> arguments to
 <strong class="program">celeryd-multi</strong>, <strong class="program">celeryd_detach</strong>,
 <strong class="program">celerybeat</strong> and <strong class="program">celeryev</strong> were used.</p>
 <p>This means privileges weren&#8217;t properly dropped, and that it would
@@ -974,7 +974,7 @@ now mentioned in the Changelog.</p>
 <span id="id15"></span><h3><a class="toc-backref" href="#id135">Security Fixes</a><a class="headerlink" href="#v234-security-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">[Security: <a class="reference external" href="http://github.com/ask/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
-real id&#8217;s when the <em class="xref std std-option">--uid</em>/<em class="xref std std-option">--gid</em> arguments to
+real id&#8217;s when the <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--uid"><em class="xref std std-option">--uid</em></a>/<a class="reference internal" href="reference/celery.bin.base.html#cmdoption--gid"><em class="xref std std-option">--gid</em></a> arguments to
 <strong class="program">celeryd-multi</strong>, <strong class="program">celeryd_detach</strong>,
 <strong class="program">celerybeat</strong> and <strong class="program">celeryev</strong> were used.</p>
 <p>This means privileges weren&#8217;t properly dropped, and that it would
@@ -1379,7 +1379,7 @@ queue is already being consumed from.</li>
 <span id="id29"></span><h3><a class="toc-backref" href="#id148">Security Fixes</a><a class="headerlink" href="#v228-security-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">[Security: <a class="reference external" href="http://github.com/ask/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
-real id&#8217;s when the <em class="xref std std-option">--uid</em>/<em class="xref std std-option">--gid</em> arguments to
+real id&#8217;s when the <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--uid"><em class="xref std std-option">--uid</em></a>/<a class="reference internal" href="reference/celery.bin.base.html#cmdoption--gid"><em class="xref std std-option">--gid</em></a> arguments to
 <strong class="program">celeryd-multi</strong>, <strong class="program">celeryd_detach</strong>,
 <strong class="program">celerybeat</strong> and <strong class="program">celeryev</strong> were used.</p>
 <p>This means privileges weren&#8217;t properly dropped, and that it would
@@ -1408,7 +1408,7 @@ after Celery has set up logging.</p>
 </li>
 <li><p class="first">Redis result backend now works with Redis 2.4.4.</p>
 </li>
-<li><p class="first">celeryd_multi: The <em class="xref std std-option">--gid</em> option now works correctly.</p>
+<li><p class="first">celeryd_multi: The <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--gid"><em class="xref std std-option">--gid</em></a> option now works correctly.</p>
 </li>
 <li><p class="first">celeryd: Retry wrongfully used the repr of the traceback instead
 of the string representation.</p>
@@ -1745,7 +1745,7 @@ have any effect.  This is now fixed.</p>
 instances, not classes.</p>
 </li>
 <li><p class="first"><strong class="program">celeryev</strong> did not create pidfile even though the
-<em class="xref std std-option">--pidfile</em> argument was set.</p>
+<a class="reference internal" href="reference/celery.bin.base.html#cmdoption--pidfile"><em class="xref std std-option">--pidfile</em></a> argument was set.</p>
 </li>
 <li><p class="first">Task logger format was no longer used. (Issue <span class="xref issue">#317</span>).</p>
 <blockquote>
@@ -2727,7 +2727,7 @@ declaration.</p>
 </dd></dl>
 
 <p>Commands also added to <strong class="program">celeryctl</strong> and
-<tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt>.</p>
+<a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>.</p>
 <p>Example using celeryctl to start consuming from queue &#8220;queue&#8221;, in
 exchange &#8220;exchange&#8221;, of type &#8220;direct&#8221; using binding key &#8220;key&#8221;:</p>
 <div class="highlight-python"><pre>$ celeryctl inspect add_consumer queue exchange direct key
@@ -2735,7 +2735,7 @@ $ celeryctl inspect cancel_consumer queue</pre>
 </div>
 <p>See <a class="reference internal" href="userguide/monitoring.html#monitoring-celeryctl"><em>celeryctl: Management Utility</em></a> for more information about the
 <strong class="program">celeryctl</strong> program.</p>
-<p>Another example using <tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt>:</p>
+<p>Another example using <a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery.task.control</span> <span class="kn">import</span> <span class="n">inspect</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">inspect</span><span class="o">.</span><span class="n">add_consumer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s">&quot;queue&quot;</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="s">&quot;exchange&quot;</span><span class="p">,</span>
 <span class="gp">... </span>                     <span class="n">exchange_type</span><span class="o">=</span><span class="s">&quot;direct&quot;</span><span class="p">,</span>
@@ -3332,7 +3332,7 @@ so its functionality was replaced.</p>
 <li><p class="first">Redis result backend: Documentation typos: Redis doesn&#8217;t have
 database names, but database numbers. The default database is now 0.</p>
 </li>
-<li><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt>:
+<li><p class="first"><a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>:
 <cite>registered_tasks</cite> was requesting an invalid command because of a typo.</p>
 <blockquote>
 <div><p>See issue <span class="xref issue">#170</span>.</p>
@@ -3370,7 +3370,7 @@ always set.</p>
 <li><p class="first"><cite>AsyncResult.traceback</cite>: Now returns <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt>, instead of raising
 <a class="reference external" href="http://docs.python.org/dev/library/exceptions.html#KeyError" title="(in Python v3.3)"><tt class="xref py py-exc docutils literal"><span class="pre">KeyError</span></tt></a> if traceback is missing.</p>
 </li>
-<li><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt>: Replies did not work correctly
+<li><p class="first"><a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>: Replies did not work correctly
 if no destination was specified.</p>
 </li>
 <li><p class="first">Can now store result/metadata for custom states.</p>
@@ -3537,7 +3537,7 @@ the ETA field.</p>
 <li><p class="first">LoggerWrapper: Try to detect loggers logging back to stderr/stdout making
 an infinite loop.</p>
 </li>
-<li><p class="first">Added <tt class="xref py py-class docutils literal"><span class="pre">celery.task.control.inspect</span></tt>: Inspects a running worker.</p>
+<li><p class="first">Added <a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">celery.task.control.inspect</span></tt></a>: Inspects a running worker.</p>
 <blockquote>
 <div><p>Examples:</p>
 <div class="highlight-python"><pre># Inspect a single worker
@@ -6596,7 +6596,7 @@ the name change request is in <cite>docs/name_change_request.txt</cite>.</p>
         <li class="right" >
           <a href="whatsnew-2.5.html" title="What’s new in Celery 2.5"
              >previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

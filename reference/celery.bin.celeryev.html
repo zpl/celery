@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.bin.celeryev &mdash; Celery 2.6.0rc1 documentation</title>
+    <title>celery.bin.celeryev &mdash; Celery 2.6.0rc2 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc1',
+        VERSION:     '2.6.0rc2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.bin.celery" href="celery.bin.celery.html" />
     <link rel="prev" title="celery.bin.celerybeat" href="celery.bin.celerybeat.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.bin.celerybeat.html" title="celery.bin.celerybeat"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -69,17 +69,63 @@
 </div>
     <div class="section" id="celery-bin-celeryev">
 <h1>celery.bin.celeryev<a class="headerlink" href="#celery-bin-celeryev" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-celery.bin.celeryev"></span><dl class="class">
+<span class="target" id="module-celery.bin.celeryev"></span><div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">See <a class="reference internal" href="celery.bin.base.html#preload-options"><em>Preload Options</em></a> and <a class="reference internal" href="celery.bin.base.html#daemon-options"><em>Daemon Options</em></a>.</p>
+</div>
+<dl class="cmdoption">
+<dt id="cmdoption-celeryev-d">
+<tt class="descname">-d</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--dump</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryev-d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump events to stdout.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryev-c">
+<tt class="descname">-c</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--camera</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryev-c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take snapshots of events using this camera.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryev--detach">
+<tt class="descname">--detach</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryev--detach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camera: Detach and run in the background as a daemon.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryev-F">
+<tt class="descname">-F</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--freq</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--frequency</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryev-F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camera: Shutter frequency.  Default is every 1.0 seconds.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryev-r">
+<tt class="descname">-r</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--maxrate</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryev-r" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camera: Optional shutter rate limit (e.g. 10/m).</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryev-l">
+<tt class="descname">-l</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--loglevel</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryev-l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logging level, choose between <cite>DEBUG</cite>, <cite>INFO</cite>, <cite>WARNING</cite>,
+<cite>ERROR</cite>, <cite>CRITICAL</cite>, or <cite>FATAL</cite>.  Default is INFO.</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="celery.bin.celeryev.EvCommand">
 <em class="property">class </em><tt class="descclassname">celery.bin.celeryev.</tt><tt class="descname">EvCommand</tt><big>(</big><em>app=None</em>, <em>get_app=None</em><big>)</big><a class="headerlink" href="#celery.bin.celeryev.EvCommand" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><dl class="attribute">
+<dt id="celery.bin.celeryev.EvCommand.doc">
+<tt class="descname">doc</tt><em class="property"> = '\n\n.. program:: celeryev\n\n.. seealso::\n\n    See :ref:`preload-options` and :ref:`daemon-options`.\n\n.. cmdoption:: -d, --dump\n\n    Dump events to stdout.\n\n.. cmdoption:: -c, --camera\n\n    Take snapshots of events using this camera.\n\n.. cmdoption:: --detach\n\n    Camera: Detach and run in the background as a daemon.\n\n.. cmdoption:: -F, --freq, --frequency\n\n    Camera: Shutter frequency.  Default is every 1.0 seconds.\n\n.. cmdoption:: -r, --maxrate\n\n    Camera: Optional shutter rate limit (e.g. 10/m).\n\n.. cmdoption:: -l, --loglevel\n\n    Logging level, choose between `DEBUG`, `INFO`, `WARNING`,\n    `ERROR`, `CRITICAL`, or `FATAL`.  Default is INFO.\n\n'</em><a class="headerlink" href="#celery.bin.celeryev.EvCommand.doc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.bin.celeryev.EvCommand.get_options">
 <tt class="descname">get_options</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.bin.celeryev.EvCommand.get_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.bin.celeryev.EvCommand.preload_options">
-<tt class="descname">preload_options</tt><em class="property"> = (&lt;Option at 0x10130f0e0: --app&gt;, &lt;Option at 0x10a90e098: -b/--broker&gt;, &lt;Option at 0x10a4616c8: --loader&gt;, &lt;Option at 0x10ada7758: --config&gt;, &lt;Option at 0x10af485f0: -f/--logfile&gt;, &lt;Option at 0x10af373b0: --pidfile&gt;, &lt;Option at 0x10af37440: --uid&gt;, &lt;Option at 0x10af37a28: --gid&gt;, &lt;Option at 0x10af37098: --umask&gt;, &lt;Option at 0x10af37ab8: --workdir&gt;)</em><a class="headerlink" href="#celery.bin.celeryev.EvCommand.preload_options" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">preload_options</tt><em class="property"> = (&lt;Option at 0x10af3fdd0: --app&gt;, &lt;Option at 0x10af3ff80: -b/--broker&gt;, &lt;Option at 0x10af3fe60: --loader&gt;, &lt;Option at 0x10af3fef0: --config&gt;, &lt;Option at 0x10b4270e0: -f/--logfile&gt;, &lt;Option at 0x10b427a70: --pidfile&gt;, &lt;Option at 0x10b427ea8: --uid&gt;, &lt;Option at 0x10b427368: --gid&gt;, &lt;Option at 0x10b427248: --umask&gt;, &lt;Option at 0x10b427d40: --workdir&gt;)</em><a class="headerlink" href="#celery.bin.celeryev.EvCommand.preload_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -177,7 +223,7 @@
         <li class="right" >
           <a href="celery.bin.celerybeat.html" title="celery.bin.celerybeat"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Routing Tasks &mdash; Celery 2.6.0rc1 documentation</title>
+    <title>Routing Tasks &mdash; Celery 2.6.0rc2 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc1',
+        VERSION:     '2.6.0rc2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
     <link rel="up" title="User Guide" href="index.html" />
     <link rel="next" title="Monitoring and Management Guide" href="monitoring.html" />
     <link rel="prev" title="HTTP Callback Tasks (Webhooks)" href="remote-tasks.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="remote-tasks.html" title="HTTP Callback Tasks (Webhooks)"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">User Guide</a> &raquo;</li> 
       </ul>
     </div>  
@@ -102,6 +102,7 @@ available for all transports, please consult the <a class="reference external" h
 <li><a class="reference internal" href="#defining-queues" id="id20">Defining queues</a></li>
 <li><a class="reference internal" href="#specifying-task-destination" id="id21">Specifying task destination</a></li>
 <li><a class="reference internal" href="#routers" id="id22">Routers</a></li>
+<li><a class="reference internal" href="#broadcast" id="id23">Broadcast</a></li>
 </ul>
 </li>
 </ul>
@@ -135,9 +136,12 @@ process the default queue as well:</p>
 <span id="routing-changing-default-queue"></span><h4><a class="toc-backref" href="#id7">Changing the name of the default queue</a><a class="headerlink" href="#changing-the-name-of-the-default-queue" title="Permalink to this headline">¶</a></h4>
 <p>You can change the name of the default queue by using the following
 configuration:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;exchange&quot;</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">,</span>
-                             <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">}}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kombu</span> <span class="kn">import</span> <span class="n">Exchange</span><span class="p">,</span> <span class="n">Queue</span>
+
 <span class="n">CELERY_DEFAULT_QUEUE</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
+<span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">,</span> <span class="n">Exchange</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">),</span> <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;default&quot;</span><span class="p">),</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -162,22 +166,21 @@ ensures it will work for them as well.</p>
 <p>Say you have two servers, <cite>x</cite>, and <cite>y</cite> that handles regular tasks,
 and one server <cite>z</cite>, that only handles feed related tasks, you can use this
 configuration:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_DEFAULT_QUEUE</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
-<span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;task.#&quot;</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s">&quot;feed_tasks&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;feed.#&quot;</span><span class="p">,</span>
-    <span class="p">},</span>
-<span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kombu</span> <span class="kn">import</span> <span class="n">Queue</span>
+
+<span class="n">CELERY_DEFAULT_QUEUE</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
+<span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">,</span>    <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;task.#&quot;</span><span class="p">),</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;feed_tasks&quot;</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;feed.#&quot;</span><span class="p">),</span>
+<span class="p">)</span>
 <span class="n">CELERY_DEFAULT_EXCHANGE</span> <span class="o">=</span> <span class="s">&quot;tasks&quot;</span>
 <span class="n">CELERY_DEFAULT_EXCHANGE_TYPE</span> <span class="o">=</span> <span class="s">&quot;topic&quot;</span>
 <span class="n">CELERY_DEFAULT_ROUTING_KEY</span> <span class="o">=</span> <span class="s">&quot;task.default&quot;</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="../configuration.html#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a> is a map of queue names and their
-exchange/type/binding_key, if you don&#8217;t set exchange or exchange type, they
+<p><a class="reference internal" href="../configuration.html#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a> is a list of <tt class="xref py py-class docutils literal"><span class="pre">Queue</span></tt>
+instances.
+If you don&#8217;t set the exchange or exchange type values for a key, these
 will be taken from the <a class="reference internal" href="../configuration.html#std:setting-CELERY_DEFAULT_EXCHANGE"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_DEFAULT_EXCHANGE</span></tt></a> and
 <a class="reference internal" href="../configuration.html#std:setting-CELERY_DEFAULT_EXCHANGE_TYPE"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_DEFAULT_EXCHANGE_TYPE</span></tt></a> settings.</p>
 <p>To route a task to the <cite>feed_tasks</cite> queue, you can add an entry in the
@@ -212,19 +215,14 @@ tasks as well, maybe in times when there&#8217;s a lot of work to do:</p>
 </div>
 <p>If you have another queue but on another exchange you want to add,
 just specify a custom exchange and exchange type:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&quot;feed_tasks&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;feed.#&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s">&quot;regular_tasks&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;task.#&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s">&quot;image_tasks&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;image.compress&quot;</span><span class="p">,</span>
-            <span class="s">&quot;exchange&quot;</span><span class="p">:</span> <span class="s">&quot;mediatasks&quot;</span><span class="p">,</span>
-            <span class="s">&quot;exchange_type&quot;</span><span class="p">:</span> <span class="s">&quot;direct&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kombu</span> <span class="kn">import</span> <span class="n">Exchange</span><span class="p">,</span> <span class="n">Queue</span>
+
+<span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;feed_tasks&quot;</span><span class="p">,</span>    <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;feed.#&quot;</span><span class="p">),</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;regular_tasks&quot;</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;task.#&quot;</span><span class="p">),</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;image_tasks&quot;</span><span class="p">,</span>   <span class="n">exchange</span><span class="o">=</span><span class="n">Exchange</span><span class="p">(</span><span class="s">&quot;mediatasks&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;direct&quot;</span><span class="p">),</span>
+                           <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;image.compress&quot;</span><span class="p">),</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>If you&#8217;re confused about these terms, you should read up on AMQP.</p>
@@ -286,29 +284,17 @@ different messaging scenarios.</li>
 setting is set to <tt class="xref py py-const docutils literal"><span class="pre">False</span></tt>).</p>
 <p>Here&#8217;s an example queue configuration with three queues;
 One for video, one for images and one default queue for everything else:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;exchange&quot;</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">,</span>
-        <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">},</span>
-    <span class="s">&quot;videos&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;exchange&quot;</span><span class="p">:</span> <span class="s">&quot;media&quot;</span><span class="p">,</span>
-        <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;media.video&quot;</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s">&quot;images&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;exchange&quot;</span><span class="p">:</span> <span class="s">&quot;media&quot;</span><span class="p">,</span>
-        <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;media.image&quot;</span><span class="p">,</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kombu</span> <span class="kn">import</span> <span class="n">Exchange</span><span class="p">,</span> <span class="n">Queue</span>
+
+<span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">,</span> <span class="n">Exchange</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">),</span> <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;default&quot;</span><span class="p">),</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;videos&quot;</span><span class="p">,</span>  <span class="n">Exchange</span><span class="p">(</span><span class="s">&quot;media&quot;</span><span class="p">),</span>   <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;media.video&quot;</span><span class="p">),</span>
+    <span class="n">Queue</span><span class="p">(</span><span class="s">&quot;images&quot;</span><span class="p">,</span>  <span class="n">Exchange</span><span class="p">(</span><span class="s">&quot;media&quot;</span><span class="p">),</span>   <span class="n">routing_key</span><span class="o">=</span><span class="s">&quot;media.image&quot;</span><span class="p">),</span>
+<span class="p">)</span>
 <span class="n">CELERY_DEFAULT_QUEUE</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
 <span class="n">CELERY_DEFAULT_EXCHANGE_TYPE</span> <span class="o">=</span> <span class="s">&quot;direct&quot;</span>
 <span class="n">CELERY_DEFAULT_ROUTING_KEY</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">In Celery the <cite>routing_key</cite> is the key used to send the message,
-while <cite>binding_key</cite> is the key the queue is bound with.  In the AMQP API
-they are both referred to as the routing key.</p>
 </div>
 </div>
 <div class="section" id="exchange-types">
@@ -472,16 +458,16 @@ One for video, one for images and one default queue for everything else:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s">&quot;exchange&quot;</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">,</span>
-        <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">},</span>
+        <span class="s">&quot;routing_key&quot;</span><span class="p">:</span> <span class="s">&quot;default&quot;</span><span class="p">},</span>
     <span class="s">&quot;videos&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s">&quot;exchange&quot;</span><span class="p">:</span> <span class="s">&quot;media&quot;</span><span class="p">,</span>
         <span class="s">&quot;exchange_type&quot;</span><span class="p">:</span> <span class="s">&quot;topic&quot;</span><span class="p">,</span>
-        <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;media.video&quot;</span><span class="p">,</span>
+        <span class="s">&quot;routing_key&quot;</span><span class="p">:</span> <span class="s">&quot;media.video&quot;</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="s">&quot;images&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s">&quot;exchange&quot;</span><span class="p">:</span> <span class="s">&quot;media&quot;</span><span class="p">,</span>
         <span class="s">&quot;exchange_type&quot;</span><span class="p">:</span> <span class="s">&quot;topic&quot;</span><span class="p">,</span>
-        <span class="s">&quot;binding_key&quot;</span><span class="p">:</span> <span class="s">&quot;media.image&quot;</span><span class="p">,</span>
+        <span class="s">&quot;routing_key&quot;</span><span class="p">:</span> <span class="s">&quot;media.image&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 <span class="p">}</span>
 <span class="n">CELERY_DEFAULT_QUEUE</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
@@ -557,6 +543,28 @@ same behavior:</p>
 <p>The routers will then be traversed in order, it will stop at the first router
 returning a true value, and use that as the final route for the task.</p>
 </div>
+<div class="section" id="broadcast">
+<h3><a class="toc-backref" href="#id23">Broadcast</a><a class="headerlink" href="#broadcast" title="Permalink to this headline">¶</a></h3>
+<p>Celery can also support broadcast routing.
+Here is an example exchange <tt class="docutils literal"><span class="pre">bcast</span></tt> that uses this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kombu.common</span> <span class="kn">import</span> <span class="n">Broadcast</span>
+
+<span class="n">CELERY_QUEUES</span> <span class="o">=</span> <span class="p">(</span><span class="n">Broadcast</span><span class="p">(</span><span class="s">&quot;broadcast_tasks&quot;</span><span class="p">),</span> <span class="p">)</span>
+
+<span class="n">CELERY_ROUTES</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;tasks.reload_cache&quot;</span><span class="p">:</span> <span class="s">&quot;broadcast_tasks&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Now the <tt class="docutils literal"><span class="pre">tasks.reload_tasks</span></tt> task will be sent to every
+worker consuming from this queue.</p>
+<div class="admonition-broadcast-results admonition">
+<p class="first admonition-title">Broadcast &amp; Results</p>
+<p>Note that Celery result does not define what happens if two
+tasks have the same task_id.  If the same task is distributed to more
+than one worker, then the state history may not be preserved.</p>
+<p class="last">It is a good idea to set the <tt class="docutils literal"><span class="pre">task.ignore_result</span></tt> attribute in
+this case.</p>
+</div>
+</div>
 </div>
 </div>
 
@@ -611,7 +619,7 @@ returning a true value, and use that as the final route for the task.</p>
         <li class="right" >
           <a href="remote-tasks.html" title="HTTP Callback Tasks (Webhooks)"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" >User Guide</a> &raquo;</li> 
       </ul>
     </div>

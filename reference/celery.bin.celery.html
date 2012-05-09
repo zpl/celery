@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.bin.celery &mdash; Celery 2.6.0rc1 documentation</title>
+    <title>celery.bin.celery &mdash; Celery 2.6.0rc2 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc1',
+        VERSION:     '2.6.0rc2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.bin.camqadm" href="celery.bin.camqadm.html" />
     <link rel="prev" title="celery.bin.celeryev" href="celery.bin.celeryev.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.bin.celeryev.html" title="celery.bin.celeryev"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -118,18 +118,8 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.bin.celery.Command.create_parser">
-<tt class="descname">create_parser</tt><big>(</big><em>prog_name</em>, <em>command</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.create_parser" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="celery.bin.celery.Command.error">
 <tt class="descname">error</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.error" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.bin.celery.Command.get_options">
-<tt class="descname">get_options</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.get_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -139,7 +129,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.Command.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10130f0e0: --app&gt;, &lt;Option at 0x10a90e098: -b/--broker&gt;, &lt;Option at 0x10a4616c8: --loader&gt;, &lt;Option at 0x10ada7758: --config&gt;, &lt;Option at 0x104e14c68: -q/--quiet&gt;, &lt;Option at 0x104e14d40: -C/--no-color&gt;)</em><a class="headerlink" href="#celery.bin.celery.Command.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae885f0: -q/--quiet&gt;, &lt;Option at 0x10b051248: -C/--no-color&gt;)</em><a class="headerlink" href="#celery.bin.celery.Command.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -168,11 +158,6 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.bin.celery.Command.run">
-<tt class="descname">run</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="celery.bin.celery.Command.run_from_argv">
 <tt class="descname">run_from_argv</tt><big>(</big><em>prog_name</em>, <em>argv</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.run_from_argv" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -189,7 +174,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.Command.version">
-<tt class="descname">version</tt><em class="property"> = '2.6.0rc1'</em><a class="headerlink" href="#celery.bin.celery.Command.version" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">version</tt><em class="property"> = '2.6.0rc2'</em><a class="headerlink" href="#celery.bin.celery.Command.version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -198,6 +183,11 @@
 <dt id="celery.bin.celery.Delegate">
 <em class="property">class </em><tt class="descclassname">celery.bin.celery.</tt><tt class="descname">Delegate</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Delegate" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
+<dt id="celery.bin.celery.Delegate.create_parser">
+<tt class="descname">create_parser</tt><big>(</big><em>prog_name</em>, <em>command</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Delegate.create_parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.bin.celery.Delegate.get_options">
 <tt class="descname">get_options</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.bin.celery.Delegate.get_options" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -234,7 +224,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.apply.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10130f0e0: --app&gt;, &lt;Option at 0x10a90e098: -b/--broker&gt;, &lt;Option at 0x10a4616c8: --loader&gt;, &lt;Option at 0x10ada7758: --config&gt;, &lt;Option at 0x104e14c68: -q/--quiet&gt;, &lt;Option at 0x104e14d40: -C/--no-color&gt;, &lt;Option at 0x104e1da28: -a/--args&gt;, &lt;Option at 0x104e1d638: -k/--kwargs&gt;, &lt;Option at 0x104e13488: --eta&gt;, &lt;Option at 0x104e6b950: --countdown&gt;, &lt;Option at 0x104e6b3f8: --expires&gt;, &lt;Option at 0x104e89710: --serializer&gt;, &lt;Option at 0x104e89cf8: --queue&gt;, &lt;Option at 0x104e89758: --exchange&gt;, &lt;Option at 0x104e89b48: --routing-key&gt;)</em><a class="headerlink" href="#celery.bin.celery.apply.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae885f0: -q/--quiet&gt;, &lt;Option at 0x10b051248: -C/--no-color&gt;, &lt;Option at 0x10b0866c8: -a/--args&gt;, &lt;Option at 0x10aeb4a28: -k/--kwargs&gt;, &lt;Option at 0x10b084ab8: --eta&gt;, &lt;Option at 0x10b084488: --countdown&gt;, &lt;Option at 0x102f26950: --expires&gt;, &lt;Option at 0x10b059ab8: --serializer&gt;, &lt;Option at 0x10b059518: --queue&gt;, &lt;Option at 0x10b059908: --exchange&gt;, &lt;Option at 0x10b0a4200: --routing-key&gt;)</em><a class="headerlink" href="#celery.bin.celery.apply.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -309,7 +299,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.inspect.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10130f0e0: --app&gt;, &lt;Option at 0x10a90e098: -b/--broker&gt;, &lt;Option at 0x10a4616c8: --loader&gt;, &lt;Option at 0x10ada7758: --config&gt;, &lt;Option at 0x104e14c68: -q/--quiet&gt;, &lt;Option at 0x104e14d40: -C/--no-color&gt;, &lt;Option at 0x104e80098: -t/--timeout&gt;, &lt;Option at 0x104e802d8: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.inspect.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae885f0: -q/--quiet&gt;, &lt;Option at 0x10b051248: -C/--no-color&gt;, &lt;Option at 0x10b0a4dd0: -t/--timeout&gt;, &lt;Option at 0x10b0a47a0: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.inspect.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -409,7 +399,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.result.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10130f0e0: --app&gt;, &lt;Option at 0x10a90e098: -b/--broker&gt;, &lt;Option at 0x10a4616c8: --loader&gt;, &lt;Option at 0x10ada7758: --config&gt;, &lt;Option at 0x104e14c68: -q/--quiet&gt;, &lt;Option at 0x104e14d40: -C/--no-color&gt;, &lt;Option at 0x104e89a28: -t/--task&gt;)</em><a class="headerlink" href="#celery.bin.celery.result.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae885f0: -q/--quiet&gt;, &lt;Option at 0x10b051248: -C/--no-color&gt;, &lt;Option at 0x10b0a44d0: -t/--task&gt;)</em><a class="headerlink" href="#celery.bin.celery.result.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -444,7 +434,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.shell.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10130f0e0: --app&gt;, &lt;Option at 0x10a90e098: -b/--broker&gt;, &lt;Option at 0x10a4616c8: --loader&gt;, &lt;Option at 0x10ada7758: --config&gt;, &lt;Option at 0x104e14c68: -q/--quiet&gt;, &lt;Option at 0x104e14d40: -C/--no-color&gt;, &lt;Option at 0x104e807e8: -I/--ipython&gt;, &lt;Option at 0x102aa2e60: -B/--bpython&gt;, &lt;Option at 0x104d37a28: -P/--python&gt;, &lt;Option at 0x104e26f38: -T/--without-tasks&gt;, &lt;Option at 0x104da8cf8: --eventlet&gt;, &lt;Option at 0x104da80e0: --gevent&gt;)</em><a class="headerlink" href="#celery.bin.celery.shell.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae885f0: -q/--quiet&gt;, &lt;Option at 0x10b051248: -C/--no-color&gt;, &lt;Option at 0x10b0a4098: -I/--ipython&gt;, &lt;Option at 0x10b0a4b48: -B/--bpython&gt;, &lt;Option at 0x10b09fdd0: -P/--python&gt;, &lt;Option at 0x10b09f638: -T/--without-tasks&gt;, &lt;Option at 0x10b09f3f8: --eventlet&gt;, &lt;Option at 0x10b09ff80: --gevent&gt;)</em><a class="headerlink" href="#celery.bin.celery.shell.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -459,7 +449,7 @@
 <em class="property">class </em><tt class="descclassname">celery.bin.celery.</tt><tt class="descname">status</tt><big>(</big><em>app=None</em>, <em>no_color=False</em>, <em>stdout=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x1002821e0&gt;</em>, <em>stderr=&lt;open file '&lt;stderr&gt;'</em>, <em>mode 'w' at 0x100282270&gt;</em><big>)</big><a class="headerlink" href="#celery.bin.celery.status" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.bin.celery.status.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10130f0e0: --app&gt;, &lt;Option at 0x10a90e098: -b/--broker&gt;, &lt;Option at 0x10a4616c8: --loader&gt;, &lt;Option at 0x10ada7758: --config&gt;, &lt;Option at 0x104e14c68: -q/--quiet&gt;, &lt;Option at 0x104e14d40: -C/--no-color&gt;, &lt;Option at 0x104e80098: -t/--timeout&gt;, &lt;Option at 0x104e802d8: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.status.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae885f0: -q/--quiet&gt;, &lt;Option at 0x10b051248: -C/--no-color&gt;, &lt;Option at 0x10b0a4dd0: -t/--timeout&gt;, &lt;Option at 0x10b0a47a0: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.status.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -532,7 +522,7 @@
         <li class="right" >
           <a href="celery.bin.celeryev.html" title="celery.bin.celeryev"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

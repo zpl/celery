@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.bin.celeryd &mdash; Celery 2.6.0rc1 documentation</title>
+    <title>celery.bin.celeryd &mdash; Celery 2.6.0rc2 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc1',
+        VERSION:     '2.6.0rc2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.bin.celerybeat" href="celery.bin.celerybeat.html" />
     <link rel="prev" title="celery.bin.base" href="celery.bin.base.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.bin.base.html" title="celery.bin.base"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -70,11 +70,22 @@
     <div class="section" id="celery-bin-celeryd">
 <h1>celery.bin.celeryd<a class="headerlink" href="#celery-bin-celeryd" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-celery.bin.celeryd"></span><p>celeryd</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">See <a class="reference internal" href="celery.bin.base.html#preload-options"><em>Preload Options</em></a>.</p>
+</div>
 <dl class="cmdoption">
 <dt id="cmdoption-celeryd-c">
 <tt class="descname">-c</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--concurrency</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd-c" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of child processes processing the queue. The default
 is the number of CPUs available on your system.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryd-P">
+<tt class="descname">-P</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--pool</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd-P" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pool implementation:</p>
+<p>processes (default), eventlet, gevent, solo or threads.</p>
 </dd></dl>
 
 <dl class="cmdoption">
@@ -93,7 +104,7 @@ is the number of CPUs available on your system.</p>
 <dl class="cmdoption">
 <dt id="cmdoption-celeryd-n">
 <tt class="descname">-n</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--hostname</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd-n" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set custom hostname.</p>
+<dd><p>Set custom hostname, e.g. &#8216;foo.example.com&#8217;.</p>
 </dd></dl>
 
 <dl class="cmdoption">
@@ -122,7 +133,7 @@ Example: -I foo.tasks,bar.tasks</p>
 <dt id="cmdoption-celeryd-s">
 <tt class="descname">-s</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--schedule</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd-s" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path to the schedule database if running with the <cite>-B</cite> option.
-Defaults to <cite>celerybeat-schedule</cite>. The extension &#8221;.db&#8221; will be
+Defaults to <cite>celerybeat-schedule</cite>. The extension &#8221;.db&#8221; may be
 appended to the filename.</p>
 </dd></dl>
 
@@ -133,15 +144,23 @@ appended to the filename.</p>
 </dd></dl>
 
 <dl class="cmdoption">
+<dt id="cmdoption-celeryd-S">
+<tt class="descname">-S</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--statedb</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd-S" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the state database. The extension &#8216;.db&#8217; may
+be appended to the filename. Default: %(default)s</p>
+</dd></dl>
+
+<dl class="cmdoption">
 <dt id="cmdoption-celeryd-E">
 <tt class="descname">-E</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--events</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd-E" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send events that can be captured by monitors like <cite>celerymon</cite>.</p>
+<dd><p>Send events that can be captured by monitors like <strong class="program">celeryev</strong>,
+<cite>celerymon</cite>, and others.</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-celeryd--purge">
-<tt class="descname">--purge</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--discard</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd--purge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Discard all waiting tasks before the daemon is started.
+<tt class="descname">--purge</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd--purge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Purges all waiting tasks before the daemon is started.
 <strong>WARNING</strong>: This is unrecoverable, and the tasks will be
 deleted from the messaging server.</p>
 </dd></dl>
@@ -165,10 +184,46 @@ deleted from the messaging server.</p>
 terminated and replaced by a new worker.</p>
 </dd></dl>
 
+<dl class="cmdoption">
+<dt id="cmdoption-celeryd--pidfile">
+<tt class="descname">--pidfile</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd--pidfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional file used to store the workers pid.</p>
+<p>The worker will not start if this file already exists
+and the pid is still alive.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryd--autoscale">
+<tt class="descname">--autoscale</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd--autoscale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable autoscaling by providing
+max_concurrency, min_concurrency. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">--</span><span class="n">autoscale</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span>
+</pre></div>
+</div>
+<p>(always keep 3 processes, but grow to 10 if necessary)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryd--autoreload">
+<tt class="descname">--autoreload</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd--autoreload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable autoreloading.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-celeryd--no-execv">
+<tt class="descname">--no-execv</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celeryd--no-execv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don&#8217;t do execv after multiprocessing child fork.</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="celery.bin.celeryd.WorkerCommand">
 <em class="property">class </em><tt class="descclassname">celery.bin.celeryd.</tt><tt class="descname">WorkerCommand</tt><big>(</big><em>app=None</em>, <em>get_app=None</em><big>)</big><a class="headerlink" href="#celery.bin.celeryd.WorkerCommand" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
+<dt id="celery.bin.celeryd.WorkerCommand.doc">
+<tt class="descname">doc</tt><em class="property"> = 'celeryd\n\n.. program:: celeryd\n\n.. seealso::\n\n    See :ref:`preload-options`.\n\n.. cmdoption:: -c, --concurrency\n\n    Number of child processes processing the queue. The default\n    is the number of CPUs available on your system.\n\n.. cmdoption:: -P, --pool\n\n    Pool implementation:\n\n    processes (default), eventlet, gevent, solo or threads.\n\n.. cmdoption:: -f, --logfile\n\n    Path to log file. If no logfile is specified, `stderr` is used.\n\n.. cmdoption:: -l, --loglevel\n\n    Logging level, choose between `DEBUG`, `INFO`, `WARNING`,\n    `ERROR`, `CRITICAL`, or `FATAL`.\n\n.. cmdoption:: -n, --hostname\n\n    Set custom hostname, e.g. \'foo.example.com\'.\n\n.. cmdoption:: -B, --beat\n\n    Also run the `celerybeat` periodic task scheduler. Please note that\n    there must only be one instance of this service.\n\n.. cmdoption:: -Q, --queues\n\n    List of queues to enable for this worker, separated by comma.\n    By default all configured queues are enabled.\n    Example: `-Q video,image`\n\n.. cmdoption:: -I, --include\n\n    Comma separated list of additional modules to import.\n    Example: -I foo.tasks,bar.tasks\n\n.. cmdoption:: -s, --schedule\n\n    Path to the schedule database if running with the `-B` option.\n    Defaults to `celerybeat-schedule`. The extension &quot;.db&quot; may be\n    appended to the filename.\n\n.. cmdoption:: --scheduler\n\n    Scheduler class to use. Default is celery.beat.PersistentScheduler\n\n.. cmdoption:: -S, --statedb\n\n    Path to the state database. The extension \'.db\' may\n    be appended to the filename. Default: %(default)s\n\n.. cmdoption:: -E, --events\n\n    Send events that can be captured by monitors like :program:`celeryev`,\n    `celerymon`, and others.\n\n.. cmdoption:: --purge\n\n    Purges all waiting tasks before the daemon is started.\n    **WARNING**: This is unrecoverable, and the tasks will be\n    deleted from the messaging server.\n\n.. cmdoption:: --time-limit\n\n    Enables a hard time limit (in seconds) for tasks.\n\n.. cmdoption:: --soft-time-limit\n\n    Enables a soft time limit (in seconds) for tasks.\n\n.. cmdoption:: --maxtasksperchild\n\n    Maximum number of tasks a pool worker can execute before it\'s\n    terminated and replaced by a new worker.\n\n.. cmdoption:: --pidfile\n\n    Optional file used to store the workers pid.\n\n    The worker will not start if this file already exists\n    and the pid is still alive.\n\n.. cmdoption:: --autoscale\n\n    Enable autoscaling by providing\n    max_concurrency, min_concurrency. Example::\n\n        --autoscale=10,3\n\n    (always keep 3 processes, but grow to 10 if necessary)\n\n.. cmdoption:: --autoreload\n\n    Enable autoreloading.\n\n.. cmdoption:: --no-execv\n\n    Don\'t do execv after multiprocessing child fork.\n\n'</em><a class="headerlink" href="#celery.bin.celeryd.WorkerCommand.doc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="celery.bin.celeryd.WorkerCommand.enable_config_from_cmdline">
 <tt class="descname">enable_config_from_cmdline</tt><em class="property"> = True</em><a class="headerlink" href="#celery.bin.celeryd.WorkerCommand.enable_config_from_cmdline" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -253,7 +308,7 @@ terminated and replaced by a new worker.</p>
         <li class="right" >
           <a href="celery.bin.base.html" title="celery.bin.base"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

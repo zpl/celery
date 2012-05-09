@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.app.builtins &mdash; Celery 2.6.0rc1 documentation</title>
+    <title>celery.app.builtins &mdash; Celery 2.6.0rc2 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc1',
+        VERSION:     '2.6.0rc2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.app.log" href="celery.app.log.html" />
     <link rel="prev" title="celery.app.registry" href="celery.app.registry.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.app.registry.html" title="celery.app.registry"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -96,8 +96,23 @@ responsible for that.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="celery.app.builtins.add_chunk_task">
+<tt class="descclassname">celery.app.builtins.</tt><tt class="descname">add_chunk_task</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.builtins.add_chunk_task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="celery.app.builtins.add_group_task">
 <tt class="descclassname">celery.app.builtins.</tt><tt class="descname">add_group_task</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.builtins.add_group_task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.app.builtins.add_map_task">
+<tt class="descclassname">celery.app.builtins.</tt><tt class="descname">add_map_task</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.builtins.add_map_task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.app.builtins.add_starmap_task">
+<tt class="descclassname">celery.app.builtins.</tt><tt class="descname">add_starmap_task</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.builtins.add_starmap_task" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -109,18 +124,18 @@ have native chord support.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="celery.app.builtins.builtin_task">
-<tt class="descclassname">celery.app.builtins.</tt><tt class="descname">builtin_task</tt><big>(</big><em>constructor</em><big>)</big><a class="headerlink" href="#celery.app.builtins.builtin_task" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.app.builtins.load_shared_tasks">
+<tt class="descclassname">celery.app.builtins.</tt><tt class="descname">load_shared_tasks</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.builtins.load_shared_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the built-in tasks for an app instance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="celery.app.builtins.shared_task">
+<tt class="descclassname">celery.app.builtins.</tt><tt class="descname">shared_task</tt><big>(</big><em>constructor</em><big>)</big><a class="headerlink" href="#celery.app.builtins.shared_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator that specifies that the decorated function is a function
 that generates a built-in task.</p>
 <p>The function will then be called for every new app instance created
 (lazily, so more exactly when the task registry for that app is needed).</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.app.builtins.load_builtin_tasks">
-<tt class="descclassname">celery.app.builtins.</tt><tt class="descname">load_builtin_tasks</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.builtins.load_builtin_tasks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the built-in tasks for an app instance.</p>
 </dd></dl>
 
 </div>
@@ -176,7 +191,7 @@ that generates a built-in task.</p>
         <li class="right" >
           <a href="celery.app.registry.html" title="celery.app.registry"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>
