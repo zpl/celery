@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.task.trace &mdash; Celery 2.6.0rc2 documentation</title>
+    <title>celery.task.trace &mdash; Celery 2.6.0rc3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.6.0rc2',
+        VERSION:     '2.6.0rc3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,10 +24,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 2.6.0rc3 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.app.abstract" href="celery.app.abstract.html" />
-    <link rel="prev" title="celery.backends.cassandra" href="celery.backends.cassandra.html" /> 
+    <link rel="prev" title="celery.state" href="celery.state.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,9 +43,9 @@
           <a href="celery.app.abstract.html" title="celery.app.abstract"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="celery.backends.cassandra.html" title="celery.backends.cassandra"
+          <a href="celery.state.html" title="celery.state"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -95,23 +95,8 @@ errors are recorded, handlers are applied and so on.</p>
 </table>
 <dl class="class">
 <dt id="celery.task.trace.TraceInfo">
-<em class="property">class </em><tt class="descclassname">celery.task.trace.</tt><tt class="descname">TraceInfo</tt><big>(</big><em>state</em>, <em>retval=None</em>, <em>exc_info=None</em><big>)</big><a class="headerlink" href="#celery.task.trace.TraceInfo" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="celery.task.trace.TraceInfo.exc_info">
-<tt class="descname">exc_info</tt><a class="headerlink" href="#celery.task.trace.TraceInfo.exc_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.task.trace.TraceInfo.exc_type">
-<tt class="descname">exc_type</tt><a class="headerlink" href="#celery.task.trace.TraceInfo.exc_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.task.trace.TraceInfo.exc_value">
-<tt class="descname">exc_value</tt><a class="headerlink" href="#celery.task.trace.TraceInfo.exc_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
+<em class="property">class </em><tt class="descclassname">celery.task.trace.</tt><tt class="descname">TraceInfo</tt><big>(</big><em>state</em>, <em>retval=None</em><big>)</big><a class="headerlink" href="#celery.task.trace.TraceInfo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
 <dt id="celery.task.trace.TraceInfo.handle_error_state">
 <tt class="descname">handle_error_state</tt><big>(</big><em>task</em>, <em>eager=False</em><big>)</big><a class="headerlink" href="#celery.task.trace.TraceInfo.handle_error_state" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -136,16 +121,6 @@ errors are recorded, handlers are applied and so on.</p>
 <dl class="attribute">
 <dt id="celery.task.trace.TraceInfo.state">
 <tt class="descname">state</tt><a class="headerlink" href="#celery.task.trace.TraceInfo.state" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.task.trace.TraceInfo.strtb">
-<tt class="descname">strtb</tt><a class="headerlink" href="#celery.task.trace.TraceInfo.strtb" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.task.trace.TraceInfo.tb">
-<tt class="descname">tb</tt><a class="headerlink" href="#celery.task.trace.TraceInfo.tb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -205,8 +180,8 @@ defines __call__ (excluding the one in BaseTask).</p>
   <img class="logo" src="http://cloud.github.com/downloads/ask/celery/celery_128.png" alt="Logo"/>
 </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="celery.backends.cassandra.html"
-                        title="previous chapter">celery.backends.cassandra</a></p>
+  <p class="topless"><a href="celery.state.html"
+                        title="previous chapter">celery.state</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="celery.app.abstract.html"
                         title="next chapter">celery.app.abstract</a></p>
@@ -245,9 +220,9 @@ defines __call__ (excluding the one in BaseTask).</p>
           <a href="celery.app.abstract.html" title="celery.app.abstract"
              >next</a> |</li>
         <li class="right" >
-          <a href="celery.backends.cassandra.html" title="celery.backends.cassandra"
+          <a href="celery.state.html" title="celery.state"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

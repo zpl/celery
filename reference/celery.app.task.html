@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.app.task &mdash; Celery 2.6.0rc2 documentation</title>
+    <title>celery.app.task &mdash; Celery 2.6.0rc3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc2',
+        VERSION:     '2.6.0rc3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc3 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.app.amqp" href="celery.app.amqp.html" />
     <link rel="prev" title="celery.app" href="celery.app.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.app.html" title="celery.app"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -209,7 +209,7 @@ Deprecated and scheduled for removal in v3.0.</p>
 
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.acks_late">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">acks_late</tt><em class="property"> = None</em><a class="headerlink" href="#celery.app.task.BaseTask.acks_late" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">acks_late</tt><em class="property"> = False</em><a class="headerlink" href="#celery.app.task.BaseTask.acks_late" title="Permalink to this definition">¶</a></dt>
 <dd><p>When enabled messages for this task will be acknowledged <strong>after</strong>
 the task has been executed, and not <em>just before</em> which is the
 default behavior.</p>
@@ -332,7 +332,7 @@ Defaults to the <a class="reference internal" href="#celery.app.task.BaseTask.se
 <li><strong>compression</strong> &#8211; A string identifying the compression method
 to use.  Can be one of <tt class="docutils literal"><span class="pre">zlib</span></tt>, <tt class="docutils literal"><span class="pre">bzip2</span></tt>,
 or any custom compression methods registered with
-<a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.compression.html#kombu.compression.register" title="(in Kombu v2.1)"><tt class="xref py py-func docutils literal"><span class="pre">kombu.compression.register()</span></tt></a>. Defaults to
+<a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.compression.html#kombu.compression.register" title="(in Kombu v2.2)"><tt class="xref py py-func docutils literal"><span class="pre">kombu.compression.register()</span></tt></a>. Defaults to
 the <a class="reference internal" href="../configuration.html#std:setting-CELERY_MESSAGE_COMPRESSION"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_MESSAGE_COMPRESSION</span></tt></a>
 setting.</li>
 <li><strong>link</strong> &#8211; A single, or a list of subtasks to apply if the
@@ -359,7 +359,7 @@ be replaced by a local <a class="reference internal" href="#celery.app.task.Base
 
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.backend">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">backend</tt><em class="property"> = None</em><a class="headerlink" href="#celery.app.task.BaseTask.backend" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x10759aa10&gt;</em><a class="headerlink" href="#celery.app.task.BaseTask.backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>The result store backend used for this task.</p>
 </dd></dl>
 
@@ -392,7 +392,7 @@ executed.  3 minutes by default.</p>
 
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.delivery_mode">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">delivery_mode</tt><em class="property"> = None</em><a class="headerlink" href="#celery.app.task.BaseTask.delivery_mode" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">delivery_mode</tt><em class="property"> = 2</em><a class="headerlink" href="#celery.app.task.BaseTask.delivery_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override the apps default delivery mode for this task.  Default is
 <cite>&#8220;persistent&#8221;</cite>, but you can change this to <cite>&#8220;transient&#8221;</cite>, which means
 messages will be lost if the broker is restarted.  Consult your broker
@@ -419,7 +419,7 @@ manual for any additional delivery modes.</p>
 
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.exchange_type">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">exchange_type</tt><em class="property"> = None</em><a class="headerlink" href="#celery.app.task.BaseTask.exchange_type" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">exchange_type</tt><em class="property"> = 'direct'</em><a class="headerlink" href="#celery.app.task.BaseTask.exchange_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overrides the apps default exchange type for this task.</p>
 </dd></dl>
 
@@ -454,7 +454,7 @@ manual for any additional delivery modes.</p>
 <dt id="celery.app.task.BaseTask.get_consumer">
 <tt class="descclassname">BaseTask.</tt><tt class="descname">get_consumer</tt><big>(</big><em>connection=None</em>, <em>queues=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.get_consumer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get message consumer.</p>
-<p>:rtype <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.messaging.html#kombu.messaging.Consumer" title="(in Kombu v2.1)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.messaging.Consumer</span></tt></a>:</p>
+<p>:rtype <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.messaging.html#kombu.messaging.Consumer" title="(in Kombu v2.2)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.messaging.Consumer</span></tt></a>:</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p>If you don&#8217;t specify a connection, one will automatically
@@ -526,9 +526,9 @@ it will <strong>never</strong> stop retrying.</p>
 <dd><p>Name of the task.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="classmethod">
 <dt id="celery.app.task.BaseTask.on_bound">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">on_bound</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.on_bound" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descclassname">BaseTask.</tt><tt class="descname">on_bound</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.on_bound" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method can be defined to do additional actions when the
 task class is bound to an app.</p>
 </dd></dl>
@@ -627,12 +627,6 @@ limit), <cite>&#8220;100/s&#8221;</cite> (hundred tasks a second), <cite>&#8220;
 a minute),`&#8221;100/h&#8221;` (hundred tasks an hour)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="celery.app.task.BaseTask.request">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">request</tt><em class="property"> = &lt;Context: {}&gt;</em><a class="headerlink" href="#celery.app.task.BaseTask.request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Request context (set when task is applied).</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="celery.app.task.BaseTask.retry">
 <tt class="descclassname">BaseTask.</tt><tt class="descname">retry</tt><big>(</big><em>args=None</em>, <em>kwargs=None</em>, <em>exc=None</em>, <em>throw=True</em>, <em>eta=None</em>, <em>countdown=None</em>, <em>max_retries=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.retry" title="Permalink to this definition">¶</a></dt>
@@ -714,7 +708,7 @@ of this type fails.</p>
 
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.serializer">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">serializer</tt><em class="property"> = None</em><a class="headerlink" href="#celery.app.task.BaseTask.serializer" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">serializer</tt><em class="property"> = 'pickle'</em><a class="headerlink" href="#celery.app.task.BaseTask.serializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>The name of a serializer that are registered with
 <tt class="xref py py-mod docutils literal"><span class="pre">kombu.serialization.registry</span></tt>.  Default is <cite>&#8220;pickle&#8221;</cite>.</p>
 </dd></dl>
@@ -843,7 +837,7 @@ running.</p>
         <li class="right" >
           <a href="celery.app.html" title="celery.app"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

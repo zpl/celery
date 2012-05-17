@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>First steps with Celery &mdash; Celery 2.6.0rc2 documentation</title>
+    <title>First steps with Celery &mdash; Celery 2.6.0rc3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc2',
+        VERSION:     '2.6.0rc3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc3 documentation" href="../index.html" />
     <link rel="up" title="Getting Started" href="index.html" />
     <link rel="next" title="Next Steps" href="next-steps.html" />
     <link rel="prev" title="Using Beanstalk" href="brokers/beanstalk.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="brokers/beanstalk.html" title="Using Beanstalk"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
       </ul>
     </div>  
@@ -182,11 +182,9 @@ AMQP, MongoDB, Tokyo Tyrant and Redis &#8211; or you can define your own.</p>
 <p>For this example we will use the <cite>amqp</cite> result backend, which sends states
 as messages.  The backend is configured via the <a class="reference internal" href="../configuration.html#std:setting-CELERY_RESULT_BACKEND"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_RESULT_BACKEND</span></tt></a>
 setting or using the <tt class="docutils literal"><span class="pre">backend</span></tt> argument to <tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt>, in addition individual
-result backends may have additional settings
-you can configure:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.backends.amqp</span> <span class="kn">import</span> <span class="n">AMQPBackend</span>
-
-<span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">AMQPBackend</span><span class="p">(</span><span class="n">expires</span><span class="o">=</span><span class="mi">300</span><span class="p">))</span>
+result backends may have additional required or optional settings
+to configure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s">&quot;amqp&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To read more about result backends please see <a class="reference internal" href="../userguide/tasks.html#task-result-backends"><em>Result Backends</em></a>.</p>
@@ -312,7 +310,7 @@ contain any syntax errors, you can try to import it:</p>
         <li class="right" >
           <a href="brokers/beanstalk.html" title="Using Beanstalk"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="index.html" >Getting Started</a> &raquo;</li> 
       </ul>
     </div>

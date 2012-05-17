@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Next Steps &mdash; Celery 2.6.0rc2 documentation</title>
+    <title>Next Steps &mdash; Celery 2.6.0rc3 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc2',
+        VERSION:     '2.6.0rc3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc3 documentation" href="../index.html" />
     <link rel="up" title="Getting Started" href="index.html" />
     <link rel="next" title="Resources" href="resources.html" />
     <link rel="prev" title="First steps with Celery" href="first-steps-with-celery.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="first-steps-with-celery.html" title="First steps with Celery"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
       </ul>
     </div>  
@@ -112,11 +112,9 @@ how to add Celery support for your application and library.</p>
                 <span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;proj.tasks&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>In this module we created our <tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt> instance.  This is something
-referred to as the celery <em>app</em>.  Your project
-imports celery from this module to access Celery&#8217;s features.
-It&#8217;s possible to use several app instances at once, but that
-will not be covered in this tutorial.</p>
+<p>In this module we created our <tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt> instance (sometimes
+referred to as the <em>app</em>).  To use Celery within your project
+you simply import this instance.</p>
 <ul>
 <li><p class="first">The <tt class="docutils literal"><span class="pre">broker</span></tt> argument specifies the URL of the broker to use.</p>
 <blockquote>
@@ -205,7 +203,7 @@ arguments, keyword arguments and execution options.</p>
 </pre></div>
 </div>
 <p>And like there is a <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a> shortcut for <cite>apply_async</cite>
-there is a <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.s" title="celery.app.task.BaseTask.s"><tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt></a> shortcut for subtask:</p>
+there is an <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.s" title="celery.app.task.BaseTask.s"><tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt></a> shortcut for subtask:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -600,7 +598,7 @@ work your way up the chain to get intermediate results:</p>
         <li class="right" >
           <a href="first-steps-with-celery.html" title="First steps with Celery"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="index.html" >Getting Started</a> &raquo;</li> 
       </ul>
     </div>

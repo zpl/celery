@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration and defaults &mdash; Celery 2.6.0rc2 documentation</title>
+    <title>Configuration and defaults &mdash; Celery 2.6.0rc3 documentation</title>
     
     <link rel="stylesheet" href="_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.6.0rc2',
+        VERSION:     '2.6.0rc3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc2 documentation" href="index.html" />
+    <link rel="top" title="Celery 2.6.0rc3 documentation" href="index.html" />
     <link rel="next" title="Django" href="django/index.html" />
     <link rel="prev" title="Signals" href="userguide/signals.html" /> 
   </head>
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="userguide/signals.html" title="Signals"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -853,6 +853,11 @@ has been executed, not <em>just before</em>, which is the default behavior.</p>
 <p>This is used to specify the task modules to import, but also
 to import signal handlers and additional remote control commands, etc.</p>
 </div>
+<div class="section" id="celery-include">
+<span id="std:setting-CELERY_INCLUDE"></span><h4>CELERY_INCLUDE<a class="headerlink" href="#celery-include" title="Permalink to this headline">¶</a></h4>
+<p>Exact same semantics as <a class="reference internal" href="#std:setting-CELERY_IMPORTS"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_IMPORTS</span></tt></a>, but can be used as a means
+to have different import categories.</p>
+</div>
 <div class="section" id="celeryd-force-execv">
 <span id="std:setting-CELERYD_FORCE_EXECV"></span><h4>CELERYD_FORCE_EXECV<a class="headerlink" href="#celeryd-force-execv" title="Permalink to this headline">¶</a></h4>
 <p>On Unix the processes pool will fork, so that child processes
@@ -1354,7 +1359,7 @@ Please use the <em class="xref std std-option">--loglevel</em> argument instead.
         <li class="right" >
           <a href="userguide/signals.html" title="Signals"
              >previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

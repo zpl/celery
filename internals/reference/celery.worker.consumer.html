@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.worker.consumer &mdash; Celery 2.6.0rc2 documentation</title>
+    <title>celery.worker.consumer &mdash; Celery 2.6.0rc3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.6.0rc2',
+        VERSION:     '2.6.0rc3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc2 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 2.6.0rc3 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.worker.job" href="celery.worker.job.html" />
     <link rel="prev" title="celery.worker" href="celery.worker.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.worker.html" title="celery.worker"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -179,7 +179,7 @@ early, <em>then</em> close the connection.</p>
 
 <dl class="class">
 <dt id="celery.worker.consumer.Consumer">
-<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">Consumer</tt><big>(</big><em>ready_queue</em>, <em>eta_schedule</em>, <em>init_callback=&lt;function noop at 0x101b3fde8&gt;</em>, <em>send_events=False</em>, <em>hostname=None</em>, <em>initial_prefetch_count=2</em>, <em>pool=None</em>, <em>app=None</em>, <em>priority_timer=None</em>, <em>controller=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">Consumer</tt><big>(</big><em>ready_queue</em>, <em>eta_schedule</em>, <em>init_callback=&lt;function noop at 0x10195b848&gt;</em>, <em>send_events=False</em>, <em>hostname=None</em>, <em>initial_prefetch_count=2</em>, <em>pool=None</em>, <em>app=None</em>, <em>priority_timer=None</em>, <em>controller=None</em>, <em>use_eventloop=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Listen for messages received from the broker and
 move them to the ready queue for task processing.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -208,6 +208,11 @@ ETA/countdown.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="celery.worker.consumer.Consumer.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.worker.consumer.Consumer.close_connection">
 <tt class="descname">close_connection</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.close_connection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Closes the current broker connection and all open channels.</p>
@@ -222,8 +227,7 @@ ETA/countdown.</p>
 <dl class="method">
 <dt id="celery.worker.consumer.Consumer.consume_messages">
 <tt class="descname">consume_messages</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.consume_messages" title="Permalink to this definition">¶</a></dt>
-<dd><p>Consume messages forever (or until an exception is raised).</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.worker.consumer.Consumer.eta_schedule">
@@ -435,6 +439,13 @@ connection.</td>
 <tt class="descname">update_strategies</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.update_strategies" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="celery.worker.consumer.Consumer.use_eventloop">
+<tt class="descname">use_eventloop</tt><em class="property"> = False</em><a class="headerlink" href="#celery.worker.consumer.Consumer.use_eventloop" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true then pool results and broker messages will be
+handled in an event loop.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="data">
@@ -459,7 +470,7 @@ connection.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>consumer</strong> &#8211; A <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.messaging.html#kombu.messaging.Consumer" title="(in Kombu v2.1)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.messaging.Consumer</span></tt></a> instance.</li>
+<li><strong>consumer</strong> &#8211; A <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.messaging.html#kombu.messaging.Consumer" title="(in Kombu v2.2)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.messaging.Consumer</span></tt></a> instance.</li>
 <li><strong>initial_value</strong> &#8211; Initial prefetch count value.</li>
 </ul>
 </td>
@@ -570,7 +581,7 @@ when necessary.</p>
         <li class="right" >
           <a href="celery.worker.html" title="celery.worker"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>
