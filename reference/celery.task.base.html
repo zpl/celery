@@ -311,6 +311,12 @@ be replaced by a local <a class="reference internal" href="#celery.task.base.Bas
 </dd></dl>
 
 <dl class="method">
+<dt id="celery.task.base.BaseTask.chunks">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">chunks</tt><big>(</big><em>it</em>, <em>n</em><big>)</big><a class="headerlink" href="#celery.task.base.BaseTask.chunks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <tt class="xref py py-class docutils literal"><span class="pre">chunks</span></tt> task for this task.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="celery.task.base.BaseTask.delay">
 <tt class="descclassname">BaseTask.</tt><tt class="descname">delay</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.task.base.BaseTask.delay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Star argument version of <a class="reference internal" href="#celery.task.base.BaseTask.apply_async" title="celery.task.base.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>.</p>
@@ -398,6 +404,12 @@ connection after use:</p>
 </pre></div>
 </div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.task.base.BaseTask.map">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">map</tt><big>(</big><em>it</em><big>)</big><a class="headerlink" href="#celery.task.base.BaseTask.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <tt class="xref py py-class docutils literal"><span class="pre">xmap</span></tt> task from <tt class="docutils literal"><span class="pre">it</span></tt>.</p>
 </dd></dl>
 
 <dl class="classmethod">
@@ -524,7 +536,7 @@ to <tt class="xref py py-const docutils literal"><span class="pre">False</span><
 <span class="gp">... </span>        <span class="n">twitter</span><span class="o">.</span><span class="n">post_status_update</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">except</span> <span class="n">twitter</span><span class="o">.</span><span class="n">FailWhale</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="c"># Retry in 5 minutes.</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retry</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="n">exc</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">raise</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retry</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="n">exc</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Although the task will never return above as <cite>retry</cite> raises an
@@ -545,6 +557,18 @@ to convey that the rest of the block will not be executed.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="celery.task.base.BaseTask.si">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">si</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.task.base.BaseTask.si" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">.si(*a,</span> <span class="pre">**k)</span> <span class="pre">-&gt;</span> <span class="pre">.subtask(a,</span> <span class="pre">k,</span> <span class="pre">immutable=True)</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.task.base.BaseTask.starmap">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">starmap</tt><big>(</big><em>it</em><big>)</big><a class="headerlink" href="#celery.task.base.BaseTask.starmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <tt class="xref py py-class docutils literal"><span class="pre">xstarmap</span></tt> task from <tt class="docutils literal"><span class="pre">it</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="celery.task.base.BaseTask.subtask">
 <tt class="descclassname">BaseTask.</tt><tt class="descname">subtask</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.task.base.BaseTask.subtask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns <tt class="xref py py-class docutils literal"><span class="pre">subtask</span></tt> object for
@@ -561,7 +585,8 @@ for a single task invocation.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>task_id</strong> &#8211; Id of the task to update.</li>
+<li><strong>task_id</strong> &#8211; Id of the task to update, defaults to the
+id of the current task</li>
 <li><strong>state</strong> &#8211; New state (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>).</li>
 <li><strong>meta</strong> &#8211; State metadata (<a class="reference external" href="http://docs.python.org/dev/library/stdtypes.html#dict" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></a>).</li>
 </ul>

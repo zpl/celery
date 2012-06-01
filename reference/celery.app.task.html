@@ -359,8 +359,14 @@ be replaced by a local <a class="reference internal" href="#celery.app.task.Base
 
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.backend">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x10759aa10&gt;</em><a class="headerlink" href="#celery.app.task.BaseTask.backend" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x105cf4ad0&gt;</em><a class="headerlink" href="#celery.app.task.BaseTask.backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>The result store backend used for this task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.app.task.BaseTask.chunks">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">chunks</tt><big>(</big><em>it</em>, <em>n</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.chunks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <tt class="xref py py-class docutils literal"><span class="pre">chunks</span></tt> task for this task.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -511,6 +517,12 @@ setting.</p>
 <dt id="celery.app.task.BaseTask.mandatory">
 <tt class="descclassname">BaseTask.</tt><tt class="descname">mandatory</tt><em class="property"> = False</em><a class="headerlink" href="#celery.app.task.BaseTask.mandatory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mandatory message routing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.app.task.BaseTask.map">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">map</tt><big>(</big><em>it</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <tt class="xref py py-class docutils literal"><span class="pre">xmap</span></tt> task from <tt class="docutils literal"><span class="pre">it</span></tt>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -673,7 +685,7 @@ to <tt class="xref py py-const docutils literal"><span class="pre">False</span><
 <span class="gp">... </span>        <span class="n">twitter</span><span class="o">.</span><span class="n">post_status_update</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">except</span> <span class="n">twitter</span><span class="o">.</span><span class="n">FailWhale</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="c"># Retry in 5 minutes.</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retry</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="n">exc</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">raise</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retry</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="n">exc</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Although the task will never return above as <cite>retry</cite> raises an
@@ -713,11 +725,23 @@ of this type fails.</p>
 <tt class="xref py py-mod docutils literal"><span class="pre">kombu.serialization.registry</span></tt>.  Default is <cite>&#8220;pickle&#8221;</cite>.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="celery.app.task.BaseTask.si">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">si</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.si" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">.si(*a,</span> <span class="pre">**k)</span> <span class="pre">-&gt;</span> <span class="pre">.subtask(a,</span> <span class="pre">k,</span> <span class="pre">immutable=True)</span></tt></p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.soft_time_limit">
 <tt class="descclassname">BaseTask.</tt><tt class="descname">soft_time_limit</tt><em class="property"> = None</em><a class="headerlink" href="#celery.app.task.BaseTask.soft_time_limit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Soft time limit.
 Defaults to the <tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_SOFT_TIME_LIMIT</span></tt> setting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.app.task.BaseTask.starmap">
+<tt class="descclassname">BaseTask.</tt><tt class="descname">starmap</tt><big>(</big><em>it</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.starmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a <tt class="xref py py-class docutils literal"><span class="pre">xstarmap</span></tt> task from <tt class="docutils literal"><span class="pre">it</span></tt>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -771,7 +795,8 @@ running.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>task_id</strong> &#8211; Id of the task to update.</li>
+<li><strong>task_id</strong> &#8211; Id of the task to update, defaults to the
+id of the current task</li>
 <li><strong>state</strong> &#8211; New state (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>).</li>
 <li><strong>meta</strong> &#8211; State metadata (<a class="reference external" href="http://docs.python.org/dev/library/stdtypes.html#dict" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></a>).</li>
 </ul>

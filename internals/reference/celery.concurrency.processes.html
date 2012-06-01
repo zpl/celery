@@ -76,7 +76,7 @@
 <dd><p>Multiprocessing Pool implementation.</p>
 <dl class="class">
 <dt id="celery.concurrency.processes.TaskPool.Pool">
-<em class="property">class </em><tt class="descname">Pool</tt><big>(</big><em>processes=None</em>, <em>initializer=None</em>, <em>initargs=()</em>, <em>maxtasksperchild=None</em>, <em>timeout=None</em>, <em>soft_timeout=None</em>, <em>lost_worker_timeout=10.0</em>, <em>max_restarts=None</em>, <em>max_restart_freq=1</em>, <em>start_result_thread=True</em>, <em>semaphore=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Pool</tt><big>(</big><em>processes=None</em>, <em>initializer=None</em>, <em>initargs=()</em>, <em>maxtasksperchild=None</em>, <em>timeout=None</em>, <em>soft_timeout=None</em>, <em>lost_worker_timeout=10.0</em>, <em>max_restarts=None</em>, <em>max_restart_freq=1</em>, <em>on_process_up=None</em>, <em>on_process_down=None</em>, <em>on_timeout_set=None</em>, <em>on_timeout_cancel=None</em>, <em>threads=True</em>, <em>semaphore=None</em>, <em>putlocks=False</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class which supports an async version of applying functions to arguments.</p>
 <dl class="class">
 <dt id="celery.concurrency.processes.TaskPool.Pool.Process">
@@ -157,7 +157,7 @@ waiting for process termination.</p>
 
 <dl class="class">
 <dt id="celery.concurrency.processes.TaskPool.Pool.ResultHandler">
-<em class="property">class </em><tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">ResultHandler</tt><big>(</big><em>outqueue</em>, <em>get</em>, <em>cache</em>, <em>poll</em>, <em>join_exited_workers</em>, <em>putlock</em>, <em>restart_state</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">ResultHandler</tt><big>(</big><em>outqueue</em>, <em>get</em>, <em>cache</em>, <em>poll</em>, <em>join_exited_workers</em>, <em>putlock</em>, <em>restart_state</em>, <em>check_timeouts</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.ResultHandler.body">
 <tt class="descname">body</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler.body" title="Permalink to this definition">¶</a></dt>
@@ -165,7 +165,7 @@ waiting for process termination.</p>
 
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.ResultHandler.finish_at_shutdown">
-<tt class="descname">finish_at_shutdown</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler.finish_at_shutdown" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">finish_at_shutdown</tt><big>(</big><em>handle_timeouts=False</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler.finish_at_shutdown" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -174,13 +174,8 @@ waiting for process termination.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.concurrency.processes.TaskPool.Pool.ResultHandler.start">
-<tt class="descname">start</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler.start" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.concurrency.processes.TaskPool.Pool.ResultHandler.stop">
-<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler.stop" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.concurrency.processes.TaskPool.Pool.ResultHandler.on_stop_not_started">
+<tt class="descname">on_stop_not_started</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler.on_stop_not_started" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -210,6 +205,16 @@ to give the task a chance to clean up.</p>
 <tt class="descname">body</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.TaskHandler.body" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.TaskHandler.on_stop_not_started">
+<tt class="descname">on_stop_not_started</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.TaskHandler.on_stop_not_started" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.TaskHandler.tell_others">
+<tt class="descname">tell_others</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.TaskHandler.tell_others" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -218,6 +223,26 @@ to give the task a chance to clean up.</p>
 <dd><dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.body">
 <tt class="descname">body</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.body" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.handle_event">
+<tt class="descname">handle_event</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.handle_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.handle_timeouts">
+<tt class="descname">handle_timeouts</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.handle_timeouts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.on_hard_timeout">
+<tt class="descname">on_hard_timeout</tt><big>(</big><em>job</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.on_hard_timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.on_soft_timeout">
+<tt class="descname">on_soft_timeout</tt><big>(</big><em>job</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.TimeoutHandler.on_soft_timeout" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -230,7 +255,7 @@ to give the task a chance to clean up.</p>
 
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.apply_async">
-<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">apply_async</tt><big>(</big><em>func</em>, <em>args=()</em>, <em>kwds={}</em>, <em>callback=None</em>, <em>error_callback=None</em>, <em>accept_callback=None</em>, <em>timeout_callback=None</em>, <em>waitforslot=False</em>, <em>soft_timeout=None</em>, <em>timeout=None</em>, <em>lost_worker_timeout=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.apply_async" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">apply_async</tt><big>(</big><em>func</em>, <em>args=()</em>, <em>kwds={}</em>, <em>callback=None</em>, <em>error_callback=None</em>, <em>accept_callback=None</em>, <em>timeout_callback=None</em>, <em>waitforslot=None</em>, <em>soft_timeout=None</em>, <em>timeout=None</em>, <em>lost_worker_timeout=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.apply_async" title="Permalink to this definition">¶</a></dt>
 <dd><p>Asynchronous equivalent of <cite>apply()</cite> method.</p>
 <p>Callback is called when the functions return value is ready.
 The accept callback is called when the job is accepted to be executed.</p>
@@ -247,6 +272,11 @@ The accept callback is called when the job is accepted to be executed.</p>
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.close">
 <tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.did_start_ok">
+<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">did_start_ok</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.did_start_ok" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -269,6 +299,11 @@ The accept callback is called when the job is accepted to be executed.</p>
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.join">
 <tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">join</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.maintain_pool">
+<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">maintain_pool</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.maintain_pool" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -315,14 +350,29 @@ be iterables as well and will be unpacked as arguments. Hence
 
 </dd></dl>
 
-<dl class="attribute">
-<dt id="celery.concurrency.processes.TaskPool.eventmap">
-<tt class="descclassname">TaskPool.</tt><tt class="descname">eventmap</tt><a class="headerlink" href="#celery.concurrency.processes.TaskPool.eventmap" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.did_start_ok">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">did_start_ok</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.did_start_ok" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.grow">
 <tt class="descclassname">TaskPool.</tt><tt class="descname">grow</tt><big>(</big><em>n=1</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.grow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.handle_timeouts">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">handle_timeouts</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.handle_timeouts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.init_callbacks">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">init_callbacks</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.init_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.maintain_pool">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">maintain_pool</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.maintain_pool" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -333,6 +383,16 @@ be iterables as well and will be unpacked as arguments. Hence
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.on_close">
 <tt class="descclassname">TaskPool.</tt><tt class="descname">on_close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.on_close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.on_hard_timeout">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">on_hard_timeout</tt><big>(</big><em>job</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.on_hard_timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.on_soft_timeout">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">on_soft_timeout</tt><big>(</big><em>job</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.on_soft_timeout" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -355,6 +415,11 @@ be iterables as well and will be unpacked as arguments. Hence
 </dd></dl>
 
 <dl class="attribute">
+<dt id="celery.concurrency.processes.TaskPool.readers">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">readers</tt><a class="headerlink" href="#celery.concurrency.processes.TaskPool.readers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="celery.concurrency.processes.TaskPool.requires_mediator">
 <tt class="descclassname">TaskPool.</tt><tt class="descname">requires_mediator</tt><em class="property"> = True</em><a class="headerlink" href="#celery.concurrency.processes.TaskPool.requires_mediator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -372,6 +437,21 @@ be iterables as well and will be unpacked as arguments. Hence
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.terminate_job">
 <tt class="descclassname">TaskPool.</tt><tt class="descname">terminate_job</tt><big>(</big><em>pid</em>, <em>signal=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.terminate_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.concurrency.processes.TaskPool.timers">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">timers</tt><a class="headerlink" href="#celery.concurrency.processes.TaskPool.timers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.concurrency.processes.TaskPool.uses_semaphore">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">uses_semaphore</tt><em class="property"> = True</em><a class="headerlink" href="#celery.concurrency.processes.TaskPool.uses_semaphore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.concurrency.processes.TaskPool.writers">
+<tt class="descclassname">TaskPool.</tt><tt class="descname">writers</tt><a class="headerlink" href="#celery.concurrency.processes.TaskPool.writers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

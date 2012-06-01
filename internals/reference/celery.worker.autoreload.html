@@ -99,6 +99,21 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="celery.worker.autoreload.Autoreloader.on_init">
+<tt class="descname">on_init</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.autoreload.Autoreloader.on_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoreload.Autoreloader.on_poll_close">
+<tt class="descname">on_poll_close</tt><big>(</big><em>hub</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.Autoreloader.on_poll_close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoreload.Autoreloader.on_poll_init">
+<tt class="descname">on_poll_init</tt><big>(</big><em>hub</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.Autoreloader.on_poll_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.worker.autoreload.Autoreloader.stop">
 <tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.autoreload.Autoreloader.stop" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -166,6 +181,31 @@
 <em class="property">class </em><tt class="descclassname">celery.worker.autoreload.</tt><tt class="descname">KQueueMonitor</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.KQueueMonitor" title="Permalink to this definition">¶</a></dt>
 <dd><p>File change monitor based on BSD kernel event notifications</p>
 <dl class="method">
+<dt id="celery.worker.autoreload.KQueueMonitor.add_events">
+<tt class="descname">add_events</tt><big>(</big><em>poller</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.KQueueMonitor.add_events" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoreload.KQueueMonitor.close">
+<tt class="descname">close</tt><big>(</big><em>poller</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.KQueueMonitor.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoreload.KQueueMonitor.handle_event">
+<tt class="descname">handle_event</tt><big>(</big><em>events</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.KQueueMonitor.handle_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoreload.KQueueMonitor.on_poll_close">
+<tt class="descname">on_poll_close</tt><big>(</big><em>hub</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.KQueueMonitor.on_poll_close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoreload.KQueueMonitor.on_poll_init">
+<tt class="descname">on_poll_init</tt><big>(</big><em>hub</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.KQueueMonitor.on_poll_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.worker.autoreload.KQueueMonitor.start">
 <tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.autoreload.KQueueMonitor.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -200,6 +240,16 @@
 <dd><dl class="method">
 <dt id="celery.worker.autoreload.WorkerComponent.create">
 <tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.WorkerComponent.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoreload.WorkerComponent.create_ev">
+<tt class="descname">create_ev</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.WorkerComponent.create_ev" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoreload.WorkerComponent.create_threaded">
+<tt class="descname">create_threaded</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.autoreload.WorkerComponent.create_threaded" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

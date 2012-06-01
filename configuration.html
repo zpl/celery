@@ -566,8 +566,13 @@ in order.  See <a class="reference internal" href="userguide/routing.html#router
 </div>
 <div class="section" id="celery-default-queue">
 <span id="std:setting-CELERY_DEFAULT_QUEUE"></span><h4>CELERY_DEFAULT_QUEUE<a class="headerlink" href="#celery-default-queue" title="Permalink to this headline">¶</a></h4>
-<p>The queue used by default, if no custom queue is specified.  This queue must
-be listed in <a class="reference internal" href="#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a>.  The default is: <cite>celery</cite>.</p>
+<p>The name of the default queue used by <cite>.apply_async</cite> if the message has
+no route or no custom queue has been specified.</p>
+<p>This queue must be listed in <a class="reference internal" href="#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a>.
+If <a class="reference internal" href="#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a> is not specified then it this automatically
+created containing one queue entry, where this name is used as the name of
+that queue.</p>
+<p>The default is: <cite>celery</cite>.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="userguide/routing.html#routing-changing-default-queue"><em>Changing the name of the default queue</em></a></p>
@@ -576,17 +581,20 @@ be listed in <a class="reference internal" href="#std:setting-CELERY_QUEUES"><tt
 <div class="section" id="celery-default-exchange">
 <span id="std:setting-CELERY_DEFAULT_EXCHANGE"></span><h4>CELERY_DEFAULT_EXCHANGE<a class="headerlink" href="#celery-default-exchange" title="Permalink to this headline">¶</a></h4>
 <p>Name of the default exchange to use when no custom exchange is
-specified.  The default is: <cite>celery</cite>.</p>
+specified for a key in the <a class="reference internal" href="#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a> setting.</p>
+<p>The default is: <cite>celery</cite>.</p>
 </div>
 <div class="section" id="celery-default-exchange-type">
 <span id="std:setting-CELERY_DEFAULT_EXCHANGE_TYPE"></span><h4>CELERY_DEFAULT_EXCHANGE_TYPE<a class="headerlink" href="#celery-default-exchange-type" title="Permalink to this headline">¶</a></h4>
-<p>Default exchange type used when no custom exchange is specified.
+<p>Default exchange type used when no custom exchange type is specified.
+for a key in the <a class="reference internal" href="#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a> setting.
 The default is: <cite>direct</cite>.</p>
 </div>
 <div class="section" id="celery-default-routing-key">
 <span id="std:setting-CELERY_DEFAULT_ROUTING_KEY"></span><h4>CELERY_DEFAULT_ROUTING_KEY<a class="headerlink" href="#celery-default-routing-key" title="Permalink to this headline">¶</a></h4>
-<p>The default routing key used when sending tasks.
-The default is: <cite>celery</cite>.</p>
+<p>The default routing key used when no custom routing key
+is specified for a key in the <a class="reference internal" href="#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a> setting.</p>
+<p>The default is: <cite>celery</cite>.</p>
 </div>
 <div class="section" id="celery-default-delivery-mode">
 <span id="std:setting-CELERY_DEFAULT_DELIVERY_MODE"></span><h4>CELERY_DEFAULT_DELIVERY_MODE<a class="headerlink" href="#celery-default-delivery-mode" title="Permalink to this headline">¶</a></h4>
@@ -919,8 +927,8 @@ may be appended to the file name (depending on Python version).</p>
 <a class="reference internal" href="reference/celery.bin.celeryd.html#module-celery.bin.celeryd" title="celery.bin.celeryd"><tt class="xref py py-mod docutils literal"><span class="pre">celeryd</span></tt></a>.</p>
 <p>Not enabled by default.</p>
 </div>
-<div class="section" id="celeryd-eta-scheduler-precision">
-<span id="std:setting-CELERYD_ETA_SCHEDULER_PRECISION"></span><h4>CELERYD_ETA_SCHEDULER_PRECISION<a class="headerlink" href="#celeryd-eta-scheduler-precision" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="celeryd-timer-precision">
+<span id="std:setting-CELERYD_TIMER_PRECISION"></span><h4>CELERYD_TIMER_PRECISION<a class="headerlink" href="#celeryd-timer-precision" title="Permalink to this headline">¶</a></h4>
 <p>Set the maximum time in seconds that the ETA scheduler can sleep between
 rechecking the schedule.  Default is 1 second.</p>
 <p>Setting this value to 1 second means the schedulers precision will
@@ -1163,8 +1171,8 @@ Default is <a class="reference internal" href="internals/reference/celery.worker
 <p>Name of the mediator class used by the worker.
 Default is <tt class="xref py py-class docutils literal"><span class="pre">celery.worker.controllers.Mediator</span></tt>.</p>
 </div>
-<div class="section" id="celeryd-eta-scheduler">
-<span id="std:setting-CELERYD_ETA_SCHEDULER"></span><h4>CELERYD_ETA_SCHEDULER<a class="headerlink" href="#celeryd-eta-scheduler" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="celeryd-timer">
+<span id="std:setting-CELERYD_TIMER"></span><h4>CELERYD_TIMER<a class="headerlink" href="#celeryd-timer" title="Permalink to this headline">¶</a></h4>
 <p>Name of the ETA scheduler class used by the worker.
 Default is <a class="reference internal" href="internals/reference/celery.utils.timer2.html#celery.utils.timer2.Timer" title="celery.utils.timer2.Timer"><tt class="xref py py-class docutils literal"><span class="pre">celery.utils.timer2.Timer</span></tt></a>, or one overrided
 by the pool implementation.</p>

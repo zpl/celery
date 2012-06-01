@@ -108,7 +108,7 @@
 
 <dl class="class">
 <dt id="celery.concurrency.base.BasePool.Timer.Schedule">
-<em class="property">class </em><tt class="descclassname">BasePool.Timer.</tt><tt class="descname">Schedule</tt><big>(</big><em>max_interval=None</em>, <em>on_error=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.Timer.Schedule" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">BasePool.Timer.</tt><tt class="descname">Schedule</tt><big>(</big><em>max_interval=None</em>, <em>on_error=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.Timer.Schedule" title="Permalink to this definition">¶</a></dt>
 <dd><p>ETA scheduler.</p>
 <dl class="class">
 <dt id="celery.concurrency.base.BasePool.Timer.Schedule.Entry">
@@ -312,9 +312,9 @@ otherwise the thread which handles the result will get blocked.</p>
 <tt class="descclassname">BasePool.</tt><tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.close" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="celery.concurrency.base.BasePool.eventmap">
-<tt class="descclassname">BasePool.</tt><tt class="descname">eventmap</tt><a class="headerlink" href="#celery.concurrency.base.BasePool.eventmap" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="celery.concurrency.base.BasePool.did_start_ok">
+<tt class="descclassname">BasePool.</tt><tt class="descname">did_start_ok</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.did_start_ok" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -322,11 +322,21 @@ otherwise the thread which handles the result will get blocked.</p>
 <tt class="descclassname">BasePool.</tt><tt class="descname">info</tt><a class="headerlink" href="#celery.concurrency.base.BasePool.info" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.concurrency.base.BasePool.init_callbacks">
+<tt class="descclassname">BasePool.</tt><tt class="descname">init_callbacks</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.init_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="celery.concurrency.base.BasePool.is_green">
 <tt class="descclassname">BasePool.</tt><tt class="descname">is_green</tt><em class="property"> = False</em><a class="headerlink" href="#celery.concurrency.base.BasePool.is_green" title="Permalink to this definition">¶</a></dt>
 <dd><p>set to true if pool uses greenlets.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.base.BasePool.maintain_pool">
+<tt class="descclassname">BasePool.</tt><tt class="descname">maintain_pool</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.maintain_pool" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.concurrency.base.BasePool.num_processes">
@@ -344,6 +354,16 @@ otherwise the thread which handles the result will get blocked.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="celery.concurrency.base.BasePool.on_hard_timeout">
+<tt class="descclassname">BasePool.</tt><tt class="descname">on_hard_timeout</tt><big>(</big><em>job</em><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.on_hard_timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.concurrency.base.BasePool.on_soft_timeout">
+<tt class="descclassname">BasePool.</tt><tt class="descname">on_soft_timeout</tt><big>(</big><em>job</em><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.on_soft_timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.concurrency.base.BasePool.on_start">
 <tt class="descclassname">BasePool.</tt><tt class="descname">on_start</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.on_start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -356,6 +376,11 @@ otherwise the thread which handles the result will get blocked.</p>
 <dl class="method">
 <dt id="celery.concurrency.base.BasePool.on_terminate">
 <tt class="descclassname">BasePool.</tt><tt class="descname">on_terminate</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.on_terminate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.concurrency.base.BasePool.readers">
+<tt class="descclassname">BasePool.</tt><tt class="descname">readers</tt><a class="headerlink" href="#celery.concurrency.base.BasePool.readers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -403,6 +428,22 @@ a signal handler.</p>
 <dl class="method">
 <dt id="celery.concurrency.base.BasePool.terminate_job">
 <tt class="descclassname">BasePool.</tt><tt class="descname">terminate_job</tt><big>(</big><em>pid</em><big>)</big><a class="headerlink" href="#celery.concurrency.base.BasePool.terminate_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.concurrency.base.BasePool.timers">
+<tt class="descclassname">BasePool.</tt><tt class="descname">timers</tt><a class="headerlink" href="#celery.concurrency.base.BasePool.timers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.concurrency.base.BasePool.uses_semaphore">
+<tt class="descclassname">BasePool.</tt><tt class="descname">uses_semaphore</tt><em class="property"> = False</em><a class="headerlink" href="#celery.concurrency.base.BasePool.uses_semaphore" title="Permalink to this definition">¶</a></dt>
+<dd><p>only used by multiprocessing pool</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.concurrency.base.BasePool.writers">
+<tt class="descclassname">BasePool.</tt><tt class="descname">writers</tt><a class="headerlink" href="#celery.concurrency.base.BasePool.writers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

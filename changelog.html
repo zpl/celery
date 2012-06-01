@@ -3628,7 +3628,7 @@ second by default.</p>
 that was scheduled. This has been fixed, so now it should move
 tasks like hot knife through butter.</p>
 <p>In addition a new setting has been added to control the minimum sleep
-interval; <a class="reference internal" href="configuration.html#std:setting-CELERYD_ETA_SCHEDULER_PRECISION"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_ETA_SCHEDULER_PRECISION</span></tt></a>. A good
+interval; <tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_ETA_SCHEDULER_PRECISION</span></tt>. A good
 value for this would be a float between 0 and 1, depending
 on the needed precision. A value of 0.8 means that when the ETA of a task
 is met, it will take at most 0.8 seconds for the task to be moved to the
@@ -4874,7 +4874,7 @@ that might happen, which may even be database dependent.</p>
 </li>
 <li><p class="first">celeryd: The worker components are now configurable: <a class="reference internal" href="configuration.html#std:setting-CELERYD_POOL"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_POOL</span></tt></a>,
 <a class="reference internal" href="configuration.html#std:setting-CELERYD_CONSUMER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_CONSUMER</span></tt></a>, <a class="reference internal" href="configuration.html#std:setting-CELERYD_MEDIATOR"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_MEDIATOR</span></tt></a>, and
-<a class="reference internal" href="configuration.html#std:setting-CELERYD_ETA_SCHEDULER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_ETA_SCHEDULER</span></tt></a>.</p>
+<tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_ETA_SCHEDULER</span></tt>.</p>
 <blockquote>
 <div><p>The default configuration is as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">CELERYD_POOL</span> <span class="o">=</span> <span class="s">&quot;celery.concurrency.processes.TaskPool&quot;</span>

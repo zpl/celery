@@ -71,11 +71,71 @@
     <div class="section" id="celery-worker-hub">
 <h1>celery.worker.hub<a class="headerlink" href="#celery-worker-hub" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-celery.worker.hub"></span><dl class="class">
-<dt id="celery.worker.hub.Hub">
-<em class="property">class </em><tt class="descclassname">celery.worker.hub.</tt><tt class="descname">Hub</tt><big>(</big><em>schedule=None</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.worker.hub.BoundedSemaphore">
+<em class="property">class </em><tt class="descclassname">celery.worker.hub.</tt><tt class="descname">BoundedSemaphore</tt><big>(</big><em>value=1</em><big>)</big><a class="headerlink" href="#celery.worker.hub.BoundedSemaphore" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
+<dt id="celery.worker.hub.BoundedSemaphore.acquire">
+<tt class="descname">acquire</tt><big>(</big><em>callback</em>, <em>*partial_args</em>, <em>**partial_kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.hub.BoundedSemaphore.acquire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.BoundedSemaphore.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.hub.BoundedSemaphore.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.BoundedSemaphore.grow">
+<tt class="descname">grow</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.hub.BoundedSemaphore.grow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.BoundedSemaphore.release">
+<tt class="descname">release</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.hub.BoundedSemaphore.release" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.BoundedSemaphore.shrink">
+<tt class="descname">shrink</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.hub.BoundedSemaphore.shrink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="celery.worker.hub.DummyLock">
+<em class="property">class </em><tt class="descclassname">celery.worker.hub.</tt><tt class="descname">DummyLock</tt><a class="headerlink" href="#celery.worker.hub.DummyLock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="celery.worker.hub.Hub">
+<em class="property">class </em><tt class="descclassname">celery.worker.hub.</tt><tt class="descname">Hub</tt><big>(</big><em>timer=None</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="celery.worker.hub.Hub.ERR">
+<tt class="descname">ERR</tt><em class="property"> = 24</em><a class="headerlink" href="#celery.worker.hub.Hub.ERR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.hub.Hub.READ">
+<tt class="descname">READ</tt><em class="property"> = 1</em><a class="headerlink" href="#celery.worker.hub.Hub.READ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.hub.Hub.WRITE">
+<tt class="descname">WRITE</tt><em class="property"> = 4</em><a class="headerlink" href="#celery.worker.hub.Hub.WRITE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.worker.hub.Hub.add">
-<tt class="descname">add</tt><big>(</big><em>fd</em>, <em>callback</em>, <em>flags=None</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.add" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add</tt><big>(</big><em>fd</em>, <em>callback</em>, <em>flags</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.Hub.add_reader">
+<tt class="descname">add_reader</tt><big>(</big><em>fd</em>, <em>callback</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.add_reader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.Hub.add_writer">
+<tt class="descname">add_writer</tt><big>(</big><em>fd</em>, <em>callback</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.add_writer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -83,14 +143,14 @@
 <tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.close" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="celery.worker.hub.Hub.eventflags">
-<tt class="descname">eventflags</tt><em class="property"> = 8217</em><a class="headerlink" href="#celery.worker.hub.Hub.eventflags" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="celery.worker.hub.Hub.fire_timers">
+<tt class="descname">fire_timers</tt><big>(</big><em>min_delay=1</em>, <em>max_delay=10</em>, <em>max_timers=10</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.fire_timers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.worker.hub.Hub.fire_timers">
-<tt class="descname">fire_timers</tt><big>(</big><em>min_delay=10</em>, <em>max_delay=10</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.fire_timers" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.worker.hub.Hub.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -104,8 +164,23 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.worker.hub.Hub.update">
-<tt class="descname">update</tt><big>(</big><em>*maps</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.update" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.worker.hub.Hub.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.Hub.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.Hub.update_readers">
+<tt class="descname">update_readers</tt><big>(</big><em>map</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.update_readers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.hub.Hub.update_writers">
+<tt class="descname">update_writers</tt><big>(</big><em>map</em><big>)</big><a class="headerlink" href="#celery.worker.hub.Hub.update_writers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

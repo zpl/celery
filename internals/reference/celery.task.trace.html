@@ -131,15 +131,13 @@ errors are recorded, handlers are applied and so on.</p>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="celery.task.trace.defines_custom_call">
-<tt class="descclassname">celery.task.trace.</tt><tt class="descname">defines_custom_call</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#celery.task.trace.defines_custom_call" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns true if the task or one of its bases
-defines __call__ (excluding the one in BaseTask).</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="celery.task.trace.eager_trace_task">
 <tt class="descclassname">celery.task.trace.</tt><tt class="descname">eager_trace_task</tt><big>(</big><em>task</em>, <em>uuid</em>, <em>args</em>, <em>kwargs</em>, <em>request=None</em>, <em>**opts</em><big>)</big><a class="headerlink" href="#celery.task.trace.eager_trace_task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.task.trace.execute_bare">
+<tt class="descclassname">celery.task.trace.</tt><tt class="descname">execute_bare</tt><big>(</big><em>task</em>, <em>uuid</em>, <em>args</em>, <em>kwargs</em>, <em>request=None</em>, <em>Info=&lt;class 'celery.task.trace.TraceInfo'&gt;</em><big>)</big><a class="headerlink" href="#celery.task.trace.execute_bare" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -164,8 +162,20 @@ defines __call__ (excluding the one in BaseTask).</p>
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="celery.task.trace.task_has_custom">
+<tt class="descclassname">celery.task.trace.</tt><tt class="descname">task_has_custom</tt><big>(</big><em>task</em>, <em>attr</em><big>)</big><a class="headerlink" href="#celery.task.trace.task_has_custom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the task or one of its bases
+defines <tt class="docutils literal"><span class="pre">attr</span></tt> (excluding the one in BaseTask).</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="celery.task.trace.trace_task">
 <tt class="descclassname">celery.task.trace.</tt><tt class="descname">trace_task</tt><big>(</big><em>task</em>, <em>uuid</em>, <em>args</em>, <em>kwargs</em>, <em>request=None</em>, <em>**opts</em><big>)</big><a class="headerlink" href="#celery.task.trace.trace_task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.task.trace.trace_task_ret">
+<tt class="descclassname">celery.task.trace.</tt><tt class="descname">trace_task_ret</tt><big>(</big><em>task</em>, <em>uuid</em>, <em>args</em>, <em>kwargs</em>, <em>request</em><big>)</big><a class="headerlink" href="#celery.task.trace.trace_task_ret" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

@@ -74,7 +74,7 @@
 <em class="property">class </em><tt class="descclassname">celery.apps.worker.</tt><tt class="descname">Worker</tt><big>(</big><em>hostname=None</em>, <em>purge=False</em>, <em>beat=False</em>, <em>queues=None</em>, <em>include=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>autoscale=None</em>, <em>autoreload=False</em>, <em>no_execv=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="class">
 <dt id="celery.apps.worker.Worker.WorkController">
-<em class="property">class </em><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x10195b848&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x101a0aa28&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmanaged worker instance.</p>
 <dl class="attribute">
 <dt id="celery.apps.worker.Worker.WorkController.CLOSE">
@@ -122,16 +122,6 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.eta_scheduler_cls">
-<tt class="descname">eta_scheduler_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.eta_scheduler_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.eta_scheduler_precision">
-<tt class="descname">eta_scheduler_precision</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.eta_scheduler_precision" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="celery.apps.worker.Worker.WorkController.force_execv">
 <tt class="descname">force_execv</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.force_execv" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -176,6 +166,11 @@
 <tt class="descname">process_task</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.process_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process task by sending it to the pool of workers.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="celery.apps.worker.Worker.WorkController.process_task_sem">
+<tt class="descname">process_task_sem</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.process_task_sem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.WorkController.reload">
@@ -239,6 +234,16 @@
 <tt class="descname">terminate</tt><big>(</big><em>in_sighandler=False</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.terminate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Not so graceful shutdown of the worker server.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="celery.apps.worker.Worker.WorkController.timer_cls">
+<tt class="descname">timer_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.timer_cls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.apps.worker.Worker.WorkController.timer_precision">
+<tt class="descname">timer_precision</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.timer_precision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.apps.worker.Worker.WorkController.worker_lost_wait">
@@ -335,6 +340,11 @@
 <dd></dd></dl>
 
 </dd></dl>
+
+<dl class="function">
+<dt id="celery.apps.worker.active_thread_count">
+<tt class="descclassname">celery.apps.worker.</tt><tt class="descname">active_thread_count</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.active_thread_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="celery.apps.worker.install_HUP_not_supported_handler">

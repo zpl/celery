@@ -118,6 +118,31 @@ argument is set.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="celery.worker.EvLoop">
+<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">EvLoop</tt><big>(</big><em>w</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.EvLoop" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="celery.worker.EvLoop.create">
+<tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.EvLoop.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.EvLoop.include_if">
+<tt class="descname">include_if</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.EvLoop.include_if" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.EvLoop.name">
+<tt class="descname">name</tt><em class="property"> = 'ev'</em><a class="headerlink" href="#celery.worker.EvLoop.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.EvLoop.namespace">
+<tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.EvLoop.namespace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="celery.worker.Namespace">
 <em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">Namespace</tt><big>(</big><em>name=None</em>, <em>app=None</em><big>)</big><a class="headerlink" href="#celery.worker.Namespace" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the boot-step namespace of the <a class="reference internal" href="../../reference/celery.html#WorkController" title="WorkController"><tt class="xref py py-class docutils literal"><span class="pre">WorkController</span></tt></a>.</p>
@@ -157,7 +182,7 @@ the pool during worker startup/shutdown.</p>
 </div></blockquote>
 <dl class="method">
 <dt id="celery.worker.Pool.create">
-<tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.Pool.create" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">create</tt><big>(</big><em>w</em>, <em>semaphore=None</em>, <em>max_restarts=None</em><big>)</big><a class="headerlink" href="#celery.worker.Pool.create" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -168,6 +193,11 @@ the pool during worker startup/shutdown.</p>
 <dl class="attribute">
 <dt id="celery.worker.Pool.namespace">
 <tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.Pool.namespace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.Pool.on_poll_init">
+<tt class="descname">on_poll_init</tt><big>(</big><em>pool</em>, <em>hub</em><big>)</big><a class="headerlink" href="#celery.worker.Pool.on_poll_init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -195,6 +225,11 @@ used by the worker.</p>
 <dl class="attribute">
 <dt id="celery.worker.Queues.namespace">
 <tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.Queues.namespace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.Queues.requires">
+<tt class="descname">requires</tt><em class="property"> = ('ev',)</em><a class="headerlink" href="#celery.worker.Queues.requires" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -229,6 +264,11 @@ used by the worker.</p>
 <tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.Timers.create" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.worker.Timers.include_if">
+<tt class="descname">include_if</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.Timers.include_if" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="celery.worker.Timers.name">
 <tt class="descname">name</tt><em class="property"> = 'timers'</em><a class="headerlink" href="#celery.worker.Timers.name" title="Permalink to this definition">¶</a></dt>
@@ -258,7 +298,7 @@ used by the worker.</p>
 
 <dl class="class">
 <dt id="celery.worker.WorkController">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x10195b848&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x101a0aa28&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmanaged worker instance.</p>
 <dl class="attribute">
 <dt id="celery.worker.WorkController.CLOSE">
@@ -306,16 +346,6 @@ used by the worker.</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="celery.worker.WorkController.eta_scheduler_cls">
-<tt class="descname">eta_scheduler_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.eta_scheduler_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.WorkController.eta_scheduler_precision">
-<tt class="descname">eta_scheduler_precision</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.eta_scheduler_precision" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="celery.worker.WorkController.force_execv">
 <tt class="descname">force_execv</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.force_execv" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -360,6 +390,11 @@ used by the worker.</p>
 <tt class="descname">process_task</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.process_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process task by sending it to the pool of workers.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.WorkController.process_task_sem">
+<tt class="descname">process_task_sem</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.process_task_sem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.worker.WorkController.reload">
@@ -423,6 +458,16 @@ used by the worker.</p>
 <tt class="descname">terminate</tt><big>(</big><em>in_sighandler=False</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.terminate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Not so graceful shutdown of the worker server.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.WorkController.timer_cls">
+<tt class="descname">timer_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.timer_cls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.WorkController.timer_precision">
+<tt class="descname">timer_precision</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.timer_precision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.worker.WorkController.worker_lost_wait">

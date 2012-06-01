@@ -98,7 +98,7 @@ has been enabled on the command line.</p>
 </table>
 <dl class="class">
 <dt id="celery.worker.autoscale.Autoscaler">
-<em class="property">class </em><tt class="descclassname">celery.worker.autoscale.</tt><tt class="descname">Autoscaler</tt><big>(</big><em>pool</em>, <em>max_concurrency</em>, <em>min_concurrency=0</em>, <em>keepalive=30</em><big>)</big><a class="headerlink" href="#celery.worker.autoscale.Autoscaler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.autoscale.</tt><tt class="descname">Autoscaler</tt><big>(</big><em>pool</em>, <em>max_concurrency</em>, <em>min_concurrency=0</em>, <em>keepalive=30</em>, <em>mutex=None</em><big>)</big><a class="headerlink" href="#celery.worker.autoscale.Autoscaler" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="celery.worker.autoscale.Autoscaler.body">
 <tt class="descname">body</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.autoscale.Autoscaler.body" title="Permalink to this definition">¶</a></dt>
@@ -117,6 +117,11 @@ has been enabled on the command line.</p>
 <dl class="method">
 <dt id="celery.worker.autoscale.Autoscaler.info">
 <tt class="descname">info</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.autoscale.Autoscaler.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoscale.Autoscaler.maybe_scale">
+<tt class="descname">maybe_scale</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.autoscale.Autoscaler.maybe_scale" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -154,6 +159,16 @@ has been enabled on the command line.</p>
 <tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.autoscale.WorkerComponent.create" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.worker.autoscale.WorkerComponent.create_ev">
+<tt class="descname">create_ev</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.autoscale.WorkerComponent.create_ev" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoscale.WorkerComponent.create_threaded">
+<tt class="descname">create_threaded</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.autoscale.WorkerComponent.create_threaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="celery.worker.autoscale.WorkerComponent.name">
 <tt class="descname">name</tt><em class="property"> = 'autoscaler'</em><a class="headerlink" href="#celery.worker.autoscale.WorkerComponent.name" title="Permalink to this definition">¶</a></dt>
@@ -162,6 +177,11 @@ has been enabled on the command line.</p>
 <dl class="attribute">
 <dt id="celery.worker.autoscale.WorkerComponent.namespace">
 <tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.autoscale.WorkerComponent.namespace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.autoscale.WorkerComponent.on_poll_init">
+<tt class="descname">on_poll_init</tt><big>(</big><em>scaler</em>, <em>hub</em><big>)</big><a class="headerlink" href="#celery.worker.autoscale.WorkerComponent.on_poll_init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

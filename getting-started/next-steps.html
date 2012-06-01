@@ -265,7 +265,11 @@ callbacks will be applied with the result of the parent task.
 Sometimes you want to specify a callback that does not take
 additional arguments, and in that case you can set the subtask
 to be immutable:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">link</span><span class="p">(</span> <span class="n">reset_buffers</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">immutable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link</span><span class="o">=</span><span class="n">reset_buffers</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">immutable</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">.si()</span></tt> shortcut can also be used to create immutable subtasks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link</span><span class="o">=</span><span class="n">reset_buffers</span><span class="o">.</span><span class="n">si</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>Only the execution options can be set when a subtask is immutable,
@@ -370,7 +374,7 @@ to apply the starmap after 10 seconds:</p>
 of parallelism, but this is rarely true for a busy cluster
 and in practice since you are avoiding the overhead  of messaging
 it may considerably increase performance.</p>
-<p>To create a chunks subtask you can use <tt class="xref py py-meth docutils literal"><span class="pre">celery.Task.chunks()</span></tt>:</p>
+<p>To create a chunks subtask you can use <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.chunks" title="celery.app.task.BaseTask.chunks"><tt class="xref py py-meth docutils literal"><span class="pre">celery.Task.chunks()</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
