@@ -469,7 +469,7 @@ properly sets content_encoding.</li>
 
 <dl class="attribute">
 <dt id="celery.backends.amqp.AMQPBackend.Exchange.attrs">
-<tt class="descname">attrs</tt><em class="property"> = (('name', None), ('type', None), ('arguments', None), ('durable', &lt;type 'bool'&gt;), ('auto_delete', &lt;type 'bool'&gt;), ('delivery_mode', &lt;function &lt;lambda&gt; at 0x105b49cf8&gt;))</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.attrs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attrs</tt><em class="property"> = (('name', None), ('type', None), ('arguments', None), ('durable', &lt;type 'bool'&gt;), ('auto_delete', &lt;type 'bool'&gt;), ('delivery_mode', &lt;function &lt;lambda&gt; at 0x107064cf8&gt;))</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.attrs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1020,6 +1020,11 @@ without modifying the server state.</li>
 <dl class="method">
 <dt id="celery.backends.amqp.AMQPBackend.get_task_meta">
 <tt class="descclassname">AMQPBackend.</tt><tt class="descname">get_task_meta</tt><big>(</big><em>task_id</em>, <em>backlog_limit=1000</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.get_task_meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.backends.amqp.AMQPBackend.poll">
+<tt class="descclassname">AMQPBackend.</tt><tt class="descname">poll</tt><big>(</big><em>task_id</em>, <em>backlog_limit=1000</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.poll" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

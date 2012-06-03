@@ -69,17 +69,39 @@
 </div>
     <div class="section" id="first-steps-with-celery">
 <span id="first-steps"></span><span id="tut-celery"></span><h1>First steps with Celery<a class="headerlink" href="#first-steps-with-celery" title="Permalink to this headline">¶</a></h1>
+<p>Celery is a task queue with batteries included.
+It is easy to use, so that you can get started without learning
+the full complexities of the problem it solves. It is designed
+around best practices so that your product can scale
+and integrate with other languages, and it comes with the
+tools and support you need to run such a system in production.</p>
+<p>In this tutorial you will learn the absolute basics of using Celery.
+You will learn about;</p>
+<ul class="simple">
+<li>Choosing and installing a message broker.</li>
+<li>Installing Celery and creating your first task</li>
+<li>Starting the worker and executing tasks.</li>
+<li>Keeping track of tasks as they execute, and inspecting return values.</li>
+</ul>
+<p>Celery may seem daunting at first - but don&#8217;t worry - this tutorial
+will get you started in no time. It is deliberately kept simple, so
+to not confuse you with advances features.
+After you have finished this tutorial
+it&#8217;s a good idea to browse the rest of the documentation,
+for example the <a class="reference internal" href="next-steps.html#next-steps"><em>Next Steps</em></a> tutorial, which will
+showcase Celery&#8217;s capabilities.</p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#choosing-a-broker" id="id1">Choosing a Broker</a></li>
-<li><a class="reference internal" href="#application" id="id2">Application</a></li>
-<li><a class="reference internal" href="#running-the-celery-worker-server" id="id3">Running the celery worker server</a></li>
-<li><a class="reference internal" href="#executing-the-task" id="id4">Executing the task</a><ul>
-<li><a class="reference internal" href="#keeping-results" id="id5">Keeping Results</a></li>
-<li><a class="reference internal" href="#configuration" id="id6">Configuration</a></li>
+<li><a class="reference internal" href="#installing-celery" id="id2">Installing Celery</a></li>
+<li><a class="reference internal" href="#application" id="id3">Application</a></li>
+<li><a class="reference internal" href="#running-the-celery-worker-server" id="id4">Running the celery worker server</a></li>
+<li><a class="reference internal" href="#executing-the-task" id="id5">Executing the task</a><ul>
+<li><a class="reference internal" href="#keeping-results" id="id6">Keeping Results</a></li>
+<li><a class="reference internal" href="#configuration" id="id7">Configuration</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#where-to-go-from-here" id="id7">Where to go from here</a></li>
+<li><a class="reference internal" href="#where-to-go-from-here" id="id8">Where to go from here</a></li>
 </ul>
 </div>
 <div class="section" id="choosing-a-broker">
@@ -91,6 +113,17 @@ comes in the form of a separate service called a <em>message broker</em>.</p>
 <li><a class="reference internal" href="brokers/rabbitmq.html#broker-rabbitmq"><em>Using RabbitMQ</em></a></li>
 </ul>
 <p><a class="reference external" href="http://www.rabbitmq.com/">RabbitMQ</a> is feature-complete, stable, durable and easy to install.</p>
+<p>If you are using Ubuntu or Debian you can install RabbitMQ by executing this
+command:</p>
+<div class="highlight-python"><pre>$ sudo apt-get install rabbitmq-server</pre>
+</div>
+<p>When the command completes the broker is already running in the background,
+ready to move messages for you.</p>
+<p>And don&#8217;t worry if you&#8217;re not running Ubuntu or Debian,
+you can go to this website to find similarly simple installation instructions
+for other platforms, including Microsoft Windows:</p>
+<blockquote>
+<div><a class="reference external" href="http://www.rabbitmq.com/download.html">http://www.rabbitmq.com/download.html</a></div></blockquote>
 <ul class="simple">
 <li><a class="reference internal" href="brokers/redis.html#broker-redis"><em>Using Redis</em></a></li>
 </ul>
@@ -106,18 +139,25 @@ for very small installations.  Celery can use the SQLAlchemy and Django ORM.</p>
 <li>and more.</li>
 </ul>
 <p>In addition to the above, there are several other transport implementations
-to choose from, including <a class="reference internal" href="brokers/couchdb.html#broker-couchdb"><em>Using CouchDB</em></a>, <a class="reference internal" href="brokers/beanstalk.html#broker-beanstalk"><em>Using Beanstalk</em></a>,
-<a class="reference internal" href="brokers/mongodb.html#broker-mongodb"><em>Using MongoDB</em></a>, and SQS.  There is a <a class="reference external" href="http://kombu.rtfd.org/transport-comparison">Transport Comparison</a>
-in the Kombu documentation.</p>
+to choose from, including <a class="reference internal" href="brokers/mongodb.html#broker-mongodb"><em>Using MongoDB</em></a>, <a class="reference internal" href="brokers/django.html#broker-django"><em>Using the Django Database</em></a>,
+<a class="reference internal" href="brokers/sqlalchemy.html#broker-sqlalchemy"><em>Using SQLAlchemy</em></a>, and SQS.</p>
+</div>
+<div class="section" id="installing-celery">
+<span id="celerytut-installation"></span><h2><a class="toc-backref" href="#id2">Installing Celery</a><a class="headerlink" href="#installing-celery" title="Permalink to this headline">¶</a></h2>
+<p>Celery is on the Python Package Index (PyPI), so it can be installed
+with standard Python tools like <tt class="docutils literal"><span class="pre">pip</span></tt> or <tt class="docutils literal"><span class="pre">easy_install</span></tt>:</p>
+<div class="highlight-python"><pre>$ pip install celery</pre>
+</div>
 </div>
 <div class="section" id="application">
-<span id="celerytut-conf"></span><h2><a class="toc-backref" href="#id2">Application</a><a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3">Application</a><a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h2>
 <p>The first thing you need is a Celery instance, this is called the celery
-application or just app.  Since this instance is used as
+application or just app in short.  Since this instance is used as
 the entry-point for everything you want to do in Celery, like creating tasks and
 managing workers, it must be possible for other modules to import it.</p>
-<p>Some people create a dedicated module for it, but in this tutorial we will
-keep everything in the same module.</p>
+<p>In this tutorial we will keep everything contained in a single module,
+but for larger projects you probably want to create
+a <a class="reference internal" href="next-steps.html#project-layout"><em>dedicated module</em></a>.</p>
 <p>Let&#8217;s create the file <tt class="file docutils literal"><span class="pre">tasks.py</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 
@@ -143,7 +183,7 @@ e.g. for Redis you can use <tt class="docutils literal"><span class="pre">redis:
 <p>We defined a single task, called <tt class="docutils literal"><span class="pre">add</span></tt>, which returns the sum of two numbers.</p>
 </div>
 <div class="section" id="running-the-celery-worker-server">
-<span id="celerytut-running-celeryd"></span><h2><a class="toc-backref" href="#id3">Running the celery worker server</a><a class="headerlink" href="#running-the-celery-worker-server" title="Permalink to this headline">¶</a></h2>
+<span id="celerytut-running-celeryd"></span><h2><a class="toc-backref" href="#id4">Running the celery worker server</a><a class="headerlink" href="#running-the-celery-worker-server" title="Permalink to this headline">¶</a></h2>
 <p>We can now run the worker by executing our program with the <tt class="docutils literal"><span class="pre">worker</span></tt>
 argument:</p>
 <div class="highlight-python"><pre>$ python tasks.py worker --loglevel=info</pre>
@@ -155,13 +195,12 @@ for more information).</p>
 <p>For a complete listing of the command line options available, do:</p>
 <div class="highlight-python"><pre>$  python tasks.py worker --help</pre>
 </div>
-<p>There also several other commands available, and similarly you can get a list
-of these:</p>
+<p>There also several other commands available, and help is also available:</p>
 <div class="highlight-python"><pre>$ python tasks.py --help</pre>
 </div>
 </div>
 <div class="section" id="executing-the-task">
-<span id="celerytut-executing-task"></span><h2><a class="toc-backref" href="#id4">Executing the task</a><a class="headerlink" href="#executing-the-task" title="Permalink to this headline">¶</a></h2>
+<span id="celerytut-executing-task"></span><h2><a class="toc-backref" href="#id5">Executing the task</a><a class="headerlink" href="#executing-the-task" title="Permalink to this headline">¶</a></h2>
 <p>Whenever we want to execute our task, we use the
 <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a> method of the task.</p>
 <p>This is a handy shortcut to the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>
@@ -179,7 +218,7 @@ or get its return value (or if the task failed, the exception and traceback).
 But this isn&#8217;t enabled by default, and you have to configure Celery to
 use a result backend, which is detailed in the next section.</p>
 <div class="section" id="keeping-results">
-<span id="celerytut-keeping-results"></span><h3><a class="toc-backref" href="#id5">Keeping Results</a><a class="headerlink" href="#keeping-results" title="Permalink to this headline">¶</a></h3>
+<span id="celerytut-keeping-results"></span><h3><a class="toc-backref" href="#id6">Keeping Results</a><a class="headerlink" href="#keeping-results" title="Permalink to this headline">¶</a></h3>
 <p>If you want to keep track of the tasks state, Celery needs to store or send
 the states somewhere.  There are several
 built-in result backends to choose from: <a class="reference external" href="http://www.sqlalchemy.org/">SQLAlchemy</a>/<a class="reference external" href="http://djangoproject.com">Django</a> ORM,
@@ -226,7 +265,7 @@ contain the exception instance raised by the task, and <cite>result.traceback</c
 will contain the original traceback as a string.</p>
 </div>
 <div class="section" id="configuration">
-<span id="celerytut-configuration"></span><h3><a class="toc-backref" href="#id6">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<span id="celerytut-configuration"></span><h3><a class="toc-backref" href="#id7">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
 <p>Celery, like a consumer appliance doesn&#8217;t need much to be operated.
 It has an input and an output, where you must connect the input to a broker and maybe
 the output to a result backend if so wanted.  But if you look closely at the back
@@ -311,7 +350,7 @@ and how to monitor what your workers are doing.</p>
 </div>
 </div>
 <div class="section" id="where-to-go-from-here">
-<h2><a class="toc-backref" href="#id7">Where to go from here</a><a class="headerlink" href="#where-to-go-from-here" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id8">Where to go from here</a><a class="headerlink" href="#where-to-go-from-here" title="Permalink to this headline">¶</a></h2>
 <p>After this you should read the <a class="reference internal" href="../userguide/index.html#guide"><em>User Guide</em></a>. Specifically
 <a class="reference internal" href="../userguide/tasks.html#guide-tasks"><em>Tasks</em></a> and <a class="reference internal" href="../userguide/executing.html#guide-executing"><em>Executing Tasks</em></a>.</p>
 </div>
