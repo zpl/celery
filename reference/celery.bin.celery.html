@@ -74,7 +74,7 @@
 <em class="property">class </em><tt class="descclassname">celery.bin.celery.</tt><tt class="descname">CeleryCommand</tt><big>(</big><em>app=None</em>, <em>get_app=None</em><big>)</big><a class="headerlink" href="#celery.bin.celery.CeleryCommand" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.bin.celery.CeleryCommand.commands">
-<tt class="descname">commands</tt><em class="property"> = {'status': &lt;class 'celery.bin.celery.status'&gt;, 'shell': &lt;class 'celery.bin.celery.shell'&gt;, 'amqp': &lt;class 'celery.bin.celery.amqp'&gt;, 'beat': &lt;class 'celery.bin.celery.beat'&gt;, 'worker': &lt;class 'celery.bin.celery.worker'&gt;, 'inspect': &lt;class 'celery.bin.celery.inspect'&gt;, 'list': &lt;class 'celery.bin.celery.list_'&gt;, 'purge': &lt;class 'celery.bin.celery.purge'&gt;, 'migrate': &lt;class 'celery.bin.celery.migrate'&gt;, 'result': &lt;class 'celery.bin.celery.result'&gt;, 'report': &lt;class 'celery.bin.celery.report'&gt;, 'apply': &lt;class 'celery.bin.celery.apply'&gt;, 'events': &lt;class 'celery.bin.celery.events'&gt;, 'help': &lt;class 'celery.bin.celery.help'&gt;}</em><a class="headerlink" href="#celery.bin.celery.CeleryCommand.commands" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">commands</tt><em class="property"> = {'rate_limit': &lt;class 'celery.bin.celery.rate_limit'&gt;, 'status': &lt;class 'celery.bin.celery.status'&gt;, 'shell': &lt;class 'celery.bin.celery.shell'&gt;, 'amqp': &lt;class 'celery.bin.celery.amqp'&gt;, 'beat': &lt;class 'celery.bin.celery.beat'&gt;, 'worker': &lt;class 'celery.bin.celery.worker'&gt;, 'inspect': &lt;class 'celery.bin.celery.inspect'&gt;, 'list': &lt;class 'celery.bin.celery.list_'&gt;, 'purge': &lt;class 'celery.bin.celery.purge'&gt;, 'migrate': &lt;class 'celery.bin.celery.migrate'&gt;, 'result': &lt;class 'celery.bin.celery.result'&gt;, 'report': &lt;class 'celery.bin.celery.report'&gt;, 'apply': &lt;class 'celery.bin.celery.apply'&gt;, 'events': &lt;class 'celery.bin.celery.events'&gt;, 'help': &lt;class 'celery.bin.celery.help'&gt;}</em><a class="headerlink" href="#celery.bin.celery.CeleryCommand.commands" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -129,7 +129,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.Command.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10953f290: -q/--quiet&gt;, &lt;Option at 0x1097d8c20: -C/--no-color&gt;)</em><a class="headerlink" href="#celery.bin.celery.Command.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2bb2d8: -q/--quiet&gt;, &lt;Option at 0x10b2bbc20: -C/--no-color&gt;)</em><a class="headerlink" href="#celery.bin.celery.Command.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -160,6 +160,21 @@
 <dl class="method">
 <dt id="celery.bin.celery.Command.run_from_argv">
 <tt class="descname">run_from_argv</tt><big>(</big><em>prog_name</em>, <em>argv</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.run_from_argv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.bin.celery.Command.say_chat">
+<tt class="descname">say_chat</tt><big>(</big><em>direction</em>, <em>title</em>, <em>body=''</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.say_chat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.bin.celery.Command.say_remote_command_reply">
+<tt class="descname">say_remote_command_reply</tt><big>(</big><em>replies</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.say_remote_command_reply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.bin.celery.Command.show_body">
+<tt class="descname">show_body</tt><em class="property"> = True</em><a class="headerlink" href="#celery.bin.celery.Command.show_body" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -224,7 +239,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.apply.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10953f290: -q/--quiet&gt;, &lt;Option at 0x1097d8c20: -C/--no-color&gt;, &lt;Option at 0x1097d8950: -a/--args&gt;, &lt;Option at 0x1097a9c20: -k/--kwargs&gt;, &lt;Option at 0x1097a9b90: --eta&gt;, &lt;Option at 0x1097a9bd8: --countdown&gt;, &lt;Option at 0x1097aba28: --expires&gt;, &lt;Option at 0x1097d2f80: --serializer&gt;, &lt;Option at 0x1097d2098: --queue&gt;, &lt;Option at 0x1029bbd88: --exchange&gt;, &lt;Option at 0x1097defc8: --routing-key&gt;)</em><a class="headerlink" href="#celery.bin.celery.apply.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2bb2d8: -q/--quiet&gt;, &lt;Option at 0x10b2bbc20: -C/--no-color&gt;, &lt;Option at 0x10b2bbe60: -a/--args&gt;, &lt;Option at 0x10b29acf8: -k/--kwargs&gt;, &lt;Option at 0x10b2ac8c0: --eta&gt;, &lt;Option at 0x10b2acfc8: --countdown&gt;, &lt;Option at 0x102d93908: --expires&gt;, &lt;Option at 0x102f05a70: --serializer&gt;, &lt;Option at 0x102f289e0: --queue&gt;, &lt;Option at 0x10b2c9ef0: --exchange&gt;, &lt;Option at 0x10b2c9710: --routing-key&gt;)</em><a class="headerlink" href="#celery.bin.celery.apply.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -299,7 +314,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.inspect.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10953f290: -q/--quiet&gt;, &lt;Option at 0x1097d8c20: -C/--no-color&gt;, &lt;Option at 0x1094f1368: -t/--timeout&gt;, &lt;Option at 0x1097de4d0: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.inspect.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2bb2d8: -q/--quiet&gt;, &lt;Option at 0x10b2bbc20: -C/--no-color&gt;, &lt;Option at 0x10afd68c0: -t/--timeout&gt;, &lt;Option at 0x1029ba170: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.inspect.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -310,11 +325,6 @@
 <dl class="method">
 <dt id="celery.bin.celery.inspect.say">
 <tt class="descname">say</tt><big>(</big><em>direction</em>, <em>title</em>, <em>body=''</em><big>)</big><a class="headerlink" href="#celery.bin.celery.inspect.say" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.bin.celery.inspect.show_body">
-<tt class="descname">show_body</tt><em class="property"> = True</em><a class="headerlink" href="#celery.bin.celery.inspect.show_body" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -380,6 +390,21 @@
 </dd></dl>
 
 <dl class="class">
+<dt id="celery.bin.celery.rate_limit">
+<em class="property">class </em><tt class="descclassname">celery.bin.celery.</tt><tt class="descname">rate_limit</tt><big>(</big><em>app=None</em>, <em>no_color=False</em>, <em>stdout=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x1002821e0&gt;</em>, <em>stderr=&lt;open file '&lt;stderr&gt;'</em>, <em>mode 'w' at 0x100282270&gt;</em><big>)</big><a class="headerlink" href="#celery.bin.celery.rate_limit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="celery.bin.celery.rate_limit.args">
+<tt class="descname">args</tt><em class="property"> = '&lt;task_name&gt; &lt;rate_limit (e.g. 10/m for 10 in a second)&gt;'</em><a class="headerlink" href="#celery.bin.celery.rate_limit.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.bin.celery.rate_limit.run">
+<tt class="descname">run</tt><big>(</big><em>task_name</em>, <em>limit</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.bin.celery.rate_limit.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="celery.bin.celery.report">
 <em class="property">class </em><tt class="descclassname">celery.bin.celery.</tt><tt class="descname">report</tt><big>(</big><em>app=None</em>, <em>no_color=False</em>, <em>stdout=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x1002821e0&gt;</em>, <em>stderr=&lt;open file '&lt;stderr&gt;'</em>, <em>mode 'w' at 0x100282270&gt;</em><big>)</big><a class="headerlink" href="#celery.bin.celery.report" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
@@ -399,7 +424,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.result.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10953f290: -q/--quiet&gt;, &lt;Option at 0x1097d8c20: -C/--no-color&gt;, &lt;Option at 0x1097de368: -t/--task&gt;)</em><a class="headerlink" href="#celery.bin.celery.result.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2bb2d8: -q/--quiet&gt;, &lt;Option at 0x10b2bbc20: -C/--no-color&gt;, &lt;Option at 0x10b2c96c8: -t/--task&gt;)</em><a class="headerlink" href="#celery.bin.celery.result.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -434,7 +459,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.shell.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10953f290: -q/--quiet&gt;, &lt;Option at 0x1097d8c20: -C/--no-color&gt;, &lt;Option at 0x1097deb90: -I/--ipython&gt;, &lt;Option at 0x1097de1b8: -B/--bpython&gt;, &lt;Option at 0x1097de908: -P/--python&gt;, &lt;Option at 0x1097de128: -T/--without-tasks&gt;, &lt;Option at 0x1097decf8: --eventlet&gt;, &lt;Option at 0x1097cfd88: --gevent&gt;)</em><a class="headerlink" href="#celery.bin.celery.shell.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2bb2d8: -q/--quiet&gt;, &lt;Option at 0x10b2bbc20: -C/--no-color&gt;, &lt;Option at 0x10b2a82d8: -I/--ipython&gt;, &lt;Option at 0x10b2a83f8: -B/--bpython&gt;, &lt;Option at 0x10b21d6c8: -P/--python&gt;, &lt;Option at 0x10b2a7710: -T/--without-tasks&gt;, &lt;Option at 0x10b146d40: --eventlet&gt;, &lt;Option at 0x10b2a9cf8: --gevent&gt;)</em><a class="headerlink" href="#celery.bin.celery.shell.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -449,7 +474,7 @@
 <em class="property">class </em><tt class="descclassname">celery.bin.celery.</tt><tt class="descname">status</tt><big>(</big><em>app=None</em>, <em>no_color=False</em>, <em>stdout=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x1002821e0&gt;</em>, <em>stderr=&lt;open file '&lt;stderr&gt;'</em>, <em>mode 'w' at 0x100282270&gt;</em><big>)</big><a class="headerlink" href="#celery.bin.celery.status" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.bin.celery.status.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10953f290: -q/--quiet&gt;, &lt;Option at 0x1097d8c20: -C/--no-color&gt;, &lt;Option at 0x1094f1368: -t/--timeout&gt;, &lt;Option at 0x1097de4d0: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.status.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2bb2d8: -q/--quiet&gt;, &lt;Option at 0x10b2bbc20: -C/--no-color&gt;, &lt;Option at 0x10afd68c0: -t/--timeout&gt;, &lt;Option at 0x1029ba170: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.status.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
