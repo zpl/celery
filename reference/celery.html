@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery &mdash; Celery 2.6.0rc3 documentation</title>
+    <title>celery &mdash; Celery 2.6.0rc4 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc3',
+        VERSION:     '2.6.0rc4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc3 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.app" href="celery.app.html" />
     <link rel="prev" title="API Reference" href="index.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="API Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -341,14 +341,15 @@ See <a class="reference internal" href="celery.apps.beat.html#celery.apps.beat.B
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>url</strong> &#8211; Either the URL or the hostname of the broker to use.</li>
-<li><strong>hostname</strong> &#8211; defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_HOST"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_HOST</span></tt></a> setting.</li>
-<li><strong>userid</strong> &#8211; defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_USER"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_USER</span></tt></a> setting.</li>
-<li><strong>password</strong> &#8211; defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_PASSWORD"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_PASSWORD</span></tt></a> setting.</li>
-<li><strong>virtual_host</strong> &#8211; defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_VHOST"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_VHOST</span></tt></a> setting.</li>
-<li><strong>port</strong> &#8211; defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_PORT"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_PORT</span></tt></a> setting.</li>
-<li><strong>ssl</strong> &#8211; defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_USE_SSL"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_USE_SSL</span></tt></a> setting.</li>
-<li><strong>insist</strong> &#8211; defaults to the <tt class="xref std std-setting docutils literal"><span class="pre">BROKER_INSIST</span></tt> setting.</li>
-<li><strong>backend_cls</strong> &#8211; defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_TRANSPORT"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_TRANSPORT</span></tt></a>
+<li><strong>hostname</strong> &#8211; URL, Hostname/IP-address of the broker.
+If an URL is used, then the other argument below will
+be taken from the URL instead.</li>
+<li><strong>userid</strong> &#8211; Username to authenticate as.</li>
+<li><strong>password</strong> &#8211; Password to authenticate with</li>
+<li><strong>virtual_host</strong> &#8211; Virtual host to use (domain).</li>
+<li><strong>port</strong> &#8211; Port to connect to.</li>
+<li><strong>ssl</strong> &#8211; Defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_USE_SSL"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_USE_SSL</span></tt></a> setting.</li>
+<li><strong>transport</strong> &#8211; defaults to the <a class="reference internal" href="../configuration.html#std:setting-BROKER_TRANSPORT"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_TRANSPORT</span></tt></a>
 setting.</li>
 </ul>
 </td>
@@ -669,7 +670,7 @@ but with links intact).</p>
         <li class="right" >
           <a href="index.html" title="API Reference"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

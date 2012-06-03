@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.app.task &mdash; Celery 2.6.0rc3 documentation</title>
+    <title>celery.app.task &mdash; Celery 2.6.0rc4 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc3',
+        VERSION:     '2.6.0rc4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc3 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.app.amqp" href="celery.app.amqp.html" />
     <link rel="prev" title="celery.app" href="celery.app.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.app.html" title="celery.app"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -269,7 +269,7 @@ setting.</li>
 
 <dl class="method">
 <dt id="celery.app.task.BaseTask.apply_async">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">apply_async</tt><big>(</big><em>args=None</em>, <em>kwargs=None</em>, <em>task_id=None</em>, <em>publisher=None</em>, <em>connection=None</em>, <em>router=None</em>, <em>link=None</em>, <em>link_error=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.apply_async" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">apply_async</tt><big>(</big><em>args=None</em>, <em>kwargs=None</em>, <em>task_id=None</em>, <em>producer=None</em>, <em>connection=None</em>, <em>router=None</em>, <em>link=None</em>, <em>link_error=None</em>, <em>publisher=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.app.task.BaseTask.apply_async" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply tasks asynchronously by sending a message.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -300,7 +300,7 @@ of establishing a new one.</li>
 in the event of connection loss or failure.  Default
 is taken from the <a class="reference internal" href="../configuration.html#std:setting-CELERY_TASK_PUBLISH_RETRY"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_PUBLISH_RETRY</span></tt></a>
 setting.  Note you need to handle the
-publisher/connection manually for this to work.</li>
+producer/connection manually for this to work.</li>
 <li><strong>retry_policy</strong> &#8211; Override the retry policy used.  See the
 <a class="reference internal" href="../configuration.html#std:setting-CELERY_TASK_PUBLISH_RETRY"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_PUBLISH_RETRY</span></tt></a> setting.</li>
 <li><strong>routing_key</strong> &#8211; The routing key used to route the task to a
@@ -339,6 +339,8 @@ setting.</li>
 task exits successfully.</li>
 <li><strong>link_error</strong> &#8211; A single, or a list of subtasks to apply
 if an error occurs while executing the task.</li>
+<li><strong>producer</strong> &#8211; :class:~&#64;amqp.TaskProducer` instance to use.</li>
+<li><strong>publisher</strong> &#8211; Deprecated alias to <tt class="docutils literal"><span class="pre">producer</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -359,7 +361,7 @@ be replaced by a local <a class="reference internal" href="#celery.app.task.Base
 
 <dl class="attribute">
 <dt id="celery.app.task.BaseTask.backend">
-<tt class="descclassname">BaseTask.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x105cf4ad0&gt;</em><a class="headerlink" href="#celery.app.task.BaseTask.backend" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseTask.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x1067dff10&gt;</em><a class="headerlink" href="#celery.app.task.BaseTask.backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>The result store backend used for this task.</p>
 </dd></dl>
 
@@ -862,7 +864,7 @@ id of the current task</li>
         <li class="right" >
           <a href="celery.app.html" title="celery.app"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

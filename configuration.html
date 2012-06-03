@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration and defaults &mdash; Celery 2.6.0rc3 documentation</title>
+    <title>Configuration and defaults &mdash; Celery 2.6.0rc4 documentation</title>
     
     <link rel="stylesheet" href="_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.6.0rc3',
+        VERSION:     '2.6.0rc4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc3 documentation" href="index.html" />
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="index.html" />
     <link rel="next" title="Django" href="django/index.html" />
     <link rel="prev" title="Signals" href="userguide/signals.html" /> 
   </head>
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="userguide/signals.html" title="Signals"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -106,22 +106,15 @@ module and make sure it is available on the Python path.</p>
 <span id="conf-example"></span><h2><a class="toc-backref" href="#id5">Example configuration file</a><a class="headerlink" href="#example-configuration-file" title="Permalink to this headline">¶</a></h2>
 <p>This is an example configuration file to get you started.
 It should contain all you need to run a basic Celery set-up.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># List of modules to import when celery starts.</span>
-<span class="n">CELERY_IMPORTS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;myapp.tasks&quot;</span><span class="p">,</span> <span class="p">)</span>
-
-<span class="c">## Result store settings.</span>
-<span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&quot;database&quot;</span>
-<span class="n">CELERY_RESULT_DBURI</span> <span class="o">=</span> <span class="s">&quot;sqlite:///mydatabase.db&quot;</span>
-
-<span class="c">## Broker settings.</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">## Broker settings.</span>
 <span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;amqp://guest:guest@localhost:5672//&quot;</span>
 
-<span class="c">## Worker settings</span>
-<span class="c">## If you&#39;re doing mostly I/O you can have more processes,</span>
-<span class="c">## but if mostly spending CPU, try to keep it close to the</span>
-<span class="c">## number of CPUs on your machine. If not set, the number of CPUs/cores</span>
-<span class="c">## available will be used.</span>
-<span class="n">CELERYD_CONCURRENCY</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="c"># List of modules to import when celery starts.</span>
+<span class="n">CELERY_IMPORTS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;myapp.tasks&quot;</span><span class="p">,</span> <span class="p">)</span>
+
+<span class="c">## Using the database to store task state and results.</span>
+<span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&quot;database&quot;</span>
+<span class="n">CELERY_RESULT_DBURI</span> <span class="o">=</span> <span class="s">&quot;sqlite:///mydatabase.db&quot;</span>
 
 <span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;tasks.add&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="s">&quot;10/s&quot;</span><span class="p">}}</span>
 </pre></div>
@@ -192,6 +185,10 @@ instead of a dict to choose which tasks to annotate:</p>
 <span id="std:setting-CELERYD_CONCURRENCY"></span><h4>CELERYD_CONCURRENCY<a class="headerlink" href="#celeryd-concurrency" title="Permalink to this headline">¶</a></h4>
 <p>The number of concurrent worker processes/threads/green threads, executing
 tasks.</p>
+<p>If you&#8217;re doing mostly I/O you can have more processes,
+but if mostly CPU-bound, try to keep it close to the
+number of CPUs on your machine. If not set, the number of CPUs/cores
+on the host will be used.</p>
 <p>Defaults to the number of available CPUs.</p>
 </div>
 <div class="section" id="celeryd-prefetch-multiplier">
@@ -617,10 +614,6 @@ persistent messages.</p>
 </tr>
 </tbody>
 </table>
-<p>The Kombu transport to use.  Default is <tt class="docutils literal"><span class="pre">amqplib</span></tt>.</p>
-<p>You can use a custom transport class name, or select one of the
-built-in transports: <tt class="docutils literal"><span class="pre">amqplib</span></tt>, <tt class="docutils literal"><span class="pre">pika</span></tt>, <tt class="docutils literal"><span class="pre">redis</span></tt>, <tt class="docutils literal"><span class="pre">beanstalk</span></tt>,
-<tt class="docutils literal"><span class="pre">sqlalchemy</span></tt>, <tt class="docutils literal"><span class="pre">django</span></tt>, <tt class="docutils literal"><span class="pre">mongodb</span></tt>, <tt class="docutils literal"><span class="pre">couchdb</span></tt>.</p>
 </div>
 <div class="section" id="broker-url">
 <span id="std:setting-BROKER_URL"></span><h4>BROKER_URL<a class="headerlink" href="#broker-url" title="Permalink to this headline">¶</a></h4>
@@ -629,32 +622,12 @@ built-in transports: <tt class="docutils literal"><span class="pre">amqplib</spa
 </div>
 <p>Only the scheme part (<tt class="docutils literal"><span class="pre">transport://</span></tt>) is required, the rest
 is optional, and defaults to the specific transports default values.</p>
-<p>If this setting is defined it will override a subset of the
-other <tt class="docutils literal"><span class="pre">BROKER</span></tt> options. These options are <a class="reference internal" href="#std:setting-BROKER_HOST"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_HOST</span></tt></a>,
-<a class="reference internal" href="#std:setting-BROKER_USER"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_USER</span></tt></a>, <a class="reference internal" href="#std:setting-BROKER_PASSWORD"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_PASSWORD</span></tt></a>, <a class="reference internal" href="#std:setting-BROKER_PORT"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_PORT</span></tt></a>,
-and <a class="reference internal" href="#std:setting-BROKER_VHOST"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_VHOST</span></tt></a>.</p>
+<p>The transport part is the broker implementation to use, and the
+default is <tt class="docutils literal"><span class="pre">amqp</span></tt>, but there are many other choices including
+<tt class="docutils literal"><span class="pre">librabbitmq</span></tt>, <tt class="docutils literal"><span class="pre">amqplib</span></tt>, <tt class="docutils literal"><span class="pre">redis</span></tt>, <tt class="docutils literal"><span class="pre">beanstalk</span></tt>,
+<tt class="docutils literal"><span class="pre">sqlalchemy</span></tt>, <tt class="docutils literal"><span class="pre">django</span></tt>, <tt class="docutils literal"><span class="pre">mongodb</span></tt>, <tt class="docutils literal"><span class="pre">couchdb</span></tt> and <tt class="docutils literal"><span class="pre">pika</span></tt>.
+It can also be a fully qualified path to your own transport implementation.</p>
 <p>See the Kombu documentation for more information about broker URLs.</p>
-</div>
-<div class="section" id="broker-host">
-<span id="std:setting-BROKER_HOST"></span><h4>BROKER_HOST<a class="headerlink" href="#broker-host" title="Permalink to this headline">¶</a></h4>
-<p>Hostname of the broker.</p>
-</div>
-<div class="section" id="broker-port">
-<span id="std:setting-BROKER_PORT"></span><h4>BROKER_PORT<a class="headerlink" href="#broker-port" title="Permalink to this headline">¶</a></h4>
-<p>Custom port of the broker.  Default is to use the default port for the
-selected backend.</p>
-</div>
-<div class="section" id="broker-user">
-<span id="std:setting-BROKER_USER"></span><h4>BROKER_USER<a class="headerlink" href="#broker-user" title="Permalink to this headline">¶</a></h4>
-<p>Username to connect as.</p>
-</div>
-<div class="section" id="broker-password">
-<span id="std:setting-BROKER_PASSWORD"></span><h4>BROKER_PASSWORD<a class="headerlink" href="#broker-password" title="Permalink to this headline">¶</a></h4>
-<p>Password to connect with.</p>
-</div>
-<div class="section" id="broker-vhost">
-<span id="std:setting-BROKER_VHOST"></span><h4>BROKER_VHOST<a class="headerlink" href="#broker-vhost" title="Permalink to this headline">¶</a></h4>
-<p>Virtual host.  Default is <cite>&#8220;/&#8221;</cite>.</p>
 </div>
 <div class="section" id="broker-use-ssl">
 <span id="std:setting-BROKER_USE_SSL"></span><h4>BROKER_USE_SSL<a class="headerlink" href="#broker-use-ssl" title="Permalink to this headline">¶</a></h4>
@@ -1367,7 +1340,7 @@ Please use the <em class="xref std std-option">--loglevel</em> argument instead.
         <li class="right" >
           <a href="userguide/signals.html" title="Signals"
              >previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

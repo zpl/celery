@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.backends.amqp &mdash; Celery 2.6.0rc3 documentation</title>
+    <title>celery.backends.amqp &mdash; Celery 2.6.0rc4 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.6.0rc3',
+        VERSION:     '2.6.0rc4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Celery 2.6.0rc3 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.backends.mongodb" href="celery.backends.mongodb.html" />
     <link rel="prev" title="celery.backends.cache" href="celery.backends.cache.html" /> 
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="celery.backends.cache.html" title="celery.backends.cache"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -469,7 +469,7 @@ properly sets content_encoding.</li>
 
 <dl class="attribute">
 <dt id="celery.backends.amqp.AMQPBackend.Exchange.attrs">
-<tt class="descname">attrs</tt><em class="property"> = (('name', None), ('type', None), ('arguments', None), ('durable', &lt;type 'bool'&gt;), ('auto_delete', &lt;type 'bool'&gt;), ('delivery_mode', &lt;function &lt;lambda&gt; at 0x10659c5f0&gt;))</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.attrs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attrs</tt><em class="property"> = (('name', None), ('type', None), ('arguments', None), ('durable', &lt;type 'bool'&gt;), ('auto_delete', &lt;type 'bool'&gt;), ('delivery_mode', &lt;function &lt;lambda&gt; at 0x10753ed70&gt;))</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.attrs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1019,12 +1019,7 @@ without modifying the server state.</li>
 
 <dl class="method">
 <dt id="celery.backends.amqp.AMQPBackend.get_task_meta">
-<tt class="descclassname">AMQPBackend.</tt><tt class="descname">get_task_meta</tt><big>(</big><em>task_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.get_task_meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.amqp.AMQPBackend.poll">
-<tt class="descclassname">AMQPBackend.</tt><tt class="descname">poll</tt><big>(</big><em>task_id</em>, <em>backlog_limit=100</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.poll" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">AMQPBackend.</tt><tt class="descname">get_task_meta</tt><big>(</big><em>task_id</em>, <em>backlog_limit=1000</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.get_task_meta" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1041,6 +1036,11 @@ without modifying the server state.</li>
 <dl class="method">
 <dt id="celery.backends.amqp.AMQPBackend.restore_taskset">
 <tt class="descclassname">AMQPBackend.</tt><tt class="descname">restore_taskset</tt><big>(</big><em>taskset_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.restore_taskset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.backends.amqp.AMQPBackend.retry_policy">
+<tt class="descclassname">AMQPBackend.</tt><tt class="descname">retry_policy</tt><em class="property"> = {'interval_start': 0, 'interval_max': 1, 'max_retries': 20, 'interval_step': 1}</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.retry_policy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1129,7 +1129,7 @@ without modifying the server state.</li>
         <li class="right" >
           <a href="celery.backends.cache.html" title="celery.backends.cache"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc3 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>
