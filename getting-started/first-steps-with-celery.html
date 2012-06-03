@@ -70,7 +70,7 @@
     <div class="section" id="first-steps-with-celery">
 <span id="first-steps"></span><span id="tut-celery"></span><h1>First steps with Celery<a class="headerlink" href="#first-steps-with-celery" title="Permalink to this headline">¶</a></h1>
 <p>Celery is a task queue with batteries included.
-It is easy to use, so that you can get started without learning
+It is easy to use so that you can get started without learning
 the full complexities of the problem it solves. It is designed
 around best practices so that your product can scale
 and integrate with other languages, and it comes with the
@@ -336,8 +336,8 @@ instead, so that only 10 tasks of this type can execute in a minute
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>But in fact, if you are using one of RabbitMQ, Redis or MongoDB as the
-broker then you can actually direct the workers to set new rate limit
+<p>If you are using RabbitMQ, Redis or MongoDB as the
+broker then you can also direct the workers to set new rate limit
 for the task at runtime:</p>
 <div class="highlight-python"><pre>$ python tasks.py rate_limit tasks.add 10/m
 worker.example.com: OK
