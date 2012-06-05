@@ -187,6 +187,26 @@ the call evaluates to <tt class="xref py py-const docutils literal"><span class=
 <tt class="descname">accept_magic_kwargs</tt><em class="property"> = False</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.accept_magic_kwargs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="celery.contrib.abortable.AbortableTask.acks_late">
+<tt class="descname">acks_late</tt><em class="property"> = False</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.acks_late" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.contrib.abortable.AbortableTask.backend">
+<tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x1087ae490&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.backend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.contrib.abortable.AbortableTask.delivery_mode">
+<tt class="descname">delivery_mode</tt><em class="property"> = 2</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.delivery_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.contrib.abortable.AbortableTask.exchange_type">
+<tt class="descname">exchange_type</tt><em class="property"> = 'direct'</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.exchange_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="celery.contrib.abortable.AbortableTask.is_aborted">
 <tt class="descname">is_aborted</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.is_aborted" title="Permalink to this definition">¶</a></dt>
@@ -212,7 +232,12 @@ often (for performance).</p>
 
 <dl class="attribute">
 <dt id="celery.contrib.abortable.AbortableTask.request_stack">
-<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x102db7600&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.request_stack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10b1aa390&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.request_stack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.contrib.abortable.AbortableTask.serializer">
+<tt class="descname">serializer</tt><em class="property"> = 'pickle'</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.serializer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

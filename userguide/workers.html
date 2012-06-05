@@ -135,7 +135,7 @@ signal).</p>
 <p>If the worker won&#8217;t shutdown after considerate time, for example because
 of tasks stuck in an infinite-loop, you can use the <tt class="xref std std-sig docutils literal"><span class="pre">KILL</span></tt> signal to
 force terminate the worker, but be aware that currently executing tasks will
-be lost (unless the tasks have the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.acks_late" title="celery.app.task.BaseTask.acks_late"><tt class="xref py py-attr docutils literal"><span class="pre">acks_late</span></tt></a>
+be lost (unless the tasks have the <tt class="xref py py-attr docutils literal"><span class="pre">acks_late</span></tt>
 option set).</p>
 <p>Also as processes can&#8217;t override the <tt class="xref std std-sig docutils literal"><span class="pre">KILL</span></tt> signal, the worker will
 not be able to reap its children, so make sure to do so manually.  This

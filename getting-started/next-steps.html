@@ -194,7 +194,7 @@ arguments, keyword arguments and execution options.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>It takes the same arguments as the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a> method:</p>
+<p>It takes the same arguments as the <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
 
@@ -202,8 +202,8 @@ arguments, keyword arguments and execution options.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>And like there is a <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a> shortcut for <cite>apply_async</cite>
-there is an <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.s" title="celery.app.task.BaseTask.s"><tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt></a> shortcut for subtask:</p>
+<p>And like there is a <tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt> shortcut for <cite>apply_async</cite>
+there is an <tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt> shortcut for subtask:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -213,7 +213,7 @@ there is an <a class="reference internal" href="../reference/celery.app.task.htm
 <span class="go">True</span>
 </pre></div>
 </div>
-<p>You can&#8217;t define options with <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.s" title="celery.app.task.BaseTask.s"><tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt></a>, but a chaining
+<p>You can&#8217;t define options with <tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt>, but a chaining
 <tt class="docutils literal"><span class="pre">set</span></tt> call takes care of that:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">proj.tasks.add(2, 2)</span>
@@ -374,7 +374,7 @@ to apply the starmap after 10 seconds:</p>
 of parallelism, but this is rarely true for a busy cluster
 and in practice since you are avoiding the overhead  of messaging
 it may considerably increase performance.</p>
-<p>To create a chunks subtask you can use <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.chunks" title="celery.app.task.BaseTask.chunks"><tt class="xref py py-meth docutils literal"><span class="pre">celery.Task.chunks()</span></tt></a>:</p>
+<p>To create a chunks subtask you can use <tt class="xref py py-meth docutils literal"><span class="pre">celery.Task.chunks()</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>

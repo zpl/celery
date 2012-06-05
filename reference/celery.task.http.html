@@ -179,6 +179,26 @@ argument, as this attribute is intended for subclasses.</p>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="celery.task.http.HttpDispatchTask.acks_late">
+<tt class="descname">acks_late</tt><em class="property"> = False</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.acks_late" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.task.http.HttpDispatchTask.backend">
+<tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x1087ae490&gt;</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.backend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.task.http.HttpDispatchTask.delivery_mode">
+<tt class="descname">delivery_mode</tt><em class="property"> = 2</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.delivery_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.task.http.HttpDispatchTask.exchange_type">
+<tt class="descname">exchange_type</tt><em class="property"> = 'direct'</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.exchange_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt>
 <tt class="descname">method</tt><em class="property"> = None</em></dt>
 <dd></dd></dl>
@@ -195,12 +215,17 @@ argument, as this attribute is intended for subclasses.</p>
 
 <dl class="attribute">
 <dt id="celery.task.http.HttpDispatchTask.request_stack">
-<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10551f738&gt;</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.request_stack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10b628bb0&gt;</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.request_stack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.task.http.HttpDispatchTask.run">
 <tt class="descname">run</tt><big>(</big><em>url=None</em>, <em>method='GET'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.task.http.HttpDispatchTask.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.task.http.HttpDispatchTask.serializer">
+<tt class="descname">serializer</tt><em class="property"> = 'pickle'</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.serializer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -287,7 +312,7 @@ By default this is <a class="reference internal" href="#celery.task.http.HttpDis
 
 <dl class="function">
 <dt id="celery.task.http.extract_response">
-<tt class="descclassname">celery.task.http.</tt><tt class="descname">extract_response</tt><big>(</big><em>raw_response</em>, <em>loads=&lt;function &lt;lambda&gt; at 0x101b73578&gt;</em><big>)</big><a class="headerlink" href="#celery.task.http.extract_response" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">celery.task.http.</tt><tt class="descname">extract_response</tt><big>(</big><em>raw_response</em>, <em>loads=&lt;function &lt;lambda&gt; at 0x101b10668&gt;</em><big>)</big><a class="headerlink" href="#celery.task.http.extract_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the response text from a raw JSON response.</p>
 </dd></dl>
 

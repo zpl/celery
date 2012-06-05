@@ -121,6 +121,12 @@ generating task names.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="current_task">
+<tt class="descname">current_task</tt><a class="headerlink" href="#current_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>The instance of the task that is being executed, or <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="amqp">
 <tt class="descname">amqp</tt><a class="headerlink" href="#amqp" title="Permalink to this definition">¶</a></dt>
 <dd><p>AMQP related functionality: <a class="reference internal" href="celery.app.amqp.html#celery.app.amqp.AMQP" title="celery.app.amqp.AMQP"><tt class="xref py py-class docutils literal"><span class="pre">amqp</span></tt></a>.</p>
@@ -287,7 +293,7 @@ using <a class="reference internal" href="#AsyncResult" title="AsyncResult"><tt 
 </tr>
 </tbody>
 </table>
-<p>Otherwise supports the same arguments as <a class="reference internal" href="celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>.</p>
+<p>Otherwise supports the same arguments as <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -533,7 +539,7 @@ options.</li>
 </tr>
 </tbody>
 </table>
-<p>See <a class="reference internal" href="celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>.</p>
+<p>See <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -610,8 +616,8 @@ but with links intact).</p>
 </dd></dl>
 
 <dl class="data">
-<dt id="current_task">
-<tt class="descname">current_task</tt><a class="headerlink" href="#current_task" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descname">current_task</tt></dt>
 <dd><p>The task currently being executed
 (only set in the worker, or when eager/apply is used).</p>
 </dd></dl>

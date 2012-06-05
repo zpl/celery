@@ -82,14 +82,14 @@
 </div>
 <div class="section" id="basics">
 <span id="executing-basics"></span><h2><a class="toc-backref" href="#id1">Basics</a><a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
-<p>Executing a task is done with <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>,
-or its shortcut: <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a>.</p>
-<p><a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.delay" title="celery.app.task.BaseTask.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a> is simple and convenient, as it looks like calling a regular
+<p>Executing a task is done with <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt>,
+or its shortcut: <tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt>.</p>
+<p><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt> is simple and convenient, as it looks like calling a regular
 function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Task</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="n">kwarg1</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="n">kwarg2</span><span class="o">=</span><span class="s">&quot;y&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The same using <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a> is written like this:</p>
+<p>The same using <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt> is written like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Task</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">],</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;kwarg1&quot;</span><span class="p">:</span> <span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="s">&quot;kwarg2&quot;</span><span class="p">:</span> <span class="s">&quot;y&quot;</span><span class="p">})</span>
 </pre></div>
 </div>
@@ -215,13 +215,13 @@ be available for the worker.</p>
 to use when sending a task:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>The <cite>serializer</cite> argument to <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a></li>
-<li>The <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.serializer" title="celery.app.task.BaseTask.serializer"><tt class="xref py py-attr docutils literal"><span class="pre">Task.serializer</span></tt></a> attribute</li>
+<li>The <cite>serializer</cite> argument to <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></li>
+<li>The <tt class="xref py py-attr docutils literal"><span class="pre">Task.serializer</span></tt> attribute</li>
 <li>The default <a class="reference internal" href="../configuration.html#std:setting-CELERY_TASK_SERIALIZER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_SERIALIZER</span></tt></a> setting.</li>
 </ol>
 </div></blockquote>
 <ul class="simple">
-<li>Using the <cite>serializer</cite> argument to <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask.apply_async" title="celery.app.task.BaseTask.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a>:</li>
+<li>Using the <cite>serializer</cite> argument to <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt>:</li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">serializer</span><span class="o">=</span><span class="s">&quot;json&quot;</span><span class="p">)</span>
 </pre></div>

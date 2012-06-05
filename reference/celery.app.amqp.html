@@ -131,7 +131,8 @@ from the current configuration.</p>
 <dl class="attribute">
 <dt id="celery.app.amqp.AMQP.TaskConsumer">
 <tt class="descname">TaskConsumer</tt><a class="headerlink" href="#celery.app.amqp.AMQP.TaskConsumer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns consumer for a single task queue.</p>
+<dd><p>Return consumer configured to consume from the queues
+we are configured for (<tt class="docutils literal"><span class="pre">app.amqp.queues.consume_from</span></tt>).</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -178,7 +179,7 @@ from the current configuration.</p>
 <h2><a class="toc-backref" href="#id2">Queues</a><a class="headerlink" href="#queues" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="celery.app.amqp.Queues">
-<em class="property">class </em><tt class="descclassname">celery.app.amqp.</tt><tt class="descname">Queues</tt><big>(</big><em>queues</em>, <em>default_exchange=None</em>, <em>create_missing=True</em><big>)</big><a class="headerlink" href="#celery.app.amqp.Queues" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.app.amqp.</tt><tt class="descname">Queues</tt><big>(</big><em>queues=None</em>, <em>default_exchange=None</em>, <em>create_missing=True</em><big>)</big><a class="headerlink" href="#celery.app.amqp.Queues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Queue name⇒ declaration mapping.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -252,10 +253,10 @@ currently defined queues.</p>
 </div>
 <div class="section" id="taskpublisher">
 <h2><a class="toc-backref" href="#id3">TaskPublisher</a><a class="headerlink" href="#taskpublisher" title="Permalink to this headline">¶</a></h2>
-<dl class="attribute">
+<dl class="class">
 <dt id="celery.app.amqp.TaskPublisher">
-<tt class="descclassname">celery.app.amqp.</tt><tt class="descname">TaskPublisher</tt><a class="headerlink" href="#celery.app.amqp.TaskPublisher" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">TaskProducer</span></tt></p>
+<em class="property">class </em><tt class="descclassname">celery.app.amqp.</tt><tt class="descname">TaskPublisher</tt><big>(</big><em>channel=None</em>, <em>exchange=None</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.amqp.TaskPublisher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated version of <tt class="xref py py-class docutils literal"><span class="pre">TaskProducer</span></tt>.</p>
 </dd></dl>
 
 </div>

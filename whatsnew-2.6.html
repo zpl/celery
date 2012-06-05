@@ -398,6 +398,24 @@ currently executing task.</li>
 </ul>
 </div></blockquote>
 </li>
+<li><p class="first">In fact, <tt class="docutils literal"><span class="pre">task.get_logger</span></tt> is no longer recommended, it is better
+to add module-level logger to your tasks module.</p>
+<blockquote>
+<div><p>For example, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.utils.log</span> <span class="kn">import</span> <span class="n">get_task_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_task_logger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Adding </span><span class="si">%r</span><span class="s"> + </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p>The resulting logger will then inherit from the <tt class="docutils literal"><span class="pre">&quot;celery.task&quot;</span></tt> logger
+so that the current task name and id is included in logging output.</p>
+</div></blockquote>
+</li>
 <li><p class="first">Redirected output from stdout/stderr is now logged to a &#8220;celery.redirected&#8221;
 logger.</p>
 </li>
