@@ -193,7 +193,7 @@ to use the <a class="reference external" href="http://pypi.python.org/pypi/djang
 <span id="faq-is-celery-for-rabbitmq-only"></span><h3><a class="toc-backref" href="#id6">Do I have to use AMQP/RabbitMQ?</a><a class="headerlink" href="#do-i-have-to-use-amqp-rabbitmq" title="Permalink to this headline">¶</a></h3>
 <p><strong>Answer</strong>: No.</p>
 <p>You can also use Redis, Beanstalk, CouchDB, MongoDB or an SQL database,
-see <a class="reference external" href="http://ask.github.com/celery/tutorials/otherqueues.html">Using other queues</a>.</p>
+see <a class="reference internal" href="getting-started/brokers/index.html#brokers"><em>Brokers</em></a>.</p>
 <p>These &#8220;virtual transports&#8221; may have limited broadcast and event functionality.
 For example remote control commands only works with AMQP and Redis.</p>
 <p>Redis or a database won&#8217;t perform as well as
@@ -216,7 +216,7 @@ to process messages.</p>
 <p>Also, there&#8217;s another way to be language independent, and that is to use REST
 tasks, instead of your tasks being functions, they&#8217;re URLs. With this
 information you can even create simple web servers that enable preloading of
-code. See: <a class="reference external" href="http://ask.github.com/celery/userguide/remote-tasks.html">User Guide: Remote Tasks</a>.</p>
+code. See: <a class="reference external" href="http://celery.github.com/celery/userguide/remote-tasks.html">User Guide: Remote Tasks</a>.</p>
 </div>
 </div>
 <div class="section" id="troubleshooting">

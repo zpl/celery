@@ -501,7 +501,7 @@ documentation for MongoDB, Beanstalk and CouchDB.</p>
 <div class="section" id="security-fixes">
 <span id="v244-security-fixes"></span><h3><a class="toc-backref" href="#id126">Security Fixes</a><a class="headerlink" href="#security-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">[Security: <a class="reference external" href="http://github.com/ask/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
+<li><p class="first">[Security: <a class="reference external" href="http://github.com/celery/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
 real id&#8217;s when the <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--uid"><em class="xref std std-option">--uid</em></a>/<a class="reference internal" href="reference/celery.bin.base.html#cmdoption--gid"><em class="xref std std-option">--gid</em></a> arguments to
 <strong class="program">celeryd-multi</strong>, <strong class="program">celeryd_detach</strong>,
 <strong class="program">celerybeat</strong> and <strong class="program">celeryev</strong> were used.</p>
@@ -973,7 +973,7 @@ now mentioned in the Changelog.</p>
 <div class="section" id="v234-security-fixes">
 <span id="id15"></span><h3><a class="toc-backref" href="#id135">Security Fixes</a><a class="headerlink" href="#v234-security-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">[Security: <a class="reference external" href="http://github.com/ask/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
+<li><p class="first">[Security: <a class="reference external" href="http://github.com/celery/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
 real id&#8217;s when the <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--uid"><em class="xref std std-option">--uid</em></a>/<a class="reference internal" href="reference/celery.bin.base.html#cmdoption--gid"><em class="xref std std-option">--gid</em></a> arguments to
 <strong class="program">celeryd-multi</strong>, <strong class="program">celeryd_detach</strong>,
 <strong class="program">celerybeat</strong> and <strong class="program">celeryev</strong> were used.</p>
@@ -1027,7 +1027,7 @@ be used with generic init scripts.</li>
 <li><p class="first">Improved Contributing guide.</p>
 <blockquote>
 <div><p>If you&#8217;d like to contribute to Celery you should read this
-guide: <a class="reference external" href="http://ask.github.com/celery/contributing.html">http://ask.github.com/celery/contributing.html</a></p>
+guide: <a class="reference external" href="http://celery.github.com/celery/contributing.html">http://celery.github.com/celery/contributing.html</a></p>
 <p>We are looking for contributors at all skill levels, so don&#8217;t
 hesitate!</p>
 </div></blockquote>
@@ -1378,7 +1378,7 @@ queue is already being consumed from.</li>
 <div class="section" id="v228-security-fixes">
 <span id="id29"></span><h3><a class="toc-backref" href="#id148">Security Fixes</a><a class="headerlink" href="#v228-security-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">[Security: <a class="reference external" href="http://github.com/ask/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
+<li><p class="first">[Security: <a class="reference external" href="http://github.com/celery/celery/tree/master/docs/sec/CELERYSA-0001.txt">CELERYSA-0001</a>] Daemons would set effective id&#8217;s rather than
 real id&#8217;s when the <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--uid"><em class="xref std std-option">--uid</em></a>/<a class="reference internal" href="reference/celery.bin.base.html#cmdoption--gid"><em class="xref std std-option">--gid</em></a> arguments to
 <strong class="program">celeryd-multi</strong>, <strong class="program">celeryd_detach</strong>,
 <strong class="program">celerybeat</strong> and <strong class="program">celeryev</strong> were used.</p>
@@ -3279,7 +3279,7 @@ not be started if this file exists and the pid contained is still alive.</p>
 </li>
 <li><p class="first">Added generic init.d script using <cite>celeryd-multi</cite></p>
 <blockquote>
-<div><p><a class="reference external" href="http://github.com/ask/celery/tree/master/contrib/generic-init.d/celeryd">http://github.com/ask/celery/tree/master/contrib/generic-init.d/celeryd</a></p>
+<div><p><a class="reference external" href="http://github.com/celery/celery/tree/master/contrib/generic-init.d/celeryd">http://github.com/celery/celery/tree/master/contrib/generic-init.d/celeryd</a></p>
 </div></blockquote>
 </li>
 </ul>
@@ -3907,7 +3907,7 @@ configured:</p>
 </div></blockquote>
 </li>
 <li><p class="first">The following deprecated settings has been removed (as scheduled by
-the <a class="reference external" href="http://ask.github.com/celery/internals/deprecation.html">deprecation timeline</a>):</p>
+the <a class="reference external" href="http://celery.github.com/celery/internals/deprecation.html">deprecation timeline</a>):</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -3954,10 +3954,10 @@ the <a class="reference external" href="http://ask.github.com/celery/internals/d
 </ul>
 <ul>
 <li><p class="first">The <cite>celery.task.rest</cite> module has been removed, use <a class="reference internal" href="userguide/remote-tasks.html#module-celery.task.http" title="celery.task.http"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.http</span></tt></a>
-instead (as scheduled by the <a class="reference external" href="http://ask.github.com/celery/internals/deprecation.html">deprecation timeline</a>).</p>
+instead (as scheduled by the <a class="reference external" href="http://celery.github.com/celery/internals/deprecation.html">deprecation timeline</a>).</p>
 </li>
 <li><p class="first">It&#8217;s no longer allowed to skip the class name in loader names.
-(as scheduled by the <a class="reference external" href="http://ask.github.com/celery/internals/deprecation.html">deprecation timeline</a>):</p>
+(as scheduled by the <a class="reference external" href="http://celery.github.com/celery/internals/deprecation.html">deprecation timeline</a>):</p>
 <blockquote>
 <div><p>Assuming the implicit <cite>Loader</cite> class name is no longer supported,
 if you use e.g.:</p>
@@ -5296,7 +5296,7 @@ removal in v2.0.</p>
 <li><p class="first">celeryd now sends events if enabled with the <cite>-E</cite> argument.</p>
 <blockquote>
 <div><p>Excellent for monitoring tools, one is already in the making
-(<a class="reference external" href="http://github.com/ask/celerymon">http://github.com/ask/celerymon</a>).</p>
+(<a class="reference external" href="http://github.com/celery/celerymon">http://github.com/celery/celerymon</a>).</p>
 <p>Current events include: worker-heartbeat,
 task-[received/succeeded/failed/retried],
 worker-online, worker-offline.</p>
@@ -5620,7 +5620,7 @@ be sure to initialize tables (django: <cite>syncdb</cite>, python: <cite>celeryi
 </li>
 <li><p class="first">Celery now supports task retries.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="http://ask.github.com/celery/cookbook/task-retries.html">Cookbook: Retrying Tasks</a> for more information.</p>
+<div><p>See <a class="reference external" href="http://celery.github.com/celery/cookbook/task-retries.html">Cookbook: Retrying Tasks</a> for more information.</p>
 </div></blockquote>
 </li>
 </ul>
@@ -6208,7 +6208,7 @@ been renamed, while others are new:</p>
 </pre></div>
 </div>
 <p>See the entry <a class="reference external" href="http://bit.ly/celery_AMQP_routing">Can I send some tasks to only some servers?</a> in the
-<a class="reference external" href="http://ask.github.com/celery/faq.html">FAQ</a> for more information.</p>
+<a class="reference external" href="http://celery.github.com/celery/faq.html">FAQ</a> for more information.</p>
 </li>
 </ul>
 <ul class="simple">
