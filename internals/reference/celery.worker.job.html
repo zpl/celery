@@ -1,0 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>celery.worker.job &mdash; Celery 2.6.0rc4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/issuetracker.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.6.0rc4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
+    <link rel="up" title="Internal Module Reference" href="index.html" />
+    <link rel="next" title="celery.worker.mediator" href="celery.worker.mediator.html" />
+    <link rel="prev" title="celery.worker.consumer" href="celery.worker.consumer.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="celery.worker.mediator.html" title="celery.worker.mediator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="celery.worker.consumer.html" title="celery.worker.consumer"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Internals</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div class="deck">
+
+    
+        <p class="developmentversion">
+        This document is for Celery's development version, which can be
+        significantly different from previous releases. Get old docs here:
+
+        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.worker.job.html">2.5</a>.
+        </p>
+        
+
+</div>
+    <div class="section" id="celery-worker-job">
+<h1>celery.worker.job<a class="headerlink" href="#celery-worker-job" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#id1" id="id2">celery.worker.job</a></li>
+</ul>
+</div>
+<span class="target" id="module-celery.worker.job"></span><div class="section" id="id1">
+<h2><a class="toc-backref" href="#id2">celery.worker.job</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>This module defines the <a class="reference internal" href="#celery.worker.job.Request" title="celery.worker.job.Request"><tt class="xref py py-class docutils literal"><span class="pre">Request</span></tt></a> class,
+which specifies how tasks are executed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
+<li>2009 - 2012 by Ask Solem.</li>
+</ol>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="celery.worker.job.Request">
+<em class="property">class </em><tt class="descclassname">celery.worker.job.</tt><tt class="descname">Request</tt><big>(</big><em>body</em>, <em>on_ack=&lt;function noop at 0x1019416e0&gt;</em>, <em>hostname=None</em>, <em>eventer=None</em>, <em>app=None</em>, <em>connection_errors=None</em>, <em>request_dict=None</em>, <em>delivery_info=None</em>, <em>task=None</em>, <em>**opts</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request" title="Permalink to this definition">¶</a></dt>
+<dd><p>A request for task execution.</p>
+<dl class="method">
+<dt id="celery.worker.job.Request.acknowledge">
+<tt class="descname">acknowledge</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.job.Request.acknowledge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acknowledge task.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.acknowledged">
+<tt class="descname">acknowledged</tt><a class="headerlink" href="#celery.worker.job.Request.acknowledged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.app">
+<tt class="descname">app</tt><a class="headerlink" href="#celery.worker.job.Request.app" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.args">
+<tt class="descname">args</tt><a class="headerlink" href="#celery.worker.job.Request.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.callbacks">
+<tt class="descname">callbacks</tt><a class="headerlink" href="#celery.worker.job.Request.callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.connection_errors">
+<tt class="descname">connection_errors</tt><a class="headerlink" href="#celery.worker.job.Request.connection_errors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.delivery_info">
+<tt class="descname">delivery_info</tt><a class="headerlink" href="#celery.worker.job.Request.delivery_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.errbacks">
+<tt class="descname">errbacks</tt><a class="headerlink" href="#celery.worker.job.Request.errbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.error_msg">
+<tt class="descname">error_msg</tt><em class="property"> = '        Task %(name)s[%(id)s] raised exception: %(exc)s\n    '</em><a class="headerlink" href="#celery.worker.job.Request.error_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format string used to log task failure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.eta">
+<tt class="descname">eta</tt><a class="headerlink" href="#celery.worker.job.Request.eta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.eventer">
+<tt class="descname">eventer</tt><a class="headerlink" href="#celery.worker.job.Request.eventer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.execute">
+<tt class="descname">execute</tt><big>(</big><em>loglevel=None</em>, <em>logfile=None</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the task in a <a class="reference internal" href="celery.task.trace.html#celery.task.trace.trace_task" title="celery.task.trace.trace_task"><tt class="xref py py-func docutils literal"><span class="pre">trace_task()</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>loglevel</strong> &#8211; The loglevel used by the task.</li>
+<li><strong>logfile</strong> &#8211; The logfile used by the task.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.execute_using_pool">
+<tt class="descname">execute_using_pool</tt><big>(</big><em>pool</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.execute_using_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#celery.worker.job.Request.execute" title="celery.worker.job.Request.execute"><tt class="xref py py-meth docutils literal"><span class="pre">execute()</span></tt></a>, but using a worker pool.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pool</strong> &#8211; A <tt class="xref py py-class docutils literal"><span class="pre">celery.concurrency.base.TaskPool</span></tt> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.expires">
+<tt class="descname">expires</tt><a class="headerlink" href="#celery.worker.job.Request.expires" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.extend_with_default_kwargs">
+<tt class="descname">extend_with_default_kwargs</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.job.Request.extend_with_default_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extend the tasks keyword arguments with standard task arguments.</p>
+<p>Currently these are <cite>logfile</cite>, <cite>loglevel</cite>, <cite>task_id</cite>,
+<cite>task_name</cite>, <cite>task_retries</cite>, and <cite>delivery_info</cite>.</p>
+<p>See <tt class="xref py py-meth docutils literal"><span class="pre">celery.task.base.Task.run()</span></tt> for more information.</p>
+<p>Magic keyword arguments are deprecated and will be removed
+in version 3.0.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="celery.worker.job.Request.from_message">
+<em class="property">classmethod </em><tt class="descname">from_message</tt><big>(</big><em>message</em>, <em>body</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.from_message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.hostname">
+<tt class="descname">hostname</tt><a class="headerlink" href="#celery.worker.job.Request.hostname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.id">
+<tt class="descname">id</tt><a class="headerlink" href="#celery.worker.job.Request.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.info">
+<tt class="descname">info</tt><big>(</big><em>safe=False</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.internal_error_msg">
+<tt class="descname">internal_error_msg</tt><em class="property"> = '        Task %(name)s[%(id)s] INTERNAL ERROR: %(exc)s\n    '</em><a class="headerlink" href="#celery.worker.job.Request.internal_error_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format string used to log internal error.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.kwargs">
+<tt class="descname">kwargs</tt><a class="headerlink" href="#celery.worker.job.Request.kwargs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.maybe_expire">
+<tt class="descname">maybe_expire</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.job.Request.maybe_expire" title="Permalink to this definition">¶</a></dt>
+<dd><p>If expired, mark the task as revoked.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.name">
+<tt class="descname">name</tt><a class="headerlink" href="#celery.worker.job.Request.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.on_accepted">
+<tt class="descname">on_accepted</tt><big>(</big><em>pid</em>, <em>time_accepted</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.on_accepted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler called when task is accepted by worker pool.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.on_ack">
+<tt class="descname">on_ack</tt><a class="headerlink" href="#celery.worker.job.Request.on_ack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.on_failure">
+<tt class="descname">on_failure</tt><big>(</big><em>exc_info</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.on_failure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler called if the task raised an exception.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.on_retry">
+<tt class="descname">on_retry</tt><big>(</big><em>exc_info</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.on_retry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler called if the task should be retried.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.on_success">
+<tt class="descname">on_success</tt><big>(</big><em>ret_value</em>, <em>now=None</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.on_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler called if the task was successfully processed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.on_timeout">
+<tt class="descname">on_timeout</tt><big>(</big><em>soft</em>, <em>timeout</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.on_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler called if the task times out.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.repr_result">
+<tt class="descname">repr_result</tt><big>(</big><em>result</em>, <em>maxlen=46</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.repr_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.request_dict">
+<tt class="descname">request_dict</tt><a class="headerlink" href="#celery.worker.job.Request.request_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.retry_msg">
+<tt class="descname">retry_msg</tt><em class="property"> = 'Task %(name)s[%(id)s] retry: %(exc)s'</em><a class="headerlink" href="#celery.worker.job.Request.retry_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format string used to log task retry.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.revoked">
+<tt class="descname">revoked</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.job.Request.revoked" title="Permalink to this definition">¶</a></dt>
+<dd><p>If revoked, skip task and mark state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.send_event">
+<tt class="descname">send_event</tt><big>(</big><em>type</em>, <em>**fields</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.send_event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.shortinfo">
+<tt class="descname">shortinfo</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.job.Request.shortinfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.store_errors">
+<tt class="descname">store_errors</tt><a class="headerlink" href="#celery.worker.job.Request.store_errors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.success_msg">
+<tt class="descname">success_msg</tt><em class="property"> = '        Task %(name)s[%(id)s] succeeded in %(runtime)ss: %(return_value)s\n    '</em><a class="headerlink" href="#celery.worker.job.Request.success_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format string used to log task success.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.task">
+<tt class="descname">task</tt><a class="headerlink" href="#celery.worker.job.Request.task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.task_id">
+<tt class="descname">task_id</tt><a class="headerlink" href="#celery.worker.job.Request.task_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.task_name">
+<tt class="descname">task_name</tt><a class="headerlink" href="#celery.worker.job.Request.task_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.job.Request.terminate">
+<tt class="descname">terminate</tt><big>(</big><em>pool</em>, <em>signal=None</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request.terminate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.time_start">
+<tt class="descname">time_start</tt><a class="headerlink" href="#celery.worker.job.Request.time_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.tzlocal">
+<tt class="descname">tzlocal</tt><a class="headerlink" href="#celery.worker.job.Request.tzlocal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.job.Request.worker_pid">
+<tt class="descname">worker_pid</tt><a class="headerlink" href="#celery.worker.job.Request.worker_pid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="celery.worker.job.TaskRequest">
+<em class="property">class </em><tt class="descclassname">celery.worker.job.</tt><tt class="descname">TaskRequest</tt><big>(</big><em>name</em>, <em>id</em>, <em>args=()</em>, <em>kwargs={}</em>, <em>eta=None</em>, <em>expires=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.worker.job.TaskRequest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="../../index.html">
+  <img class="logo" src="http://cloud.github.com/downloads/ask/celery/celery_128.png" alt="Logo"/>
+</a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="celery.worker.consumer.html"
+                        title="previous chapter">celery.worker.consumer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="celery.worker.mediator.html"
+                        title="next chapter">celery.worker.mediator</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/internals/reference/celery.worker.job.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="celery.worker.mediator.html" title="celery.worker.mediator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="celery.worker.consumer.html" title="celery.worker.consumer"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Internals</a> &raquo;</li>
+          <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+    </div>
+  </body>
+</html>

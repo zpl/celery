@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>celery.utils &mdash; Celery 2.6.0rc4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/issuetracker.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.6.0rc4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
+    <link rel="up" title="Internal Module Reference" href="index.html" />
+    <link rel="next" title="celery.utils.functional" href="celery.utils.functional.html" />
+    <link rel="prev" title="celery.backends.database.session" href="celery.backends.database.session.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="celery.utils.functional.html" title="celery.utils.functional"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="celery.backends.database.session.html" title="celery.backends.database.session"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Internals</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div class="deck">
+
+    
+        <p class="developmentversion">
+        This document is for Celery's development version, which can be
+        significantly different from previous releases. Get old docs here:
+
+        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.html">2.5</a>.
+        </p>
+        
+
+</div>
+    <div class="section" id="celery-utils">
+<h1>celery.utils<a class="headerlink" href="#celery-utils" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#id1" id="id2">celery.utils</a></li>
+</ul>
+</div>
+<span class="target" id="module-celery.utils"></span><div class="section" id="id1">
+<h2><a class="toc-backref" href="#id2">celery.utils</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Utility functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
+<li>2009 - 2012 by Ask Solem.</li>
+</ol>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="celery.utils.cry">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">cry</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.cry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return stacktrace of all active threads.</p>
+<p>From <a class="reference external" href="https://gist.github.com/737056">https://gist.github.com/737056</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.deprecated">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">deprecated</tt><big>(</big><em>description=None</em>, <em>deprecation=None</em>, <em>removal=None</em>, <em>alternative=None</em><big>)</big><a class="headerlink" href="#celery.utils.deprecated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.fun_takes_kwargs">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">fun_takes_kwargs</tt><big>(</big><em>fun</em>, <em>kwlist=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#celery.utils.fun_takes_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>With a function, and a list of keyword arguments, returns arguments
+in the list which the function takes.</p>
+<p>If the object has an <cite>argspec</cite> attribute that is used instead
+of using the <tt class="xref py py-meth docutils literal"><span class="pre">inspect.getargspec()</span></tt> introspection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fun</strong> &#8211; The function to inspect arguments of.</li>
+<li><strong>kwlist</strong> &#8211; The list of keyword arguments.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">loglevel</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fun_takes_kwargs</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;logfile&quot;</span><span class="p">,</span> <span class="s">&quot;loglevel&quot;</span><span class="p">,</span> <span class="s">&quot;task_id&quot;</span><span class="p">])</span>
+<span class="go">[&quot;logfile&quot;, &quot;loglevel&quot;]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fun_takes_kwargs</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;logfile&quot;</span><span class="p">,</span> <span class="s">&quot;loglevel&quot;</span><span class="p">,</span> <span class="s">&quot;task_id&quot;</span><span class="p">])</span>
+<span class="go">[&quot;logfile&quot;, &quot;loglevel&quot;, &quot;task_id&quot;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.is_iterable">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">is_iterable</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#celery.utils.is_iterable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.isatty">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">isatty</tt><big>(</big><em>fh</em><big>)</big><a class="headerlink" href="#celery.utils.isatty" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.lpmerge">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">lpmerge</tt><big>(</big><em>L</em>, <em>R</em><big>)</big><a class="headerlink" href="#celery.utils.lpmerge" title="Permalink to this definition">¶</a></dt>
+<dd><p>In place left precedent dictionary merge.</p>
+<p>Keeps values from <cite>L</cite>, if the value in <cite>R</cite> is <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.maybe_reraise">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">maybe_reraise</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.maybe_reraise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reraise if an exception is currently being handled, or return
+otherwise.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.strtobool">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">strtobool</tt><big>(</big><em>term</em>, <em>table={'1': True</em>, <em>'0': False</em>, <em>'false': False</em>, <em>'no': False</em>, <em>'off': False</em>, <em>'yes': True</em>, <em>'on': True</em>, <em>'true': True}</em><big>)</big><a class="headerlink" href="#celery.utils.strtobool" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.warn_deprecated">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">warn_deprecated</tt><big>(</big><em>description=None</em>, <em>deprecation=None</em>, <em>removal=None</em>, <em>alternative=None</em><big>)</big><a class="headerlink" href="#celery.utils.warn_deprecated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="../../index.html">
+  <img class="logo" src="http://cloud.github.com/downloads/ask/celery/celery_128.png" alt="Logo"/>
+</a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="celery.backends.database.session.html"
+                        title="previous chapter">celery.backends.database.session</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="celery.utils.functional.html"
+                        title="next chapter">celery.utils.functional</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/internals/reference/celery.utils.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="celery.utils.functional.html" title="celery.utils.functional"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="celery.backends.database.session.html" title="celery.backends.database.session"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Internals</a> &raquo;</li>
+          <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+    </div>
+  </body>
+</html>

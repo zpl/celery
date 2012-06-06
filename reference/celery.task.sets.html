@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>celery.task.sets &mdash; Celery 2.6.0rc4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/issuetracker.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.6.0rc4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
+    <link rel="up" title="API Reference" href="index.html" />
+    <link rel="next" title="celery.result" href="celery.result.html" />
+    <link rel="prev" title="celery.task.base" href="celery.task.base.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="celery.result.html" title="celery.result"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="celery.task.base.html" title="celery.task.base"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div class="deck">
+
+    
+        <p class="developmentversion">
+        This document is for Celery's development version, which can be
+        significantly different from previous releases. Get old docs here:
+
+        <a href="http://docs.celeryproject.org/en/latest/reference/celery.task.sets.html">2.5</a>.
+        </p>
+        
+
+</div>
+    <div class="section" id="celery-task-sets">
+<h1>celery.task.sets<a class="headerlink" href="#celery-task-sets" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-celery.task.sets"></span><dl class="class">
+<dt id="celery.task.sets.TaskSet">
+<em class="property">class </em><tt class="descclassname">celery.task.sets.</tt><tt class="descname">TaskSet</tt><big>(</big><em>tasks=None</em>, <em>app=None</em>, <em>Publisher=None</em><big>)</big><a class="headerlink" href="#celery.task.sets.TaskSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>A task containing several subtasks, making it possible
+to track how many, or when all of the tasks have been completed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tasks</strong> &#8211; A list of <a class="reference internal" href="celery.html#subtask" title="subtask"><tt class="xref py py-class docutils literal"><span class="pre">subtask</span></tt></a> instances.</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">urls</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;http://cnn.com/rss&quot;</span><span class="p">,</span> <span class="s">&quot;http://bbc.co.uk/rss&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">TaskSet</span><span class="p">(</span><span class="n">refresh_feed</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">taskset_result</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_of_return_values</span> <span class="o">=</span> <span class="n">taskset_result</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>  <span class="c"># *expensive*</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="celery.task.sets.TaskSet.app">
+<tt class="descname">app</tt><em class="property"> = None</em><a class="headerlink" href="#celery.task.sets.TaskSet.app" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.task.sets.TaskSet.apply">
+<tt class="descname">apply</tt><big>(</big><em>taskset_id=None</em><big>)</big><a class="headerlink" href="#celery.task.sets.TaskSet.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the TaskSet locally by blocking until all tasks return.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.task.sets.TaskSet.apply_async">
+<tt class="descname">apply_async</tt><big>(</big><em>connection=None</em>, <em>connect_timeout=None</em>, <em>publisher=None</em>, <em>taskset_id=None</em><big>)</big><a class="headerlink" href="#celery.task.sets.TaskSet.apply_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply TaskSet.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.task.sets.TaskSet.tasks">
+<tt class="descname">tasks</tt><a class="headerlink" href="#celery.task.sets.TaskSet.tasks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="../index.html">
+  <img class="logo" src="http://cloud.github.com/downloads/ask/celery/celery_128.png" alt="Logo"/>
+</a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="celery.task.base.html"
+                        title="previous chapter">celery.task.base</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="celery.result.html"
+                        title="next chapter">celery.result</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/celery.task.sets.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="celery.result.html" title="celery.result"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="celery.task.base.html" title="celery.task.base"
+             >previous</a> |</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >API Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+    </div>
+  </body>
+</html>
