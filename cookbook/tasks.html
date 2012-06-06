@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating Tasks &mdash; Celery 2.6.0rc4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/issuetracker.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.6.0rc4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
+    <link rel="up" title="Cookbook" href="index.html" />
+    <link rel="next" title="Running celeryd as a daemon" href="daemonizing.html" />
+    <link rel="prev" title="Cookbook" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="daemonizing.html" title="Running celeryd as a daemon"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Cookbook"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div class="deck">
+
+    
+        <p class="developmentversion">
+        This document is for Celery's development version, which can be
+        significantly different from previous releases. Get old docs here:
+
+        <a href="http://docs.celeryproject.org/en/latest/cookbook/tasks.html">2.5</a>.
+        </p>
+        
+
+</div>
+    <div class="section" id="creating-tasks">
+<span id="cookbook-tasks"></span><h1>Creating Tasks<a class="headerlink" href="#creating-tasks" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#ensuring-a-task-is-only-executed-one-at-a-time" id="id1">Ensuring a task is only executed one at a time</a></li>
+</ul>
+</div>
+<div class="section" id="ensuring-a-task-is-only-executed-one-at-a-time">
+<span id="cookbook-task-serial"></span><h2><a class="toc-backref" href="#id1">Ensuring a task is only executed one at a time</a><a class="headerlink" href="#ensuring-a-task-is-only-executed-one-at-a-time" title="Permalink to this headline">¶</a></h2>
+<p>You can accomplish this by using a lock.</p>
+<p>In this example we&#8217;ll be using the cache framework to set a lock that is
+accessible for all workers.</p>
+<p>It&#8217;s part of an imaginary RSS feed importer called <cite>djangofeeds</cite>.
+The task takes a feed URL as a single argument, and imports that feed into
+a Django model called <cite>Feed</cite>. We ensure that it&#8217;s not possible for two or
+more workers to import the same feed at the same time by setting a cache key
+consisting of the MD5 checksum of the feed URL.</p>
+<p>The cache key expires after some time in case something unexpected happens
+(you never know, right?)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.task</span> <span class="kn">import</span> <span class="n">Task</span>
+<span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+<span class="kn">from</span> <span class="nn">django.utils.hashcompat</span> <span class="kn">import</span> <span class="n">md5_constructor</span> <span class="k">as</span> <span class="n">md5</span>
+<span class="kn">from</span> <span class="nn">djangofeeds.models</span> <span class="kn">import</span> <span class="n">Feed</span>
+
+<span class="n">LOCK_EXPIRE</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">5</span> <span class="c"># Lock expires in 5 minutes</span>
+
+<span class="k">class</span> <span class="nc">FeedImporter</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;feed.import&quot;</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feed_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_logger</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c"># The cache key consists of the task name and the MD5 digest</span>
+        <span class="c"># of the feed URL.</span>
+        <span class="n">feed_url_digest</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="n">feed_url</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="n">lock_id</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">-lock-</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">feed_url_hexdigest</span><span class="p">)</span>
+
+        <span class="c"># cache.add fails if if the key already exists</span>
+        <span class="n">acquire_lock</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">cache</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">lock_id</span><span class="p">,</span> <span class="s">&quot;true&quot;</span><span class="p">,</span> <span class="n">LOCK_EXPIRE</span><span class="p">)</span>
+        <span class="c"># memcache delete is very slow, but we have to use it to take</span>
+        <span class="c"># advantage of using add() for atomic locking</span>
+        <span class="n">release_lock</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">lock_id</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Importing feed: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">feed_url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">acquire_lock</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">feed</span> <span class="o">=</span> <span class="n">Feed</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">import_feed</span><span class="p">(</span><span class="n">feed_url</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">release_lock</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">feed</span><span class="o">.</span><span class="n">url</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s">&quot;Feed </span><span class="si">%s</span><span class="s"> is already being imported by another worker&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">feed_url</span><span class="p">))</span>
+        <span class="k">return</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="../index.html">
+  <img class="logo" src="http://cloud.github.com/downloads/ask/celery/celery_128.png" alt="Logo"/>
+</a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Cookbook</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="daemonizing.html"
+                        title="next chapter">Running celeryd as a daemon</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/cookbook/tasks.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="daemonizing.html" title="Running celeryd as a daemon"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Cookbook"
+             >previous</a> |</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Cookbook</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+    </div>
+  </body>
+</html>
