@@ -106,7 +106,7 @@ if the execution was successful:</p>
 <div class="section" id="enabling-the-http-task">
 <h3><a class="toc-backref" href="#id2">Enabling the HTTP task</a><a class="headerlink" href="#enabling-the-http-task" title="Permalink to this headline">¶</a></h3>
 <p>To enable the HTTP dispatch task you have to add <a class="reference internal" href="#module-celery.task.http" title="celery.task.http"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.http</span></tt></a>
-to <a class="reference internal" href="../configuration.html#std:setting-CELERY_IMPORTS"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_IMPORTS</span></tt></a>, or start <tt class="docutils literal"><span class="pre">celeryd</span></tt> with <tt class="docutils literal"><span class="pre">-I</span>
+to <a class="reference internal" href="../configuration.html#std:setting-CELERY_IMPORTS"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_IMPORTS</span></tt></a>, or start the worker with <tt class="docutils literal"><span class="pre">-I</span>
 <span class="pre">celery.task.http</span></tt>.</p>
 </div>
 </div>
@@ -157,7 +157,7 @@ functionality.</p>
 <span class="go">100</span>
 </pre></div>
 </div>
-<p>The output of <strong class="program">celeryd</strong> (or the log file if enabled) should show the
+<p>The output of <strong class="program">celery worker</strong> (or the log file if enabled) should show the
 task being executed:</p>
 <div class="highlight-python"><pre>[INFO/MainProcess] Task celery.task.http.HttpDispatchTask
         [f2cc8efc-2a14-40cd-85ad-f1c77c94beeb] processed: 100</pre>

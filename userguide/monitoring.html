@@ -73,7 +73,7 @@
 <ul class="simple">
 <li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
 <li><a class="reference internal" href="#workers" id="id4">Workers</a><ul>
-<li><a class="reference internal" href="#celeryctl-management-utility" id="id5">celeryctl: Management Utility</a><ul>
+<li><a class="reference internal" href="#celery-management-command-line-utility" id="id5"><tt class="docutils literal"><span class="pre">celery</span></tt>: Management Command-line Utility</a><ul>
 <li><a class="reference internal" href="#commands" id="id6">Commands</a></li>
 <li><a class="reference internal" href="#specifying-destination-nodes" id="id7">Specifying destination nodes</a></li>
 </ul>
@@ -84,7 +84,7 @@
 <li><a class="reference internal" href="#using-outside-of-django" id="id11">Using outside of Django</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#celeryev-curses-monitor" id="id12">celeryev: Curses Monitor</a></li>
+<li><a class="reference internal" href="#celery-events-curses-monitor" id="id12">celery events: Curses Monitor</a></li>
 <li><a class="reference internal" href="#celerymon-web-monitor" id="id13">celerymon: Web monitor</a></li>
 </ul>
 </li>
@@ -119,17 +119,17 @@ features related to monitoring, like events and broadcast commands.</p>
 </div>
 <div class="section" id="workers">
 <span id="monitoring-workers"></span><h2><a class="toc-backref" href="#id4">Workers</a><a class="headerlink" href="#workers" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="celeryctl-management-utility">
-<span id="monitoring-celeryctl"></span><h3><a class="toc-backref" href="#id5">celeryctl: Management Utility</a><a class="headerlink" href="#celeryctl-management-utility" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="celery-management-command-line-utility">
+<span id="monitoring-celeryctl"></span><h3><a class="toc-backref" href="#id5"><tt class="docutils literal"><span class="pre">celery</span></tt>: Management Command-line Utility</a><a class="headerlink" href="#celery-management-command-line-utility" title="Permalink to this headline">¶</a></h3>
 <p class="versionadded">
 <span class="versionmodified">New in version 2.1.</span></p>
-<p><tt class="xref py py-mod docutils literal"><span class="pre">celeryctl</span></tt> is a command line utility to inspect
+<p><strong class="program">celery</strong> can also be used to inspect
 and manage worker nodes (and to some degree tasks).</p>
 <p>To list all the commands available do:</p>
-<div class="highlight-python"><pre>$ celeryctl help</pre>
+<div class="highlight-python"><pre>$ celery help</pre>
 </div>
 <p>or to get help for a specific command do:</p>
-<div class="highlight-python"><pre>$ celeryctl &lt;command&gt; --help</pre>
+<div class="highlight-python"><pre>$ celery &lt;command&gt; --help</pre>
 </div>
 <div class="section" id="commands">
 <h4><a class="toc-backref" href="#id6">Commands</a><a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h4>
@@ -144,14 +144,14 @@ You can force an implementation using <tt class="docutils literal"><span class="
 </li>
 <li><dl class="first docutils">
 <dt><strong>status</strong>: List active nodes in this cluster</dt>
-<dd><div class="first last highlight-python"><pre>$ celeryctl status</pre>
+<dd><div class="first last highlight-python"><pre>$ celery status</pre>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><strong>result</strong>: Show the result of a task</dt>
-<dd><div class="first highlight-python"><pre>$ celeryctl result -t tasks.add 4e196aa4-0141-4601-8138-7aa33db0f577</pre>
+<dd><div class="first highlight-python"><pre>$ celery result -t tasks.add 4e196aa4-0141-4601-8138-7aa33db0f577</pre>
 </div>
 <p class="last">Note that you can omit the name of the task as long as the
 task doesn&#8217;t use a custom result backend.</p>
@@ -160,7 +160,7 @@ task doesn&#8217;t use a custom result backend.</p>
 </li>
 <li><dl class="first docutils">
 <dt><strong>purge</strong>: Purge messages from all configured task queues.</dt>
-<dd><div class="first highlight-python"><pre>$ celeryctl purge</pre>
+<dd><div class="first highlight-python"><pre>$ celery purge</pre>
 </div>
 <div class="last admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -172,7 +172,7 @@ be permanently deleted!</p>
 </li>
 <li><dl class="first docutils">
 <dt><strong>inspect active</strong>: List active tasks</dt>
-<dd><div class="first highlight-python"><pre>$ celeryctl inspect active</pre>
+<dd><div class="first highlight-python"><pre>$ celery inspect active</pre>
 </div>
 <p class="last">These are all the tasks that are currently being executed.</p>
 </dd>
@@ -180,7 +180,7 @@ be permanently deleted!</p>
 </li>
 <li><dl class="first docutils">
 <dt><strong>inspect scheduled</strong>: List scheduled ETA tasks</dt>
-<dd><div class="first highlight-python"><pre>$ celeryctl inspect scheduled</pre>
+<dd><div class="first highlight-python"><pre>$ celery inspect scheduled</pre>
 </div>
 <p class="last">These are tasks reserved by the worker because they have the
 <cite>eta</cite> or <cite>countdown</cite> argument set.</p>
@@ -189,7 +189,7 @@ be permanently deleted!</p>
 </li>
 <li><dl class="first docutils">
 <dt><strong>inspect reserved</strong>: List reserved tasks</dt>
-<dd><div class="first highlight-python"><pre>$ celeryctl inspect reserved</pre>
+<dd><div class="first highlight-python"><pre>$ celery inspect reserved</pre>
 </div>
 <p class="last">This will list all tasks that have been prefetched by the worker,
 and is currently waiting to be executed (does not include tasks
@@ -199,41 +199,41 @@ with an eta).</p>
 </li>
 <li><dl class="first docutils">
 <dt><strong>inspect revoked</strong>: List history of revoked tasks</dt>
-<dd><div class="first last highlight-python"><pre>$ celeryctl inspect revoked</pre>
+<dd><div class="first last highlight-python"><pre>$ celery inspect revoked</pre>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><strong>inspect registered</strong>: List registered tasks</dt>
-<dd><div class="first last highlight-python"><pre>$ celeryctl inspect registered</pre>
+<dd><div class="first last highlight-python"><pre>$ celery inspect registered</pre>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><strong>inspect stats</strong>: Show worker statistics</dt>
-<dd><div class="first last highlight-python"><pre>$ celeryctl inspect stats</pre>
+<dd><div class="first last highlight-python"><pre>$ celery inspect stats</pre>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><strong>inspect enable_events</strong>: Enable events</dt>
-<dd><div class="first last highlight-python"><pre>$ celeryctl inspect enable_events</pre>
+<dd><div class="first last highlight-python"><pre>$ celery inspect enable_events</pre>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><strong>inspect disable_events</strong>: Disable events</dt>
-<dd><div class="first last highlight-python"><pre>$ celeryctl inspect disable_events</pre>
+<dd><div class="first last highlight-python"><pre>$ celery inspect disable_events</pre>
 </div>
 </dd>
 </dl>
 </li>
 <li><p class="first"><strong>migrate</strong>: Migrate tasks from one broker to another (<strong>EXPERIMENTAL</strong>).</p>
-<div class="highlight-python"><pre>$ celeryctl migrate redis://localhost amqp://localhost</pre>
+<div class="highlight-python"><pre>$ celery migrate redis://localhost amqp://localhost</pre>
 </div>
 <p>This command will migrate all the tasks on one broker to another.
 As this command is new and experimental you should be sure to have
@@ -253,7 +253,7 @@ due to latency.</p>
 <p>By default the inspect commands operates on all workers.
 You can specify a single, or a list of workers by using the
 <cite>&#8211;destination</cite> argument:</p>
-<div class="highlight-python"><pre>$ celeryctl inspect -d w1,w2 reserved</pre>
+<div class="highlight-python"><pre>$ celery inspect -d w1,w2 reserved</pre>
 </div>
 </div>
 </div>
@@ -278,14 +278,13 @@ intervals, storing them in your database (See <a class="reference internal" href
 <div class="highlight-python"><pre>$ python manage.py celerycam</pre>
 </div>
 <p>If you haven&#8217;t already enabled the sending of events you need to do so:</p>
-<div class="highlight-python"><pre>$ python manage.py celeryctl inspect enable_events</pre>
+<div class="highlight-python"><pre>$ python manage.py celery inspect enable_events</pre>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Tip:</th><td class="field-body">You can enable events when the worker starts using the <cite>-E</cite> argument
-to <a class="reference internal" href="../reference/celery.bin.celeryd.html#module-celery.bin.celeryd" title="celery.bin.celeryd"><tt class="xref py py-mod docutils literal"><span class="pre">celeryd</span></tt></a>.</td>
+<tr class="field-odd field"><th class="field-name">Tip:</th><td class="field-body">You can enable events when the worker starts using the <cite>-E</cite> argument.</td>
 </tr>
 </tbody>
 </table>
@@ -367,26 +366,30 @@ at <a class="reference external" href="http://127.0.0.1:8000">http://127.0.0.1:8
 please see <tt class="docutils literal"><span class="pre">djcelerymon</span> <span class="pre">--help</span></tt>.</p>
 </div>
 </div>
-<div class="section" id="celeryev-curses-monitor">
-<span id="monitoring-celeryev"></span><h3><a class="toc-backref" href="#id12">celeryev: Curses Monitor</a><a class="headerlink" href="#celeryev-curses-monitor" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="celery-events-curses-monitor">
+<span id="monitoring-celeryev"></span><h3><a class="toc-backref" href="#id12">celery events: Curses Monitor</a><a class="headerlink" href="#celery-events-curses-monitor" title="Permalink to this headline">¶</a></h3>
 <p class="versionadded">
 <span class="versionmodified">New in version 2.0.</span></p>
-<p><a class="reference internal" href="../reference/celery.bin.celeryev.html#module-celery.bin.celeryev" title="celery.bin.celeryev"><tt class="xref py py-mod docutils literal"><span class="pre">celeryev</span></tt></a> is a simple curses monitor displaying
+<p><cite>celery events</cite> is a simple curses monitor displaying
 task and worker history.  You can inspect the result and traceback of tasks,
 and it also supports some management commands like rate limiting and shutting
 down workers.</p>
+<p>Starting:</p>
+<div class="highlight-python"><pre>$ celery events</pre>
+</div>
+<p>You should see a screen like:</p>
 <div class="figure">
 <img alt="../_images/celeryevshotsm1.jpg" src="../_images/celeryevshotsm1.jpg" />
 </div>
-<p><a class="reference internal" href="../reference/celery.bin.celeryev.html#module-celery.bin.celeryev" title="celery.bin.celeryev"><tt class="xref py py-mod docutils literal"><span class="pre">celeryev</span></tt></a> is also used to start snapshot cameras (see
+<p><cite>celery events</cite> is also used to start snapshot cameras (see
 <a class="reference internal" href="#monitoring-snapshots"><em>Snapshots</em></a>:</p>
-<div class="highlight-python"><pre>$ celeryev --camera=&lt;camera-class&gt; --frequency=1.0</pre>
+<div class="highlight-python"><pre>$ celery events --camera=&lt;camera-class&gt; --frequency=1.0</pre>
 </div>
 <p>and it includes a tool to dump events to <tt class="file docutils literal"><span class="pre">stdout</span></tt>:</p>
-<div class="highlight-python"><pre>$ celeryev --dump</pre>
+<div class="highlight-python"><pre>$ celery events --dump</pre>
 </div>
 <p>For a complete list of options use <tt class="docutils literal"><span class="pre">--help</span></tt>:</p>
-<div class="highlight-python"><pre>$ celeryev --help</pre>
+<div class="highlight-python"><pre>$ celery events --help</pre>
 </div>
 </div>
 <div class="section" id="celerymon-web-monitor">
@@ -501,7 +504,7 @@ been executed (requires <cite>celerymon</cite>).</p>
 <span id="monitoring-events"></span><h2><a class="toc-backref" href="#id19">Events</a><a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
 <p>The worker has the ability to send a message whenever some event
 happens.  These events are then captured by tools like <strong class="program">celerymon</strong>
-and <strong class="program">celeryev</strong> to monitor the cluster.</p>
+and <strong class="program">celery events</strong> to monitor the cluster.</p>
 <div class="section" id="snapshots">
 <span id="monitoring-snapshots"></span><h3><a class="toc-backref" href="#id20">Snapshots</a><a class="headerlink" href="#snapshots" title="Permalink to this headline">¶</a></h3>
 <p class="versionadded">
@@ -514,11 +517,11 @@ still only periodically write it to disk.</p>
 <p>To take snapshots you need a Camera class, with this you can define
 what should happen every time the state is captured;  You can
 write it to a database, send it by email or something else entirely.</p>
-<p><strong class="program">celeryev</strong> is then used to take snapshots with the camera,
+<p><strong class="program">celery events</strong> is then used to take snapshots with the camera,
 for example if you want to capture state every 2 seconds using the
-camera <tt class="docutils literal"><span class="pre">myapp.Camera</span></tt> you run <strong class="program">celeryev</strong> with the following
+camera <tt class="docutils literal"><span class="pre">myapp.Camera</span></tt> you run <strong class="program">celery events</strong> with the following
 arguments:</p>
-<div class="highlight-python"><pre>$ celeryev -c myapp.Camera --frequency=2.0</pre>
+<div class="highlight-python"><pre>$ celery events -c myapp.Camera --frequency=2.0</pre>
 </div>
 <div class="section" id="custom-camera">
 <span id="monitoring-camera"></span><h4><a class="toc-backref" href="#id21">Custom Camera</a><a class="headerlink" href="#custom-camera" title="Permalink to this headline">¶</a></h4>
@@ -542,9 +545,9 @@ arguments:</p>
 </div>
 <p>See the API reference for <a class="reference internal" href="../reference/celery.events.state.html#module-celery.events.state" title="celery.events.state"><tt class="xref py py-mod docutils literal"><span class="pre">celery.events.state</span></tt></a> to read more
 about state objects.</p>
-<p>Now you can use this cam with <strong class="program">celeryev</strong> by specifying
+<p>Now you can use this cam with <strong class="program">celery events</strong> by specifying
 it with the <cite>-c</cite> option:</p>
-<div class="highlight-python"><pre>$ celeryev -c myapp.DumpCam --frequency=2.0</pre>
+<div class="highlight-python"><pre>$ celery events -c myapp.DumpCam --frequency=2.0</pre>
 </div>
 <p>Or you can use it programmatically like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.events</span> <span class="kn">import</span> <span class="n">EventReceiver</span>
@@ -624,7 +627,7 @@ to be sent by more than one worker).</p>
 <li><cite>hostname</cite>: Hostname of the worker.</li>
 <li><cite>timestamp</cite>: Event timestamp.</li>
 <li><cite>freq</cite>: Heartbeat frequency in seconds (float).</li>
-<li><cite>sw_ident</cite>: Name of worker software (e.g. celeryd).</li>
+<li><cite>sw_ident</cite>: Name of worker software (e.g. <tt class="docutils literal"><span class="pre">py-celery</span></tt>).</li>
 <li><cite>sw_ver</cite>: Software version (e.g. 2.2.0).</li>
 <li><cite>sw_sys</cite>: Operating System (e.g. Linux, Windows, Darwin).</li>
 </ul>

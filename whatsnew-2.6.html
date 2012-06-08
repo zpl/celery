@@ -495,9 +495,9 @@ and get the celery attribute from that module.</li>
 <p>E.g. if you have a project named &#8216;proj&#8217; where the
 celery app is located in &#8216;from proj.celery import celery&#8217;,
 then the following will be equivalent:</p>
-<div class="highlight-python"><pre>$ celeryd --app=proj
-$ celeryd --app=proj.celery:
-$ celeryd --app=proj.celery:celery</pre>
+<div class="highlight-python"><pre>$ celery worker --app=proj
+$ celery worker --app=proj.celery:
+$ celery worker --app=proj.celery:celery</pre>
 </div>
 </div>
 <div class="section" id="in-other-news">
@@ -586,12 +586,12 @@ annotated methods end up being bound.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Use celeryctl:</p>
-<div class="highlight-python"><pre>$ celeryctl report</pre>
+<li><p class="first">Using the <tt class="docutils literal"><span class="pre">celery</span></tt> command-line program:</p>
+<div class="highlight-python"><pre>$ celery report</pre>
 </div>
 </li>
 <li><p class="first">Get it from remote workers:</p>
-<div class="highlight-python"><pre>$ celeryctl inspect report</pre>
+<div class="highlight-python"><pre>$ celery inspect report</pre>
 </div>
 </li>
 </ul>
@@ -665,7 +665,7 @@ it manually, you can do so by executing the command:</p>
 <li><p class="first"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_FORCE_EXECV</span></tt> is now enabled by default.</p>
 <blockquote>
 <div><p>If the old behavior is wanted the setting can be set to False,
-or the new <em class="xref std std-option">--no-execv</em> to <strong class="program">celeryd</strong>.</p>
+or the new <em class="xref std std-option">--no-execv</em> to <strong class="program">celery worker</strong>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Deprecated module <tt class="docutils literal"><span class="pre">celery.conf</span></tt> has been removed.</p>
@@ -681,12 +681,12 @@ library to be installed (exept if the timezone is set to <cite>UTC</cite>).</p>
 <a class="reference internal" href="configuration.html#std:setting-CELERYBEAT_MAX_LOOP_INTERVAL"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYBEAT_MAX_LOOP_INTERVAL</span></tt></a> setting, it is instead
 set by individual schedulers.</p>
 </li>
-<li><p class="first">celeryd now truncates very long message bodies in error reports.</p>
+<li><p class="first">Worker: now truncates very long message bodies in error reports.</p>
 </li>
 <li><p class="first"><span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CELERY_BENCH</span></tt> environment variable, will now also list
-memory usage statistics at celeryd shutdown.</p>
+memory usage statistics at worker shutdown.</p>
 </li>
-<li><p class="first">celeryd now only ever use a single timer for all timing needs,
+<li><p class="first">Worker: now only ever use a single timer for all timing needs,
 and instead set different priorities.</p>
 </li>
 </ul>
@@ -765,7 +765,7 @@ but these removals should have no major effect.</p>
 </div>
 <div class="section" id="deprecations">
 <span id="v260-deprecations"></span><h2><a class="toc-backref" href="#id20">Deprecations</a><a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h2>
-<p>See the <em class="xref std std-ref">celery-deprecation-timeline</em>.</p>
+<p>See the <a class="reference internal" href="internals/deprecation.html#deprecation-timeline"><em>Celery Deprecation Timeline</em></a>.</p>
 </div>
 <div class="section" id="fixes">
 <h2><a class="toc-backref" href="#id21">Fixes</a><a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>

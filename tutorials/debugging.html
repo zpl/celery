@@ -27,7 +27,7 @@
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="Tutorials" href="index.html" />
     <link rel="next" title="Tutorial: Creating a click counter using Kombu and celery" href="clickcounter.html" />
-    <link rel="prev" title="Using Celery with Redis/Database as the messaging queue." href="otherqueues.html" /> 
+    <link rel="prev" title="Running the worker as a daemon" href="daemonizing.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,7 +43,7 @@
           <a href="clickcounter.html" title="Tutorial: Creating a click counter using Kombu and celery"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="otherqueues.html" title="Using Celery with Redis/Database as the messaging queue."
+          <a href="daemonizing.html" title="Running the worker as a daemon"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Tutorials</a> &raquo;</li> 
@@ -96,7 +96,7 @@ The base port can be changed using the environment variable
 <p>By default the debugger will only be available from the local host,
 to enable access from the outside you have to set the environment
 variable <span class="target" id="index-1"></span><a class="reference internal" href="../reference/celery.contrib.rdb.html#envvar-CELERY_RDB_HOST"><tt class="xref std std-envvar docutils literal"><span class="pre">CELERY_RDB_HOST</span></tt></a>.</p>
-<p>When <cite>celeryd</cite> encounters your breakpoint it will log the following
+<p>When the worker encounters your breakpoint it will log the following
 information:</p>
 <div class="highlight-python"><pre>[INFO/MainProcess] Got task from broker:
     tasks.add[d7261c71-4962-47e5-b342-2448bedd20e8]
@@ -139,7 +139,7 @@ Connection closed by foreign host.</pre>
 will open up an rdb instance whenever the <cite>SIGUSR2</cite> signal is sent.
 This is the case for both main and worker processes.</p>
 <p>For example starting the worker with:</p>
-<div class="highlight-python"><pre>CELERY_RDBSIG=1 celeryd -l info</pre>
+<div class="highlight-python"><pre>CELERY_RDBSIG=1 celery worker -l info</pre>
 </div>
 <p>You can start an rdb session for any of the worker processes by executing:</p>
 <div class="highlight-python"><pre>kill -USR2 &lt;pid&gt;</pre>
@@ -157,8 +157,8 @@ This is the case for both main and worker processes.</p>
   <img class="logo" src="http://cloud.github.com/downloads/ask/celery/celery_128.png" alt="Logo"/>
 </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="otherqueues.html"
-                        title="previous chapter">Using Celery with Redis/Database as the messaging queue.</a></p>
+  <p class="topless"><a href="daemonizing.html"
+                        title="previous chapter">Running the worker as a daemon</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="clickcounter.html"
                         title="next chapter">Tutorial: Creating a click counter using Kombu and celery</a></p>
@@ -197,7 +197,7 @@ This is the case for both main and worker processes.</p>
           <a href="clickcounter.html" title="Tutorial: Creating a click counter using Kombu and celery"
              >next</a> |</li>
         <li class="right" >
-          <a href="otherqueues.html" title="Using Celery with Redis/Database as the messaging queue."
+          <a href="daemonizing.html" title="Running the worker as a daemon"
              >previous</a> |</li>
         <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" >Tutorials</a> &raquo;</li> 

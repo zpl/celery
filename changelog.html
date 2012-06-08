@@ -2280,7 +2280,7 @@ deprecated as previously indicated in the source code.</p>
 <li><p class="first">Built-in daemonization support of celeryd using <cite>celeryd-multi</cite>
 is no longer experimental and is considered production quality.</p>
 <blockquote>
-<div><p>See <a class="reference internal" href="cookbook/daemonizing.html#daemon-generic"><em>Generic init scripts</em></a> if you want to use the new generic init
+<div><p>See <a class="reference internal" href="tutorials/daemonizing.html#daemon-generic"><em>Generic init scripts</em></a> if you want to use the new generic init
 scripts.</p>
 </div></blockquote>
 </li>
@@ -2733,7 +2733,7 @@ exchange &#8220;exchange&#8221;, of type &#8220;direct&#8221; using binding key 
 <div class="highlight-python"><pre>$ celeryctl inspect add_consumer queue exchange direct key
 $ celeryctl inspect cancel_consumer queue</pre>
 </div>
-<p>See <a class="reference internal" href="userguide/monitoring.html#monitoring-celeryctl"><em>celeryctl: Management Utility</em></a> for more information about the
+<p>See <a class="reference internal" href="userguide/monitoring.html#monitoring-celeryctl"><em>celery: Management Command-line Utility</em></a> for more information about the
 <strong class="program">celeryctl</strong> program.</p>
 <p>Another example using <a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery.task.control</span> <span class="kn">import</span> <span class="n">inspect</span>
@@ -2857,7 +2857,7 @@ this monitor if you&#8217;re not using Django.</p>
 lets you perform some actions, like revoking and rate limiting tasks,
 and shutting down worker nodes.</p>
 <p>There&#8217;s also a Debian init.d script for <a class="reference internal" href="reference/celery.bin.celeryev.html#module-celery.bin.celeryev" title="celery.bin.celeryev"><tt class="xref py py-mod docutils literal"><span class="pre">celeryev</span></tt></a> available,
-see <a class="reference internal" href="cookbook/daemonizing.html"><em>Running celeryd as a daemon</em></a> for more information.</p>
+see <tt class="xref doc docutils literal"><span class="pre">cookbook/daemonizing</span></tt> for more information.</p>
 <p>New command line arguments to celeryev:</p>
 <blockquote>
 <div><ul class="simple">
@@ -2899,7 +2899,7 @@ apply tasks and inspect the results of tasks.</p>
 <blockquote>
 <div><div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">The <a class="reference internal" href="userguide/monitoring.html#monitoring-celeryctl"><em>celeryctl: Management Utility</em></a> section in the <a class="reference internal" href="userguide/index.html#guide"><em>User Guide</em></a>.</p>
+<p class="last">The <a class="reference internal" href="userguide/monitoring.html#monitoring-celeryctl"><em>celery: Management Command-line Utility</em></a> section in the <a class="reference internal" href="userguide/index.html#guide"><em>User Guide</em></a>.</p>
 </div>
 <p>Some examples:</p>
 <div class="highlight-python"><pre>$ celeryctl apply tasks.add -a '[2, 2]' --countdown=10

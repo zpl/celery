@@ -108,22 +108,22 @@
 </div>
 <div class="section" id="starting-the-worker">
 <span id="worker-starting"></span><h2><a class="toc-backref" href="#id1">Starting the worker</a><a class="headerlink" href="#starting-the-worker" title="Permalink to this headline">¶</a></h2>
-<p>You can start celeryd to run in the foreground by executing the command:</p>
-<div class="highlight-python"><pre>$ celeryd --loglevel=INFO</pre>
+<p>You can start the worker in the foreground by executing the command:</p>
+<div class="highlight-python"><pre>$ celery worker --loglevel=INFO</pre>
 </div>
 <p>You probably want to use a daemonization tool to start
-<cite>celeryd</cite> in the background.  See <a class="reference internal" href="../cookbook/daemonizing.html#daemonizing"><em>Running celeryd as a daemon</em></a> for help
-using <cite>celeryd</cite> with popular daemonization tools.</p>
+in the background.  See <a class="reference internal" href="../tutorials/daemonizing.html#daemonizing"><em>Running the worker as a daemon</em></a> for help
+detaching the worker using popular daemonization tools.</p>
 <p>For a full list of available command line options see
 <a class="reference internal" href="../reference/celery.bin.celeryd.html#module-celery.bin.celeryd" title="celery.bin.celeryd"><tt class="xref py py-mod docutils literal"><span class="pre">celeryd</span></tt></a>, or simply do:</p>
-<div class="highlight-python"><pre>$ celeryd --help</pre>
+<div class="highlight-python"><pre>$ celery worker --help</pre>
 </div>
 <p>You can also start multiple workers on the same machine. If you do so
 be sure to give a unique name to each individual worker by specifying a
 host name with the <em class="xref std std-option">--hostname|-n</em> argument:</p>
-<div class="highlight-python"><pre>$ celeryd --loglevel=INFO --concurrency=10 -n worker1.example.com
-$ celeryd --loglevel=INFO --concurrency=10 -n worker2.example.com
-$ celeryd --loglevel=INFO --concurrency=10 -n worker3.example.com</pre>
+<div class="highlight-python"><pre>$ celery worker --loglevel=INFO --concurrency=10 -n worker1.example.com
+$ celery worker --loglevel=INFO --concurrency=10 -n worker2.example.com
+$ celery worker --loglevel=INFO --concurrency=10 -n worker3.example.com</pre>
 </div>
 </div>
 <div class="section" id="stopping-the-worker">
@@ -141,7 +141,7 @@ option set).</p>
 <p>Also as processes can&#8217;t override the <tt class="xref std std-sig docutils literal"><span class="pre">KILL</span></tt> signal, the worker will
 not be able to reap its children, so make sure to do so manually.  This
 command usually does the trick:</p>
-<div class="highlight-python"><pre>$ ps auxww | grep celeryd | awk '{print $2}' | xargs kill -9</pre>
+<div class="highlight-python"><pre>$ ps auxww | grep 'celery worker' | awk '{print $2}' | xargs kill -9</pre>
 </div>
 </div>
 <div class="section" id="restarting-the-worker">
@@ -154,7 +154,7 @@ restart the worker using the <tt class="xref std std-sig docutils literal"><span
 arguments as it was started with.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>This will only work if <tt class="docutils literal"><span class="pre">celeryd</span></tt> is running in the background as
+<p>This will only work if the worker is running in the background as
 a daemon (it does not have a controlling terminal).</p>
 <p class="last">Restarting by HUP is disabled on OS X because of a limitation on
 that platform.</p>
@@ -162,7 +162,7 @@ that platform.</p>
 </div>
 <div class="section" id="process-signals">
 <span id="worker-process-signals"></span><h2><a class="toc-backref" href="#id4">Process Signals</a><a class="headerlink" href="#process-signals" title="Permalink to this headline">¶</a></h2>
-<p>The celeryd main process overrides the following signals:</p>
+<p>The worker&#8217;s main process overrides the following signals:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="22%" />
@@ -192,13 +192,13 @@ of worker processes/threads can be changed using the <em class="xref std std-opt
 argument and defaults to the number of CPUs available on the machine.</p>
 <div class="admonition-number-of-processes-multiprocessing admonition">
 <p class="first admonition-title">Number of processes (multiprocessing)</p>
-<p class="last">More worker processes are usually better, but there&#8217;s a cut-off point where
-adding more processes affects performance in negative ways.
-There is even some evidence to support that having multiple celeryd&#8217;s running,
-may perform better than having a single worker.  For example 3 celeryd&#8217;s with
-10 worker processes each.  You need to experiment to find the numbers that
-works best for you, as this varies based on application, work load, task
-run times and other factors.</p>
+<p class="last">More pool processes are usually better, but there&#8217;s a cut-off point where
+adding more pool processes affects performance in negative ways.
+There is even some evidence to support that having multiple worker
+instances running, may perform better than having a single worker.
+For example 3 workers with 10 pool processes each.  You need to experiment
+to find the numbers that works best for you, as this varies based on
+application, work load, task run times and other factors.</p>
 </div>
 </div>
 <div class="section" id="persistent-revokes">
@@ -287,8 +287,8 @@ two minutes:</p>
 a worker can execute before it&#8217;s replaced by a new process.</p>
 <p>This is useful if you have memory leaks you have no control over
 for example from closed source C extensions.</p>
-<p>The option can be set using the <cite>&#8211;maxtasksperchild</cite> argument
-to <cite>celeryd</cite> or using the <a class="reference internal" href="../configuration.html#std:setting-CELERYD_MAX_TASKS_PER_CHILD"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_MAX_TASKS_PER_CHILD</span></tt></a> setting.</p>
+<p>The option can be set using the workers <cite>&#8211;maxtasksperchild</cite> argument
+or using the <a class="reference internal" href="../configuration.html#std:setting-CELERYD_MAX_TASKS_PER_CHILD"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_MAX_TASKS_PER_CHILD</span></tt></a> setting.</p>
 </div>
 <div class="section" id="autoreloading">
 <span id="worker-autoreload"></span><h2><a class="toc-backref" href="#id10">Autoreloading</a><a class="headerlink" href="#autoreloading" title="Permalink to this headline">¶</a></h2>
@@ -303,7 +303,7 @@ to <cite>celeryd</cite> or using the <a class="reference internal" href="../conf
 </tr>
 </tbody>
 </table>
-<p>Starting <strong class="program">celeryd</strong> with the <em class="xref std std-option">--autoreload</em> option will
+<p>Starting <strong class="program">celery worker</strong> with the <em class="xref std std-option">--autoreload</em> option will
 enable the worker to watch for file system changes to all imported task
 modules imported (and also any non-task modules added to the
 <a class="reference internal" href="../configuration.html#std:setting-CELERY_IMPORTS"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_IMPORTS</span></tt></a> setting or the <em class="xref std std-option">-I|--include</em> option).</p>
@@ -342,7 +342,7 @@ expensive.</p>
 </ul>
 <p>You can force an implementation by setting the <span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CELERYD_FSNOTIFY</span></tt>
 environment variable:</p>
-<div class="highlight-python"><pre>$ env CELERYD_FSNOTIFY=stat celeryd -l info --autoreload</pre>
+<div class="highlight-python"><pre>$ env CELERYD_FSNOTIFY=stat celery worker -l info --autoreload</pre>
 </div>
 </div>
 <div class="section" id="remote-control">
@@ -378,9 +378,9 @@ of replies to wait for.  If a destination is specified, this limit is set
 to the number of destination hosts.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">The <strong class="program">celeryctl</strong> program is used to execute remote control
+<p class="last">The <strong class="program">celery</strong> program is used to execute remote control
 commands from the command line.  It supports all of the commands
-listed below.  See <a class="reference internal" href="monitoring.html#monitoring-celeryctl"><em>celeryctl: Management Utility</em></a> for more information.</p>
+listed below.  See <a class="reference internal" href="monitoring.html#monitoring-celeryctl"><em>celery: Management Command-line Utility</em></a> for more information.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -500,7 +500,7 @@ so you can specify which workers to ping:</p>
 <span id="std:control-disable_events"></span><h3><a class="toc-backref" href="#id17">Enable/disable events</a><a class="headerlink" href="#enable-disable-events" title="Permalink to this headline">¶</a></h3>
 <p>You can enable/disable events by using the <cite>enable_events</cite>,
 <cite>disable_events</cite> commands.  This is useful to temporarily monitor
-a worker using <strong class="program">celeryev</strong>/<strong class="program">celerymon</strong>.</p>
+a worker using <strong class="program">celery events</strong>/<strong class="program">celerymon</strong>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;enable_events&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;disable_events&quot;</span><span class="p">)</span>
 </pre></div>

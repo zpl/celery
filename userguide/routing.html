@@ -126,11 +126,11 @@ configuration:</p>
 <cite>&#8220;feeds&#8221;</cite> queue, while all other tasks will be routed to the default queue
 (named <cite>&#8220;celery&#8221;</cite> for historical reasons).</p>
 <p>Now you can start server <cite>z</cite> to only process the feeds queue like this:</p>
-<div class="highlight-python"><pre>(z)$ celeryd -Q feeds</pre>
+<div class="highlight-python"><pre>(z)$ celery worker -Q feeds</pre>
 </div>
 <p>You can specify as many queues as you want, so you can make this server
 process the default queue as well:</p>
-<div class="highlight-python"><pre>(z)$ celeryd -Q feeds,celery</pre>
+<div class="highlight-python"><pre>(z)$ celery worker -Q feeds,celery</pre>
 </div>
 <div class="section" id="changing-the-name-of-the-default-queue">
 <span id="routing-changing-default-queue"></span><h4><a class="toc-backref" href="#id7">Changing the name of the default queue</a><a class="headerlink" href="#changing-the-name-of-the-default-queue" title="Permalink to this headline">¶</a></h4>
@@ -203,15 +203,15 @@ will be taken from the <a class="reference internal" href="../configuration.html
 </div>
 <p>To make server <cite>z</cite> consume from the feed queue exclusively you can
 start it with the <tt class="docutils literal"><span class="pre">-Q</span></tt> option:</p>
-<div class="highlight-python"><pre>(z)$ celeryd -Q feed_tasks --hostname=z.example.com</pre>
+<div class="highlight-python"><pre>(z)$ celery worker -Q feed_tasks --hostname=z.example.com</pre>
 </div>
 <p>Servers <cite>x</cite> and <cite>y</cite> must be configured to consume from the default queue:</p>
-<div class="highlight-python"><pre>(x)$ celeryd -Q default --hostname=x.example.com
-(y)$ celeryd -Q default --hostname=y.example.com</pre>
+<div class="highlight-python"><pre>(x)$ celery worker -Q default --hostname=x.example.com
+(y)$ celery worker -Q default --hostname=y.example.com</pre>
 </div>
 <p>If you want, you can even have your feed processing worker handle regular
 tasks as well, maybe in times when there&#8217;s a lot of work to do:</p>
-<div class="highlight-python"><pre>(z)$ celeryd -Q feed_tasks,default --hostname=z.example.com</pre>
+<div class="highlight-python"><pre>(z)$ celery worker -Q feed_tasks,default --hostname=z.example.com</pre>
 </div>
 <p>If you have another queue but on another exchange you want to add,
 just specify a custom exchange and exchange type:</p>
@@ -383,13 +383,14 @@ be the one to create it.</p>
 </div>
 <div class="section" id="hands-on-with-the-api">
 <span id="amqp-api-hands-on"></span><h3><a class="toc-backref" href="#id18">Hands-on with the API</a><a class="headerlink" href="#hands-on-with-the-api" title="Permalink to this headline">¶</a></h3>
-<p>Celery comes with a tool called <strong class="program">camqadm</strong> (short for Celery AMQ Admin).
-It&#8217;s used for command-line access to the AMQP API, enabling access to
+<p>Celery comes with a tool called <strong class="program">celery amqp</strong>
+that is used for command-line access to the AMQP API, enabling access to
 administration tasks like creating/deleting queues and exchanges, purging
-queues or sending messages.</p>
-<p>You can write commands directly in the arguments to <strong class="program">camqadm</strong>,
+queues or sending messages.  It can also be used for non-AMQP brokers,
+but different implementation may not implement all commands.</p>
+<p>You can write commands directly in the arguments to <strong class="program">celery amqp</strong>,
 or just start with no arguments to start it in shell-mode:</p>
-<div class="highlight-python"><pre>$ camqadm
+<div class="highlight-python"><pre>$ celery amqp
 -&gt; connecting to amqp://guest@localhost:5672/.
 -&gt; connected.
 1&gt;</pre>
