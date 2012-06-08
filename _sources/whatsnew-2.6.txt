@@ -125,7 +125,7 @@ Tasks can now have callbacks and errbacks, and dependencies are recorded
 
         .. code-block:: python
 
-            @task
+            @celery.task()
             def error_handler(uuid):
                 result = AsyncResult(uuid)
                 exc = result.get(propagate=False)
@@ -176,7 +176,7 @@ Tasks can now have callbacks and errbacks, and dependencies are recorded
         >>> from celery import chain
 
         # (2 + 2) * 8 / 2
-        >>> res = chain(add.subtask((4, 4)),
+        >>> res = chain(add.subtask((2, 2)),
                         mul.subtask((8, )),
                         div.subtask((2,))).apply_async()
         >>> res.get() == 16
@@ -645,16 +645,25 @@ to create tasks out of methods::
 
 See :mod:`celery.contrib.methods` for more information.
 
-.. _v260-deprecations:
+.. _v260-unscheduled-removals:
 
-Deprecations
-============
+Unscheduled Removals
+====================
 
+Usually we don't make backward incompatible removals,
+but these removals should have no major effect.
 
 - The following settings have been renamed:
 
     - ``CELERYD_ETA_SCHEDULER`` -> ``CELERYD_TIMER``
     - ``CELERYD_ETA_SCHEDULER_PRECISION`` -> ``CELERYD_TIMER_PRECISION``
+
+.. _v260-deprecations:
+
+Deprecations
+============
+
+See the :ref:`celery-deprecation-timeline`.
 
 Fixes
 =====

@@ -238,7 +238,7 @@ time limit kills it:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">myapp</span> <span class="kn">import</span> <span class="n">celery</span>
 <span class="kn">from</span> <span class="nn">celery.exceptions</span> <span class="kn">import</span> <span class="n">SoftTimeLimitExceeded</span>
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">mytask</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">do_work</span><span class="p">()</span>

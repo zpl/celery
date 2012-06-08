@@ -149,7 +149,7 @@ Given a function <tt class="docutils literal"><span class="pre">create_user</spa
 the task decorator:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">User</span>
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
     <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
 </pre></div>
@@ -168,7 +168,7 @@ if you don&#8217;t know what that is then please read <a class="reference intern
 then you can import the task decorator like this:</p>
 <div class="last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">task</span>
 
-<span class="nd">@task</span>
+<span class="nd">@task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
@@ -213,7 +213,7 @@ to resend the task to the same destination queue.</td>
 </table>
 <div class="section" id="example-usage">
 <h3><a class="toc-backref" href="#id7">Example Usage</a><a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">print</span><span class="p">(</span><span class="s">&quot;Executing task id </span><span class="si">%r</span><span class="s">, args: </span><span class="si">%r</span><span class="s"> kwargs: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
         <span class="n">add</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">add</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="n">add</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">kwargs</span><span class="p">))</span>
@@ -226,7 +226,7 @@ to resend the task to the same destination queue.</td>
 <p>The worker will automatically set up logging for you, or you can
 configure logging manually.  Every task will also have a dedicated
 logger that can be used freely to emit logs from your tasks.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Adding </span><span class="si">%s</span><span class="s"> + </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
@@ -244,7 +244,7 @@ out/-err will be redirected to a logger by default (see
 <span id="task-retry"></span><h2><a class="toc-backref" href="#id9">Retrying a task if something fails</a><a class="headerlink" href="#retrying-a-task-if-something-fails" title="Permalink to this headline">¶</a></h2>
 <p><tt class="xref py py-meth docutils literal"><span class="pre">Task.retry()</span></tt> can be used to re-send the task, for example in the event
 of temporary failure.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">send_twitter_status</span><span class="p">(</span><span class="n">oauth</span><span class="p">,</span> <span class="n">tweet</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">twitter</span> <span class="o">=</span> <span class="n">Twitter</span><span class="p">(</span><span class="n">oauth</span><span class="p">)</span>
@@ -530,7 +530,7 @@ another module:</p>
 </div>
 <p>Which is exactly the name automatically generated for this
 task if the module name is &#8220;tasks.py&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
@@ -573,7 +573,7 @@ add the project directory to the Python path:</p>
 <span id="tasks-decorating"></span><h2><a class="toc-backref" href="#id16">Decorating tasks</a><a class="headerlink" href="#decorating-tasks" title="Permalink to this headline">¶</a></h2>
 <p>When using other decorators you must make sure that the <cite>task</cite>
 decorator is applied last:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="nd">@decorator2</span>
 <span class="nd">@decorator1</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -748,7 +748,7 @@ The name of the state is usually an uppercase string.  As an example
 you could have a look at <tt class="xref py py-mod docutils literal"><span class="pre">abortable</span> <span class="pre">tasks</span></tt>
 which defines its own custom <tt class="xref std std-state docutils literal"><span class="pre">ABORTED</span></tt> state.</p>
 <p>Use <tt class="xref py py-meth docutils literal"><span class="pre">update_state()</span></tt> to update a task&#8217;s state:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">upload_files</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="nb">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
         <span class="n">upload_files</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="s">&quot;PROGRESS&quot;</span><span class="p">,</span>
@@ -812,13 +812,13 @@ you have to pass them as regular args:</p>
 <p>All tasks inherit from the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.BaseTask" title="celery.app.task.BaseTask"><tt class="xref py py-class docutils literal"><span class="pre">celery.Task</span></tt></a> class.
 The <tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt> method becomes the task body.</p>
 <p>As an example, the following code,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
 </div>
 <p>will do roughly this behind the scenes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">AddTask</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -1066,21 +1066,21 @@ rate limits:</p>
 and may even cause a deadlock if the worker pool is exhausted.</p>
 <p>Make your design asynchronous instead, for example by using <em>callbacks</em>.</p>
 <p><strong>Bad</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">update_page_info</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="n">page</span> <span class="o">=</span> <span class="n">fetch_page</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">parse_page</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
     <span class="n">store_page_info</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">fetch_page</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">myhttplib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">parse_page</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">myparser</span><span class="o">.</span><span class="n">parse_document</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">store_page_info</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">PageInfo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 </pre></div>
@@ -1178,7 +1178,7 @@ that automatically expands some abbreviations in it:</p>
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">()</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">expand_abbreviations</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
     <span class="n">article</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;MyCorp&quot;</span><span class="p">,</span> <span class="s">&quot;My Corporation&quot;</span><span class="p">)</span>
     <span class="n">article</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
@@ -1196,7 +1196,7 @@ when the task is finally run, the body of the article is reverted to the old
 version because the task had the old body in its argument.</p>
 <p>Fixing the race condition is easy, just use the article id instead, and
 re-fetch the article in the task body:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">expand_abbreviations</span><span class="p">(</span><span class="n">article_id</span><span class="p">):</span>
     <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">article_id</span><span class="p">)</span>
     <span class="n">article</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;MyCorp&quot;</span><span class="p">,</span> <span class="s">&quot;My Corporation&quot;</span><span class="p">)</span>
@@ -1329,7 +1329,7 @@ need to pay.  You have to sign up to their service to get an API key.</p>
 <span class="kn">from</span> <span class="nn">blog.models</span> <span class="kn">import</span> <span class="n">Comment</span>
 
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">spam_filter</span><span class="p">(</span><span class="n">comment_id</span><span class="p">,</span> <span class="n">remote_addr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">spam_filter</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Running spam filter for comment </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">comment_id</span><span class="p">)</span>

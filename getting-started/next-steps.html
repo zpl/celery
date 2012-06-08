@@ -146,17 +146,17 @@ that the worker is able to find our tasks.</p>
 <span class="kn">from</span> <span class="nn">proj.celery</span> <span class="kn">import</span> <span class="n">celery</span>
 
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">mul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
 
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">xsum</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
 </pre></div>
@@ -340,7 +340,7 @@ that calls the task for every element in a sequence.</p>
 </pre></div>
 </div>
 <p>is the same as having a task doing:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">temp</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">xsum</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">xsum</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">))]</span>
 </pre></div>
@@ -351,7 +351,7 @@ that calls the task for every element in a sequence.</p>
 </pre></div>
 </div>
 <p>is the same as having a task doing:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">temp</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
 </pre></div>
@@ -469,7 +469,7 @@ and subtasks can be linked too:</p>
 the error callbacks take the id of the parent task as argument instead:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">proj.celery</span> <span class="kn">import</span> <span class="n">celery</span>
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">log_error</span><span class="p">(</span><span class="n">task_id</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">AsyncResult</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
     <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">propagate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>  <span class="c"># make sure result written.</span>

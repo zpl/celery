@@ -110,7 +110,7 @@ Let's create the file :file:`tasks.py`:
 
     celery = Celery("tasks", broker="amqp://guest@localhost//")
 
-    @celery.task
+    @celery.task()
     def add(x, y):
         return x + y
 
@@ -285,7 +285,7 @@ you can also imagine your sysadmin making simple changes to the configuration
 in the event of system trobule.
 
 You can tell your Celery instance to use a configuration module,
-by calling the :meth:`~@Celery.config_from_obj` method:
+by calling the :meth:`~@Celery.config_from_object` method:
 
 .. code-block:: python
 

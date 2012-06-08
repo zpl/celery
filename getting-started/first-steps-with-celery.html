@@ -161,7 +161,7 @@ a <a class="reference internal" href="next-steps.html#project-layout"><em>dedica
 
 <span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&quot;tasks&quot;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&quot;amqp://guest@localhost//&quot;</span><span class="p">)</span>
 
-<span class="nd">@celery.task</span>
+<span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
@@ -301,7 +301,7 @@ it makes it possible for users to control how they want your tasks to behave,
 you can also imagine your sysadmin making simple changes to the configuration
 in the event of system trobule.</p>
 <p>You can tell your Celery instance to use a configuration module,
-by calling the <tt class="xref py py-meth docutils literal"><span class="pre">config_from_obj()</span></tt> method:</p>
+by calling the <tt class="xref py py-meth docutils literal"><span class="pre">config_from_object()</span></tt> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s">&quot;celeryconfig&quot;</span><span class="p">)</span>
 </pre></div>
 </div>

@@ -48,6 +48,119 @@ And to some degree:
 Misconceptions
 ==============
 
+.. _faq-loc:
+
+Does Celery really consist of 50.000 lines of code?
+---------------------------------------------------
+
+**Answer:**: No, this and similarly large number have
+been reported in various locations.
+
+This a list of the actual numbers:
+
+    - core: 7,141 lines of code.
+    - tests: 14,209 lines.
+    - backends, contrib, compat utilities: 9,032 lines.
+
+Lines of code is not a useful metric to prove anything, so
+even if Celery did consist of 50k lines of code you would not
+be able to draw any conclusions from such a number.
+
+Does Celery have many dependencies?
+-----------------------------------
+
+A common criticism is that Celery uses too many dependencies.
+The rationale behind such a fear is hard to imagine, especially considering
+code reuse as the established way to combat complexity in modern software
+development, and that the cost of adding dependencies is very low now
+that package managers like pip and PyPI makes the hassle of installing
+and maintaining dependencies a thing of the past.
+
+Celery has replaced several dependencies along the way, and
+the current list of dependencies are:
+
+celery
+~~~~~~
+
+- `kombu`_
+
+Kombu is part of the Celery ecosystem and is the library used
+to send and receive messages.  It is also the library that enables
+us to support many different message brokers.  It is also used by the
+OpenStack project, and many others, validating the choice to separate
+it from the Celery codebase.
+
+.. _`kombu`: http://pypi.python.org/pypi/kombu
+
+- `billiard`_
+
+Billiard is a fork of the Python multiprocessing module containing
+many performance and stability improvements.  It is an eventual goal
+that these improvements will be merged back into Python one day.
+
+It is also used for compatibility with older Python versions.
+
+.. _`billiard`: http://pypi.python.org/pypi/billiard
+
+- `python-dateutil`_
+
+The dateutil module is used by Celery to parse ISO-8601 formatted time strings,
+as well as its ``relativedelta`` class which is used in the implementation
+of crontab style periodic tasks.
+
+.. _`python-dateutil`: http://pypi.python.org/pypi/python-dateutil
+
+django-celery
+~~~~~~~~~~~~~
+
+If you use django-celery then you don't have to install celery separately,
+as it will make sure that the required version is installed.
+
+django-celery does not have any other dependencies.
+
+kombu
+~~~~~
+
+Kombu depends on the following packages:
+
+- `amqplib`_
+
+The underlying pure-Python amqp client implementation.  AMQP being the default
+broker it is a natural dependency.
+
+.. _`amqplib`: http://pypi.python.org/pypi/amqplib
+
+- `anyjson`_
+
+anyjson is an utility library to select the best possible
+JSON implementation.
+
+.. _`anyjson`: http://pypi.python.org/pypi/anyjson
+
+
+.. note::
+
+    For compatibility reasons additional packages may be installed
+    if you are running on older Python versions,
+    for example Python 2.6 depends on the ``importlib``,
+    and ``ordereddict`` libraries.
+
+    Also, to handle the dependencies for popular configuration
+    choices Celery defines a number of "bundle" packages,
+    see :ref:`bundles`.
+
+
+.. _faq-heavyweight
+
+Is Celery heavy-weight?
+-----------------------
+
+Celery poses very little overhead both in memory footprint and
+performance.
+
+But not that the default configuration is not optimized for either,
+see the :ref:`guide-optimizing` guide for more information.
+
 .. _faq-serializion-is-a-choice:
 
 Is Celery dependent on pickle?
@@ -505,7 +618,7 @@ How can I get the task id of the current task?
 
 **Answer**: The current id and more is available in the task request::
 
-    @celery.task
+    @celery.task()
     def mytask():
         cache.set(mytask.request.id, "Running")
 

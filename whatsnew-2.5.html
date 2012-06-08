@@ -196,7 +196,7 @@ scheduled for removal in 2.3).</li>
 for removal in 2.3).  Please use the ping broadcast command
 instead.</li>
 <li>It is no longer possible to import <tt class="docutils literal"><span class="pre">subtask</span></tt> and <tt class="docutils literal"><span class="pre">TaskSet</span></tt>
-from <a class="reference internal" href="reference/celery.task.base.html#module-celery.task.base" title="celery.task.base"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.base</span></tt></a>, please import them from <a class="reference internal" href="reference/celery.task.html#module-celery.task" title="celery.task"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task</span></tt></a>
+from <a class="reference internal" href="faq.html#module-celery.task.base" title="celery.task.base"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.base</span></tt></a>, please import them from <a class="reference internal" href="reference/celery.task.html#module-celery.task" title="celery.task"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task</span></tt></a>
 instead (originally scheduled for removal in 2.4).</li>
 </ul>
 </div>
@@ -359,7 +359,7 @@ be used: <tt class="docutils literal"><span class="pre">update_twitter_status.ap
 <ul>
 <li><p class="first">Now depends on Kombu 2.1.0.</p>
 </li>
-<li><p class="first">Efficient Chord support for the memcached backend (Issue <span class="xref issue">#533</span>)</p>
+<li><p class="first">Efficient Chord support for the memcached backend (<a class="reference external" href="https://github.com/celery/celery/issues/533" title="Memcache chords implementation"><span class="xref issue closed">Issue #533</span></a>)</p>
 <blockquote>
 <div><p>This means memcached joins Redis in the ability to do non-polling
 chords.</p>
@@ -401,7 +401,7 @@ followed by <tt class="docutils literal"><span class="pre">--</span></tt>, for e
 </div>
 </li>
 <li><p class="first">Now limits the number of frames in a traceback so that celeryd does not
-crash on maximum recursion limit exceeded exceptions (Issue <span class="xref issue">#615</span>).</p>
+crash on maximum recursion limit exceeded exceptions (<a class="reference external" href="https://github.com/celery/celery/issues/615" title="&quot;Maximum recursion depth exceeded&quot; causes datastructures.py to fail and almost impossible to debug the error"><span class="xref issue closed">Issue #615</span></a>).</p>
 <blockquote>
 <div><p>The limit is set to the current recursion limit divided by 8 (which
 is 125 by default).</p>
@@ -458,7 +458,7 @@ $ python manage.py celeryctl migrate django:// redis://</pre>
 </ul>
 <ul>
 <li><p class="first">Routers can now override the <tt class="docutils literal"><span class="pre">exchange</span></tt> and <tt class="docutils literal"><span class="pre">routing_key</span></tt> used
-to create missing queues (Issue <span class="xref issue">#577</span>).</p>
+to create missing queues (<a class="reference external" href="https://github.com/celery/celery/issues/577" title="[feature] Supports some user defined options on missing queue creation."><span class="xref issue closed">Issue #577</span></a>).</p>
 <blockquote>
 <div><p>By default this will always use the name of the queue,
 but you can now have a router return exchange and routing_key keys
@@ -514,7 +514,7 @@ configured for that to work.</p>
 <div><p>Contributed by Ivan Metzlar.</p>
 </div></blockquote>
 </li>
-<li><p class="first">gevent: Now supports autoscaling (Issue <span class="xref issue">#599</span>).</p>
+<li><p class="first">gevent: Now supports autoscaling (<a class="reference external" href="https://github.com/celery/celery/issues/599" title="Gevent autoscaling support"><span class="xref issue closed">Issue #599</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Mark Lavin.</p>
 </div></blockquote>
@@ -576,7 +576,7 @@ deprecated since <tt class="xref py py-mod docutils literal"><span class="pre">p
 by PEP-366.</p>
 </li>
 <li><p class="first"><tt class="docutils literal"><span class="pre">send_task</span></tt> now emits a warning when used in combination with
-<a class="reference internal" href="configuration.html#std:setting-CELERY_ALWAYS_EAGER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_ALWAYS_EAGER</span></tt></a> (Issue <span class="xref issue">#581</span>).</p>
+<a class="reference internal" href="configuration.html#std:setting-CELERY_ALWAYS_EAGER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_ALWAYS_EAGER</span></tt></a> (<a class="reference external" href="https://github.com/celery/celery/issues/581" title="celery.execute.send_task should respect CELERY_ALWAYS_EAGER"><span class="xref issue closed">Issue #581</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Mher Movsisyan.</p>
 </div></blockquote>
@@ -585,7 +585,7 @@ by PEP-366.</p>
 when <a class="reference internal" href="configuration.html#std:setting-CELERY_ALWAYS_EAGER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_ALWAYS_EAGER</span></tt></a> is enabled.</p>
 </li>
 <li><p class="first">celeryev now tries to re-establish the connection if the connection
-to the broker is lost (Issue <span class="xref issue">#574</span>).</p>
+to the broker is lost (<a class="reference external" href="https://github.com/celery/celery/issues/574" title="CeleryEV reconnect"><span class="xref issue closed">Issue #574</span></a>).</p>
 </li>
 <li><p class="first">celeryev: Fixed a crash occurring if a task has no associated worker
 information.</p>

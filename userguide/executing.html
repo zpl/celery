@@ -100,7 +100,7 @@ In addition you can set countdown/eta, task expiry, provide a custom broker
 connection and more.</p>
 <p>Let&#8217;s go over these in more detail.  All the examples uses a simple task
 called <cite>add</cite>, returning the sum of two positional arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>

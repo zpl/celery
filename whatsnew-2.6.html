@@ -106,8 +106,9 @@ as well as PyPy and Jython.</p>
 <li><a class="reference internal" href="#celery-contrib-methods-task-decorator-for-methods" id="id18"><a class="reference internal" href="reference/celery.contrib.methods.html#module-celery.contrib.methods" title="celery.contrib.methods"><tt class="xref py py-mod docutils literal"><span class="pre">celery.contrib.methods</span></tt></a>:  Task decorator for methods</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#deprecations" id="id19">Deprecations</a></li>
-<li><a class="reference internal" href="#fixes" id="id20">Fixes</a></li>
+<li><a class="reference internal" href="#unscheduled-removals" id="id19">Unscheduled Removals</a></li>
+<li><a class="reference internal" href="#deprecations" id="id20">Deprecations</a></li>
+<li><a class="reference internal" href="#fixes" id="id21">Fixes</a></li>
 </ul>
 </div>
 <div class="section" id="important-notes">
@@ -135,11 +136,11 @@ and also contains the pool improvements previously located in Celery.</p>
 <p>This fork was necessary as changes to the C extension code was required
 for the no-execv patch to work.</p>
 <ul class="simple">
-<li>Issue <span class="xref issue">#625</span></li>
-<li>Issue <span class="xref issue">#627</span></li>
-<li>Issue <span class="xref issue">#640</span></li>
-<li><cite>django-celery <span class="xref issue">#122</span> &lt;http://github.com/celery/django-celery/issues/122</cite></li>
-<li><cite>django-celery <span class="xref issue">#124</span> &lt;http://github.com/celery/django-celery/issues/122</cite></li>
+<li><a class="reference external" href="https://github.com/celery/celery/issues/625" title="Celery 2.5.0 with CELERYD_FORCE_EXECV = True fails to start processes in virtualenv"><span class="xref issue closed">Issue #625</span></a></li>
+<li><a class="reference external" href="https://github.com/celery/celery/issues/627" title="Celery 2.5.0 workers immediately shut down"><span class="xref issue closed">Issue #627</span></a></li>
+<li><a class="reference external" href="https://github.com/celery/celery/issues/640" title="celeryd workers dying to segfault with CELERYD_FORCE_EXECV enabled"><span class="xref issue closed">Issue #640</span></a></li>
+<li><cite>django-celery #122 &lt;http://github.com/celery/django-celery/issues/122</cite></li>
+<li><cite>django-celery #124 &lt;http://github.com/celery/django-celery/issues/122</cite></li>
 </ul>
 </div>
 <div class="section" id="last-version-to-support-python-2-5">
@@ -188,7 +189,7 @@ subtasks:</p>
 </pre></div>
 </div>
 <p>Example error callback:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@task</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">error_handler</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">AsyncResult</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
     <span class="n">exc</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">propagate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -253,7 +254,7 @@ This can also be used to convert to dot format:</p>
     &gt;&gt;&gt; from celery import chain
 
     # (2 + 2) * 8 / 2
-    &gt;&gt;&gt; res = chain(add.subtask((4, 4)),
+    &gt;&gt;&gt; res = chain(add.subtask((2, 2)),
                     mul.subtask((8, )),
                     div.subtask((2,))).apply_async()
     &gt;&gt;&gt; res.get() == 16
@@ -504,12 +505,12 @@ $ celeryd --app=proj.celery:celery</pre>
 <ul>
 <li><p class="first">New <a class="reference internal" href="configuration.html#std:setting-CELERYD_WORKER_LOST_WAIT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_WORKER_LOST_WAIT</span></tt></a> to control the timeout in
 seconds before <tt class="xref py py-exc docutils literal"><span class="pre">billiard.WorkerLostError</span></tt> is raised
-when a worker can not be signalled (Issue <span class="xref issue">#595</span>).</p>
+when a worker can not be signalled (<a class="reference external" href="https://github.com/celery/celery/issues/595" title="Adding ability to specify config option for how long to wait before a WorkerLostError is raised."><span class="xref issue closed">Issue #595</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Brendon Crawford.</p>
 </div></blockquote>
 </li>
-<li><p class="first">Redis event monitor queues are now automatically deleted (Issue <span class="xref issue">#436</span>).</p>
+<li><p class="first">Redis event monitor queues are now automatically deleted (<a class="reference external" href="https://github.com/celery/celery/issues/436" title="memory leak with redis broker"><span class="xref issue closed">Issue #436</span></a>).</p>
 </li>
 <li><p class="first">App instance factory methods have been converted to be cached
 descriptors that creates a new subclass on access.</p>
@@ -747,8 +748,10 @@ to create tasks out of methods:</p>
 <p>See <a class="reference internal" href="reference/celery.contrib.methods.html#module-celery.contrib.methods" title="celery.contrib.methods"><tt class="xref py py-mod docutils literal"><span class="pre">celery.contrib.methods</span></tt></a> for more information.</p>
 </div>
 </div>
-<div class="section" id="deprecations">
-<span id="v260-deprecations"></span><h2><a class="toc-backref" href="#id19">Deprecations</a><a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="unscheduled-removals">
+<span id="v260-unscheduled-removals"></span><h2><a class="toc-backref" href="#id19">Unscheduled Removals</a><a class="headerlink" href="#unscheduled-removals" title="Permalink to this headline">¶</a></h2>
+<p>Usually we don&#8217;t make backward incompatible removals,
+but these removals should have no major effect.</p>
 <ul>
 <li><p class="first">The following settings have been renamed:</p>
 <blockquote>
@@ -760,11 +763,15 @@ to create tasks out of methods:</p>
 </li>
 </ul>
 </div>
+<div class="section" id="deprecations">
+<span id="v260-deprecations"></span><h2><a class="toc-backref" href="#id20">Deprecations</a><a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h2>
+<p>See the <em class="xref std std-ref">celery-deprecation-timeline</em>.</p>
+</div>
 <div class="section" id="fixes">
-<h2><a class="toc-backref" href="#id20">Fixes</a><a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id21">Fixes</a><a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Retry sqlalchemy backend operations on DatabaseError/OperationalError
-(Issue <span class="xref issue">#634</span>)</li>
+(<a class="reference external" href="https://github.com/celery/celery/issues/634" title="Result backend resilience &amp; SSL"><span class="xref issue closed">Issue #634</span></a>)</li>
 </ul>
 </div>
 </div>
