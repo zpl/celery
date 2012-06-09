@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction to Task Queues &mdash; Celery 2.6.0rc4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/issuetracker.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.6.0rc4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
+    <link rel="up" title="Getting Started" href="index.html" />
+    <link rel="next" title="Introduction" href="introduction.html" />
+    <link rel="prev" title="Getting Started" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div class="deck">
+
+    
+        <p class="developmentversion">
+        This document is for Celery's development version, which can be
+        significantly different from previous releases. Get old docs here:
+
+        <a href="http://docs.celeryproject.org/en/latest/getting-started/intro.html">2.5</a>.
+        </p>
+        
+
+</div>
+    <div class="section" id="introduction-to-task-queues">
+<h1>Introduction to Task Queues<a class="headerlink" href="#introduction-to-task-queues" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#what-are-task-queues" id="id1">What are Task Queues?</a></li>
+<li><a class="reference internal" href="#celery-features" id="id2">Celery Features</a></li>
+</ul>
+</div>
+<div class="section" id="what-are-task-queues">
+<h2><a class="toc-backref" href="#id1">What are Task Queues?</a><a class="headerlink" href="#what-are-task-queues" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="celery-features">
+<h2><a class="toc-backref" href="#id2">Celery Features</a><a class="headerlink" href="#celery-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Messaging Transports (Brokers)</li>
+</ul>
+<p>Celery requires a message broker to send and receive messages,
+but this term has been stretched to include everything from
+financial-grade messaging systems to your fridge (no offense)</p>
+<p>RabbitMQ, Redis, MongoDB, Amazon SQS, CouchDB, Beanstalk, Apache ZooKeeper,
+or Databases (SQLAlchemy/Django ORM).</p>
+<ul class="simple">
+<li>HA</li>
+</ul>
+<p>Both clients and workers will automatically retry in the event
+of connection loss or failure, and some brokers support
+HA in way of Master/Master or Master/Slave replication.</p>
+<ul class="simple">
+<li>Multiple Serializers</li>
+</ul>
+<p>Messages can be serialized using pickle, json, yaml, msgpack or
+even custom serializers.  In addition Celery ships with a special
+serializer that signs messages using cryptographic hashes.</p>
+<ul class="simple">
+<li>Compression</li>
+</ul>
+<p>Messages can be compressed using zlib, bzip2 or custom
+compression schemes defined by the user.</p>
+<div class="section" id="worker">
+<h3>Worker<a class="headerlink" href="#worker" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Monitoring</li>
+</ul>
+<p>Workers emit a stream of monitoring events, that is used
+by monitoring tools like <cite>celery events</cite>, <cite>celerymon</cite> and
+the Django Admin monitor.  Users can write custom event consumers
+to analyze what the workers are doing in real-time.</p>
+<ul class="simple">
+<li>Time Limits</li>
+</ul>
+<p>Tasks can be enforced a strict time to run, and this can be set as a default
+for all tasks, for a specific worker, or individually for each task.</p>
+<div class="sidebar">
+<p class="first sidebar-title">Soft, or hard?</p>
+<p class="last">The time limit is set in two values, <cite>soft</cite> and <cite>hard</cite>.
+The soft time limit allows the task to catch an exception
+to clean up before it is killed: the hard timeout is not catchable
+and force terminates the task.</p>
+</div>
+<ul class="simple">
+<li>Autoreloading</li>
+</ul>
+<p>While developing the worker can be set to automatically reload
+when the source code for a task changes.</p>
+<ul class="simple">
+<li>Autoscaling</li>
+</ul>
+<p>The worker pool can be dynamically resized based on worker load,
+and autoscaling rules can be customized by the user.</p>
+<ul class="simple">
+<li>Memory Leak Cleanup</li>
+</ul>
+<p>Sometimes tasks contain memory leaks that are out of the
+developers control, or the task allocated other resources
+that cannot be cleaned up.  In this case the worker supports
+a <em class="xref std std-option">--maxtasksperchild</em> argument that defines how
+many task a given pool process can execute before it&#8217;s
+replaced by a fresh process.</p>
+<ul class="simple">
+<li>User components</li>
+</ul>
+<p>Each worker component can be customized, and additional components
+can be defined by the user simply by defining a new boot steps
+that will be loaded as part of the workers dependency graph.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="../index.html">
+  <img class="logo" src="http://cloud.github.com/downloads/celery/celery/celery_128.png" alt="Logo"/>
+</a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="next chapter">Introduction</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/getting-started/intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+    </div>
+  </body>
+</html>
