@@ -350,7 +350,7 @@ subtask with augmented arguments/options.</p>
 <span id="v252-fixes"></span><h3><a class="toc-backref" href="#id120">Fixes</a><a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Programs now verifies that the pidfile is actually written correctly
-(<a class="reference external" href="https://github.com/celery/celery/issues/641" title="Local var 'pid' ref'd before assignment"><span class="xref issue closed">Issue #641</span></a>).</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/641" title="Local var 'pid' ref'd before assignment"><span class="xref issue closed">#641</span></a>).</p>
 <blockquote>
 <div><p>Hopefully this will crash the worker immediately if the system
 is out of space to store the complete pidfile.</p>
@@ -436,7 +436,7 @@ before it was properly started.</li>
 <li>Proxy objects now redirects <tt class="docutils literal"><span class="pre">__doc__</span></tt> and <tt class="docutils literal"><span class="pre">__name__</span></tt> so <tt class="docutils literal"><span class="pre">help(obj)</span></tt>
 works.</li>
 <li>Internal timer (timer2) now logs exceptions instead of swallowing them
-(<a class="reference external" href="https://github.com/celery/celery/issues/626" title="Celery 2.5.0 celerycam shows a stacktrace"><span class="xref issue closed">Issue #626</span></a>).</li>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/626" title="Celery 2.5.0 celerycam shows a stacktrace"><span class="xref issue closed">#626</span></a>).</li>
 <li>celeryctl shell: can now be started with <em class="xref std std-option">--eventlet</em> or
 <em class="xref std std-option">--gevent</em> options to apply their monkey patches.</li>
 </ul>
@@ -513,12 +513,12 @@ be possible to regain supervisor privileges later.</p>
 <div class="section" id="v244-fixes">
 <span id="id8"></span><h3><a class="toc-backref" href="#id127">Fixes</a><a class="headerlink" href="#v244-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Processes pool: Fixed rare deadlock at shutdown (<a class="reference external" href="https://github.com/celery/celery/issues/523" title="celeryd can't process signals if the workers are full (it's blocking a on a lock)."><span class="xref issue closed">Issue #523</span></a>).</p>
+<li><p class="first">Processes pool: Fixed rare deadlock at shutdown (Issue <a class="reference external" href="https://github.com/celery/celery/issues/523" title="celeryd can't process signals if the workers are full (it's blocking a on a lock)."><span class="xref issue closed">#523</span></a>).</p>
 <blockquote>
 <div><p>Fix contributed by Ionel Maries Christian.</p>
 </div></blockquote>
 </li>
-<li><p class="first">Webhook tasks issued the wrong HTTP POST headers (<a class="reference external" href="https://github.com/celery/celery/issues/515" title="Fixed HTTP POST requests."><span class="xref issue closed">Issue #515</span></a>).</p>
+<li><p class="first">Webhook tasks issued the wrong HTTP POST headers (Issue <a class="reference external" href="https://github.com/celery/celery/issues/515" title="Fixed HTTP POST requests."><span class="xref issue closed">#515</span></a>).</p>
 <blockquote>
 <div><p>The <em>Content-Type</em> header has been changed from
 <tt class="docutils literal"><span class="pre">application/json</span></tt> ⇒  <tt class="docutils literal"><span class="pre">application/x-www-form-urlencoded</span></tt>,
@@ -526,14 +526,14 @@ and adds a proper <em>Content-Length</em> header.</p>
 <p>Fix contributed by Mitar.</p>
 </div></blockquote>
 </li>
-<li><p class="first">Daemonization cookbook: Adds a configuration example using Django and
-virtualenv together (<a class="reference external" href="https://github.com/celery/celery/issues/505" title="Celeryd daemon configuration example could be improved"><span class="xref issue closed">Issue #505</span></a>).</p>
+<li><p class="first">Daemonization tutorial: Adds a configuration example using Django and
+virtualenv together (Issue <a class="reference external" href="https://github.com/celery/celery/issues/505" title="Celeryd daemon configuration example could be improved"><span class="xref issue closed">#505</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Juan Ignacio Catalano.</p>
 </div></blockquote>
 </li>
 <li><p class="first">generic init scripts now automatically creates log and pid file
-directories (<a class="reference external" href="https://github.com/celery/celery/issues/545" title="Create log/run directories if nonexistant"><span class="xref issue closed">Issue #545</span></a>).</p>
+directories (Issue <a class="reference external" href="https://github.com/celery/celery/issues/545" title="Create log/run directories if nonexistant"><span class="xref issue closed">#545</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Chris Streeter.</p>
 </div></blockquote>
@@ -554,7 +554,7 @@ directories (<a class="reference external" href="https://github.com/celery/celer
 </tbody>
 </table>
 <ul>
-<li><p class="first">Fixes module import typo in <cite>celeryctl</cite> (<a class="reference external" href="https://github.com/celery/celery/issues/538" title="from celeryutils import term in celeryctl.py should be celery.utils"><span class="xref issue closed">Issue #538</span></a>).</p>
+<li><p class="first">Fixes module import typo in <cite>celeryctl</cite> (Issue <a class="reference external" href="https://github.com/celery/celery/issues/538" title="from celeryutils import term in celeryctl.py should be celery.utils"><span class="xref issue closed">#538</span></a>).</p>
 <blockquote>
 <div><p>Fix contributed by Chris Streeter.</p>
 </div></blockquote>
@@ -594,10 +594,10 @@ possible to do <tt class="docutils literal"><span class="pre">python</span> <spa
 <li>celeryctl inspect commands was missing output.</li>
 <li>processes pool: Decrease polling interval for less idle CPU usage.</li>
 <li>processes pool: MaybeEncodingError was not wrapped in ExceptionInfo
-(<a class="reference external" href="https://github.com/celery/celery/issues/524" title="Celery crashes with AttributeError: 'MaybeEncodingError' object has no attribute 'exception'"><span class="xref issue closed">Issue #524</span></a>).</li>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/524" title="Celery crashes with AttributeError: 'MaybeEncodingError' object has no attribute 'exception'"><span class="xref issue closed">#524</span></a>).</li>
 <li>celeryd: would silence errors occuring after task consumer started.</li>
 <li>logging: Fixed a bug where unicode in stdout redirected log messages
-couldn&#8217;t be written (<a class="reference external" href="https://github.com/celery/celery/issues/522" title="Enable showing unicode character when logging in console."><span class="xref issue closed">Issue #522</span></a>).</li>
+couldn&#8217;t be written (Issue <a class="reference external" href="https://github.com/celery/celery/issues/522" title="Enable showing unicode character when logging in console."><span class="xref issue closed">#522</span></a>).</li>
 </ul>
 </div>
 <div class="section" id="version-2-4-0">
@@ -617,7 +617,7 @@ couldn&#8217;t be written (<a class="reference external" href="https://github.co
 <ul>
 <li><p class="first">Now supports Python 3.</p>
 </li>
-<li><p class="first">Fixed deadlock in worker process handling (<a class="reference external" href="https://github.com/celery/celery/issues/496" title="Deadlock in worker process handling"><span class="xref issue closed">Issue #496</span></a>).</p>
+<li><p class="first">Fixed deadlock in worker process handling (Issue <a class="reference external" href="https://github.com/celery/celery/issues/496" title="Deadlock in worker process handling"><span class="xref issue closed">#496</span></a>).</p>
 <blockquote>
 <div><p>A deadlock could occur after spawning new child processes because
 the logging library&#8217;s mutex was not properly reset after fork.</p>
@@ -647,7 +647,7 @@ with an older version.  You can do so by disabling the
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Eventlet: Fixed problem with shutdown (<a class="reference external" href="https://github.com/celery/celery/issues/457" title="[gevent] Celery improper exit behavior on KeyboardInterrupt exception in task body."><span class="xref issue closed">Issue #457</span></a>).</p>
+<li><p class="first">Eventlet: Fixed problem with shutdown (Issue <a class="reference external" href="https://github.com/celery/celery/issues/457" title="[gevent] Celery improper exit behavior on KeyboardInterrupt exception in task body."><span class="xref issue closed">#457</span></a>).</p>
 </li>
 <li><p class="first">Broker transports can be now be specified using URLs</p>
 <blockquote>
@@ -694,7 +694,7 @@ easily override the default broker used.</p>
 <li><p class="first">The deprecated <tt class="xref py py-func docutils literal"><span class="pre">celery.loaders.setup_loader()</span></tt> function has been removed.</p>
 </li>
 <li><p class="first">The <a class="reference internal" href="configuration.html#std:setting-CELERY_TASK_ERROR_WHITELIST"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_ERROR_WHITELIST</span></tt></a> setting has been replaced
-by a more flexible approach (<a class="reference external" href="https://github.com/celery/celery/issues/447" title="need a CELERY_TASK_ERROR_BLACKLIST setting"><span class="xref issue closed">Issue #447</span></a>).</p>
+by a more flexible approach (Issue <a class="reference external" href="https://github.com/celery/celery/issues/447" title="need a CELERY_TASK_ERROR_BLACKLIST setting"><span class="xref issue closed">#447</span></a>).</p>
 <blockquote>
 <div><p>The error mail sending logic is now available as <tt class="docutils literal"><span class="pre">Task.ErrorMail</span></tt>,
 with the implementation (for reference) in <a class="reference internal" href="reference/celery.utils.mail.html#module-celery.utils.mail" title="celery.utils.mail"><tt class="xref py py-mod docutils literal"><span class="pre">celery.utils.mail</span></tt></a>.</p>
@@ -807,7 +807,7 @@ in version 3.0:</p>
 </li>
 <li><p class="first">Now depends on Kombu 1.4.3.</p>
 </li>
-<li><p class="first">CELERY_IMPORTS can now be a scalar value (<a class="reference external" href="https://github.com/celery/celery/issues/485" title="Noob problems with celeryconfig.py and CELERY_IMPORTS fix suggestion"><span class="xref issue closed">Issue #485</span></a>).</p>
+<li><p class="first">CELERY_IMPORTS can now be a scalar value (Issue <a class="reference external" href="https://github.com/celery/celery/issues/485" title="Noob problems with celeryconfig.py and CELERY_IMPORTS fix suggestion"><span class="xref issue closed">#485</span></a>).</p>
 <blockquote>
 <div><p>It is too easy to forget to add the comma after the sole element of a
 tuple, and this is something that often affects newcomers.</p>
@@ -818,7 +818,7 @@ to new users.</p>
 <p>Suggested by jsaxon-cars.</p>
 </div></blockquote>
 </li>
-<li><p class="first">Fixed a memory leak when using the thread pool (<a class="reference external" href="https://github.com/celery/celery/issues/486" title="memory leak in concurrency.threads"><span class="xref issue closed">Issue #486</span></a>).</p>
+<li><p class="first">Fixed a memory leak when using the thread pool (Issue <a class="reference external" href="https://github.com/celery/celery/issues/486" title="memory leak in concurrency.threads"><span class="xref issue closed">#486</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Kornelijus Survila.</p>
 </div></blockquote>
@@ -830,7 +830,7 @@ revoked tasks when a <tt class="docutils literal"><span class="pre">--statedb</s
 </div></blockquote>
 </li>
 <li><p class="first">Adds <a class="reference internal" href="configuration.html#std:setting-EMAIL_USE_TLS"><tt class="xref std std-setting docutils literal"><span class="pre">EMAIL_USE_TLS</span></tt></a> to enable secure SMTP connections
-(<a class="reference external" href="https://github.com/celery/celery/issues/418" title="Gmail TLS support"><span class="xref issue closed">Issue #418</span></a>).</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/418" title="Gmail TLS support"><span class="xref issue closed">#418</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Stefan Kjartansson.</p>
 </div></blockquote>
@@ -846,10 +846,10 @@ format documentation.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Fixed race condition in celery.events.state (celerymon/celeryev)
-where task info would be removed while iterating over it (<a class="reference external" href="https://github.com/celery/celery/issues/501" title="celeryev crashes intermittently with KeyError exception"><span class="xref issue closed">Issue #501</span></a>).</p>
+where task info would be removed while iterating over it (Issue <a class="reference external" href="https://github.com/celery/celery/issues/501" title="celeryev crashes intermittently with KeyError exception"><span class="xref issue closed">#501</span></a>).</p>
 </li>
 <li><p class="first">The Cache, Cassandra, MongoDB, Redis and Tyrant backends now respects
-the <a class="reference internal" href="configuration.html#std:setting-CELERY_RESULT_SERIALIZER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_RESULT_SERIALIZER</span></tt></a> setting (<a class="reference external" href="https://github.com/celery/celery/issues/435" title="Result backends fixes"><span class="xref issue closed">Issue #435</span></a>).</p>
+the <a class="reference internal" href="configuration.html#std:setting-CELERY_RESULT_SERIALIZER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_RESULT_SERIALIZER</span></tt></a> setting (Issue <a class="reference external" href="https://github.com/celery/celery/issues/435" title="Result backends fixes"><span class="xref issue closed">#435</span></a>).</p>
 <blockquote>
 <div><p>This means that only the database (django/sqlalchemy) backends
 currently does not support using custom serializers.</p>
@@ -858,7 +858,7 @@ currently does not support using custom serializers.</p>
 </li>
 <li><p class="first">Logging calls no longer manually formats messages, but delegates
 that to the logging system, so tools like Sentry can easier
-work with the messages (<a class="reference external" href="https://github.com/celery/celery/issues/445" title="Logging: don't force string interpolation"><span class="xref issue closed">Issue #445</span></a>).</p>
+work with the messages (Issue <a class="reference external" href="https://github.com/celery/celery/issues/445" title="Logging: don't force string interpolation"><span class="xref issue closed">#445</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Chris Adams.</p>
 </div></blockquote>
@@ -866,33 +866,33 @@ work with the messages (<a class="reference external" href="https://github.com/c
 <li><p class="first"><tt class="docutils literal"><span class="pre">celeryd_multi</span></tt> now supports a <tt class="docutils literal"><span class="pre">stop_verify</span></tt> command to wait for
 processes to shutdown.</p>
 </li>
-<li><p class="first">Cache backend did not work if the cache key was unicode (<a class="reference external" href="https://github.com/celery/celery/issues/504" title="Encode memcached cache key"><span class="xref issue closed">Issue #504</span></a>).</p>
+<li><p class="first">Cache backend did not work if the cache key was unicode (Issue <a class="reference external" href="https://github.com/celery/celery/issues/504" title="Encode memcached cache key"><span class="xref issue closed">#504</span></a>).</p>
 <blockquote>
 <div><p>Fix contributed by Neil Chintomby.</p>
 </div></blockquote>
 </li>
 <li><p class="first">New setting <tt class="xref std std-setting docutils literal"><span class="pre">CELERY_RESULT_DB_SHORT_LIVED_SESSIONS</span></tt> added,
 which if enabled will disable the caching of SQLAlchemy sessions
-(<a class="reference external" href="https://github.com/celery/celery/issues/449" title="Option not to cache DB sessions"><span class="xref issue closed">Issue #449</span></a>).</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/449" title="Option not to cache DB sessions"><span class="xref issue closed">#449</span></a>).</p>
 <blockquote>
 <div><p>Contributed by Leo Dirac.</p>
 </div></blockquote>
 </li>
 <li><p class="first">All result backends now implements <tt class="docutils literal"><span class="pre">__reduce__</span></tt> so that they can
-be pickled (<a class="reference external" href="https://github.com/celery/celery/issues/441" title="Pickleability of backends"><span class="xref issue closed">Issue #441</span></a>).</p>
+be pickled (Issue <a class="reference external" href="https://github.com/celery/celery/issues/441" title="Pickleability of backends"><span class="xref issue closed">#441</span></a>).</p>
 <blockquote>
 <div><p>Fix contributed by Remy Noel</p>
 </div></blockquote>
 </li>
-<li><p class="first">celeryd-multi did not work on Windows (<a class="reference external" href="https://github.com/celery/celery/issues/472" title="Python path gets &quot;corrupted&quot; on a Windows system"><span class="xref issue closed">Issue #472</span></a>).</p>
+<li><p class="first">celeryd-multi did not work on Windows (Issue <a class="reference external" href="https://github.com/celery/celery/issues/472" title="Python path gets &quot;corrupted&quot; on a Windows system"><span class="xref issue closed">#472</span></a>).</p>
 </li>
 <li><p class="first">New-style <tt class="docutils literal"><span class="pre">CELERY_REDIS_*</span></tt> settings now takes precedence over
-the old <tt class="docutils literal"><span class="pre">REDIS_*</span></tt> configuration keys (<a class="reference external" href="https://github.com/celery/celery/issues/508" title="New style CELERY_REDIS_* configuration should take precedence over old st"><span class="xref issue closed">Issue #508</span></a>).</p>
+the old <tt class="docutils literal"><span class="pre">REDIS_*</span></tt> configuration keys (Issue <a class="reference external" href="https://github.com/celery/celery/issues/508" title="New style CELERY_REDIS_* configuration should take precedence over old st"><span class="xref issue closed">#508</span></a>).</p>
 <blockquote>
 <div><p>Fix contributed by Joshua Ginsberg</p>
 </div></blockquote>
 </li>
-<li><p class="first">Generic celerybeat init script no longer sets <cite>bash -e</cite> (<a class="reference external" href="https://github.com/celery/celery/issues/510" title="remove set -e / bash -e, make code friendlier to use with fabric"><span class="xref issue closed">Issue #510</span></a>).</p>
+<li><p class="first">Generic celerybeat init script no longer sets <cite>bash -e</cite> (Issue <a class="reference external" href="https://github.com/celery/celery/issues/510" title="remove set -e / bash -e, make code friendlier to use with fabric"><span class="xref issue closed">#510</span></a>).</p>
 <blockquote>
 <div><p>Fix contributed by Roger Hu.</p>
 </div></blockquote>
@@ -913,7 +913,7 @@ consistency.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Worker logged the string representation of args and kwargs
-without safe guards (<a class="reference external" href="https://github.com/celery/celery/issues/480" title="Stringizing arguments in apply_async leads to incorrect 'Internal error's"><span class="xref issue closed">Issue #480</span></a>).</p>
+without safe guards (Issue <a class="reference external" href="https://github.com/celery/celery/issues/480" title="Stringizing arguments in apply_async leads to incorrect 'Internal error's"><span class="xref issue closed">#480</span></a>).</p>
 </li>
 <li><p class="first">RHEL init script: Changed celeryd startup priority.</p>
 <blockquote>
@@ -934,10 +934,10 @@ down before it terminates.</p>
 </div></blockquote>
 </li>
 <li><p class="first">KeyValueStoreBackend.get_many did not respect the <tt class="docutils literal"><span class="pre">timeout</span></tt> argument
-(<a class="reference external" href="https://github.com/celery/celery/issues/512" title="KeyValueStoreBackend.get_many ignores timeout"><span class="xref issue closed">Issue #512</span></a>).</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/512" title="KeyValueStoreBackend.get_many ignores timeout"><span class="xref issue closed">#512</span></a>).</p>
 </li>
 <li><p class="first">celerybeat/celeryev&#8217;s &#8211;workdir option did not chdir before after
-configuration was attempted (<a class="reference external" href="https://github.com/celery/celery/issues/506" title="celerybeat ignores --workdir param"><span class="xref issue closed">Issue #506</span></a>).</p>
+configuration was attempted (Issue <a class="reference external" href="https://github.com/celery/celery/issues/506" title="celerybeat ignores --workdir param"><span class="xref issue closed">#506</span></a>).</p>
 </li>
 <li><p class="first">After deprecating 2.4 support we can now name modules correctly, since we
 can take use of absolute imports.</p>
@@ -985,7 +985,7 @@ be possible to regain supervisor privileges later.</p>
 <div class="section" id="id17">
 <h3><a class="toc-backref" href="#id136">Fixes</a><a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Backported fix for #455 from 2.4 to 2.3.</li>
+<li>Backported fix for <a class="reference external" href="https://github.com/celery/celery/issues/455" title="celeryctl purge doesn't purge everything"><span class="xref issue closed">#455</span></a> from 2.4 to 2.3.</li>
 <li>Statedb was not saved at shutdown.</li>
 <li>Fixes worker sometimes hanging when hard time limit exceeded.</li>
 </ul>
@@ -1006,7 +1006,7 @@ be possible to regain supervisor privileges later.</p>
 <ul class="simple">
 <li>Monkey patching <tt class="xref py py-attr docutils literal"><span class="pre">sys.stdout</span></tt> could result in the worker
 crashing if the replacing object did not define <tt class="xref py py-meth docutils literal"><span class="pre">isatty()</span></tt>
-(<a class="reference external" href="https://github.com/celery/celery/issues/477" title="celery/apps/worker calls sys.stdout.isatty() directly"><span class="xref issue closed">Issue #477</span></a>).</li>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/477" title="celery/apps/worker calls sys.stdout.isatty() directly"><span class="xref issue closed">#477</span></a>).</li>
 <li><tt class="docutils literal"><span class="pre">CELERYD</span></tt> option in <tt class="file docutils literal"><span class="pre">/etc/default/celeryd</span></tt> should not
 be used with generic init scripts.</li>
 </ul>
@@ -1034,7 +1034,7 @@ hesitate!</p>
 </li>
 <li><p class="first">Now depends on Kombu 1.3.1</p>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">Task.request</span></tt> now contains the current worker host name (<a class="reference external" href="https://github.com/celery/celery/issues/460" title="Get hostname of a worker from task"><span class="xref issue closed">Issue #460</span></a>).</p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Task.request</span></tt> now contains the current worker host name (Issue <a class="reference external" href="https://github.com/celery/celery/issues/460" title="Get hostname of a worker from task"><span class="xref issue closed">#460</span></a>).</p>
 <blockquote>
 <div><p>Available as <tt class="docutils literal"><span class="pre">task.request.hostname</span></tt>.</p>
 </div></blockquote>
@@ -1050,20 +1050,20 @@ hesitate!</p>
 <div class="section" id="v232-fixes">
 <span id="id21"></span><h3><a class="toc-backref" href="#id140">Fixes</a><a class="headerlink" href="#v232-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first"><cite>purge/discard_all</cite> was not working correctly (<a class="reference external" href="https://github.com/celery/celery/issues/455" title="celeryctl purge doesn't purge everything"><span class="xref issue closed">Issue #455</span></a>).</p>
+<li><p class="first"><cite>purge/discard_all</cite> was not working correctly (Issue <a class="reference external" href="https://github.com/celery/celery/issues/455" title="celeryctl purge doesn't purge everything"><span class="xref issue closed">#455</span></a>).</p>
 </li>
 <li><p class="first">The coloring of log messages didn&#8217;t handle non-ASCII data well
-(<a class="reference external" href="https://github.com/celery/celery/issues/427" title="UnicodeEncodeErrors with celery built-in console logging"><span class="xref issue closed">Issue #427</span></a>).</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/427" title="UnicodeEncodeErrors with celery built-in console logging"><span class="xref issue closed">#427</span></a>).</p>
 </li>
 <li><p class="first">[Windows] the multiprocessing pool tried to import <tt class="docutils literal"><span class="pre">os.kill</span></tt>
-even though this is not available there (<a class="reference external" href="https://github.com/celery/celery/issues/450" title="os.kill is not available in windows before python 2.7"><span class="xref issue closed">Issue #450</span></a>).</p>
+even though this is not available there (Issue <a class="reference external" href="https://github.com/celery/celery/issues/450" title="os.kill is not available in windows before python 2.7"><span class="xref issue closed">#450</span></a>).</p>
 </li>
 <li><p class="first">Fixes case where the worker could become unresponsive because of tasks
 exceeding the hard time limit.</p>
 </li>
 <li><p class="first">The <tt class="docutils literal"><span class="pre">task-sent</span></tt> event was missing from the event reference.</p>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ResultSet.iterate</span></tt> now returns results as they finish (<a class="reference external" href="https://github.com/celery/celery/issues/459" title="TaskSet.iterate() doesn't iterate as tasks complete *when task set is large and tasks are slow*"><span class="xref issue closed">Issue #459</span></a>).</p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ResultSet.iterate</span></tt> now returns results as they finish (Issue <a class="reference external" href="https://github.com/celery/celery/issues/459" title="TaskSet.iterate() doesn't iterate as tasks complete *when task set is large and tasks are slow*"><span class="xref issue closed">#459</span></a>).</p>
 <blockquote>
 <div><p>This was not the case previously, even though the documentation
 states this was the expected behavior.</p>
@@ -1100,7 +1100,7 @@ states this was the expected behavior.</p>
 <ul class="simple">
 <li>The <a class="reference internal" href="configuration.html#std:setting-CELERY_AMQP_TASK_RESULT_EXPIRES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_AMQP_TASK_RESULT_EXPIRES</span></tt></a> setting did not work,
 resulting in an AMQP related error about not being able to serialize
-floats while trying to publish task states (<a class="reference external" href="https://github.com/celery/celery/issues/446" title="Specifying CELERY_AMQP_TASK_RESULT_EXPIRES raises a ValueError"><span class="xref issue closed">Issue #446</span></a>).</li>
+floats while trying to publish task states (Issue <a class="reference external" href="https://github.com/celery/celery/issues/446" title="Specifying CELERY_AMQP_TASK_RESULT_EXPIRES raises a ValueError"><span class="xref issue closed">#446</span></a>).</li>
 </ul>
 </div>
 </div>
@@ -1289,7 +1289,7 @@ line.</p>
 </div></blockquote>
 </div></blockquote>
 </li>
-<li><p class="first">celerybeat: Now retries establishing the connection (<a class="reference external" href="https://github.com/celery/celery/issues/419" title="celerybeat does not retry broker connection like celeryd"><span class="xref issue closed">Issue #419</span></a>).</p>
+<li><p class="first">celerybeat: Now retries establishing the connection (Issue <a class="reference external" href="https://github.com/celery/celery/issues/419" title="celerybeat does not retry broker connection like celeryd"><span class="xref issue closed">#419</span></a>).</p>
 </li>
 <li><p class="first">celeryctl: New <tt class="docutils literal"><span class="pre">list</span> <span class="pre">bindings</span></tt> command.</p>
 <blockquote>
@@ -1323,19 +1323,19 @@ an event dispatcher instance using the connection pool.</p>
 has been renamed to <tt class="docutils literal"><span class="pre">callback</span></tt> and <tt class="docutils literal"><span class="pre">errback</span></tt> and take a single scalar
 value instead of a list.</p>
 </li>
-<li><p class="first">No longer propagates errors occurring during process cleanup (<a class="reference external" href="https://github.com/celery/celery/issues/365" title="Task exception masked by cleanup code exception"><span class="xref issue closed">Issue #365</span></a>)</p>
+<li><p class="first">No longer propagates errors occurring during process cleanup (Issue <a class="reference external" href="https://github.com/celery/celery/issues/365" title="Task exception masked by cleanup code exception"><span class="xref issue closed">#365</span></a>)</p>
 </li>
 <li><p class="first">Added <tt class="docutils literal"><span class="pre">TaskSetResult.delete()</span></tt>, which will delete a previously
 saved taskset result.</p>
 </li>
 <li><p class="first">Celerybeat now syncs every 3 minutes instead of only at
-shutdown (<a class="reference external" href="https://github.com/celery/celery/issues/382" title="Invalid parsing of crontab schedules"><span class="xref issue closed">Issue #382</span></a>).</p>
+shutdown (Issue <a class="reference external" href="https://github.com/celery/celery/issues/382" title="Invalid parsing of crontab schedules"><span class="xref issue closed">#382</span></a>).</p>
 </li>
 <li><p class="first">Monitors now properly handles unknown events, so user-defined events
 are displayed.</p>
 </li>
 <li><p class="first">Terminating a task on Windows now also terminates all of the tasks child
-processes (<a class="reference external" href="https://github.com/celery/celery/issues/384" title="Kill full process tree of a worker by default in Windows platforms"><span class="xref issue closed">Issue #384</span></a>).</p>
+processes (Issue <a class="reference external" href="https://github.com/celery/celery/issues/384" title="Kill full process tree of a worker by default in Windows platforms"><span class="xref issue closed">#384</span></a>).</p>
 </li>
 <li><p class="first">celeryd: <tt class="docutils literal"><span class="pre">-I|--include</span></tt> option now always searches the current directory
 to import the specified modules.</p>
@@ -1352,7 +1352,7 @@ passing tests.</p>
 <ul class="simple">
 <li>celeryev was trying to create the pidfile twice.</li>
 <li>celery.contrib.batches: Fixed problem where tasks failed
-silently (<a class="reference external" href="https://github.com/celery/celery/issues/393" title="Batches silently failing"><span class="xref issue closed">Issue #393</span></a>).</li>
+silently (Issue <a class="reference external" href="https://github.com/celery/celery/issues/393" title="Batches silently failing"><span class="xref issue closed">#393</span></a>).</li>
 <li>Fixed an issue where logging objects would give &#8220;&lt;Unrepresentable&#8221;,
 even though the objects were.</li>
 <li><tt class="docutils literal"><span class="pre">CELERY_TASK_ERROR_WHITE_LIST</span></tt> is now properly initialized
@@ -1451,12 +1451,12 @@ to the 1.5.0 version:</p>
 <div class="section" id="v226-fixes">
 <span id="id34"></span><h3><a class="toc-backref" href="#id152">Fixes</a><a class="headerlink" href="#v226-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">The new <tt class="docutils literal"><span class="pre">WatchedFileHandler</span></tt> broke Python 2.5 support (<a class="reference external" href="https://github.com/celery/celery/issues/367" title="celeryd_multi dies on python 2.5"><span class="xref issue closed">Issue #367</span></a>).</p>
+<li><p class="first">The new <tt class="docutils literal"><span class="pre">WatchedFileHandler</span></tt> broke Python 2.5 support (Issue <a class="reference external" href="https://github.com/celery/celery/issues/367" title="celeryd_multi dies on python 2.5"><span class="xref issue closed">#367</span></a>).</p>
 </li>
 <li><p class="first">Task: Don&#8217;t use <tt class="docutils literal"><span class="pre">app.main</span></tt> if the task name is set explicitly.</p>
 </li>
 <li><p class="first">Sending emails did not work on Python 2.5, due to a bug in
-the version detection code (<a class="reference external" href="https://github.com/celery/celery/issues/378" title="celery.utils.mail incompatible with Python 2.5"><span class="xref issue closed">Issue #378</span></a>).</p>
+the version detection code (Issue <a class="reference external" href="https://github.com/celery/celery/issues/378" title="celery.utils.mail incompatible with Python 2.5"><span class="xref issue closed">#378</span></a>).</p>
 </li>
 <li><p class="first">Beat: Adds method <tt class="docutils literal"><span class="pre">ScheduleEntry._default_now</span></tt></p>
 <blockquote>
@@ -1467,10 +1467,10 @@ of <tt class="docutils literal"><span class="pre">last_run_at</span></tt>.</p>
 <li><p class="first">An error occurring in process cleanup could mask task errors.</p>
 <p>We no longer propagate errors happening at process cleanup,
 but log them instead.  This way they will not interfere with publishing
-the task result (<a class="reference external" href="https://github.com/celery/celery/issues/365" title="Task exception masked by cleanup code exception"><span class="xref issue closed">Issue #365</span></a>).</p>
+the task result (Issue <a class="reference external" href="https://github.com/celery/celery/issues/365" title="Task exception masked by cleanup code exception"><span class="xref issue closed">#365</span></a>).</p>
 </li>
 <li><p class="first">Defining tasks did not work properly when using the Django
-<tt class="docutils literal"><span class="pre">shell_plus</span></tt> utility (<a class="reference external" href="https://github.com/celery/celery/issues/366" title="KeyError on tutorial with Python 2.6.6 and 2.7.1 but not 2.6.1"><span class="xref issue closed">Issue #366</span></a>).</p>
+<tt class="docutils literal"><span class="pre">shell_plus</span></tt> utility (Issue <a class="reference external" href="https://github.com/celery/celery/issues/366" title="KeyError on tutorial with Python 2.6.6 and 2.7.1 but not 2.6.1"><span class="xref issue closed">#366</span></a>).</p>
 </li>
 <li><dl class="first docutils">
 <dt><tt class="docutils literal"><span class="pre">AsyncResult.get</span></tt> did not accept the <tt class="docutils literal"><span class="pre">interval</span></tt> and <tt class="docutils literal"><span class="pre">propagate</span></tt></dt>
@@ -1511,7 +1511,7 @@ the task result (<a class="reference external" href="https://github.com/celery/c
 the new URL.</p>
 </li>
 <li><p class="first">Logging: Now supports log rotation using external tools like <a class="reference external" href="http://www.ducea.com/2006/06/06/rotating-linux-log-files-part-2-logrotate/">logrotate.d</a>
-(<a class="reference external" href="https://github.com/celery/celery/issues/321" title="Provide support for rolling file logs"><span class="xref issue closed">Issue #321</span></a>)</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/321" title="Provide support for rolling file logs"><span class="xref issue closed">#321</span></a>)</p>
 <blockquote>
 <div><p>This is accomplished by using the <tt class="docutils literal"><span class="pre">WatchedFileHandler</span></tt>, which re-opens
 the file if it is renamed or deleted.</p>
@@ -1567,7 +1567,7 @@ unique constraint.  (Tables need to recreated for this to take affect).</p>
 <span id="id38"></span><h3><a class="toc-backref" href="#id156">Fixes</a><a class="headerlink" href="#v225-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">multiprocessing.Pool:  Fixes race condition when marking job with
-<tt class="docutils literal"><span class="pre">WorkerLostError</span></tt> (<a class="reference external" href="https://github.com/celery/celery/issues/268" title="Worker Exits Prematurely with Semaphore Error when replacing worker after max tasks per child count"><span class="xref issue closed">Issue #268</span></a>).</p>
+<tt class="docutils literal"><span class="pre">WorkerLostError</span></tt> (Issue <a class="reference external" href="https://github.com/celery/celery/issues/268" title="Worker Exits Prematurely with Semaphore Error when replacing worker after max tasks per child count"><span class="xref issue closed">#268</span></a>).</p>
 <blockquote>
 <div><p>The process may have published a result before it was terminated,
 but we have no reliable way to detect that this is the case.</p>
@@ -1602,7 +1602,7 @@ active tasks.</p>
 is the only way to ensure exit in the case of syntax errors, or other
 unrecoverable errors.</p>
 </li>
-<li><p class="first">Fixed typo in <tt class="docutils literal"><span class="pre">maybe_timedelta</span></tt> (<a class="reference external" href="https://github.com/celery/celery/issues/352" title="maybe_timedelta tries to return a tiemdelta passing int type."><span class="xref issue closed">Issue #352</span></a>).</p>
+<li><p class="first">Fixed typo in <tt class="docutils literal"><span class="pre">maybe_timedelta</span></tt> (Issue <a class="reference external" href="https://github.com/celery/celery/issues/352" title="maybe_timedelta tries to return a tiemdelta passing int type."><span class="xref issue closed">#352</span></a>).</p>
 </li>
 <li><p class="first">celeryd: Broadcast commands now logs with loglevel debug instead of warning.</p>
 </li>
@@ -1613,16 +1613,16 @@ unrecoverable errors.</p>
 <li><p class="first">Rate limits: No longer sleeps if there are no tasks, but rather waits for
 the task received condition (Performance improvement).</p>
 </li>
-<li><p class="first">ConfigurationView: <tt class="docutils literal"><span class="pre">iter(dict)</span></tt> should return keys, not items (<a class="reference external" href="https://github.com/celery/celery/issues/362" title="celery.datastructures.DictAttribute iteritems() relies on vars() which doesn't work nicely with settings."><span class="xref issue closed">Issue #362</span></a>).</p>
+<li><p class="first">ConfigurationView: <tt class="docutils literal"><span class="pre">iter(dict)</span></tt> should return keys, not items (Issue <a class="reference external" href="https://github.com/celery/celery/issues/362" title="celery.datastructures.DictAttribute iteritems() relies on vars() which doesn't work nicely with settings."><span class="xref issue closed">#362</span></a>).</p>
 </li>
 <li><p class="first">celerybeat:  PersistentScheduler now automatically removes a corrupted
-schedule file (<a class="reference external" href="https://github.com/celery/celery/issues/346" title="Celerybeat stops working if PersistentStorage is corrupted"><span class="xref issue closed">Issue #346</span></a>).</p>
+schedule file (Issue <a class="reference external" href="https://github.com/celery/celery/issues/346" title="Celerybeat stops working if PersistentStorage is corrupted"><span class="xref issue closed">#346</span></a>).</p>
 </li>
 <li><p class="first">Programs that doesn&#8217;t support positional command line arguments now provides
 a user friendly error message.</p>
 </li>
 <li><p class="first">Programs no longer tries to load the configuration file when showing
-<tt class="docutils literal"><span class="pre">--version</span></tt> (<a class="reference external" href="https://github.com/celery/celery/issues/347" title="errors when checking version"><span class="xref issue closed">Issue #347</span></a>).</p>
+<tt class="docutils literal"><span class="pre">--version</span></tt> (Issue <a class="reference external" href="https://github.com/celery/celery/issues/347" title="errors when checking version"><span class="xref issue closed">#347</span></a>).</p>
 </li>
 <li><p class="first">Autoscaler: The &#8220;all processes busy&#8221; log message is now severity debug
 instead of error.</p>
@@ -1638,13 +1638,13 @@ the failure.</p>
 loaders.</p>
 </li>
 <li><p class="first">Now emits a user-friendly error message if the result backend name is
-unknown (<a class="reference external" href="https://github.com/celery/celery/issues/349" title="Nice error message when specifying wrong result backend"><span class="xref issue closed">Issue #349</span></a>).</p>
+unknown (Issue <a class="reference external" href="https://github.com/celery/celery/issues/349" title="Nice error message when specifying wrong result backend"><span class="xref issue closed">#349</span></a>).</p>
 </li>
 <li><p class="first"><a class="reference internal" href="reference/celery.contrib.batches.html#module-celery.contrib.batches" title="celery.contrib.batches"><tt class="xref py py-mod docutils literal"><span class="pre">celery.contrib.batches</span></tt></a>: Now sets loglevel and logfile in the task
-request so <tt class="docutils literal"><span class="pre">task.get_logger</span></tt> works with batch tasks (<a class="reference external" href="https://github.com/celery/celery/issues/357" title="Log messages not appearing in batch tasks"><span class="xref issue closed">Issue #357</span></a>).</p>
+request so <tt class="docutils literal"><span class="pre">task.get_logger</span></tt> works with batch tasks (Issue <a class="reference external" href="https://github.com/celery/celery/issues/357" title="Log messages not appearing in batch tasks"><span class="xref issue closed">#357</span></a>).</p>
 </li>
 <li><p class="first">celeryd: An exception was raised if using the amqp transport and the prefetch
-count value exceeded 65535 (<a class="reference external" href="https://github.com/celery/celery/issues/359" title="Problem with more than 65535 scheduled tasks"><span class="xref issue closed">Issue #359</span></a>).</p>
+count value exceeded 65535 (Issue <a class="reference external" href="https://github.com/celery/celery/issues/359" title="Problem with more than 65535 scheduled tasks"><span class="xref issue closed">#359</span></a>).</p>
 <blockquote>
 <div><p>The prefetch count is incremented for every received task with an
 ETA/countdown defined.  The prefetch count is a short, so can only support
@@ -1653,7 +1653,7 @@ disable the prefetch count, it is re-enabled as soon as the value is below
 the limit again.</p>
 </div></blockquote>
 </li>
-<li><p class="first">cursesmon: Fixed unbound local error (<a class="reference external" href="https://github.com/celery/celery/issues/303" title="celeryev: race condition?"><span class="xref issue closed">Issue #303</span></a>).</p>
+<li><p class="first">cursesmon: Fixed unbound local error (Issue <a class="reference external" href="https://github.com/celery/celery/issues/303" title="celeryev: race condition?"><span class="xref issue closed">#303</span></a>).</p>
 </li>
 <li><p class="first">eventlet/gevent is now imported on demand so autodoc can import the modules
 without having eventlet/gevent installed.</p>
@@ -1671,7 +1671,7 @@ too many times. (this can happen if one or more worker processes are
 killed).</p>
 </li>
 <li><p class="first">SQLAlchemy Result Backend: Now returns accidentally removed <tt class="docutils literal"><span class="pre">date_done</span></tt> again
-(<a class="reference external" href="https://github.com/celery/celery/issues/325" title="date_done missing from get_task_meta result when using database result backend"><span class="xref issue closed">Issue #325</span></a>).</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/325" title="date_done missing from get_task_meta result when using database result backend"><span class="xref issue closed">#325</span></a>).</p>
 </li>
 <li><p class="first">Task.request contex is now always initialized to ensure calling the task
 function directly works even if it actively uses the request context.</p>
@@ -1701,11 +1701,11 @@ fixed.</p>
 <li>AMQP result backend: Polling task states did not work properly if there were
 more than one result message in the queue.</li>
 <li><tt class="docutils literal"><span class="pre">TaskSet.apply_async()</span></tt> and <tt class="docutils literal"><span class="pre">TaskSet.apply()</span></tt> now supports an optional
-<tt class="docutils literal"><span class="pre">taskset_id</span></tt> keyword argument (<a class="reference external" href="https://github.com/celery/celery/issues/331" title="Optional taskset_id parameter for TaskSet.apply(_async)"><span class="xref issue closed">Issue #331</span></a>).</li>
+<tt class="docutils literal"><span class="pre">taskset_id</span></tt> keyword argument (Issue <a class="reference external" href="https://github.com/celery/celery/issues/331" title="Optional taskset_id parameter for TaskSet.apply(_async)"><span class="xref issue closed">#331</span></a>).</li>
 <li>The current taskset id (if any) is now available in the task context as
-<tt class="docutils literal"><span class="pre">request.taskset</span></tt> (<a class="reference external" href="https://github.com/celery/celery/issues/329" title="Propagate the taskset UUID from the message body to the task request"><span class="xref issue closed">Issue #329</span></a>).</li>
+<tt class="docutils literal"><span class="pre">request.taskset</span></tt> (Issue <a class="reference external" href="https://github.com/celery/celery/issues/329" title="Propagate the taskset UUID from the message body to the task request"><span class="xref issue closed">#329</span></a>).</li>
 <li>SQLAlchemy result backend: <cite>date_done</cite> was no longer part of the results as it had
-been accidentally removed.  It is now available again (<a class="reference external" href="https://github.com/celery/celery/issues/325" title="date_done missing from get_task_meta result when using database result backend"><span class="xref issue closed">Issue #325</span></a>).</li>
+been accidentally removed.  It is now available again (Issue <a class="reference external" href="https://github.com/celery/celery/issues/325" title="date_done missing from get_task_meta result when using database result backend"><span class="xref issue closed">#325</span></a>).</li>
 <li>SQLAlchemy result backend: Added unique constraint on <cite>Task.id</cite> and
 <cite>TaskSet.taskset_id</cite>.  Tables needs to be recreated for this to take effect.</li>
 <li>Fixed exception raised when iterating on the result of <tt class="docutils literal"><span class="pre">TaskSet.apply()</span></tt>.</li>
@@ -1732,7 +1732,7 @@ been accidentally removed.  It is now available again (<a class="reference exter
 default value.</p>
 </li>
 <li><p class="first"><cite>multiprocessing.cpu_count</cite> may raise <a class="reference external" href="http://docs.python.org/dev/library/exceptions.html#NotImplementedError" title="(in Python v3.3)"><tt class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></tt></a> on
-platforms where this is not supported (<a class="reference external" href="https://github.com/celery/celery/issues/320" title="celery.apps.worker can raise NotImplementedError: cannot determine number of cpus"><span class="xref issue closed">Issue #320</span></a>).</p>
+platforms where this is not supported (Issue <a class="reference external" href="https://github.com/celery/celery/issues/320" title="celery.apps.worker can raise NotImplementedError: cannot determine number of cpus"><span class="xref issue closed">#320</span></a>).</p>
 </li>
 <li><p class="first">Coloring of log messages broke if the logged object was not a string.</p>
 </li>
@@ -1747,14 +1747,14 @@ instances, not classes.</p>
 <li><p class="first"><strong class="program">celeryev</strong> did not create pidfile even though the
 <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--pidfile"><em class="xref std std-option">--pidfile</em></a> argument was set.</p>
 </li>
-<li><p class="first">Task logger format was no longer used. (<a class="reference external" href="https://github.com/celery/celery/issues/317" title="Correct default log format?"><span class="xref issue closed">Issue #317</span></a>).</p>
+<li><p class="first">Task logger format was no longer used. (Issue <a class="reference external" href="https://github.com/celery/celery/issues/317" title="Correct default log format?"><span class="xref issue closed">#317</span></a>).</p>
 <blockquote>
 <div><p>The id and name of the task is now part of the log message again.</p>
 </div></blockquote>
 </li>
 <li><p class="first">A safe version of <tt class="docutils literal"><span class="pre">repr()</span></tt> is now used in strategic places to ensure
 objects with a broken <tt class="docutils literal"><span class="pre">__repr__</span></tt> does not crash the worker, or otherwise
-make errors hard to understand (<a class="reference external" href="https://github.com/celery/celery/issues/298" title="Task arg with a __repr__ bug causes hard-to-troubleshoot errors"><span class="xref issue closed">Issue #298</span></a>).</p>
+make errors hard to understand (Issue <a class="reference external" href="https://github.com/celery/celery/issues/298" title="Task arg with a __repr__ bug causes hard-to-troubleshoot errors"><span class="xref issue closed">#298</span></a>).</p>
 </li>
 <li><p class="first">Remote control command <tt class="docutils literal"><span class="pre">active_queues</span></tt>: did not account for queues added
 at runtime.</p>
@@ -1803,7 +1803,7 @@ is used as the list of queues to consume from.</p>
 <li><p class="first">celeryd-multi/celeryd_detach: Now logs errors occuring when executing
 the <cite>celeryd</cite> command.</p>
 </li>
-<li><p class="first">daemonizing cookbook: Fixed typo <tt class="docutils literal"><span class="pre">--time-limit</span> <span class="pre">300</span></tt> -&gt;
+<li><p class="first">daemonizing tutorial: Fixed typo <tt class="docutils literal"><span class="pre">--time-limit</span> <span class="pre">300</span></tt> -&gt;
 <tt class="docutils literal"><span class="pre">--time-limit=300</span></tt></p>
 </li>
 <li><p class="first">Colors in logging broke non-string objects in log messages.</p>
@@ -1826,7 +1826,7 @@ the <cite>celeryd</cite> command.</p>
 <div class="section" id="v221-fixes">
 <span id="id46"></span><h3><a class="toc-backref" href="#id164">Fixes</a><a class="headerlink" href="#v221-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Eventlet pool was leaking memory (<a class="reference external" href="https://github.com/celery/celery/issues/308" title="eventlet pool is leaking memory like crazy!"><span class="xref issue closed">Issue #308</span></a>).</p>
+<li><p class="first">Eventlet pool was leaking memory (Issue <a class="reference external" href="https://github.com/celery/celery/issues/308" title="eventlet pool is leaking memory like crazy!"><span class="xref issue closed">#308</span></a>).</p>
 </li>
 <li><p class="first">Deprecated function <tt class="docutils literal"><span class="pre">celery.execute.delay_task</span></tt> was accidentally removed,
 now available again.</p>
@@ -2430,7 +2430,7 @@ so please upgrade to the latest version.</p>
 <span id="id50"></span><h3><a class="toc-backref" href="#id168">Fixes</a><a class="headerlink" href="#v220-fixes" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first"><cite>celeryev</cite> Curses Monitor: Improved resize handling and UI layout
-(<a class="reference external" href="https://github.com/celery/celery/issues/274" title="Ncurses ui layout"><span class="xref issue closed">Issue #274</span></a> + <a class="reference external" href="https://github.com/celery/celery/issues/276" title="Ncurses ui layout"><span class="xref issue closed">Issue #276</span></a>)</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/274" title="Ncurses ui layout"><span class="xref issue closed">#274</span></a> + Issue <a class="reference external" href="https://github.com/celery/celery/issues/276" title="Ncurses ui layout"><span class="xref issue closed">#276</span></a>)</p>
 </li>
 <li><p class="first">AMQP Backend: Exceptions occurring while sending task results are now
 propagated instead of silenced.</p>
@@ -2513,20 +2513,20 @@ retry sending of the task message if the connection is lost.</p>
 <ul>
 <li><p class="first">Execution options to <cite>apply_async</cite> now takes precedence over options
 returned by active routers.  This was a regression introduced recently
-(<a class="reference external" href="https://github.com/celery/celery/issues/244" title="execution options to apply_async should take precedence over routes."><span class="xref issue closed">Issue #244</span></a>).</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/244" title="execution options to apply_async should take precedence over routes."><span class="xref issue closed">#244</span></a>).</p>
 </li>
 <li><p class="first"><cite>celeryev</cite> curses monitor: Long arguments are now truncated so curses
-doesn&#8217;t crash with out of bounds errors.  (<a class="reference external" href="https://github.com/celery/celery/issues/235" title="celeryev does not properly truncate output"><span class="xref issue closed">Issue #235</span></a>).</p>
+doesn&#8217;t crash with out of bounds errors.  (Issue <a class="reference external" href="https://github.com/celery/celery/issues/235" title="celeryev does not properly truncate output"><span class="xref issue closed">#235</span></a>).</p>
 </li>
 <li><p class="first"><cite>celeryd</cite>: Channel errors occurring while handling control commands no
 longer crash the worker but are instead logged with severity error.</p>
 </li>
 <li><p class="first">SQLAlchemy database backend: Fixed a race condition occurring when
 the client wrote the pending state.  Just like the Django database backend,
-it does no longer save the pending state (<a class="reference external" href="https://github.com/celery/celery/issues/261" title="task.get() blocks without ever returning."><span class="xref issue closed">Issue #261</span></a> + <a class="reference external" href="https://github.com/celery/celery/issues/262" title="Db backend consistency"><span class="xref issue closed">Issue #262</span></a>).</p>
+it does no longer save the pending state (Issue <a class="reference external" href="https://github.com/celery/celery/issues/261" title="task.get() blocks without ever returning."><span class="xref issue closed">#261</span></a> + Issue <a class="reference external" href="https://github.com/celery/celery/issues/262" title="Db backend consistency"><span class="xref issue closed">#262</span></a>).</p>
 </li>
 <li><p class="first">Error email body now uses <cite>repr(exception)</cite> instead of <cite>str(exception)</cite>,
-as the latter could result in Unicode decode errors (<a class="reference external" href="https://github.com/celery/celery/issues/245" title="error email body should use repr(exc) not str(exc)"><span class="xref issue closed">Issue #245</span></a>).</p>
+as the latter could result in Unicode decode errors (Issue <a class="reference external" href="https://github.com/celery/celery/issues/245" title="error email body should use repr(exc) not str(exc)"><span class="xref issue closed">#245</span></a>).</p>
 </li>
 <li><p class="first">Error email timeout value is now configurable by using the
 <a class="reference internal" href="configuration.html#std:setting-EMAIL_TIMEOUT"><tt class="xref std std-setting docutils literal"><span class="pre">EMAIL_TIMEOUT</span></tt></a> setting.</p>
@@ -2543,11 +2543,11 @@ the message.</p>
 </li>
 <li><dl class="first docutils">
 <dt><cite>TaskRequest.on_failure</cite> now encodes traceback using the current filesystem</dt>
-<dd><p class="first last">encoding.  (<a class="reference external" href="https://github.com/celery/celery/issues/286" title="worker.job.TaskReqeust.on_failure forces utf-8 encoding for traceback"><span class="xref issue closed">Issue #286</span></a>).</p>
+<dd><p class="first last">encoding.  (Issue <a class="reference external" href="https://github.com/celery/celery/issues/286" title="worker.job.TaskReqeust.on_failure forces utf-8 encoding for traceback"><span class="xref issue closed">#286</span></a>).</p>
 </dd>
 </dl>
 </li>
-<li><p class="first"><cite>EagerResult</cite> can now be pickled (<a class="reference external" href="https://github.com/celery/celery/issues/288" title="TaskSetResult cannot save with EagerResult"><span class="xref issue closed">Issue #288</span></a>).</p>
+<li><p class="first"><cite>EagerResult</cite> can now be pickled (Issue <a class="reference external" href="https://github.com/celery/celery/issues/288" title="TaskSetResult cannot save with EagerResult"><span class="xref issue closed">#288</span></a>).</p>
 </li>
 </ul>
 </div>
@@ -2635,7 +2635,7 @@ when using logging setup signals.</li>
 </li>
 <li><p class="first">celeryd: Reject tasks with an eta that cannot be converted to a time stamp.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/209" title="Problem upgrading from 2.0.3 -&gt; 2.1"><span class="xref issue closed">issue #209</span></a></p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/209" title="Problem upgrading from 2.0.3 -&gt; 2.1"><span class="xref issue closed">#209</span></a></p>
 </div></blockquote>
 </li>
 <li><p class="first">concurrency.processes.pool: The semaphore was released twice for each task
@@ -2647,7 +2647,7 @@ when using logging setup signals.</li>
 <li><p class="first">docs/configuration: Fixed typo <cite>CELERYD_SOFT_TASK_TIME_LIMIT</cite> -&gt;
 <a class="reference internal" href="configuration.html#std:setting-CELERYD_TASK_SOFT_TIME_LIMIT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_TASK_SOFT_TIME_LIMIT</span></tt></a>.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/214" title="Docs say &quot;CELERYD_SOFT_TASK_TIME_LIMIT&quot; but should be &quot;CELERYD_TASK_SOFT_TIME_LIMIT&quot;"><span class="xref issue closed">issue #214</span></a></p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/214" title="Docs say &quot;CELERYD_SOFT_TASK_TIME_LIMIT&quot; but should be &quot;CELERYD_TASK_SOFT_TIME_LIMIT&quot;"><span class="xref issue closed">#214</span></a></p>
 </div></blockquote>
 </li>
 <li><p class="first">control command <cite>dump_scheduled</cite>: was using old .info attribute</p>
@@ -2857,7 +2857,7 @@ this monitor if you&#8217;re not using Django.</p>
 lets you perform some actions, like revoking and rate limiting tasks,
 and shutting down worker nodes.</p>
 <p>There&#8217;s also a Debian init.d script for <a class="reference internal" href="reference/celery.bin.celeryev.html#module-celery.bin.celeryev" title="celery.bin.celeryev"><tt class="xref py py-mod docutils literal"><span class="pre">celeryev</span></tt></a> available,
-see <tt class="xref doc docutils literal"><span class="pre">cookbook/daemonizing</span></tt> for more information.</p>
+see <tt class="xref doc docutils literal"><span class="pre">tutorial/daemonizing</span></tt> for more information.</p>
 <p>New command line arguments to celeryev:</p>
 <blockquote>
 <div><ul class="simple">
@@ -3012,7 +3012,7 @@ with <strong>py2exe</strong>, <strong>PyInstaller</strong>, <strong>cx_Freeze</s
 <li><p class="first">celeryd: Now includes more metadata for the <a class="reference internal" href="userguide/tasks.html#std:state-STARTED"><tt class="xref std std-state docutils literal"><span class="pre">STARTED</span></tt></a> state: PID and
 host name of the worker that started the task.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/181" title="no way to tell which worker picked up a task"><span class="xref issue closed">issue #181</span></a></p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/181" title="no way to tell which worker picked up a task"><span class="xref issue closed">#181</span></a></p>
 </div></blockquote>
 </li>
 <li><p class="first">subtask: Merge additional keyword arguments to <cite>subtask()</cite> into task keyword
@@ -3026,7 +3026,7 @@ arguments.</p>
 <span class="go">{&quot;foo&quot;: &quot;bar&quot;, &quot;baz&quot;: 1}</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://github.com/celery/celery/issues/182" title="callback argument ignored by subtask"><span class="xref issue closed">issue #182</span></a>.</p>
+<p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/182" title="callback argument ignored by subtask"><span class="xref issue closed">#182</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">celeryd: Now emits a warning if there is already a worker node using the same
@@ -3095,13 +3095,13 @@ the first time it was run (using crontab schedule instead of
 to &#8220;celery.backend_cleanup&#8221;</p>
 </li>
 </ul>
-<p>See <a class="reference external" href="https://github.com/celery/celery/issues/134" title="Need a config flag that allows disabling the builtin tasks"><span class="xref issue closed">issue #134</span></a>.</p>
+<p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/134" title="Need a config flag that allows disabling the builtin tasks"><span class="xref issue closed">#134</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Implemented <cite>AsyncResult.forget</cite> for sqla/cache/redis/tyrant backends.
 (Forget and remove task result).</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/184" title="&quot;Discard task result&quot; operation"><span class="xref issue closed">issue #184</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/184" title="&quot;Discard task result&quot; operation"><span class="xref issue closed">#184</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first"><tt class="xref py py-meth docutils literal"><span class="pre">TaskSetResult.join</span></tt>:
@@ -3144,7 +3144,7 @@ instead of taking down the worker.</p>
 </li>
 <li><p class="first"><cite>Task.retry</cite>: Now raises <a class="reference external" href="http://docs.python.org/dev/library/exceptions.html#TypeError" title="(in Python v3.3)"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> if kwargs argument is empty.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/164" title="retry does not work without kwargs explicitly passed"><span class="xref issue closed">issue #164</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/164" title="retry does not work without kwargs explicitly passed"><span class="xref issue closed">#164</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">timedelta_seconds: Use <cite>timedelta.total_seconds</cite> if running on Python 2.7</p>
@@ -3193,19 +3193,19 @@ pool without going through the ready queue (<em>Optimization</em>).</p>
 <li><p class="first">Pool: Process timed out by <cite>TimeoutHandler</cite> must be joined by the Supervisor,
 so don&#8217;t remove it from the internal process list.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/192" title="Currently having zombie processes on Celery master branch (like one a week)"><span class="xref issue closed">issue #192</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/192" title="Currently having zombie processes on Celery master branch (like one a week)"><span class="xref issue closed">#192</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first"><cite>TaskPublisher.delay_task</cite> now supports exchange argument, so exchange can be
 overridden when sending tasks in bulk using the same publisher</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/187" title="Using publisher with a different queue does not respond"><span class="xref issue closed">issue #187</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/187" title="Using publisher with a different queue does not respond"><span class="xref issue closed">#187</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">celeryd no longer marks tasks as revoked if <a class="reference internal" href="configuration.html#std:setting-CELERY_IGNORE_RESULT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_IGNORE_RESULT</span></tt></a>
 is enabled.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/207" title="TaskRevokedError Exceptions stored to queue even when CELERY_IGNORE_RESULT=True"><span class="xref issue closed">issue #207</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/207" title="TaskRevokedError Exceptions stored to queue even when CELERY_IGNORE_RESULT=True"><span class="xref issue closed">#207</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">AMQP Result backend: Fixed bug with <cite>result.get()</cite> if
@@ -3335,7 +3335,7 @@ database names, but database numbers. The default database is now 0.</p>
 <li><p class="first"><a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>:
 <cite>registered_tasks</cite> was requesting an invalid command because of a typo.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/170" title="task.control.inspect.registered_task is broken"><span class="xref issue closed">issue #170</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/170" title="task.control.inspect.registered_task is broken"><span class="xref issue closed">#170</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first"><a class="reference internal" href="configuration.html#std:setting-CELERY_ROUTES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_ROUTES</span></tt></a>: Values defined in the route should now have
@@ -3381,7 +3381,7 @@ emails fails.</p>
 <li><p class="first">celeryev: Curses monitor no longer crashes if the terminal window
 is resized.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/160" title="celeryev crashes when terminal is resized"><span class="xref issue closed">issue #160</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/160" title="celeryev crashes when terminal is resized"><span class="xref issue closed">#160</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">celeryd: On OS X it is not possible to run <cite>os.exec*</cite> in a process
@@ -3391,30 +3391,30 @@ that is threaded.</p>
 <div><p>This breaks the SIGHUP restart handler,
 and is now disabled on OS X, emitting a warning instead.</p>
 </div></blockquote>
-<p>See <a class="reference external" href="https://github.com/celery/celery/issues/152" title="kill -HUP leaves worker running but defunct, with &quot;OSError: [Errno 45] Operation not supported&quot;"><span class="xref issue closed">issue #152</span></a>.</p>
+<p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/152" title="kill -HUP leaves worker running but defunct, with &quot;OSError: [Errno 45] Operation not supported&quot;"><span class="xref issue closed">#152</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first"><tt class="xref py py-mod docutils literal"><span class="pre">celery.execute.trace</span></tt>: Properly handle <cite>raise(str)</cite>,
 which is still allowed in Python 2.4.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/175" title="py2.4: raise &quot;string&quot; kills worker processes"><span class="xref issue closed">issue #175</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/175" title="py2.4: raise &quot;string&quot; kills worker processes"><span class="xref issue closed">#175</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Using urllib2 in a periodic task on OS X crashed because
 of the proxy auto detection used in OS X.</p>
 <blockquote>
 <div><p>This is now fixed by using a workaround.
-See <a class="reference external" href="https://github.com/celery/celery/issues/143" title="test_cleanup fails"><span class="xref issue closed">issue #143</span></a>.</p>
+See issue <a class="reference external" href="https://github.com/celery/celery/issues/143" title="test_cleanup fails"><span class="xref issue closed">#143</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Debian init scripts: Commands should not run in a sub shell</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/163" title="Debian initscript: $cmd should not be run in subshell"><span class="xref issue closed">issue #163</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/163" title="Debian initscript: $cmd should not be run in subshell"><span class="xref issue closed">#163</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Debian init scripts: Use the absolute path of celeryd to allow stat</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/162" title="Default debian init script won't run on Lenny"><span class="xref issue closed">issue #162</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/162" title="Default debian init script won't run on Lenny"><span class="xref issue closed">#162</span></a>.</p>
 </div></blockquote>
 </li>
 </ul>
@@ -3429,12 +3429,12 @@ See <a class="reference external" href="https://github.com/celery/celery/issues/
 </li>
 <li><p class="first">Tasks User Guide: Added section on database transactions.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/169" title="Documentation issues"><span class="xref issue closed">issue #169</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/169" title="Documentation issues"><span class="xref issue closed">#169</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Routing User Guide: Fixed typo <cite>&#8220;feed&#8221;: -&gt; {&#8220;queue&#8221;: &#8220;feeds&#8221;}</cite>.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/169" title="Documentation issues"><span class="xref issue closed">issue #169</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/169" title="Documentation issues"><span class="xref issue closed">#169</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Documented the default values for the <a class="reference internal" href="configuration.html#std:setting-CELERYD_CONCURRENCY"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_CONCURRENCY</span></tt></a>
@@ -3472,7 +3472,7 @@ and <a class="reference internal" href="configuration.html#std:setting-CELERYD_P
 <li><p class="first">Routes: When using the dict route syntax, the exchange for a task
 could disappear making the task unroutable.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/158" title="Only the first delayed task is sent when overriding queue/routes."><span class="xref issue closed">issue #158</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/158" title="Only the first delayed task is sent when overriding queue/routes."><span class="xref issue closed">#158</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Test suite now passing on Python 2.4</p>
@@ -3509,13 +3509,13 @@ when closing the terminal.</p>
 </li>
 <li><p class="first">celeryd: Now joins threads at shutdown.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/152" title="kill -HUP leaves worker running but defunct, with &quot;OSError: [Errno 45] Operation not supported&quot;"><span class="xref issue closed">issue #152</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/152" title="kill -HUP leaves worker running but defunct, with &quot;OSError: [Errno 45] Operation not supported&quot;"><span class="xref issue closed">#152</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Test tear down: Don&#8217;t use <cite>atexit</cite> but nose&#8217;s <cite>teardown()</cite> functionality
 instead.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/154" title="Errors after python setup.py test: “Parent module 'celery.tests' not loaded”"><span class="xref issue closed">issue #154</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/154" title="Errors after python setup.py test: “Parent module 'celery.tests' not loaded”"><span class="xref issue closed">#154</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Debian init script for celeryd: Stop now works correctly.</p>
@@ -3528,7 +3528,7 @@ instead.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_TASK_ERROR_WHITELIST</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;myapp.MalformedInputError&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://github.com/celery/celery/issues/153" title="CELERY_SEND_TASK_ERROR_EMAILS exception whitelist"><span class="xref issue closed">issue #153</span></a>.</p>
+<p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/153" title="CELERY_SEND_TASK_ERROR_EMAILS exception whitelist"><span class="xref issue closed">#153</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">celeryd: Now handles overflow exceptions in <cite>time.mktime</cite> while parsing
@@ -4110,7 +4110,7 @@ tasks to the pool.</p>
 <div><p>This means it doesn&#8217;t have to wait for dozens of tasks to finish at shutdown
 because it has applied prefetched tasks without having any pool
 processes available to immediately accept them.</p>
-<p>See <a class="reference external" href="https://github.com/celery/celery/issues/122" title="celery.worker.control.builtins.shutdown crashes cleanup if celeryd has prefetched tasks"><span class="xref issue closed">issue #122</span></a>.</p>
+<p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/122" title="celery.worker.control.builtins.shutdown crashes cleanup if celeryd has prefetched tasks"><span class="xref issue closed">#122</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">New built-in way to do task callbacks using
@@ -4125,12 +4125,12 @@ version 1.4.</p>
 </li>
 <li><p class="first">TaskSet failed() result was incorrect.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/132" title="Taskset failed() result is incorrect (patch)"><span class="xref issue closed">issue #132</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/132" title="Taskset failed() result is incorrect (patch)"><span class="xref issue closed">#132</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Now creates different loggers per task class.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/129" title="Enhancement: Create a different logger per each task class"><span class="xref issue closed">issue #129</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/129" title="Enhancement: Create a different logger per each task class"><span class="xref issue closed">#129</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Missing queue definitions are now created automatically.</p>
@@ -4480,7 +4480,7 @@ tasks.</p>
 <li><p class="first">Should not close the consumers before the pool is terminated, just cancel
 the consumers.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/122" title="celery.worker.control.builtins.shutdown crashes cleanup if celeryd has prefetched tasks"><span class="xref issue closed">issue #122</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/122" title="celery.worker.control.builtins.shutdown crashes cleanup if celeryd has prefetched tasks"><span class="xref issue closed">#122</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Now depends on <tt class="xref py py-mod docutils literal"><span class="pre">billiard</span></tt> &gt;= 0.3.1</p>
@@ -4512,13 +4512,13 @@ from the sources using setup.py</p>
 </li>
 <li><p class="first"><tt class="xref py py-func docutils literal"><span class="pre">celery.execute.apply()</span></tt>: Pass log file/log level arguments as task kwargs.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/110" title="slave task logging is broken"><span class="xref issue closed">issue #110</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/110" title="slave task logging is broken"><span class="xref issue closed">#110</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">celery.execute.apply: Should return exception, not <a class="reference internal" href="internals/reference/celery.datastructures.html#celery.datastructures.ExceptionInfo" title="celery.datastructures.ExceptionInfo"><tt class="xref py py-class docutils literal"><span class="pre">ExceptionInfo</span></tt></a>
 on error.</p>
 <blockquote>
-<div><p>See <a class="reference external" href="https://github.com/celery/celery/issues/111" title="TypeError: exceptions must be classes or instances, not ExceptionInfo"><span class="xref issue closed">issue #111</span></a>.</p>
+<div><p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/111" title="TypeError: exceptions must be classes or instances, not ExceptionInfo"><span class="xref issue closed">#111</span></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Added new entries to the <a class="reference internal" href="faq.html"><em>FAQs</em></a>:</p>
@@ -4649,7 +4649,7 @@ in practice, so consider this experimental.</p>
 <li><p class="first"><cite>TaskPool.apply_async</cite>: Now supports the <cite>accept_callback</cite> argument.</p>
 </li>
 <li><p class="first"><cite>apply_async</cite>: Now raises <a class="reference external" href="http://docs.python.org/dev/library/exceptions.html#ValueError" title="(in Python v3.3)"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> if task args is not a list,
-or kwargs is not a tuple (<a class="reference external" href="https://github.com/celery/celery/issues/95" title="Calling apply_async with incorrect parameters does not result in a failed task"><span class="xref issue closed">Issue #95</span></a>).</p>
+or kwargs is not a tuple (Issue <a class="reference external" href="https://github.com/celery/celery/issues/95" title="Calling apply_async with incorrect parameters does not result in a failed task"><span class="xref issue closed">#95</span></a>).</p>
 </li>
 <li><p class="first"><cite>Task.max_retries</cite> can now be <cite>None</cite>, which means it will retry forever.</p>
 </li>
@@ -4810,7 +4810,7 @@ the mediator thread could block shutdown (and potentially block other
 jobs from coming in).</p>
 </div></blockquote>
 </li>
-<li><p class="first">Remote rate limits was not properly applied (<a class="reference external" href="https://github.com/celery/celery/issues/98" title="celery.task.control.rate_limit does not affect worker processes"><span class="xref issue closed">Issue #98</span></a>).</p>
+<li><p class="first">Remote rate limits was not properly applied (Issue <a class="reference external" href="https://github.com/celery/celery/issues/98" title="celery.task.control.rate_limit does not affect worker processes"><span class="xref issue closed">#98</span></a>).</p>
 </li>
 <li><p class="first">Now handles exceptions with Unicode messages correctly in
 <cite>TaskRequest.on_failure</cite>.</p>
@@ -4860,7 +4860,7 @@ can easily be traced.</p>
 </li>
 <li><p class="first">Unit tests: Don&#8217;t disable the django test database tear down,
 instead fixed the underlying issue which was caused by modifications
-to the <cite>DATABASE_NAME</cite> setting (<a class="reference external" href="https://github.com/celery/celery/issues/82" title="Celery stops manage.py test from destroying the test database"><span class="xref issue closed">Issue #82</span></a>).</p>
+to the <cite>DATABASE_NAME</cite> setting (Issue <a class="reference external" href="https://github.com/celery/celery/issues/82" title="Celery stops manage.py test from destroying the test database"><span class="xref issue closed">#82</span></a>).</p>
 </li>
 <li><p class="first">Django Loader: New config <tt class="xref std std-setting docutils literal"><span class="pre">CELERY_DB_REUSE_MAX</span></tt> (max number of
 tasks to reuse the same database connection)</p>
@@ -4889,7 +4889,7 @@ twisted/eventlet pool?</p>
 <p>Consider the competition for the first pool plug-in started!</p>
 </div></blockquote>
 </li>
-<li><p class="first">Debian init scripts: Use <cite>-a</cite> not <cite>&amp;&amp;</cite> (<a class="reference external" href="https://github.com/celery/celery/issues/82" title="Celery stops manage.py test from destroying the test database"><span class="xref issue closed">Issue #82</span></a>).</p>
+<li><p class="first">Debian init scripts: Use <cite>-a</cite> not <cite>&amp;&amp;</cite> (Issue <a class="reference external" href="https://github.com/celery/celery/issues/82" title="Celery stops manage.py test from destroying the test database"><span class="xref issue closed">#82</span></a>).</p>
 </li>
 <li><p class="first">Debian init scripts: Now always preserves <cite>$CELERYD_OPTS</cite> from the
 <cite>/etc/default/celeryd</cite> and <cite>/etc/default/celerybeat</cite>.</p>
@@ -4906,7 +4906,7 @@ and <tt class="xref std std-sig docutils literal"><span class="pre">SIGINT</span
 when trying to log that a task had been revoked.</p>
 </li>
 <li><p class="first">management.commands.camqadm: Fixed typo <cite>camqpadm</cite> -&gt; <cite>camqadm</cite>
-(<a class="reference external" href="https://github.com/celery/celery/issues/83" title="Typo in camqadm management command"><span class="xref issue closed">Issue #83</span></a>).</p>
+(Issue <a class="reference external" href="https://github.com/celery/celery/issues/83" title="Typo in camqadm management command"><span class="xref issue closed">#83</span></a>).</p>
 </li>
 <li><p class="first">PeriodicTask.delta_resolution: Was not working for days and hours, now fixed
 by rounding to the nearest day/hour.</p>
@@ -5629,7 +5629,7 @@ be sure to initialize tables (django: <cite>syncdb</cite>, python: <cite>celeryi
 <blockquote>
 <div><p>It uses messages to publish task return value and status. And it&#8217;s
 incredibly fast!</p>
-<p>See <a class="reference external" href="https://github.com/celery/celery/issues/6" title="RabbitMQ Result store."><span class="xref issue closed">issue #6</span></a> for more info!</p>
+<p>See issue <a class="reference external" href="https://github.com/celery/celery/issues/6" title="RabbitMQ Result store."><span class="xref issue closed">#6</span></a> for more info!</p>
 </div></blockquote>
 </li>
 <li><p class="first">AMQP QoS (prefetch count) implemented:</p>
@@ -5729,13 +5729,13 @@ detaching.</p>
 </li>
 <li><dl class="first docutils">
 <dt><cite>TaskSetResult.join</cite> caused <cite>TypeError</cite> when <cite>timeout=None</cite>.</dt>
-<dd><p class="first last">Thanks Jerzy Kozera.  Closes #31</p>
+<dd><p class="first last">Thanks Jerzy Kozera.  Closes <span class="xref issue">#31</span></p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt><cite>views.apply</cite> should return <cite>HttpResponse</cite> instance.</dt>
-<dd><p class="first last">Thanks to Jerzy Kozera. Closes #32</p>
+<dd><p class="first last">Thanks to Jerzy Kozera. Closes <span class="xref issue">#32</span></p>
 </dd>
 </dl>
 </li>
