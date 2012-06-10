@@ -136,10 +136,10 @@ and also contains the pool improvements previously located in Celery.</p>
 <p>This fork was necessary as changes to the C extension code was required
 for the no-execv patch to work.</p>
 <ul class="simple">
-<li>Issue <a class="reference external" href="https://github.com/celery/celery/issues/625" title="Celery 2.5.0 with CELERYD_FORCE_EXECV = True fails to start processes in virtualenv"><span class="xref issue closed">#625</span></a></li>
-<li>Issue <a class="reference external" href="https://github.com/celery/celery/issues/627" title="Celery 2.5.0 workers immediately shut down"><span class="xref issue closed">#627</span></a></li>
-<li>Issue <a class="reference external" href="https://github.com/celery/celery/issues/640" title="celeryd workers dying to segfault with CELERYD_FORCE_EXECV enabled"><span class="xref issue closed">#640</span></a></li>
-<li><cite>django-celery <a class="reference external" href="https://github.com/celery/celery/issues/122" title="celery.worker.control.builtins.shutdown crashes cleanup if celeryd has prefetched tasks"><span class="xref issue closed">#122</span></a> &lt;http://github.com/celery/django-celery/issues/122</cite></li>
+<li>Issue <span class="xref issue">#625</span></li>
+<li>Issue <span class="xref issue">#627</span></li>
+<li>Issue <span class="xref issue">#640</span></li>
+<li><cite>django-celery <span class="xref issue">#122</span> &lt;http://github.com/celery/django-celery/issues/122</cite></li>
 <li><cite>django-celery <span class="xref issue">#124</span> &lt;http://github.com/celery/django-celery/issues/122</cite></li>
 </ul>
 </div>
@@ -505,12 +505,12 @@ $ celery worker --app=proj.celery:celery</pre>
 <ul>
 <li><p class="first">New <a class="reference internal" href="configuration.html#std:setting-CELERYD_WORKER_LOST_WAIT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_WORKER_LOST_WAIT</span></tt></a> to control the timeout in
 seconds before <tt class="xref py py-exc docutils literal"><span class="pre">billiard.WorkerLostError</span></tt> is raised
-when a worker can not be signalled (Issue <a class="reference external" href="https://github.com/celery/celery/issues/595" title="Adding ability to specify config option for how long to wait before a WorkerLostError is raised."><span class="xref issue closed">#595</span></a>).</p>
+when a worker can not be signalled (Issue <span class="xref issue">#595</span>).</p>
 <blockquote>
 <div><p>Contributed by Brendon Crawford.</p>
 </div></blockquote>
 </li>
-<li><p class="first">Redis event monitor queues are now automatically deleted (Issue <a class="reference external" href="https://github.com/celery/celery/issues/436" title="memory leak with redis broker"><span class="xref issue closed">#436</span></a>).</p>
+<li><p class="first">Redis event monitor queues are now automatically deleted (Issue <span class="xref issue">#436</span>).</p>
 </li>
 <li><p class="first">App instance factory methods have been converted to be cached
 descriptors that creates a new subclass on access.</p>
@@ -771,7 +771,7 @@ but these removals should have no major effect.</p>
 <h2><a class="toc-backref" href="#id21">Fixes</a><a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Retry sqlalchemy backend operations on DatabaseError/OperationalError
-(Issue <a class="reference external" href="https://github.com/celery/celery/issues/634" title="Result backend resilience &amp; SSL"><span class="xref issue closed">#634</span></a>)</li>
+(Issue <span class="xref issue">#634</span>)</li>
 </ul>
 </div>
 </div>
