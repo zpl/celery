@@ -73,7 +73,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">2.6</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">June 10, 2012</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">June 11, 2012</td>
 </tr>
 </tbody>
 </table>
@@ -102,14 +102,16 @@
 <li class="toctree-l2"><a class="reference internal" href="tasks.html#example">Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="executing.html">Executing Tasks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="executing.html#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="executing.html#eta-and-countdown">ETA and countdown</a></li>
-<li class="toctree-l2"><a class="reference internal" href="executing.html#expiration">Expiration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="executing.html#serializers">Serializers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="executing.html#connections">Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="executing.html#routing-options">Routing options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="executing.html#amqp-options">AMQP options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calling.html">Calling Tasks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#linking-callbacks-errbacks">Linking (callbacks/errbacks)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#eta-and-countdown">ETA and countdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#expiration">Expiration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#message-sending-retry">Message Sending Retry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#serializers">Serializers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#compression">Compression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#connections">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calling.html#routing-options">Routing options</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="workers.html">Workers Guide</a><ul>
@@ -135,17 +137,17 @@
 <li class="toctree-l2"><a class="reference internal" href="periodic-tasks.html#starting-the-scheduler">Starting the Scheduler</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="groups.html">Groups, Chords, Chains and Callbacks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="groups.html#subtasks">Subtasks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="groups.html#groups">Groups</a></li>
-<li class="toctree-l2"><a class="reference internal" href="groups.html#chords">Chords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="canvas.html">Canvas: Building Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="canvas.html#subtasks">Subtasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="canvas.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="canvas.html#chords">Chords</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="remote-tasks.html">HTTP Callback Tasks (Webhooks)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#basics">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#django-webhook-example">Django webhook example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#ruby-on-rails-webhook-example">Ruby on Rails webhook example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#executing-webhook-tasks">Executing webhook tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#calling-webhook-tasks">Calling webhook tasks</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="routing.html">Routing Tasks</a><ul>

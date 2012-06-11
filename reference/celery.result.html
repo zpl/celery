@@ -27,7 +27,7 @@
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.task.http" href="celery.task.http.html" />
-    <link rel="prev" title="celery.task.sets" href="celery.task.sets.html" /> 
+    <link rel="prev" title="celery.task.base (Deprecated)" href="celery.task.base.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,7 +43,7 @@
           <a href="celery.task.http.html" title="celery.task.http"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="celery.task.sets.html" title="celery.task.sets"
+          <a href="celery.task.base.html" title="celery.task.base (Deprecated)"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
@@ -101,7 +101,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>id</strong> &#8211; see <a class="reference internal" href="#celery.result.AsyncResult.id" title="celery.result.AsyncResult.id"><tt class="xref py py-attr docutils literal"><span class="pre">id</span></tt></a>.</li>
-<li><strong>backend</strong> &#8211; see <a class="reference internal" href="celery.html#backend" title="backend"><tt class="xref py py-attr docutils literal"><span class="pre">backend</span></tt></a>.</li>
+<li><strong>backend</strong> &#8211; see <a class="reference internal" href="#celery.result.AsyncResult.backend" title="celery.result.AsyncResult.backend"><tt class="xref py py-attr docutils literal"><span class="pre">backend</span></tt></a>.</li>
 </ul>
 </td>
 </tr>
@@ -138,12 +138,12 @@
 <dt id="celery.result.AsyncResult.collect">
 <tt class="descclassname">AsyncResult.</tt><tt class="descname">collect</tt><big>(</big><em>intermediate=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.result.AsyncResult.collect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterator, like <a class="reference internal" href="#celery.result.AsyncResult.get" title="celery.result.AsyncResult.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> will wait for the task to complete,
-but will also follow <a class="reference internal" href="celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> and <a class="reference internal" href="#celery.result.ResultSet" title="celery.result.ResultSet"><tt class="xref py py-class docutils literal"><span class="pre">ResultSet</span></tt></a>
+but will also follow <a class="reference internal" href="#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> and <a class="reference internal" href="#celery.result.ResultSet" title="celery.result.ResultSet"><tt class="xref py py-class docutils literal"><span class="pre">ResultSet</span></tt></a>
 returned by the task, yielding for each result in the tree.</p>
 <p>An example would be having the following tasks:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">A</span><span class="p">(</span><span class="n">how_many</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">TaskSet</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">how_many</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">group</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">how_many</span><span class="p">))</span>
 
 <span class="nd">@task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">B</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
@@ -396,7 +396,7 @@ be re-raised.</p>
 <dl class="attribute">
 <dt id="celery.result.BaseAsyncResult">
 <tt class="descclassname">celery.result.</tt><tt class="descname">BaseAsyncResult</tt><a class="headerlink" href="#celery.result.BaseAsyncResult" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a></p>
+<dd><p>alias of <a class="reference internal" href="#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
@@ -455,6 +455,68 @@ be re-raised.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="celery.result.GroupResult">
+<em class="property">class </em><tt class="descclassname">celery.result.</tt><tt class="descname">GroupResult</tt><big>(</big><em>id=None</em>, <em>results=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.result.GroupResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#celery.result.ResultSet" title="celery.result.ResultSet"><tt class="xref py py-class docutils literal"><span class="pre">ResultSet</span></tt></a>, but with an associated id.</p>
+<p>This type is returned by <a class="reference internal" href="celery.html#celery.group" title="celery.group"><tt class="xref py py-class docutils literal"><span class="pre">group</span></tt></a>, and the
+deprecated TaskSet, meth:<cite>~celery.task.TaskSet.apply_async</cite> method.</p>
+<p>It enables inspection of the tasks state and return values as
+a single entity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> &#8211; The id of the group.</li>
+<li><strong>results</strong> &#8211; List of result instances.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="celery.result.GroupResult.delete">
+<tt class="descname">delete</tt><big>(</big><em>backend=None</em><big>)</big><a class="headerlink" href="#celery.result.GroupResult.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove this result if it was previously saved.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.result.GroupResult.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#celery.result.GroupResult.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The UUID of the group.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="celery.result.GroupResult.restore">
+<em class="property">classmethod </em><tt class="descname">restore</tt><big>(</big><em>id</em>, <em>backend=None</em><big>)</big><a class="headerlink" href="#celery.result.GroupResult.restore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore previously saved group result.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.result.GroupResult.results">
+<tt class="descname">results</tt><em class="property"> = None</em><a class="headerlink" href="#celery.result.GroupResult.results" title="Permalink to this definition">¶</a></dt>
+<dd><p>List/iterator of results in the group</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.result.GroupResult.save">
+<tt class="descname">save</tt><big>(</big><em>backend=None</em><big>)</big><a class="headerlink" href="#celery.result.GroupResult.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save group-result for later retrieval using <a class="reference internal" href="#celery.result.GroupResult.restore" title="celery.result.GroupResult.restore"><tt class="xref py py-meth docutils literal"><span class="pre">restore()</span></tt></a>.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">GroupResult</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.result.GroupResult.serializable">
+<tt class="descname">serializable</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.result.GroupResult.serializable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="celery.result.ResultBase">
 <em class="property">class </em><tt class="descclassname">celery.result.</tt><tt class="descname">ResultBase</tt><a class="headerlink" href="#celery.result.ResultBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all results</p>
@@ -475,7 +537,7 @@ be re-raised.</p>
 <dl class="method">
 <dt id="celery.result.ResultSet.add">
 <tt class="descname">add</tt><big>(</big><em>result</em><big>)</big><a class="headerlink" href="#celery.result.ResultSet.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add <a class="reference internal" href="celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> as a new member of the set.</p>
+<dd><p>Add <a class="reference internal" href="#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> as a new member of the set.</p>
 <p>Does nothing if the result is already a member.</p>
 </dd></dl>
 
@@ -536,7 +598,7 @@ be re-raised.</p>
 <dt id="celery.result.ResultSet.get">
 <tt class="descname">get</tt><big>(</big><em>timeout=None</em>, <em>propagate=True</em>, <em>interval=0.5</em><big>)</big><a class="headerlink" href="#celery.result.ResultSet.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>See <a class="reference internal" href="#celery.result.ResultSet.join" title="celery.result.ResultSet.join"><tt class="xref py py-meth docutils literal"><span class="pre">join()</span></tt></a></p>
-<p>This is here for API compatibility with <a class="reference internal" href="celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a>,
+<p>This is here for API compatibility with <a class="reference internal" href="#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a>,
 in addition it uses <a class="reference internal" href="#celery.result.ResultSet.join_native" title="celery.result.ResultSet.join_native"><tt class="xref py py-meth docutils literal"><span class="pre">join_native()</span></tt></a> if available for the
 current result backend.</p>
 </dd></dl>
@@ -690,12 +752,6 @@ successfully (i.e. did not raise an exception).</td>
 <tt class="descname">supports_native_join</tt><a class="headerlink" href="#celery.result.ResultSet.supports_native_join" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="celery.result.ResultSet.total">
-<tt class="descname">total</tt><a class="headerlink" href="#celery.result.ResultSet.total" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deprecated: Use <tt class="docutils literal"><span class="pre">len(r)</span></tt>.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="celery.result.ResultSet.update">
 <tt class="descname">update</tt><big>(</big><em>results</em><big>)</big><a class="headerlink" href="#celery.result.ResultSet.update" title="Permalink to this definition">¶</a></dt>
@@ -722,73 +778,24 @@ waiting for execution.</td>
 
 <dl class="class">
 <dt id="celery.result.TaskSetResult">
-<em class="property">class </em><tt class="descclassname">celery.result.</tt><tt class="descname">TaskSetResult</tt><big>(</big><em>id</em>, <em>results=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.result.TaskSetResult" title="Permalink to this definition">¶</a></dt>
-<dd><p>An instance of this class is returned by
-<cite>TaskSet</cite>&#8216;s <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt> method.</p>
-<p>It enables inspection of the tasks state and return values as
-a single entity.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> &#8211; The id of the taskset.</li>
-<li><strong>results</strong> &#8211; List of result instances.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="celery.result.TaskSetResult.delete">
-<tt class="descname">delete</tt><big>(</big><em>backend=None</em><big>)</big><a class="headerlink" href="#celery.result.TaskSetResult.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove this result if it was previously saved.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.result.TaskSetResult.id">
-<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#celery.result.TaskSetResult.id" title="Permalink to this definition">¶</a></dt>
-<dd><p>The UUID of the taskset.</p>
-</dd></dl>
-
+<em class="property">class </em><tt class="descclassname">celery.result.</tt><tt class="descname">TaskSetResult</tt><big>(</big><em>taskset_id</em>, <em>results=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.result.TaskSetResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated version of <a class="reference internal" href="#celery.result.GroupResult" title="celery.result.GroupResult"><tt class="xref py py-class docutils literal"><span class="pre">GroupResult</span></tt></a></p>
 <dl class="method">
 <dt id="celery.result.TaskSetResult.itersubtasks">
 <tt class="descname">itersubtasks</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.result.TaskSetResult.itersubtasks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Depreacted.   Use <tt class="docutils literal"><span class="pre">iter(self.results)</span></tt> instead.</p>
+<dd><p>Deprecated.   Use <tt class="docutils literal"><span class="pre">iter(self.results)</span></tt> instead.</p>
 </dd></dl>
-
-<dl class="classmethod">
-<dt id="celery.result.TaskSetResult.restore">
-<em class="property">classmethod </em><tt class="descname">restore</tt><big>(</big><em>taskset_id</em>, <em>backend=None</em><big>)</big><a class="headerlink" href="#celery.result.TaskSetResult.restore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Restore previously saved taskset result.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.result.TaskSetResult.results">
-<tt class="descname">results</tt><em class="property"> = None</em><a class="headerlink" href="#celery.result.TaskSetResult.results" title="Permalink to this definition">¶</a></dt>
-<dd><p>List/iterator of results in the taskset</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.result.TaskSetResult.save">
-<tt class="descname">save</tt><big>(</big><em>backend=None</em><big>)</big><a class="headerlink" href="#celery.result.TaskSetResult.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save taskset result for later retrieval using <a class="reference internal" href="#celery.result.TaskSetResult.restore" title="celery.result.TaskSetResult.restore"><tt class="xref py py-meth docutils literal"><span class="pre">restore()</span></tt></a>.</p>
-<p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">TaskSetResult</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">taskset_id</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.result.TaskSetResult.serializable">
-<tt class="descname">serializable</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.result.TaskSetResult.serializable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.result.TaskSetResult.taskset_id">
 <tt class="descname">taskset_id</tt><a class="headerlink" href="#celery.result.TaskSetResult.taskset_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.result.TaskSetResult.total">
+<tt class="descname">total</tt><a class="headerlink" href="#celery.result.TaskSetResult.total" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated: Use <tt class="docutils literal"><span class="pre">len(r)</span></tt>.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -809,8 +816,8 @@ a single entity.</p>
   <img class="logo" src="http://cloud.github.com/downloads/celery/celery/celery_128.png" alt="Logo"/>
 </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="celery.task.sets.html"
-                        title="previous chapter">celery.task.sets</a></p>
+  <p class="topless"><a href="celery.task.base.html"
+                        title="previous chapter">celery.task.base (Deprecated)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="celery.task.http.html"
                         title="next chapter">celery.task.http</a></p>
@@ -849,7 +856,7 @@ a single entity.</p>
           <a href="celery.task.http.html" title="celery.task.http"
              >next</a> |</li>
         <li class="right" >
-          <a href="celery.task.sets.html" title="celery.task.sets"
+          <a href="celery.task.base.html" title="celery.task.base (Deprecated)"
              >previous</a> |</li>
         <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 

@@ -1194,7 +1194,7 @@ currently provided by the Redis result backend.</p>
 <span class="go">9900</span>
 </pre></div>
 </div>
-<p>Please read the <a class="reference internal" href="userguide/tasksets.html#chords"><em>Chords section in the user guide</em></a>, if you
+<p>Please read the <a class="reference internal" href="userguide/canvas.html#chords"><em>Chords section in the user guide</em></a>, if you
 want to know more.</p>
 </div></blockquote>
 </li>
@@ -2583,7 +2583,7 @@ at startup.</p>
 <li><p class="first">celeryev cursesmon: Set screen_delay to 10ms, so the screen refreshes more
 often.</p>
 </li>
-<li><p class="first">Fixed pickling errors when pickling <a class="reference internal" href="reference/celery.html#AsyncResult" title="AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a> on older Python
+<li><p class="first">Fixed pickling errors when pickling <tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt> on older Python
 versions.</p>
 </li>
 <li><p class="first">celeryd: prefetch count was decremented by eta tasks even if there
@@ -2727,7 +2727,7 @@ declaration.</p>
 </dd></dl>
 
 <p>Commands also added to <strong class="program">celeryctl</strong> and
-<a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>.</p>
+<tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt>.</p>
 <p>Example using celeryctl to start consuming from queue &#8220;queue&#8221;, in
 exchange &#8220;exchange&#8221;, of type &#8220;direct&#8221; using binding key &#8220;key&#8221;:</p>
 <div class="highlight-python"><pre>$ celeryctl inspect add_consumer queue exchange direct key
@@ -2735,7 +2735,7 @@ $ celeryctl inspect cancel_consumer queue</pre>
 </div>
 <p>See <a class="reference internal" href="userguide/monitoring.html#monitoring-celeryctl"><em>celery: Management Command-line Utility</em></a> for more information about the
 <strong class="program">celeryctl</strong> program.</p>
-<p>Another example using <a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>:</p>
+<p>Another example using <tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery.task.control</span> <span class="kn">import</span> <span class="n">inspect</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">inspect</span><span class="o">.</span><span class="n">add_consumer</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s">&quot;queue&quot;</span><span class="p">,</span> <span class="n">exchange</span><span class="o">=</span><span class="s">&quot;exchange&quot;</span><span class="p">,</span>
 <span class="gp">... </span>                     <span class="n">exchange_type</span><span class="o">=</span><span class="s">&quot;direct&quot;</span><span class="p">,</span>
@@ -3332,7 +3332,7 @@ so its functionality was replaced.</p>
 <li><p class="first">Redis result backend: Documentation typos: Redis doesn&#8217;t have
 database names, but database numbers. The default database is now 0.</p>
 </li>
-<li><p class="first"><a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>:
+<li><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt>:
 <cite>registered_tasks</cite> was requesting an invalid command because of a typo.</p>
 <blockquote>
 <div><p>See issue <span class="xref issue">#170</span>.</p>
@@ -3370,7 +3370,7 @@ always set.</p>
 <li><p class="first"><cite>AsyncResult.traceback</cite>: Now returns <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt>, instead of raising
 <a class="reference external" href="http://docs.python.org/dev/library/exceptions.html#KeyError" title="(in Python v3.3)"><tt class="xref py py-exc docutils literal"><span class="pre">KeyError</span></tt></a> if traceback is missing.</p>
 </li>
-<li><p class="first"><a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt></a>: Replies did not work correctly
+<li><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">inspect</span></tt>: Replies did not work correctly
 if no destination was specified.</p>
 </li>
 <li><p class="first">Can now store result/metadata for custom states.</p>
@@ -3537,7 +3537,7 @@ the ETA field.</p>
 <li><p class="first">LoggerWrapper: Try to detect loggers logging back to stderr/stdout making
 an infinite loop.</p>
 </li>
-<li><p class="first">Added <a class="reference internal" href="reference/celery.task.control.html#celery.task.control.inspect" title="celery.task.control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">celery.task.control.inspect</span></tt></a>: Inspects a running worker.</p>
+<li><p class="first">Added <tt class="xref py py-class docutils literal"><span class="pre">celery.task.control.inspect</span></tt>: Inspects a running worker.</p>
 <blockquote>
 <div><p>Examples:</p>
 <div class="highlight-python"><pre># Inspect a single worker
@@ -4042,7 +4042,7 @@ The fields here are, in order: *sender hostname*, *timestamp*, *event type* and
 <blockquote>
 <div><ul class="simple">
 <li><a class="reference internal" href="userguide/workers.html"><em>Workers Guide</em></a></li>
-<li><a class="reference internal" href="userguide/tasksets.html"><em>Groups, Chords, Chains and Callbacks</em></a></li>
+<li><a class="reference internal" href="userguide/canvas.html"><em>Canvas: Building Workflows</em></a></li>
 <li><a class="reference internal" href="userguide/routing.html"><em>Routing Tasks</em></a></li>
 </ul>
 </div></blockquote>
@@ -4114,12 +4114,12 @@ processes available to immediately accept them.</p>
 </div></blockquote>
 </li>
 <li><p class="first">New built-in way to do task callbacks using
-<tt class="xref py py-class docutils literal"><span class="pre">subtask</span></tt>.</p>
-<p>See <a class="reference internal" href="userguide/tasksets.html"><em>Groups, Chords, Chains and Callbacks</em></a> for more information.</p>
+<a class="reference internal" href="reference/celery.html#celery.subtask" title="celery.subtask"><tt class="xref py py-class docutils literal"><span class="pre">subtask</span></tt></a>.</p>
+<p>See <a class="reference internal" href="userguide/canvas.html"><em>Canvas: Building Workflows</em></a> for more information.</p>
 </li>
 <li><p class="first">TaskSets can now contain several types of tasks.</p>
-<p><a class="reference internal" href="reference/celery.task.sets.html#celery.task.sets.TaskSet" title="celery.task.sets.TaskSet"><tt class="xref py py-class docutils literal"><span class="pre">TaskSet</span></tt></a> has been refactored to use
-a new syntax, please see <a class="reference internal" href="userguide/tasksets.html"><em>Groups, Chords, Chains and Callbacks</em></a> for more information.</p>
+<p><tt class="xref py py-class docutils literal"><span class="pre">TaskSet</span></tt> has been refactored to use
+a new syntax, please see <a class="reference internal" href="userguide/canvas.html"><em>Canvas: Building Workflows</em></a> for more information.</p>
 <p>The previous syntax is still supported, but will be deprecated in
 version 1.4.</p>
 </li>
@@ -4525,7 +4525,7 @@ on error.</p>
 <blockquote>
 <div><ul class="simple">
 <li>Should I use retry or acks_late?</li>
-<li>Can I execute a task by name?</li>
+<li>Can I call a task by name?</li>
 </ul>
 </div></blockquote>
 </li>
@@ -5403,7 +5403,7 @@ of <a class="reference internal" href="configuration.html#std:setting-CELERYBEAT
 </li>
 <li><p class="first">The worker now supports control commands enabled through the use of a
 broadcast queue, you can remotely revoke tasks or set the rate limit for
-a task type. See <a class="reference internal" href="reference/celery.task.control.html#module-celery.task.control" title="celery.task.control"><tt class="xref py py-mod docutils literal"><span class="pre">celery.task.control</span></tt></a>.</p>
+a task type. See <tt class="xref py py-mod docutils literal"><span class="pre">celery.task.control</span></tt>.</p>
 </li>
 <li><p class="first">The services now sets informative process names (as shown in <cite>ps</cite>
 listings) if the <tt class="xref py py-mod docutils literal"><span class="pre">setproctitle</span></tt> module is installed.</p>

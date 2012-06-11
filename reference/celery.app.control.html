@@ -177,8 +177,38 @@ Server implementation is in <a class="reference internal" href="../internals/ref
 </dd></dl>
 
 <dl class="method">
+<dt id="celery.app.control.Control.add_consumer">
+<tt class="descclassname">Control.</tt><tt class="descname">add_consumer</tt><big>(</big><em>queue</em>, <em>exchange=None</em>, <em>exchange_type='direct'</em>, <em>routing_key=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.add_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all (or specific) workers to start consuming from a new queue.</p>
+<p>Only the queue name is required as if only the queue is specified
+then the exchange/routing key will be set to the same name (
+like automatic queues do).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This command does not respect the default queue/exchange
+options in the configuration.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>queue</strong> &#8211; Name of queue to start consuming from.</li>
+<li><strong>exchange</strong> &#8211; Optional name of exchange.</li>
+<li><strong>exchange_type</strong> &#8211; Type of exchange (defaults to &#8220;direct&#8221;)
+command to, when empty broadcast to all workers.</li>
+<li><strong>routing_key</strong> &#8211; Optional routing key.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference internal" href="#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a> for supported keyword arguments.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="celery.app.control.Control.broadcast">
-<tt class="descclassname">Control.</tt><tt class="descname">broadcast</tt><big>(</big><em>command</em>, <em>arguments=None</em>, <em>destination=None</em>, <em>connection=None</em>, <em>reply=False</em>, <em>timeout=1</em>, <em>limit=None</em>, <em>callback=None</em>, <em>channel=None</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.broadcast" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Control.</tt><tt class="descname">broadcast</tt><big>(</big><em>command</em>, <em>arguments=None</em>, <em>destination=None</em>, <em>connection=None</em>, <em>reply=False</em>, <em>timeout=1</em>, <em>limit=None</em>, <em>callback=None</em>, <em>channel=None</em>, <em>**extra_kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.broadcast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Broadcast a control command to the celery workers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -204,6 +234,19 @@ received.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="celery.app.control.Control.cancel_consumer">
+<tt class="descclassname">Control.</tt><tt class="descname">cancel_consumer</tt><big>(</big><em>queue</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.cancel_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all (or specific) workers to stop consuming from <tt class="docutils literal"><span class="pre">queue</span></tt>.</p>
+<p>Supports the same keyword arguments as <a class="reference internal" href="#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.app.control.Control.disable_events">
+<tt class="descclassname">Control.</tt><tt class="descname">disable_events</tt><big>(</big><em>destination=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.disable_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all (or specific) workers to enable events.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="celery.app.control.Control.discard_all">
 <tt class="descclassname">Control.</tt><tt class="descname">discard_all</tt><big>(</big><em>connection=None</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.discard_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Discard all waiting tasks.</p>
@@ -219,6 +262,12 @@ be deleted from the messaging server.</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="celery.app.control.Control.enable_events">
+<tt class="descclassname">Control.</tt><tt class="descname">enable_events</tt><big>(</big><em>destination=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.enable_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all (or specific) workers to enable events.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="celery.app.control.Control.inspect">
 <tt class="descclassname">Control.</tt><tt class="descname">inspect</tt><a class="headerlink" href="#celery.app.control.Control.inspect" title="Permalink to this definition">¶</a></dt>
@@ -227,25 +276,23 @@ be deleted from the messaging server.</p>
 <dl class="method">
 <dt id="celery.app.control.Control.ping">
 <tt class="descclassname">Control.</tt><tt class="descname">ping</tt><big>(</big><em>destination=None</em>, <em>timeout=1</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.ping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ping workers.</p>
+<dd><p>Ping all (or specific) workers.</p>
 <p>Returns answer from alive workers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>destination</strong> &#8211; If set, a list of the hosts to send the
-command to, when empty broadcast to all workers.</li>
-<li><strong>connection</strong> &#8211; Custom broker connection to use, if not set,
-a connection will be established automatically.</li>
-<li><strong>reply</strong> &#8211; Wait for and return the reply.</li>
-<li><strong>timeout</strong> &#8211; Timeout in seconds to wait for the reply.</li>
-<li><strong>limit</strong> &#8211; Limit number of replies.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<p>See <a class="reference internal" href="#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a> for supported keyword arguments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.app.control.Control.pool_grow">
+<tt class="descclassname">Control.</tt><tt class="descname">pool_grow</tt><big>(</big><em>n=1</em>, <em>destination=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.pool_grow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all (or specific) workers to grow the pool by <tt class="docutils literal"><span class="pre">n</span></tt>.</p>
+<p>Supports the same arguments as <a class="reference internal" href="#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.app.control.Control.pool_shrink">
+<tt class="descclassname">Control.</tt><tt class="descname">pool_shrink</tt><big>(</big><em>n=1</em>, <em>destination=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.pool_shrink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all (or specific) workers to shrink the pool by <tt class="docutils literal"><span class="pre">n</span></tt>.</p>
+<p>Supports the same arguments as <a class="reference internal" href="#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -267,7 +314,8 @@ be deleted from the messaging server.</p>
 <dl class="method">
 <dt id="celery.app.control.Control.rate_limit">
 <tt class="descclassname">Control.</tt><tt class="descname">rate_limit</tt><big>(</big><em>task_name</em>, <em>rate_limit</em>, <em>destination=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.rate_limit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set rate limit for task by type.</p>
+<dd><p>Tell all (or specific) workers to set a new rate limit
+for task by type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -278,24 +326,18 @@ be deleted from the messaging server.</p>
 string (<cite>&#8220;100/m&#8221;</cite>, etc.
 see <tt class="xref py py-attr docutils literal"><span class="pre">celery.task.base.Task.rate_limit</span></tt> for
 more information).</li>
-<li><strong>destination</strong> &#8211; If set, a list of the hosts to send the
-command to, when empty broadcast to all workers.</li>
-<li><strong>connection</strong> &#8211; Custom broker connection to use, if not set,
-a connection will be established automatically.</li>
-<li><strong>reply</strong> &#8211; Wait for and return the reply.</li>
-<li><strong>timeout</strong> &#8211; Timeout in seconds to wait for the reply.</li>
-<li><strong>limit</strong> &#8211; Limit number of replies.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<p>See <a class="reference internal" href="#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a> for supported keyword arguments.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="celery.app.control.Control.revoke">
 <tt class="descclassname">Control.</tt><tt class="descname">revoke</tt><big>(</big><em>task_id</em>, <em>destination=None</em>, <em>terminate=False</em>, <em>signal='SIGTERM'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.revoke" title="Permalink to this definition">¶</a></dt>
-<dd><p>Revoke a task by id.</p>
+<dd><p>Tell all (or specific) workers to revoke a task by id.</p>
 <p>If a task is revoked, the workers will ignore the task and
 not execute it after all.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -308,24 +350,19 @@ not execute it after all.</p>
 on the task (if any).</li>
 <li><strong>signal</strong> &#8211; Name of signal to send to process if terminate.
 Default is TERM.</li>
-<li><strong>destination</strong> &#8211; If set, a list of the hosts to send the
-command to, when empty broadcast to all workers.</li>
-<li><strong>connection</strong> &#8211; Custom broker connection to use, if not set,
-a connection will be established automatically.</li>
-<li><strong>reply</strong> &#8211; Wait for and return the reply.</li>
-<li><strong>timeout</strong> &#8211; Timeout in seconds to wait for the reply.</li>
-<li><strong>limit</strong> &#8211; Limit number of replies.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<p>See <a class="reference internal" href="#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a> for supported keyword arguments.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="celery.app.control.Control.time_limit">
 <tt class="descclassname">Control.</tt><tt class="descname">time_limit</tt><big>(</big><em>task_name</em>, <em>soft=None</em>, <em>hard=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.time_limit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set time limits for task by type.</p>
+<dd><p>Tell all (or specific) workers to set time limits for
+a task by type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -357,29 +394,9 @@ a connection will be established automatically.</li>
 <tt class="descname">active_queues</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.active_queues" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="celery.app.control.Inspect.add_consumer">
-<tt class="descname">add_consumer</tt><big>(</big><em>queue</em>, <em>exchange=None</em>, <em>exchange_type='direct'</em>, <em>routing_key=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.add_consumer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="celery.app.control.Inspect.app">
 <tt class="descname">app</tt><em class="property"> = None</em><a class="headerlink" href="#celery.app.control.Inspect.app" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.app.control.Inspect.cancel_consumer">
-<tt class="descname">cancel_consumer</tt><big>(</big><em>queue</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.cancel_consumer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.app.control.Inspect.disable_events">
-<tt class="descname">disable_events</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.disable_events" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.app.control.Inspect.enable_events">
-<tt class="descname">enable_events</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.enable_events" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

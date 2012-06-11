@@ -79,10 +79,10 @@
 </div>
 <span class="target" id="module-celery.contrib.abortable"></span><div class="section" id="abortable-tasks-overview">
 <h2><a class="toc-backref" href="#id1">Abortable tasks overview</a><a class="headerlink" href="#abortable-tasks-overview" title="Permalink to this headline">¶</a></h2>
-<p>For long-running <a class="reference internal" href="celery.html#Task" title="Task"><tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt></a>&#8216;s, it can be desirable to support
+<p>For long-running <tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt>&#8216;s, it can be desirable to support
 aborting during execution. Of course, these tasks should be built to
 support abortion specifically.</p>
-<p>The <a class="reference internal" href="#celery.contrib.abortable.AbortableTask" title="celery.contrib.abortable.AbortableTask"><tt class="xref py py-class docutils literal"><span class="pre">AbortableTask</span></tt></a> serves as a base class for all <a class="reference internal" href="celery.html#Task" title="Task"><tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt></a>
+<p>The <a class="reference internal" href="#celery.contrib.abortable.AbortableTask" title="celery.contrib.abortable.AbortableTask"><tt class="xref py py-class docutils literal"><span class="pre">AbortableTask</span></tt></a> serves as a base class for all <tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt>
 objects that should support abortion by producers.</p>
 <ul class="simple">
 <li>Producers may invoke the <tt class="xref py py-meth docutils literal"><span class="pre">abort()</span></tt> method on
@@ -171,7 +171,7 @@ all).</p>
 <dl class="class">
 <dt id="celery.contrib.abortable.AbortableTask">
 <em class="property">class </em><tt class="descclassname">celery.contrib.abortable.</tt><tt class="descname">AbortableTask</tt><a class="headerlink" href="#celery.contrib.abortable.AbortableTask" title="Permalink to this definition">¶</a></dt>
-<dd><p>A celery task that serves as a base class for all <a class="reference internal" href="celery.html#Task" title="Task"><tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt></a>&#8216;s
+<dd><p>A celery task that serves as a base class for all <tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt>&#8216;s
 that support aborting during execution.</p>
 <p>All subclasses of <a class="reference internal" href="#celery.contrib.abortable.AbortableTask" title="celery.contrib.abortable.AbortableTask"><tt class="xref py py-class docutils literal"><span class="pre">AbortableTask</span></tt></a> must call the
 <a class="reference internal" href="#celery.contrib.abortable.AbortableTask.is_aborted" title="celery.contrib.abortable.AbortableTask.is_aborted"><tt class="xref py py-meth docutils literal"><span class="pre">is_aborted()</span></tt></a> method periodically and act accordingly when
@@ -185,16 +185,6 @@ the call evaluates to <tt class="xref py py-const docutils literal"><span class=
 <dl class="attribute">
 <dt id="celery.contrib.abortable.AbortableTask.accept_magic_kwargs">
 <tt class="descname">accept_magic_kwargs</tt><em class="property"> = False</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.accept_magic_kwargs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.contrib.abortable.AbortableTask.acks_late">
-<tt class="descname">acks_late</tt><em class="property"> = False</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.acks_late" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.contrib.abortable.AbortableTask.backend">
-<tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x108755d90&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.backend" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -213,7 +203,7 @@ the call evaluates to <tt class="xref py py-const docutils literal"><span class=
 <dd><p>Checks against the backend whether this
 <a class="reference internal" href="#celery.contrib.abortable.AbortableAsyncResult" title="celery.contrib.abortable.AbortableAsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AbortableAsyncResult</span></tt></a> is <tt class="xref py py-const docutils literal"><span class="pre">ABORTED</span></tt>.</p>
 <p>Always returns <tt class="xref py py-const docutils literal"><span class="pre">False</span></tt> in case the <cite>task_id</cite> parameter
-refers to a regular (non-abortable) <a class="reference internal" href="celery.html#Task" title="Task"><tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt></a>.</p>
+refers to a regular (non-abortable) <tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt>.</p>
 <p>Be aware that invoking this method will cause a hit in the
 backend (for example a database query), so find a good balance
 between calling it regularly (for responsiveness), but not too
@@ -232,12 +222,7 @@ often (for performance).</p>
 
 <dl class="attribute">
 <dt id="celery.contrib.abortable.AbortableTask.request_stack">
-<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10aa31d50&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.request_stack" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.contrib.abortable.AbortableTask.serializer">
-<tt class="descname">serializer</tt><em class="property"> = 'pickle'</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.serializer" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10af68120&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.request_stack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

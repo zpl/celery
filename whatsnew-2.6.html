@@ -82,39 +82,18 @@ read the <a class="reference external" href="http://bit.ly/djcelery-26-changelog
 as well as PyPy and Jython.</p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#important-notes" id="id1">Important Notes</a><ul>
-<li><a class="reference internal" href="#eventloop" id="id2">Eventloop</a></li>
-<li><a class="reference internal" href="#now-depends-on-billiard" id="id3">Now depends on <tt class="xref py py-mod docutils literal"><span class="pre">billiard</span></tt>.</a></li>
-<li><a class="reference internal" href="#last-version-to-support-python-2-5" id="id4">Last version to support Python 2.5</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#news" id="id5">News</a><ul>
-<li><a class="reference internal" href="#chaining-tasks" id="id6">Chaining Tasks</a></li>
-<li><a class="reference internal" href="#group-chord-chain-are-now-subtasks" id="id7"><cite>group</cite>/<cite>chord</cite>/<cite>chain</cite> are now subtasks</a></li>
-<li><a class="reference internal" href="#crontab-now-supports-day-of-month-and-month-of-year-arguments" id="id8">Crontab now supports Day of Month, and Month of Year arguments</a></li>
-<li><a class="reference internal" href="#immutable-subtasks" id="id9">Immutable subtasks</a></li>
-<li><a class="reference internal" href="#logging-improvements" id="id10">Logging Improvements</a></li>
-<li><a class="reference internal" href="#task-registry-no-longer-global" id="id11">Task registry no longer global</a></li>
-<li><a class="reference internal" href="#abstract-tasks-are-now-lazily-bound" id="id12">Abstract tasks are now lazily bound.</a></li>
-<li><a class="reference internal" href="#lazy-task-decorators" id="id13">Lazy task decorators</a></li>
-<li><a class="reference internal" href="#smart-app-option" id="id14">Smart <cite>&#8211;app</cite> option</a></li>
-<li><a class="reference internal" href="#in-other-news" id="id15">In Other News</a></li>
-<li><a class="reference internal" href="#internals" id="id16">Internals</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#experimental" id="id17">Experimental</a><ul>
-<li><a class="reference internal" href="#celery-contrib-methods-task-decorator-for-methods" id="id18"><a class="reference internal" href="reference/celery.contrib.methods.html#module-celery.contrib.methods" title="celery.contrib.methods"><tt class="xref py py-mod docutils literal"><span class="pre">celery.contrib.methods</span></tt></a>:  Task decorator for methods</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#unscheduled-removals" id="id19">Unscheduled Removals</a></li>
-<li><a class="reference internal" href="#deprecations" id="id20">Deprecations</a></li>
-<li><a class="reference internal" href="#fixes" id="id21">Fixes</a></li>
+<li><a class="reference internal" href="#important-notes" id="id1">Important Notes</a></li>
+<li><a class="reference internal" href="#news" id="id2">News</a></li>
+<li><a class="reference internal" href="#experimental" id="id3">Experimental</a></li>
+<li><a class="reference internal" href="#unscheduled-removals" id="id4">Unscheduled Removals</a></li>
+<li><a class="reference internal" href="#deprecations" id="id5">Deprecations</a></li>
+<li><a class="reference internal" href="#fixes" id="id6">Fixes</a></li>
 </ul>
 </div>
 <div class="section" id="important-notes">
 <span id="v260-important"></span><h2><a class="toc-backref" href="#id1">Important Notes</a><a class="headerlink" href="#important-notes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="eventloop">
-<h3><a class="toc-backref" href="#id2">Eventloop</a><a class="headerlink" href="#eventloop" title="Permalink to this headline">¶</a></h3>
+<h3>Eventloop<a class="headerlink" href="#eventloop" title="Permalink to this headline">¶</a></h3>
 <p>The worker is now running <em>without threads</em> when used with AMQP or Redis as a
 broker, resulting in:</p>
 <div class="highlight-python"><pre>- Much better performance overall.
@@ -129,7 +108,7 @@ in the future.</p>
 by default if the eventloop is not used.</p>
 </div>
 <div class="section" id="now-depends-on-billiard">
-<h3><a class="toc-backref" href="#id3">Now depends on <tt class="xref py py-mod docutils literal"><span class="pre">billiard</span></tt>.</a><a class="headerlink" href="#now-depends-on-billiard" title="Permalink to this headline">¶</a></h3>
+<h3>Now depends on <tt class="xref py py-mod docutils literal"><span class="pre">billiard</span></tt>.<a class="headerlink" href="#now-depends-on-billiard" title="Permalink to this headline">¶</a></h3>
 <p>Billiard is a fork of the multiprocessing containing
 the no-execv patch by sbt (<a class="reference external" href="http://bugs.python.org/issue8713">http://bugs.python.org/issue8713</a>),
 and also contains the pool improvements previously located in Celery.</p>
@@ -144,7 +123,7 @@ for the no-execv patch to work.</p>
 </ul>
 </div>
 <div class="section" id="last-version-to-support-python-2-5">
-<h3><a class="toc-backref" href="#id4">Last version to support Python 2.5</a><a class="headerlink" href="#last-version-to-support-python-2-5" title="Permalink to this headline">¶</a></h3>
+<h3>Last version to support Python 2.5<a class="headerlink" href="#last-version-to-support-python-2-5" title="Permalink to this headline">¶</a></h3>
 <p>The 2.6 series will be last series to support Python 2.5.</p>
 <p>With several other distributions taking the step to discontinue
 Python 2.5 support, we feel that it is time too.</p>
@@ -155,9 +134,9 @@ introduced in Celery 2.7 will be back-ported to Celery 2.6 upon request.</p>
 </div>
 </div>
 <div class="section" id="news">
-<span id="v260-news"></span><h2><a class="toc-backref" href="#id5">News</a><a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h2>
+<span id="v260-news"></span><h2><a class="toc-backref" href="#id2">News</a><a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="chaining-tasks">
-<h3><a class="toc-backref" href="#id6">Chaining Tasks</a><a class="headerlink" href="#chaining-tasks" title="Permalink to this headline">¶</a></h3>
+<h3>Chaining Tasks<a class="headerlink" href="#chaining-tasks" title="Permalink to this headline">¶</a></h3>
 <p>Tasks can now have callbacks and errbacks, and dependencies are recorded</p>
 <ul>
 <li><p class="first">The task message format have been updated with two new extension keys</p>
@@ -182,23 +161,8 @@ traceback of the task from the result backend.</p>
 <li><p class="first"><tt class="docutils literal"><span class="pre">link</span></tt> and <tt class="docutils literal"><span class="pre">link_error</span></tt> keyword arguments has been added
 to <tt class="docutils literal"><span class="pre">apply_async</span></tt>.</p>
 <blockquote>
-<div><p>The value passed can be either a subtask or a list of
-subtasks:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link</span><span class="o">=</span><span class="n">mul</span><span class="o">.</span><span class="n">subtask</span><span class="p">())</span>
-<span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link</span><span class="o">=</span><span class="p">[</span><span class="n">mul</span><span class="o">.</span><span class="n">subtask</span><span class="p">(),</span> <span class="n">echo</span><span class="o">.</span><span class="n">subtask</span><span class="p">()])</span>
-</pre></div>
-</div>
-<p>Example error callback:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">error_handler</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">AsyncResult</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
-    <span class="n">exc</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">propagate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Task </span><span class="si">%r</span><span class="s"> raised exception: </span><span class="si">%r</span><span class="se">\n</span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
-        <span class="n">exc</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">traceback</span><span class="p">))</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">link_error</span><span class="o">=</span><span class="n">error_handler</span><span class="p">)</span>
-</pre></div>
-</div>
+<div><p>These add callbacks and errbacks to the task, and
+you can read more about them at <a class="reference internal" href="userguide/calling.html#calling-links"><em>Linking (callbacks/errbacks)</em></a>.</p>
 </div></blockquote>
 </li>
 <li><p class="first">We now track what subtasks a task sends, and some result backends
@@ -285,7 +249,7 @@ a list).</p>
 </ul>
 </div>
 <div class="section" id="group-chord-chain-are-now-subtasks">
-<h3><a class="toc-backref" href="#id7"><cite>group</cite>/<cite>chord</cite>/<cite>chain</cite> are now subtasks</a><a class="headerlink" href="#group-chord-chain-are-now-subtasks" title="Permalink to this headline">¶</a></h3>
+<h3><cite>group</cite>/<cite>chord</cite>/<cite>chain</cite> are now subtasks<a class="headerlink" href="#group-chord-chain-are-now-subtasks" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">The source code for these, including subtask, has been moved
 to new module celery.canvas.</p>
@@ -356,12 +320,77 @@ access to the relevant keys.</p>
 </li>
 </ul>
 </div>
+<div class="section" id="additional-control-commands-made-public">
+<h3>Additional control commands made public<a class="headerlink" href="#additional-control-commands-made-public" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">add_consumer</span></tt>/<tt class="docutils literal"><span class="pre">cancel_consumer</span></tt></p>
+<blockquote>
+<div><p>Tells workers to consume from a new queue, or cancel consuming from a
+queue.  This command has also been changed so that the worker remembers
+the queues added, so that the change will persist even if
+the connection is re-connected.</p>
+<p>These commands are available programmatically as
+<a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.add_consumer" title="celery.app.control.Control.add_consumer"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.add_consumer()</span></tt></a> / <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.cancel_consumer" title="celery.app.control.Control.cancel_consumer"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.cancel_consumer()</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">add_consumer</span><span class="p">(</span><span class="n">queue_name</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">cancel_consumer</span><span class="p">(</span><span class="n">queue_name</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>or using the <strong class="program">celery control</strong> command:</p>
+<div class="highlight-python"><pre>$ celery control -d w1.example.com add_consumer queue
+$ celery control -d w1.example.com cancel_consumer queue</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remember that a control command without <em>destination</em> will be
+sent to <strong>all workers</strong>.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">autoscale</span></tt></p>
+<blockquote>
+<div><p>Tells workers with <cite>&#8211;autoscale</cite> enabled to change autoscale
+max/min concurrency settings.</p>
+<p>This command is available programmatically as <tt class="xref py py-meth docutils literal"><span class="pre">celery.control.autoscale()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>or using the <strong class="program">celery control</strong> command:</p>
+<div class="highlight-python"><pre>$ celery control -d w1.example.com autoscale 10 5</pre>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">pool_grow</span></tt>/<tt class="docutils literal"><span class="pre">pool_shrink</span></tt></p>
+<blockquote>
+<div><p>Tells workers to add or remove pool processes.</p>
+<p>These commands are available programmatically as
+<a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.pool_grow" title="celery.app.control.Control.pool_grow"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.pool_grow()</span></tt></a> / <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.pool_shrink" title="celery.app.control.Control.pool_shrink"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.pool_shrink()</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pool_grow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">contorl</span><span class="o">.</span><span class="n">pool_shrink</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>or using the <strong class="program">celery control</strong> command:</p>
+<div class="highlight-python"><pre>$ celery control -d w1.example.com pool_grow 2
+$ celery control -d w1.example.com pool_shrink 2</pre>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong class="program">celery control</strong> now supports <tt class="docutils literal"><span class="pre">rate_limit</span></tt> &amp; <tt class="docutils literal"><span class="pre">time_limit</span></tt>
+commands.</p>
+<blockquote>
+<div><p>See <tt class="docutils literal"><span class="pre">celery</span> <span class="pre">control</span> <span class="pre">--help</span></tt> for details.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
 <div class="section" id="crontab-now-supports-day-of-month-and-month-of-year-arguments">
-<h3><a class="toc-backref" href="#id8">Crontab now supports Day of Month, and Month of Year arguments</a><a class="headerlink" href="#crontab-now-supports-day-of-month-and-month-of-year-arguments" title="Permalink to this headline">¶</a></h3>
+<h3>Crontab now supports Day of Month, and Month of Year arguments<a class="headerlink" href="#crontab-now-supports-day-of-month-and-month-of-year-arguments" title="Permalink to this headline">¶</a></h3>
 <p>See the updated list of examples at <a class="reference internal" href="userguide/periodic-tasks.html#beat-crontab"><em>Crontab schedules</em></a>.</p>
 </div>
 <div class="section" id="immutable-subtasks">
-<h3><a class="toc-backref" href="#id9">Immutable subtasks</a><a class="headerlink" href="#immutable-subtasks" title="Permalink to this headline">¶</a></h3>
+<h3>Immutable subtasks<a class="headerlink" href="#immutable-subtasks" title="Permalink to this headline">¶</a></h3>
 <p><tt class="docutils literal"><span class="pre">subtask</span></tt>&#8216;s can now be immutable, which means that the arguments
 will not be modified when applying callbacks:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">clear_static_electricity</span><span class="o">.</span><span class="n">si</span><span class="p">())</span>
@@ -374,7 +403,7 @@ and <tt class="docutils literal"><span class="pre">.si()</span></tt> is a shortc
 </div>
 </div>
 <div class="section" id="logging-improvements">
-<h3><a class="toc-backref" href="#id10">Logging Improvements</a><a class="headerlink" href="#logging-improvements" title="Permalink to this headline">¶</a></h3>
+<h3>Logging Improvements<a class="headerlink" href="#logging-improvements" title="Permalink to this headline">¶</a></h3>
 <p>Logging support now conforms better with best practices.</p>
 <ul>
 <li><p class="first">Classes used by the worker no longer uses app.get_default_logger, but uses
@@ -427,7 +456,7 @@ logger.</p>
 </ul>
 </div>
 <div class="section" id="task-registry-no-longer-global">
-<h3><a class="toc-backref" href="#id11">Task registry no longer global</a><a class="headerlink" href="#task-registry-no-longer-global" title="Permalink to this headline">¶</a></h3>
+<h3>Task registry no longer global<a class="headerlink" href="#task-registry-no-longer-global" title="Permalink to this headline">¶</a></h3>
 <p>Every Celery instance now has its own task registry.</p>
 <p>You can make apps share registries by specifying it:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">app1</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">()</span>
@@ -445,7 +474,7 @@ by setting the <tt class="docutils literal"><span class="pre">shared</span></tt>
 </div>
 </div>
 <div class="section" id="abstract-tasks-are-now-lazily-bound">
-<h3><a class="toc-backref" href="#id12">Abstract tasks are now lazily bound.</a><a class="headerlink" href="#abstract-tasks-are-now-lazily-bound" title="Permalink to this headline">¶</a></h3>
+<h3>Abstract tasks are now lazily bound.<a class="headerlink" href="#abstract-tasks-are-now-lazily-bound" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference internal" href="reference/celery.task.html#celery.task.Task" title="celery.task.Task"><tt class="xref py py-class docutils literal"><span class="pre">Task</span></tt></a> class is no longer bound to an app
 by default, it will first be bound (and configured) when
 a concrete subclass is created.</p>
@@ -471,7 +500,7 @@ class DebugTask(Task):
 </div>
 </div>
 <div class="section" id="lazy-task-decorators">
-<h3><a class="toc-backref" href="#id13">Lazy task decorators</a><a class="headerlink" href="#lazy-task-decorators" title="Permalink to this headline">¶</a></h3>
+<h3>Lazy task decorators<a class="headerlink" href="#lazy-task-decorators" title="Permalink to this headline">¶</a></h3>
 <p>The <tt class="docutils literal"><span class="pre">&#64;task</span></tt> decorator is now lazy when used with custom apps.</p>
 <p>That is, if <tt class="docutils literal"><span class="pre">accept_magic_kwargs</span></tt> is enabled (herby called &#8220;compat mode&#8221;), the task
 decorator executes inline like before, however for custom apps the &#64;task
@@ -481,8 +510,8 @@ on access.</p>
 when the task registry is first used.</p>
 </div>
 <div class="section" id="smart-app-option">
-<h3><a class="toc-backref" href="#id14">Smart <cite>&#8211;app</cite> option</a><a class="headerlink" href="#smart-app-option" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference internal" href="reference/celery.bin.base.html#cmdoption--app"><em class="xref std std-option">--app</em></a> option now &#8216;auto-detects&#8217;</p>
+<h3>Smart <cite>&#8211;app</cite> option<a class="headerlink" href="#smart-app-option" title="Permalink to this headline">¶</a></h3>
+<p>The <em class="xref std std-option">--app</em> option now &#8216;auto-detects&#8217;</p>
 <blockquote>
 <div><ul class="simple">
 <li>If the provided path is a module it tries to get an
@@ -501,7 +530,7 @@ $ celery worker --app=proj.celery:celery</pre>
 </div>
 </div>
 <div class="section" id="in-other-news">
-<h3><a class="toc-backref" href="#id15">In Other News</a><a class="headerlink" href="#in-other-news" title="Permalink to this headline">¶</a></h3>
+<h3>In Other News<a class="headerlink" href="#in-other-news" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">New <a class="reference internal" href="configuration.html#std:setting-CELERYD_WORKER_LOST_WAIT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_WORKER_LOST_WAIT</span></tt></a> to control the timeout in
 seconds before <tt class="xref py py-exc docutils literal"><span class="pre">billiard.WorkerLostError</span></tt> is raised
@@ -692,7 +721,7 @@ and instead set different priorities.</p>
 </ul>
 </div>
 <div class="section" id="internals">
-<h3><a class="toc-backref" href="#id16">Internals</a><a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h3>
+<h3>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">Compat modules are now generated dynamically upon use.</p>
 <blockquote>
@@ -726,9 +755,9 @@ and instead set different priorities.</p>
 </div>
 </div>
 <div class="section" id="experimental">
-<span id="v260-experimental"></span><h2><a class="toc-backref" href="#id17">Experimental</a><a class="headerlink" href="#experimental" title="Permalink to this headline">¶</a></h2>
+<span id="v260-experimental"></span><h2><a class="toc-backref" href="#id3">Experimental</a><a class="headerlink" href="#experimental" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="celery-contrib-methods-task-decorator-for-methods">
-<h3><a class="toc-backref" href="#id18"><a class="reference internal" href="reference/celery.contrib.methods.html#module-celery.contrib.methods" title="celery.contrib.methods"><tt class="xref py py-mod docutils literal"><span class="pre">celery.contrib.methods</span></tt></a>:  Task decorator for methods</a><a class="headerlink" href="#celery-contrib-methods-task-decorator-for-methods" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="reference/celery.contrib.methods.html#module-celery.contrib.methods" title="celery.contrib.methods"><tt class="xref py py-mod docutils literal"><span class="pre">celery.contrib.methods</span></tt></a>:  Task decorator for methods<a class="headerlink" href="#celery-contrib-methods-task-decorator-for-methods" title="Permalink to this headline">¶</a></h3>
 <p>This is an experimental module containing a task
 decorator, and a task decorator filter, that can be used
 to create tasks out of methods:</p>
@@ -749,7 +778,7 @@ to create tasks out of methods:</p>
 </div>
 </div>
 <div class="section" id="unscheduled-removals">
-<span id="v260-unscheduled-removals"></span><h2><a class="toc-backref" href="#id19">Unscheduled Removals</a><a class="headerlink" href="#unscheduled-removals" title="Permalink to this headline">¶</a></h2>
+<span id="v260-unscheduled-removals"></span><h2><a class="toc-backref" href="#id4">Unscheduled Removals</a><a class="headerlink" href="#unscheduled-removals" title="Permalink to this headline">¶</a></h2>
 <p>Usually we don&#8217;t make backward incompatible removals,
 but these removals should have no major effect.</p>
 <ul>
@@ -764,11 +793,21 @@ but these removals should have no major effect.</p>
 </ul>
 </div>
 <div class="section" id="deprecations">
-<span id="v260-deprecations"></span><h2><a class="toc-backref" href="#id20">Deprecations</a><a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h2>
+<span id="v260-deprecations"></span><h2><a class="toc-backref" href="#id5">Deprecations</a><a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h2>
 <p>See the <a class="reference internal" href="internals/deprecation.html#deprecation-timeline"><em>Celery Deprecation Timeline</em></a>.</p>
+<p>The following undocumented API&#8217;s has been moved:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">control.inspect.add_consumer</span></tt> -&gt; <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.add_consumer" title="celery.app.control.Control.add_consumer"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.add_consumer()</span></tt></a>.</li>
+<li><tt class="docutils literal"><span class="pre">control.inspect.cancel_consumer</span></tt> -&gt; <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.cancel_consumer" title="celery.app.control.Control.cancel_consumer"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.cancel_consumer()</span></tt></a>.</li>
+<li><tt class="docutils literal"><span class="pre">control.inspect.enable_events</span></tt> -&gt; <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.enable_events" title="celery.app.control.Control.enable_events"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.enable_events()</span></tt></a>.</li>
+<li><tt class="docutils literal"><span class="pre">control.inspect.disable_events</span></tt> -&gt; <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.disable_events" title="celery.app.control.Control.disable_events"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.disable_events()</span></tt></a>.</li>
+</ul>
+<p>This way <tt class="docutils literal"><span class="pre">inspect()</span></tt> is only used for commands that do not
+modify anything, while idempotent control commands that make changes
+are on the control objects.</p>
 </div>
 <div class="section" id="fixes">
-<h2><a class="toc-backref" href="#id21">Fixes</a><a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Fixes</a><a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Retry sqlalchemy backend operations on DatabaseError/OperationalError
 (Issue <span class="xref issue">#634</span>)</li>

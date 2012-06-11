@@ -74,12 +74,12 @@ we will demonstrate what Celery offers in more detail, including
 how to add Celery support for your application and library.</p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#using-celery-in-your-application" id="id3">Using Celery in your Application</a></li>
-<li><a class="reference internal" href="#designing-work-flows" id="id4">Designing Work-flows</a></li>
+<li><a class="reference internal" href="#using-celery-in-your-application" id="id2">Using Celery in your Application</a></li>
+<li><a class="reference internal" href="#canvas-designing-workflows" id="id3"><em>Canvas</em>: Designing Workflows</a></li>
 </ul>
 </div>
 <div class="section" id="using-celery-in-your-application">
-<h2><a class="toc-backref" href="#id3">Using Celery in your Application</a><a class="headerlink" href="#using-celery-in-your-application" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id2">Using Celery in your Application</a><a class="headerlink" href="#using-celery-in-your-application" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="our-project">
 <span id="project-layout"></span><h3>Our Project<a class="headerlink" href="#our-project" title="Permalink to this headline">¶</a></h3>
 <p>Project layout:</p>
@@ -98,7 +98,7 @@ how to add Celery support for your application and library.</p>
                 <span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;proj.tasks&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>In this module we created our <tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt> instance (sometimes
+<p>In this module we created our <a class="reference internal" href="../reference/celery.html#celery.Celery" title="celery.Celery"><tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt></a> instance (sometimes
 referred to as the <em>app</em>).  To use Celery within your project
 you simply import this instance.</p>
 <ul>
@@ -199,10 +199,10 @@ and emulating priorities, all described in the <a class="reference internal" hre
 by passing in the <cite>&#8211;help</cite> flag:</p>
 <div class="highlight-python"><pre>$ celery worker --help</pre>
 </div>
-<p>These options are described in more detailed in the <a class="reference internal" href="../userguide/workers.html#guide-worker"><em>Workers Guide</em></a>.</p>
+<p>These options are described in more detailed in the <a class="reference internal" href="../userguide/workers.html#guide-workers"><em>Workers Guide</em></a>.</p>
 <div class="sidebar">
-<p class="first sidebar-title">About the <a class="reference internal" href="../reference/celery.bin.base.html#cmdoption--app"><em class="xref std std-option">--app</em></a> argument</p>
-<p>The <a class="reference internal" href="../reference/celery.bin.base.html#cmdoption--app"><em class="xref std std-option">--app</em></a> argument specifies the Celery app instance to use,
+<p class="first sidebar-title">About the <em class="xref std std-option">--app</em> argument</p>
+<p>The <em class="xref std std-option">--app</em> argument specifies the Celery app instance to use,
 it must be in the form of <tt class="docutils literal"><span class="pre">module.path:celery</span></tt>, where the part before the colon
 is the name of the module, and the attribute name comes last.
 If a package name is specified instead it will automatically
@@ -216,9 +216,9 @@ $ celery &#8211;app=proj.celery:celery</div></blockquote>
 </div>
 </div>
 </div>
-<div class="section" id="designing-work-flows">
-<span id="id2"></span><h2><a class="toc-backref" href="#id4">Designing Work-flows</a><a class="headerlink" href="#designing-work-flows" title="Permalink to this headline">¶</a></h2>
-<p>A <tt class="xref py py-func docutils literal"><span class="pre">subtask()</span></tt> wraps the signature of a single task invocation:
+<div class="section" id="canvas-designing-workflows">
+<span id="designing-workflows"></span><h2><a class="toc-backref" href="#id3"><em>Canvas</em>: Designing Workflows</a><a class="headerlink" href="#canvas-designing-workflows" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference internal" href="../reference/celery.html#celery.subtask" title="celery.subtask"><tt class="xref py py-func docutils literal"><span class="pre">subtask()</span></tt></a> wraps the signature of a single task invocation:
 arguments, keyword arguments and execution options.</p>
 <p>A subtask for the <tt class="docutils literal"><span class="pre">add</span></tt> task can be created like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">subtask</span>
@@ -230,7 +230,7 @@ arguments, keyword arguments and execution options.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>It takes the same arguments as the <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt> method:</p>
+<p>It takes the same arguments as the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.apply_async" title="celery.app.task.Task.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
 
@@ -238,8 +238,8 @@ arguments, keyword arguments and execution options.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>And like there is a <tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt> shortcut for <cite>apply_async</cite>
-there is an <tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt> shortcut for subtask:</p>
+<p>And like there is a <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.delay" title="celery.app.task.Task.delay"><tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt></a> shortcut for <cite>apply_async</cite>
+there is an <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.s" title="celery.app.task.Task.s"><tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt></a> shortcut for subtask:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -249,7 +249,7 @@ there is an <tt class="xref py py-meth docutils literal"><span class="pre">s()</
 <span class="go">True</span>
 </pre></div>
 </div>
-<p>You can&#8217;t define options with <tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt>, but a chaining
+<p>You can&#8217;t define options with <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.s" title="celery.app.task.Task.s"><tt class="xref py py-meth docutils literal"><span class="pre">s()</span></tt></a>, but a chaining
 <tt class="docutils literal"><span class="pre">set</span></tt> call takes care of that:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">proj.tasks.add(2, 2)</span>
@@ -326,7 +326,7 @@ when testing with the Python shell:</p>
 <div class="section" id="groups">
 <h3>Groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h3>
 <p>A group can be used to execute several tasks in parallel.</p>
-<p>The <tt class="xref py py-class docutils literal"><span class="pre">group</span></tt> function takes a list of subtasks:</p>
+<p>The <a class="reference internal" href="../reference/celery.html#celery.group" title="celery.group"><tt class="xref py py-class docutils literal"><span class="pre">group</span></tt></a> function takes a list of subtasks:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">group</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
 
@@ -335,7 +335,7 @@ when testing with the Python shell:</p>
 </pre></div>
 </div>
 <p>If you <strong>call</strong> the group, the tasks will be applied
-one after one in the current process, and a <a class="reference internal" href="../reference/celery.result.html#celery.result.TaskSetResult" title="celery.result.TaskSetResult"><tt class="xref py py-class docutils literal"><span class="pre">TaskSetResult</span></tt></a>
+one after one in the current process, and a <tt class="xref py py-class docutils literal"><span class="pre">TaskSetResult</span></tt>
 instance is returned which can be used to keep track of the results,
 or tell how many tasks are ready and so on:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
@@ -410,11 +410,11 @@ to apply the starmap after 10 seconds:</p>
 of parallelism, but this is rarely true for a busy cluster
 and in practice since you are avoiding the overhead  of messaging
 it may considerably increase performance.</p>
-<p>To create a chunks subtask you can use <tt class="xref py py-meth docutils literal"><span class="pre">celery.Task.chunks()</span></tt>:</p>
+<p>To create a chunks subtask you can use <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.chunks" title="celery.app.task.Task.chunks"><tt class="xref py py-meth docutils literal"><span class="pre">celery.Task.chunks()</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>As with <tt class="xref py py-class docutils literal"><span class="pre">group</span></tt> the act of <strong>calling</strong>
+<p>As with <a class="reference internal" href="../reference/celery.html#celery.group" title="celery.group"><tt class="xref py py-class docutils literal"><span class="pre">group</span></tt></a> the act of <strong>calling</strong>
 the chunks will apply the tasks in the current process:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
 
@@ -515,7 +515,7 @@ the error callbacks take the id of the parent task as argument instead:</p>
 </pre></div>
 </div>
 <p>To make it even easier to link tasks together there is
-a special subtask called <tt class="xref py py-class docutils literal"><span class="pre">chain</span></tt> that lets
+a special subtask called <a class="reference internal" href="../reference/celery.html#celery.chain" title="celery.chain"><tt class="xref py py-class docutils literal"><span class="pre">chain</span></tt></a> that lets
 you chain tasks together:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">chain</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">mul</span>

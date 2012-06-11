@@ -183,7 +183,7 @@ instead of a dict to choose which tasks to annotate:</p>
 <span id="conf-concurrency"></span><h3><a class="toc-backref" href="#id9">Concurrency settings</a><a class="headerlink" href="#concurrency-settings" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="celeryd-concurrency">
 <span id="std:setting-CELERYD_CONCURRENCY"></span><h4>CELERYD_CONCURRENCY<a class="headerlink" href="#celeryd-concurrency" title="Permalink to this headline">¶</a></h4>
-<p>The number of concurrent worker processes/threads/green threads, executing
+<p>The number of concurrent worker processes/threads/green threads executing
 tasks.</p>
 <p>If you&#8217;re doing mostly I/O you can have more processes,
 but if mostly CPU-bound, try to keep it close to the
@@ -266,7 +266,7 @@ See <a class="reference internal" href="#conf-cassandra-result-backend"><em>Cass
 <div class="section" id="celery-result-serializer">
 <span id="std:setting-CELERY_RESULT_SERIALIZER"></span><h4>CELERY_RESULT_SERIALIZER<a class="headerlink" href="#celery-result-serializer" title="Permalink to this headline">¶</a></h4>
 <p>Result serialization format.  Default is <cite>&#8220;pickle&#8221;</cite>. See
-<a class="reference internal" href="userguide/executing.html#executing-serializers"><em>Serializers</em></a> for information about supported
+<a class="reference internal" href="userguide/calling.html#calling-serializers"><em>Serializers</em></a> for information about supported
 serialization formats.</p>
 </div>
 </div>
@@ -752,7 +752,7 @@ need to report which task is currently running.</p>
 methods that have been registered with <tt class="xref py py-mod docutils literal"><span class="pre">kombu.serialization.registry</span></tt>.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="userguide/executing.html#executing-serializers"><em>Serializers</em></a>.</p>
+<p class="last"><a class="reference internal" href="userguide/calling.html#calling-serializers"><em>Serializers</em></a>.</p>
 </div>
 </div>
 <div class="section" id="celery-task-publish-retry">
@@ -770,49 +770,7 @@ See also <a class="reference internal" href="#std:setting-CELERY_TASK_PUBLISH_RE
 <span class="versionmodified">New in version 2.2.</span></p>
 <p>Defines the default policy when retrying publishing a task message in
 the case of connection loss or other connection errors.</p>
-<p>This is a mapping that must contain the following keys:</p>
-<blockquote>
-<div><ul>
-<li><p class="first"><cite>max_retries</cite></p>
-<blockquote>
-<div><p>Maximum number of retries before giving up, in this case the
-exception that caused the retry to fail will be raised.</p>
-<p>A value of 0 or <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt> means it will retry forever.</p>
-<p>The default is to retry 3 times.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><cite>interval_start</cite></p>
-<blockquote>
-<div><p>Defines the number of seconds (float or integer) to wait between
-retries.  Default is 0, which means the first retry will be
-instantaneous.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><cite>interval_step</cite></p>
-<blockquote>
-<div><p>On each consecutive retry this number will be added to the retry
-delay (float or integer).  Default is 0.2.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><cite>interval_max</cite></p>
-<blockquote>
-<div><p>Maximum number of seconds (float or integer) to wait between
-retries.  Default is 0.2.</p>
-</div></blockquote>
-</li>
-</ul>
-</div></blockquote>
-<p>With the default policy of:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;max_retries&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
- <span class="s">&quot;interval_start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
- <span class="s">&quot;interval_step&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
- <span class="s">&quot;interval_max&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>the maximum time spent retrying will be 0.4 seconds.  It is set relatively
-short by default because a connection failure could lead to a retry pile effect
-if the broker connection is down: e.g. many web server processes waiting
-to retry blocking other incoming requests.</p>
+<p>See <a class="reference internal" href="userguide/calling.html#calling-retry"><em>Message Sending Retry</em></a> for more information.</p>
 </div>
 <div class="section" id="celery-default-rate-limit">
 <span id="std:setting-CELERY_DEFAULT_RATE_LIMIT"></span><h4>CELERY_DEFAULT_RATE_LIMIT<a class="headerlink" href="#celery-default-rate-limit" title="Permalink to this headline">¶</a></h4>
@@ -1007,7 +965,7 @@ tracked before they are consumed by a worker.</p>
 <div class="section" id="celery-event-serializer">
 <span id="std:setting-CELERY_EVENT_SERIALIZER"></span><h4>CELERY_EVENT_SERIALIZER<a class="headerlink" href="#celery-event-serializer" title="Permalink to this headline">¶</a></h4>
 <p>Message serialization format used when sending event messages.
-Default is <cite>&#8220;json&#8221;</cite>. See <a class="reference internal" href="userguide/executing.html#executing-serializers"><em>Serializers</em></a>.</p>
+Default is <cite>&#8220;json&#8221;</cite>. See <a class="reference internal" href="userguide/calling.html#calling-serializers"><em>Serializers</em></a>.</p>
 </div>
 </div>
 <div class="section" id="broadcast-commands">

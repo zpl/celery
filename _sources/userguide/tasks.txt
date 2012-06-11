@@ -306,7 +306,17 @@ General
     serialization methods that have been registered with
     :mod:`kombu.serialization.registry`.
 
-    Please see :ref:`executing-serializers` for more information.
+    Please see :ref:`calling-serializers` for more information.
+
+.. attribute:: Task.compression
+
+    A string identifying the default compression scheme to use.
+
+    Defaults to the :setting:`CELERY_MESSAGE_COMPRESSION` setting.
+    Can be `gzip`, or `bzip2`, or any custom compression schemes
+    that have been registered with the :mod:`kombu.compression` registry.
+
+    Please see :ref:`calling-compression` for more information.
 
 .. attribute:: Task.backend
 
@@ -990,7 +1000,7 @@ Make your design asynchronous instead, for example by using *callbacks*.
 Here we instead create a chain of tasks by linking together
 different :func:`~celery.subtask`'s.
 You can read about chains and other powerful constructs
-at :ref:`designing-work-flows`.
+at :ref:`designing-workflows`.
 
 .. _task-performance-and-strategies:
 

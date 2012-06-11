@@ -105,6 +105,11 @@
 <tt class="descname">add_queue</tt><big>(</big><em>queue</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Consumer.add_queue" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.backends.amqp.AMQPBackend.Consumer.add_queue_from_dict">
+<tt class="descname">add_queue_from_dict</tt><big>(</big><em>queue</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Consumer.add_queue_from_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="celery.backends.amqp.AMQPBackend.Consumer.auto_declare">
 <tt class="descname">auto_declare</tt><em class="property"> = True</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Consumer.auto_declare" title="Permalink to this definition">¶</a></dt>
@@ -469,7 +474,7 @@ properly sets content_encoding.</li>
 
 <dl class="attribute">
 <dt id="celery.backends.amqp.AMQPBackend.Exchange.attrs">
-<tt class="descname">attrs</tt><em class="property"> = (('name', None), ('type', None), ('arguments', None), ('durable', &lt;type 'bool'&gt;), ('auto_delete', &lt;type 'bool'&gt;), ('delivery_mode', &lt;function &lt;lambda&gt; at 0x108178140&gt;))</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.attrs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attrs</tt><em class="property"> = (('name', None), ('type', None), ('arguments', None), ('durable', &lt;type 'bool'&gt;), ('auto_delete', &lt;type 'bool'&gt;), ('delivery_mode', &lt;function &lt;lambda&gt; at 0x1086faed8&gt;))</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.attrs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1003,8 +1008,8 @@ without modifying the server state.</li>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.backends.amqp.AMQPBackend.delete_taskset">
-<tt class="descclassname">AMQPBackend.</tt><tt class="descname">delete_taskset</tt><big>(</big><em>taskset_id</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.delete_taskset" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.backends.amqp.AMQPBackend.delete_group">
+<tt class="descclassname">AMQPBackend.</tt><tt class="descname">delete_group</tt><big>(</big><em>group_id</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.delete_group" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1028,19 +1033,19 @@ without modifying the server state.</li>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="celery.backends.amqp.AMQPBackend.reload_group_result">
+<tt class="descclassname">AMQPBackend.</tt><tt class="descname">reload_group_result</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.reload_group_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reload group result, even if it has been previously fetched.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="celery.backends.amqp.AMQPBackend.reload_task_result">
 <tt class="descclassname">AMQPBackend.</tt><tt class="descname">reload_task_result</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.reload_task_result" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.backends.amqp.AMQPBackend.reload_taskset_result">
-<tt class="descclassname">AMQPBackend.</tt><tt class="descname">reload_taskset_result</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.reload_taskset_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reload taskset result, even if it has been previously fetched.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.amqp.AMQPBackend.restore_taskset">
-<tt class="descclassname">AMQPBackend.</tt><tt class="descname">restore_taskset</tt><big>(</big><em>taskset_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.restore_taskset" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.backends.amqp.AMQPBackend.restore_group">
+<tt class="descclassname">AMQPBackend.</tt><tt class="descname">restore_group</tt><big>(</big><em>group_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.restore_group" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1054,8 +1059,8 @@ without modifying the server state.</li>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="celery.backends.amqp.AMQPBackend.save_taskset">
-<tt class="descclassname">AMQPBackend.</tt><tt class="descname">save_taskset</tt><big>(</big><em>taskset_id</em>, <em>result</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.save_taskset" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.backends.amqp.AMQPBackend.save_group">
+<tt class="descclassname">AMQPBackend.</tt><tt class="descname">save_group</tt><big>(</big><em>group_id</em>, <em>result</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.save_group" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
