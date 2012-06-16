@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using Amazon SQS &mdash; Celery 2.6.0rc4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/issuetracker.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.6.0rc4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+<div class="deck">
+
+    
+        <p class="developmentversion">
+        This document is for Celery's development version, which can be
+        significantly different from previous releases. Get old docs here:
+
+        <a href="http://docs.celeryproject.org/en/latest/getting-started/brokers/sqs.html">2.5</a>.
+        </p>
+        
+
+</div>
+    <div class="section" id="using-amazon-sqs">
+<span id="broker-sqs"></span><h1>Using Amazon SQS<a class="headerlink" href="#using-amazon-sqs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<span id="broker-sqs-installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>For the Amazon SQS support you have to install the <a class="reference external" href="http://pypi.python.org/pypi/boto">boto</a> library:</p>
+<div class="highlight-python"><pre>$ pip install -U boto</pre>
+</div>
+</div>
+<div class="section" id="configuration">
+<span id="broker-sqs-configuration"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>You have to specify SQS in the broker URL:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqs://ABCDEFGHIJKLMNOPQRST:ZYXK7NiynGlTogH8Nj+P9nlE73sq3@&#39;</span>
+</pre></div>
+</div>
+<p>where the URL format is:</p>
+<div class="highlight-python"><pre>sqs://aws_access_key_id@aws_secret_access_key@</pre>
+</div>
+<p>remember to include the &#8220;&#64;&#8221; at the end.</p>
+<p>The login credentials can also be set using the environment variables
+<span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">AWS_ACCESS_KEY_ID</span></tt> and <span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">AWS_SECRET_ACCESS_KEY</span></tt>,
+in that case the broker url may only be <tt class="docutils literal"><span class="pre">sqs://</span></tt>.</p>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="region">
+<h3>region<a class="headerlink" href="#region" title="Permalink to this headline">¶</a></h3>
+<p>The default region is <tt class="docutils literal"><span class="pre">us-east-1</span></tt> but you can select another region
+by configuring the <a class="reference internal" href="../../configuration.html#std:setting-BROKER_TRANSPORT_OPTIONS"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_TRANSPORT_OPTIONS</span></tt></a> setting:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_TRANSPORT_OPTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;region&#39;</span><span class="p">:</span> <span class="s">&#39;eu-west-1&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>An overview of Amazon Web Services regions can be found here:</p>
+<blockquote class="last">
+<div><a class="reference external" href="http://aws.amazon.com/about-aws/globalinfrastructure/">http://aws.amazon.com/about-aws/globalinfrastructure/</a></div></blockquote>
+</div>
+</div>
+<div class="section" id="visibility-timeout">
+<h3>visibility_timeout<a class="headerlink" href="#visibility-timeout" title="Permalink to this headline">¶</a></h3>
+<p>The visibility timeout defines the number of seconds to wait
+for the worker to acknowledge the task before the message is redelivered
+to another worker.  Also see caveats below.</p>
+<p>This option is set via the <a class="reference internal" href="../../configuration.html#std:setting-BROKER_TRANSPORT_OPTIONS"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_TRANSPORT_OPTIONS</span></tt></a> setting:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_TRANSPORT_OPTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;visibility_timeout&#39;</span><span class="p">:</span> <span class="mi">3600</span><span class="p">}</span>  <span class="c"># 1 hour.</span>
+</pre></div>
+</div>
+<p>The default visibility timeout is 120 seconds.</p>
+</div>
+<div class="section" id="queue-name-prefix">
+<h3>queue_name_prefix<a class="headerlink" href="#queue-name-prefix" title="Permalink to this headline">¶</a></h3>
+<p>By default Celery will not assign any prefix to the queue names,
+If you have other services using SQS you can configure it do so
+using the <a class="reference internal" href="../../configuration.html#std:setting-BROKER_TRANSPORT_OPTIONS"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_TRANSPORT_OPTIONS</span></tt></a> setting:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_TRANSPORT_OPTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;queue_name_prefix&#39;</span><span class="p">:</span> <span class="s">&#39;celery-&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="caveats">
+<span id="sqs-caveats"></span><h2>Caveats<a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">If a task is not acknowledged within the <tt class="docutils literal"><span class="pre">visibility_timeout</span></tt>,
+the task will be redelivered to another worker and executed.</p>
+<blockquote>
+<div><p>This causes problems with ETA/countdown/retry tasks where the
+time to execute exceeds the visibility timeout; in fact if that
+happens it will be executed again, and again in a loop.</p>
+<p>So you have to increase the visibility timeout to match
+the time of the longest ETA you are planning to use.</p>
+<p>Note that Celery will redeliver messages at worker shutdown,
+so having a long visibility timeout will only delay the redelivery
+of &#8216;lost&#8217; tasks in the event of a power failure or forcefully terminated
+workers.</p>
+<p>Periodic tasks will not be affected by the visibility timeout,
+as it is a concept separate from ETA/countdown.</p>
+<p>The maximum visibility timeout supported by AWS as of this writing
+is 12 hours (43200 seconds):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_TRANSPORT_OPTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;visibility_timeout&#39;</span><span class="p">:</span> <span class="mi">43200</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">SQS does not yet support worker remote control commands.</p>
+</li>
+<li><p class="first">SQS does not yet support events, and so cannot be used with
+<strong class="program">celery events</strong>, <strong class="program">celerymon</strong> or the Django Admin
+monitor.</p>
+</li>
+</ul>
+<div class="section" id="results">
+<span id="sqs-results-configuration"></span><h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
+<p>Multiple products in the Amazon Web Services family could be a good candidate
+to store or publish results with, but there is no such result backend included
+at this point.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Do not use the <tt class="docutils literal"><span class="pre">amqp</span></tt> backend with SQS.</p>
+<p class="last">It will create one queue for every task, and the queues will
+not be collected.  This could cost you money that would be better
+spent contributing an Amazon WS result store backend back to Celery :)</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="../../index.html">
+  <img class="logo" src="http://cloud.github.com/downloads/celery/celery/celery_128.png" alt="Logo"/>
+</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/getting-started/brokers/sqs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
+    </div>
+  </body>
+</html>
