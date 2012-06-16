@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.worker.consumer" href="celery.worker.consumer.html" />
@@ -79,21 +80,7 @@
 <h2><a class="toc-backref" href="#id2">celery.worker</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="#celery.worker.WorkController" title="celery.worker.WorkController"><tt class="xref py py-class docutils literal"><span class="pre">WorkController</span></tt></a> can be used to instantiate in-process workers.</p>
 <p>The worker consists of several components, all managed by boot-steps
-(mod:<cite>celery.abstract</cite>).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
-<li>2009 - 2012 by Ask Solem.</li>
-</ol>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
-</td>
-</tr>
-</tbody>
-</table>
+(mod:<cite>celery.worker.bootsteps</cite>).</p>
 <dl class="class">
 <dt id="celery.worker.Beat">
 <em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">Beat</tt><big>(</big><em>w</em>, <em>beat=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.Beat" title="Permalink to this definition">¶</a></dt>
@@ -298,7 +285,7 @@ used by the worker.</p>
 
 <dl class="class">
 <dt id="celery.worker.WorkController">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x101b15230&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x101b152a8&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmanaged worker instance.</p>
 <dl class="attribute">
 <dt id="celery.worker.WorkController.CLOSE">
@@ -536,7 +523,7 @@ used by the worker.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

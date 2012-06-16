@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.worker.state" href="celery.worker.state.html" />
@@ -78,26 +79,12 @@
 <span class="target" id="module-celery.worker.control"></span><div class="section" id="id1">
 <h2><a class="toc-backref" href="#id2">celery.worker.control</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Remote control commands.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
-<li>2009 - 2012 by Ask Solem.</li>
-</ol>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
-</td>
-</tr>
-</tbody>
-</table>
 <dl class="class">
 <dt id="celery.worker.control.Panel">
 <em class="property">class </em><tt class="descclassname">celery.worker.control.</tt><tt class="descname">Panel</tt><big>(</big><em>dict=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.Panel" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.worker.control.Panel.data">
-<tt class="descname">data</tt><em class="property"> = {'time_limit': &lt;function time_limit at 0x10a6c5758&gt;, 'revoke': &lt;function revoke at 0x105727cf8&gt;, 'dump_active': &lt;function dump_active at 0x10a6c58c0&gt;, 'report': &lt;function report at 0x105727c80&gt;, 'cancel_consumer': &lt;function cancel_consumer at 0x10a6c5de8&gt;, 'dump_reserved': &lt;function dump_reserved at 0x10a6c5848&gt;, 'shutdown': &lt;function shutdown at 0x10a6c5cf8&gt;, 'autoscale': &lt;function autoscale at 0x10a6c5c80&gt;, 'ping': &lt;function ping at 0x10a6c5aa0&gt;, 'disable_events': &lt;function disable_events at 0x10a6c5050&gt;, 'pool_shrink': &lt;function pool_shrink at 0x10a6c5b90&gt;, 'pool_restart': &lt;function pool_restart at 0x10a6c5c08&gt;, 'dump_schedule': &lt;function dump_schedule at 0x10a6c57d0&gt;, 'active_queues': &lt;function active_queues at 0x10a6c5e60&gt;, 'stats': &lt;function stats at 0x10a6c5938&gt;, 'dump_tasks': &lt;function dump_tasks at 0x10a6c5a28&gt;, 'add_consumer': &lt;function add_consumer at 0x10a6c5d70&gt;, 'enable_events': &lt;function enable_events at 0x10a6c52a8&gt;, 'dump_revoked': &lt;function dump_revoked at 0x10a6c59b0&gt;, 'rate_limit': &lt;function rate_limit at 0x10a6c56e0&gt;, 'pool_grow': &lt;function pool_grow at 0x10a6c5b18&gt;, 'heartbeat': &lt;function heartbeat at 0x10a6c5398&gt;}</em><a class="headerlink" href="#celery.worker.control.Panel.data" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">data</tt><em class="property"> = {'time_limit': &lt;function time_limit at 0x10a0f78c0&gt;, 'revoke': &lt;function revoke at 0x10a0f7578&gt;, 'dump_active': &lt;function dump_active at 0x10a0f7a28&gt;, 'report': &lt;function report at 0x10a0f7668&gt;, 'cancel_consumer': &lt;function cancel_consumer at 0x10a0f7f50&gt;, 'dump_reserved': &lt;function dump_reserved at 0x10a0f79b0&gt;, 'shutdown': &lt;function shutdown at 0x10a0f7e60&gt;, 'autoscale': &lt;function autoscale at 0x10a0f7de8&gt;, 'ping': &lt;function ping at 0x10a0f7c08&gt;, 'disable_events': &lt;function disable_events at 0x10a0f7758&gt;, 'pool_shrink': &lt;function pool_shrink at 0x10a0f7cf8&gt;, 'pool_restart': &lt;function pool_restart at 0x10a0f7d70&gt;, 'dump_schedule': &lt;function dump_schedule at 0x10a0f7938&gt;, 'active_queues': &lt;function active_queues at 0x10a142050&gt;, 'stats': &lt;function stats at 0x10a0f7aa0&gt;, 'dump_tasks': &lt;function dump_tasks at 0x10a0f7b90&gt;, 'add_consumer': &lt;function add_consumer at 0x10a0f7ed8&gt;, 'enable_events': &lt;function enable_events at 0x10a0f76e0&gt;, 'dump_revoked': &lt;function dump_revoked at 0x10a0f7b18&gt;, 'rate_limit': &lt;function rate_limit at 0x10a0f7848&gt;, 'pool_grow': &lt;function pool_grow at 0x10a0f7c80&gt;, 'heartbeat': &lt;function heartbeat at 0x10a0f77d0&gt;}</em><a class="headerlink" href="#celery.worker.control.Panel.data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="classmethod">
@@ -293,7 +280,7 @@
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

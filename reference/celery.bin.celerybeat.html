@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.bin.celeryev" href="celery.bin.celeryev.html" />
@@ -69,47 +70,47 @@
 </div>
     <div class="section" id="celery-bin-celerybeat">
 <h1>celery.bin.celerybeat<a class="headerlink" href="#celery-bin-celerybeat" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-celery.bin.celerybeat"></span><p>celerybeat</p>
+<span class="target" id="module-celery.bin.celerybeat"></span><p>The <strong class="program">celery beat</strong> command.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last">See <a class="reference internal" href="celery.bin.base.html#preload-options"><em>Preload Options</em></a> and <a class="reference internal" href="celery.bin.base.html#daemon-options"><em>Daemon Options</em></a>.</p>
 </div>
 <dl class="cmdoption">
-<dt id="cmdoption-celerybeat--detach">
-<tt class="descname">--detach</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celerybeat--detach" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-celery-beat--detach">
+<tt class="descname">--detach</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat--detach" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detach and run in the background as a daemon.</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-celerybeat-s">
-<tt class="descname">-s</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--schedule</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celerybeat-s" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-celery-beat-s">
+<tt class="descname">-s</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--schedule</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-s" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path to the schedule database. Defaults to <cite>celerybeat-schedule</cite>.
-The extension &#8221;.db&#8221; may be appended to the filename.
+The extension &#8216;.db&#8217; may be appended to the filename.
 Default is %(default)s.</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-celerybeat-S">
-<tt class="descname">-S</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--scheduler</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celerybeat-S" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-celery-beat-S">
+<tt class="descname">-S</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--scheduler</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-S" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scheduler class to use.
 Default is <a class="reference internal" href="../internals/reference/celery.beat.html#celery.beat.PersistentScheduler" title="celery.beat.PersistentScheduler"><tt class="xref py py-class docutils literal"><span class="pre">celery.beat.PersistentScheduler</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-celerybeat-interval">
-<tt class="descname">-interval</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celerybeat-interval" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-celery-beat-interval">
+<tt class="descname">-interval</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-interval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Max seconds to sleep between schedule iterations.</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-celerybeat-f">
-<tt class="descname">-f</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--logfile</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celerybeat-f" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-celery-beat-f">
+<tt class="descname">-f</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--logfile</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-f" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path to log file. If no logfile is specified, <cite>stderr</cite> is used.</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-celerybeat-l">
-<tt class="descname">-l</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--loglevel</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celerybeat-l" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-celery-beat-l">
+<tt class="descname">-l</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--loglevel</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-l" title="Permalink to this definition">¶</a></dt>
 <dd><p>Logging level, choose between <cite>DEBUG</cite>, <cite>INFO</cite>, <cite>WARNING</cite>,
 <cite>ERROR</cite>, <cite>CRITICAL</cite>, or <cite>FATAL</cite>.</p>
 </dd></dl>
@@ -119,7 +120,7 @@ Default is <a class="reference internal" href="../internals/reference/celery.bea
 <em class="property">class </em><tt class="descclassname">celery.bin.celerybeat.</tt><tt class="descname">BeatCommand</tt><big>(</big><em>app=None</em>, <em>get_app=None</em><big>)</big><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.bin.celerybeat.BeatCommand.doc">
-<tt class="descname">doc</tt><em class="property"> = 'celerybeat\n\n.. program:: celerybeat\n\n.. seealso::\n\n    See :ref:`preload-options` and :ref:`daemon-options`.\n\n.. cmdoption:: --detach\n\n    Detach and run in the background as a daemon.\n\n.. cmdoption:: -s, --schedule\n\n    Path to the schedule database. Defaults to `celerybeat-schedule`.\n    The extension &quot;.db&quot; may be appended to the filename.\n    Default is %(default)s.\n\n.. cmdoption:: -S, --scheduler\n\n    Scheduler class to use.\n    Default is :class:`celery.beat.PersistentScheduler`.\n\n.. cmdoption:: max-interval\n\n    Max seconds to sleep between schedule iterations.\n\n.. cmdoption:: -f, --logfile\n\n    Path to log file. If no logfile is specified, `stderr` is used.\n\n.. cmdoption:: -l, --loglevel\n\n    Logging level, choose between `DEBUG`, `INFO`, `WARNING`,\n    `ERROR`, `CRITICAL`, or `FATAL`.\n\n'</em><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand.doc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">doc</tt><em class="property"> = &quot;\n\nThe :program:`celery beat` command.\n\n.. program:: celery beat\n\n.. seealso::\n\n    See :ref:`preload-options` and :ref:`daemon-options`.\n\n.. cmdoption:: --detach\n\n    Detach and run in the background as a daemon.\n\n.. cmdoption:: -s, --schedule\n\n    Path to the schedule database. Defaults to `celerybeat-schedule`.\n    The extension '.db' may be appended to the filename.\n    Default is %(default)s.\n\n.. cmdoption:: -S, --scheduler\n\n    Scheduler class to use.\n    Default is :class:`celery.beat.PersistentScheduler`.\n\n.. cmdoption:: max-interval\n\n    Max seconds to sleep between schedule iterations.\n\n.. cmdoption:: -f, --logfile\n\n    Path to log file. If no logfile is specified, `stderr` is used.\n\n.. cmdoption:: -l, --loglevel\n\n    Logging level, choose between `DEBUG`, `INFO`, `WARNING`,\n    `ERROR`, `CRITICAL`, or `FATAL`.\n\n&quot;</em><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand.doc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -212,7 +213,7 @@ Default is <a class="reference internal" href="../internals/reference/celery.bea
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

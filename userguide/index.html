@@ -24,8 +24,9 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
-    <link rel="next" title="Overview" href="overview.html" />
+    <link rel="next" title="Application" href="application.html" />
     <link rel="prev" title="Resources" href="../getting-started/resources.html" /> 
   </head>
   <body>
@@ -39,7 +40,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="overview.html" title="Overview"
+          <a href="application.html" title="Application"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../getting-started/resources.html" title="Resources"
@@ -73,122 +74,25 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">2.6</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">June 11, 2012</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">June 16, 2012</td>
 </tr>
 </tbody>
 </table>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#tasks">Tasks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#workers">Workers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#monitoring">Monitoring</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#routing">Routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#ecosystem">Ecosystem</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#context">Context</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#logging">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#retrying-a-task-if-something-fails">Retrying a task if something fails</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#task-options">Task options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#task-names">Task names</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#task-states">Task States</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#creating-custom-task-classes">Creating custom task classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#how-it-works">How it works</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#tips-and-best-practices">Tips and Best Practices</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#performance-and-strategies">Performance and Strategies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tasks.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="calling.html">Calling Tasks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#linking-callbacks-errbacks">Linking (callbacks/errbacks)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#eta-and-countdown">ETA and countdown</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#expiration">Expiration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#message-sending-retry">Message Sending Retry</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#serializers">Serializers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#compression">Compression</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#connections">Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calling.html#routing-options">Routing options</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="workers.html">Workers Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#starting-the-worker">Starting the worker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#stopping-the-worker">Stopping the worker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#restarting-the-worker">Restarting the worker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#process-signals">Process Signals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#concurrency">Concurrency</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#persistent-revokes">Persistent revokes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#time-limits">Time Limits</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#max-tasks-per-child-setting">Max tasks per child setting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#autoscaling">Autoscaling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#autoreloading">Autoreloading</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#remote-control">Remote control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workers.html#inspecting-workers">Inspecting workers</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="periodic-tasks.html">Periodic Tasks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="periodic-tasks.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="periodic-tasks.html#entries">Entries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="periodic-tasks.html#crontab-schedules">Crontab schedules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="periodic-tasks.html#timezones">Timezones</a></li>
-<li class="toctree-l2"><a class="reference internal" href="periodic-tasks.html#starting-the-scheduler">Starting the Scheduler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="canvas.html">Canvas: Building Workflows</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="canvas.html#subtasks">Subtasks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="canvas.html#groups">Groups</a></li>
-<li class="toctree-l2"><a class="reference internal" href="canvas.html#chords">Chords</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="remote-tasks.html">HTTP Callback Tasks (Webhooks)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#django-webhook-example">Django webhook example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#ruby-on-rails-webhook-example">Ruby on Rails webhook example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="remote-tasks.html#calling-webhook-tasks">Calling webhook tasks</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="routing.html">Routing Tasks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="routing.html#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="routing.html#amqp-primer">AMQP Primer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="routing.html#id2">Routing Tasks</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring and Management Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="monitoring.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="monitoring.html#workers">Workers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="monitoring.html#rabbitmq">RabbitMQ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="monitoring.html#redis">Redis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="monitoring.html#munin">Munin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="monitoring.html#events">Events</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="security.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="security.html#areas-of-concern">Areas of Concern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="security.html#serializers">Serializers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="security.html#message-signing">Message Signing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="security.html#intrusion-detection">Intrusion Detection</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="optimizing.html">Optimizing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="optimizing.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="optimizing.html#ensuring-operations">Ensuring Operations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="optimizing.html#general-settings">General Settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="optimizing.html#worker-settings">Worker Settings</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="concurrency/index.html">Concurrency</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concurrency/eventlet.html">Concurrency with Eventlet</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="signals.html">Signals</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="signals.html#basics">Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="signals.html#signal-ref">Signals</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="application.html">Application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calling.html">Calling Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="canvas.html">Canvas: Designing Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workers.html">Workers Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="periodic-tasks.html">Periodic Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote-tasks.html">HTTP Callback Tasks (Webhooks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="routing.html">Routing Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring and Management Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizing.html">Optimizing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concurrency/index.html">Concurrency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signals.html">Signals</a></li>
 </ul>
 </div>
 </div>
@@ -205,8 +109,8 @@
   <p class="topless"><a href="../getting-started/resources.html"
                         title="previous chapter">Resources</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="overview.html"
-                        title="next chapter">Overview</a></p>
+  <p class="topless"><a href="application.html"
+                        title="next chapter">Application</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/userguide/index.txt"
@@ -239,7 +143,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="overview.html" title="Overview"
+          <a href="application.html" title="Application"
              >next</a> |</li>
         <li class="right" >
           <a href="../getting-started/resources.html" title="Resources"
@@ -248,7 +152,7 @@
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

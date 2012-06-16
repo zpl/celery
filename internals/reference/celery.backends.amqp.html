@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.backends.mongodb" href="celery.backends.mongodb.html" />
@@ -70,7 +71,16 @@
 </div>
     <div class="section" id="celery-backends-amqp">
 <h1>celery.backends.amqp<a class="headerlink" href="#celery-backends-amqp" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-celery.backends.amqp"></span><dl class="class">
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#id1" id="id2">celery.backends.amqp</a></li>
+</ul>
+</div>
+<span class="target" id="module-celery.backends.amqp"></span><div class="section" id="id1">
+<h2><a class="toc-backref" href="#id2">celery.backends.amqp</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>The AMQP result backend.</p>
+<p>This backend publishes results as messages.</p>
+<dl class="class">
 <dt id="celery.backends.amqp.AMQPBackend">
 <em class="property">class </em><tt class="descclassname">celery.backends.amqp.</tt><tt class="descname">AMQPBackend</tt><big>(</big><em>connection=None</em>, <em>exchange=None</em>, <em>exchange_type=None</em>, <em>persistent=None</em>, <em>serializer=None</em>, <em>auto_delete=True</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Publishes results by sending messages.</p>
@@ -474,7 +484,7 @@ properly sets content_encoding.</li>
 
 <dl class="attribute">
 <dt id="celery.backends.amqp.AMQPBackend.Exchange.attrs">
-<tt class="descname">attrs</tt><em class="property"> = (('name', None), ('type', None), ('arguments', None), ('durable', &lt;type 'bool'&gt;), ('auto_delete', &lt;type 'bool'&gt;), ('delivery_mode', &lt;function &lt;lambda&gt; at 0x106ec3aa0&gt;))</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.attrs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attrs</tt><em class="property"> = (('name', None), ('type', None), ('arguments', None), ('durable', &lt;type 'bool'&gt;), ('auto_delete', &lt;type 'bool'&gt;), ('delivery_mode', &lt;function &lt;lambda&gt; at 0x107c0fde8&gt;))</em><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.attrs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -489,7 +499,7 @@ properly sets content_encoding.</li>
 
 <dl class="method">
 <dt id="celery.backends.amqp.AMQPBackend.Exchange.declare">
-<tt class="descname">declare</tt><big>(</big><em>nowait=False</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.declare" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">declare</tt><big>(</big><em>nowait=False</em>, <em>passive=False</em><big>)</big><a class="headerlink" href="#celery.backends.amqp.AMQPBackend.Exchange.declare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Declare the exchange.</p>
 <p>Creates the exchange on the broker.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1092,6 +1102,7 @@ without modifying the server state.</li>
 <dd></dd></dl>
 
 </div>
+</div>
 
 
           </div>
@@ -1150,7 +1161,7 @@ without modifying the server state.</li>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

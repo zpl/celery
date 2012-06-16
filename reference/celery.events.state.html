@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.apps.worker" href="celery.apps.worker.html" />
@@ -85,20 +86,6 @@ at the time of the last event.</p>
 <p>Snapshots (<a class="reference internal" href="../internals/reference/celery.events.snapshot.html#module-celery.events.snapshot" title="celery.events.snapshot"><tt class="xref py py-mod docutils literal"><span class="pre">celery.events.snapshot</span></tt></a>) can be used to
 take &#8220;pictures&#8221; of this state at regular intervals
 to e.g. store that in a database.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
-<li>2009 - 2012 by Ask Solem.</li>
-</ol>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
-</td>
-</tr>
-</tbody>
-</table>
 <dl class="class">
 <dt id="celery.events.state.Element">
 <em class="property">class </em><tt class="descclassname">celery.events.state.</tt><tt class="descname">Element</tt><a class="headerlink" href="#celery.events.state.Element" title="Permalink to this definition">¶</a></dt>
@@ -226,7 +213,7 @@ to e.g. store that in a database.</p>
 Disorder is detected by logical ordering (e.g. task-received must have
 happened before a task-failed event).</p>
 <p>A merge rule consists of a state and a list of fields to keep from
-that state. <tt class="docutils literal"><span class="pre">(RECEIVED,</span> <span class="pre">(&quot;name&quot;,</span> <span class="pre">&quot;args&quot;)</span></tt>, means the name and args
+that state. <tt class="docutils literal"><span class="pre">(RECEIVED,</span> <span class="pre">('name',</span> <span class="pre">'args')</span></tt>, means the name and args
 fields are always taken from the RECEIVED state, and any values for
 these fields received before or after is simply ignored.</p>
 </dd></dl>
@@ -407,7 +394,7 @@ these fields received before or after is simply ignored.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

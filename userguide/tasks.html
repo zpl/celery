@@ -24,10 +24,11 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="User Guide" href="index.html" />
     <link rel="next" title="Calling Tasks" href="calling.html" />
-    <link rel="prev" title="Overview" href="overview.html" /> 
+    <link rel="prev" title="Application" href="application.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,7 +44,7 @@
           <a href="calling.html" title="Calling Tasks"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="overview.html" title="Overview"
+          <a href="application.html" title="Application"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">User Guide</a> &raquo;</li> 
@@ -69,36 +70,58 @@
 </div>
     <div class="section" id="tasks">
 <span id="guide-tasks"></span><h1>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h1>
+<p>Tasks are the building blocks of Celery applications.</p>
+<p>A task can be created out of any callable and defines what happens
+when the worker receives a particular message.</p>
+<p>Every task has unique name which is referenced in the message,
+so that the worker can find the right task to execute.</p>
+<p>It&#8217;s not a requirement, but it&#8217;s a good idea to keep your tasks
+<em>idempotent</em>.  Idempotence means that a task can be applied multiple
+times without changing the result.</p>
+<p>This is important because the task message will not disappear
+until the message has been <em>acknowledged</em>. A worker can reserve
+many messages in advance and even if the worker is killed &#8211; caused by a power failure
+or otherwise &#8211; the message will be redelivered to another worker.</p>
+<p>But the worker cannot know if your tasks are idempotent, so the default
+behavior is to acknowledge the message in advance just before it&#8217;s executed,
+this way a task that has been started will not be executed again.</p>
+<p>If your task is idempotent you can set the <tt class="xref py py-attr docutils literal"><span class="pre">acks_late</span></tt> option
+to have the worker acknowledge the message <em>after</em> that task has been
+executed instead.  This way the task will be redelivered to another
+worker, even if the task has already started executing before.
+See also the FAQ entry <a class="reference internal" href="../faq.html#faq-acks-late-vs-retry"><em>Should I use retry or acks_late?</em></a>.</p>
+<p>&#8211;</p>
+<p>In this chapter you will learn all about defining tasks,
+and this is the <strong>table of contents</strong>:</p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#basics" id="id5">Basics</a></li>
-<li><a class="reference internal" href="#context" id="id6">Context</a></li>
-<li><a class="reference internal" href="#logging" id="id7">Logging</a></li>
-<li><a class="reference internal" href="#retrying-a-task-if-something-fails" id="id8">Retrying a task if something fails</a></li>
-<li><a class="reference internal" href="#task-options" id="id9">Task options</a></li>
-<li><a class="reference internal" href="#task-names" id="id10">Task names</a></li>
-<li><a class="reference internal" href="#task-states" id="id11">Task States</a></li>
-<li><a class="reference internal" href="#creating-custom-task-classes" id="id12">Creating custom task classes</a></li>
-<li><a class="reference internal" href="#how-it-works" id="id13">How it works</a></li>
-<li><a class="reference internal" href="#tips-and-best-practices" id="id14">Tips and Best Practices</a></li>
-<li><a class="reference internal" href="#performance-and-strategies" id="id15">Performance and Strategies</a></li>
-<li><a class="reference internal" href="#example" id="id16">Example</a></li>
+<li><a class="reference internal" href="#basics" id="id2">Basics</a></li>
+<li><a class="reference internal" href="#names" id="id3">Names</a></li>
+<li><a class="reference internal" href="#context" id="id4">Context</a></li>
+<li><a class="reference internal" href="#logging" id="id5">Logging</a></li>
+<li><a class="reference internal" href="#retrying" id="id6">Retrying</a></li>
+<li><a class="reference internal" href="#list-of-options" id="id7">List of Options</a></li>
+<li><a class="reference internal" href="#states" id="id8">States</a></li>
+<li><a class="reference internal" href="#custom-task-classes" id="id9">Custom task classes</a></li>
+<li><a class="reference internal" href="#how-it-works" id="id10">How it works</a></li>
+<li><a class="reference internal" href="#tips-and-best-practices" id="id11">Tips and Best Practices</a></li>
+<li><a class="reference internal" href="#performance-and-strategies" id="id12">Performance and Strategies</a></li>
+<li><a class="reference internal" href="#example" id="id13">Example</a></li>
 </ul>
 </div>
 <div class="section" id="basics">
-<span id="task-basics"></span><h2><a class="toc-backref" href="#id5">Basics</a><a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
-<p>A task is a class that encapsulates a function and its execution options.
-Given a function <tt class="docutils literal"><span class="pre">create_user</span></tt> taking two arguments: <cite>username</cite> and
-<cite>password</cite>, you can easily create a task from any function by using
-the task decorator:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">User</span>
+<span id="task-basics"></span><h2><a class="toc-backref" href="#id2">Basics</a><a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<p>You can easily create a task from any callable by using
+the <a class="reference internal" href="../reference/celery.html#celery.Celery.task" title="celery.Celery.task"><tt class="xref py py-meth docutils literal"><span class="pre">task()</span></tt></a> decorator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">User</span>
 
 <span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
     <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Task options can be specified as arguments to the decorator:</p>
+<p>There are also many <a class="reference internal" href="#task-options"><em>options</em></a> that can be set for the task,
+these can be specified as arguments to the decorator:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="s">&quot;json&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
     <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
@@ -133,8 +156,77 @@ be the first in the list):</p>
 </div>
 </div>
 </div>
+<div class="section" id="names">
+<span id="task-names"></span><h2><a class="toc-backref" href="#id3">Names</a><a class="headerlink" href="#names" title="Permalink to this headline">¶</a></h2>
+<p>Every task must have a unique name, and a new name
+will be generated out of the function name if a custom name is not provided.</p>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;sum-of-two-numbers&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;sum-of-two-numbers&#39;</span>
+</pre></div>
+</div>
+<p>A best practice is to use the module name as a namespace,
+this way names won&#8217;t collide if there&#8217;s already a task with that name
+defined in another module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;tasks.add&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p>You can tell the name of the task by investigating its name attribute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;tasks.add&#39;</span>
+</pre></div>
+</div>
+<p>Which is exactly the name that would have been generated anyway,
+if the module name is &#8220;tasks.py&#8221;:</p>
+<p><tt class="file docutils literal"><span class="pre">tasks.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">tasks</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">add</span><span class="o">.</span><span class="n">name</span>
+<span class="s">&#39;tasks.add&#39;</span>
+</pre></div>
+</div>
+<div class="section" id="automatic-naming-and-relative-imports">
+<span id="task-naming-relative-imports"></span><h3>Automatic naming and relative imports<a class="headerlink" href="#automatic-naming-and-relative-imports" title="Permalink to this headline">¶</a></h3>
+<p>Relative imports and automatic name generation does not go well together,
+so if you&#8217;re using relative imports you should set the name explicitly.</p>
+<p>For example if the client imports the module &#8220;myapp.tasks&#8221; as &#8221;.tasks&#8221;, and
+the worker imports the module as &#8220;myapp.tasks&#8221;, the generated names won&#8217;t match
+and an <a class="reference internal" href="../reference/celery.exceptions.html#celery.exceptions.NotRegistered" title="celery.exceptions.NotRegistered"><tt class="xref py py-exc docutils literal"><span class="pre">NotRegistered</span></tt></a> error will be raised by the worker.</p>
+<p>This is also the case if using Django and using <cite>project.myapp</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;project.myapp&quot;</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>The worker will have the tasks registered as &#8220;project.myapp.tasks.*&#8221;,
+while this is what happens in the client if the module is imported as
+&#8220;myapp.tasks&#8221;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">myapp.tasks</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;myapp.tasks.add&#39;</span>
+</pre></div>
+</div>
+<p>For this reason you should never use &#8220;project.app&#8221;, but rather
+add the project directory to the Python path:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;myapp&quot;</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>This makes more sense from the reusable app perspective anyway.</p>
+</div>
+</div>
 <div class="section" id="context">
-<span id="task-request-info"></span><h2><a class="toc-backref" href="#id6">Context</a><a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h2>
+<span id="task-request-info"></span><h2><a class="toc-backref" href="#id4">Context</a><a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h2>
 <p><tt class="xref py py-attr docutils literal"><span class="pre">request</span></tt> contains information and state related to
 the executing task.</p>
 <p>The request defines the following attributes:</p>
@@ -178,7 +270,7 @@ to resend the task to the same destination queue.</td>
 </div>
 </div>
 <div class="section" id="logging">
-<span id="task-logging"></span><h2><a class="toc-backref" href="#id7">Logging</a><a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<span id="task-logging"></span><h2><a class="toc-backref" href="#id5">Logging</a><a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
 <p>The worker will automatically set up logging for you, or you can
 configure logging manually.</p>
 <p>A special logger is available named &#8220;celery.task&#8221;, you can inherit
@@ -203,15 +295,17 @@ module.</p>
 out/-err will be redirected to the workers logs by default (see
 <a class="reference internal" href="../configuration.html#std:setting-CELERY_REDIRECT_STDOUTS"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_REDIRECT_STDOUTS</span></tt></a>).</p>
 </div>
-<div class="section" id="retrying-a-task-if-something-fails">
-<span id="task-retry"></span><h2><a class="toc-backref" href="#id8">Retrying a task if something fails</a><a class="headerlink" href="#retrying-a-task-if-something-fails" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.retry" title="celery.app.task.Task.retry"><tt class="xref py py-meth docutils literal"><span class="pre">retry()</span></tt></a> can be used to re-execute the task in the event
-of temporary failure, or for any other reason.</p>
-<p>A new message will the be sent using the same task-id, and sent
-to the same queue as the current task. This also means that you
-can track retries using the task&#8217;s result instance (if a result
-backend is enabled).</p>
-<p>An example:</p>
+<div class="section" id="retrying">
+<span id="task-retry"></span><h2><a class="toc-backref" href="#id6">Retrying</a><a class="headerlink" href="#retrying" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.retry" title="celery.app.task.Task.retry"><tt class="xref py py-meth docutils literal"><span class="pre">retry()</span></tt></a> can be used to re-execute the task,
+for example in the event of recoverable errors.</p>
+<p>When you call <tt class="docutils literal"><span class="pre">retry</span></tt> it will send a new message, using the same
+task-id, and it will take care to make sure the message is delivered
+to the same queue as the originating task.</p>
+<p>When a task is retried this is also recorded as a task state,
+so that you can track the progress of the task using the result
+instance (see <a class="reference internal" href="#task-states"><em>States</em></a>).</p>
+<p>Here&#8217;s an example using <tt class="docutils literal"><span class="pre">retry</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">send_twitter_status</span><span class="p">(</span><span class="n">oauth</span><span class="p">,</span> <span class="n">tweet</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
@@ -222,11 +316,8 @@ backend is enabled).</p>
 </pre></div>
 </div>
 <p>Here we used the <cite>exc</cite> argument to pass the current exception to
-<a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.retry" title="celery.app.task.Task.retry"><tt class="xref py py-meth docutils literal"><span class="pre">retry()</span></tt></a>. At each step of the retry this exception
-is available as the tombstone (result) of the task. When
-<a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.max_retries" title="celery.app.task.Task.max_retries"><tt class="xref py py-attr docutils literal"><span class="pre">max_retries</span></tt></a> has been exceeded this is the
-exception raised.  However, if an <cite>exc</cite> argument is not provided the
-<a class="reference internal" href="../reference/celery.exceptions.html#celery.exceptions.RetryTaskError" title="celery.exceptions.RetryTaskError"><tt class="xref py py-exc docutils literal"><span class="pre">RetryTaskError</span></tt></a> exception is raised instead.</p>
+<a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.retry" title="celery.app.task.Task.retry"><tt class="xref py py-meth docutils literal"><span class="pre">retry()</span></tt></a>.  Both the exception and the traceback will
+be available in the task state (if a result backend is enabled).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>The <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.retry" title="celery.app.task.Task.retry"><tt class="xref py py-meth docutils literal"><span class="pre">retry()</span></tt></a> call will raise an exception so any code after the retry
@@ -257,8 +348,14 @@ override this default.</p>
 </div>
 </div>
 </div>
-<div class="section" id="task-options">
-<span id="id1"></span><h2><a class="toc-backref" href="#id9">Task options</a><a class="headerlink" href="#task-options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="list-of-options">
+<span id="task-options"></span><h2><a class="toc-backref" href="#id7">List of Options</a><a class="headerlink" href="#list-of-options" title="Permalink to this headline">¶</a></h2>
+<p>The task decorator can take a number of options that change the way
+the task behaves, for example you can set the rate limit for a task
+using the <tt class="xref py py-attr docutils literal"><span class="pre">rate_limit</span></tt> option.</p>
+<p>Any keyword argument passed to the task decorator will actually be set
+as an attribute of the resulting task class, and this is a list
+of the built-in attributes.</p>
 <div class="section" id="general">
 <h3>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="task-general-options"></span><dl class="attribute">
@@ -267,7 +364,7 @@ override this default.</p>
 <dd><p>The name the task is registered as.</p>
 <p>You can set this name manually, or a name will be
 automatically generated using the module and class name.  See
-<a class="reference internal" href="#task-names"><em>Task names</em></a>.</p>
+<a class="reference internal" href="#task-names"><em>Names</em></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -423,76 +520,8 @@ will be available in the state metadata (e.g. <cite>result.info[&#8220;pid&#8221
 </div>
 </div>
 </div>
-<div class="section" id="task-names">
-<span id="id2"></span><h2><a class="toc-backref" href="#id10">Task names</a><a class="headerlink" href="#task-names" title="Permalink to this headline">¶</a></h2>
-<p>The task type is identified by the <em>task name</em>.</p>
-<p>If not provided a name will be automatically generated using the module
-and class name.</p>
-<p>For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;sum-of-two-numbers&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;sum-of-two-numbers&#39;</span>
-</pre></div>
-</div>
-<p>A best practice is to use the module name as a prefix to classify the
-tasks using namespaces.  This way the name won&#8217;t collide with the name from
-another module:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;tasks.add&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-</pre></div>
-</div>
-<p>You can tell the name of the task by investigating its name attribute:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;tasks.add&#39;</span>
-</pre></div>
-</div>
-<p>Which is exactly the name automatically generated for this
-task if the module name is &#8220;tasks.py&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;tasks.add&#39;</span>
-</pre></div>
-</div>
-<div class="section" id="automatic-naming-and-relative-imports">
-<span id="task-naming-relative-imports"></span><h3>Automatic naming and relative imports<a class="headerlink" href="#automatic-naming-and-relative-imports" title="Permalink to this headline">¶</a></h3>
-<p>Relative imports and automatic name generation does not go well together,
-so if you&#8217;re using relative imports you should set the name explicitly.</p>
-<p>For example if the client imports the module &#8220;myapp.tasks&#8221; as &#8221;.tasks&#8221;, and
-the worker imports the module as &#8220;myapp.tasks&#8221;, the generated names won&#8217;t match
-and an <a class="reference internal" href="../reference/celery.exceptions.html#celery.exceptions.NotRegistered" title="celery.exceptions.NotRegistered"><tt class="xref py py-exc docutils literal"><span class="pre">NotRegistered</span></tt></a> error will be raised by the worker.</p>
-<p>This is also the case if using Django and using <cite>project.myapp</cite>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;project.myapp&quot;</span><span class="p">,</span> <span class="p">)</span>
-</pre></div>
-</div>
-<p>The worker will have the tasks registered as &#8220;project.myapp.tasks.*&#8221;,
-while this is what happens in the client if the module is imported as
-&#8220;myapp.tasks&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">myapp.tasks</span> <span class="kn">import</span> <span class="n">add</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;myapp.tasks.add&#39;</span>
-</pre></div>
-</div>
-<p>For this reason you should never use &#8220;project.app&#8221;, but rather
-add the project directory to the Python path:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
-
-<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;myapp&quot;</span><span class="p">,</span> <span class="p">)</span>
-</pre></div>
-</div>
-<p>This makes more sense from the reusable app perspective anyway.</p>
-</div>
-</div>
-<div class="section" id="task-states">
-<span id="id3"></span><h2><a class="toc-backref" href="#id11">Task States</a><a class="headerlink" href="#task-states" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="states">
+<span id="task-states"></span><h2><a class="toc-backref" href="#id8">States</a><a class="headerlink" href="#states" title="Permalink to this headline">¶</a></h2>
 <p>Celery can keep track of the tasks current state.  The state also contains the
 result of a successful task, or the exception and traceback information of a
 failed task.</p>
@@ -651,7 +680,7 @@ when the exceptions was raised.</td>
 </div>
 </div>
 <div class="section" id="custom-states">
-<span id="id4"></span><h3>Custom states<a class="headerlink" href="#custom-states" title="Permalink to this headline">¶</a></h3>
+<span id="id1"></span><h3>Custom states<a class="headerlink" href="#custom-states" title="Permalink to this headline">¶</a></h3>
 <p>You can easily define your own states, all you need is a unique name.
 The name of the state is usually an uppercase string.  As an example
 you could have a look at <tt class="xref py py-mod docutils literal"><span class="pre">abortable</span> <span class="pre">tasks</span></tt>
@@ -718,8 +747,8 @@ you have to pass them as regular args:</p>
 </div>
 </div>
 </div>
-<div class="section" id="creating-custom-task-classes">
-<span id="task-custom-classes"></span><h2><a class="toc-backref" href="#id12">Creating custom task classes</a><a class="headerlink" href="#creating-custom-task-classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="custom-task-classes">
+<span id="task-custom-classes"></span><h2><a class="toc-backref" href="#id9">Custom task classes</a><a class="headerlink" href="#custom-task-classes" title="Permalink to this headline">¶</a></h2>
 <p>All tasks inherit from the <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task" title="celery.app.task.Task"><tt class="xref py py-class docutils literal"><span class="pre">celery.Task</span></tt></a> class.
 The <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.run" title="celery.app.task.Task.run"><tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt></a> method becomes the task body.</p>
 <p>As an example, the following code,</p>
@@ -892,7 +921,7 @@ instance, containing the traceback.</li>
 </div>
 </div>
 <div class="section" id="how-it-works">
-<span id="task-how-they-work"></span><h2><a class="toc-backref" href="#id13">How it works</a><a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<span id="task-how-they-work"></span><h2><a class="toc-backref" href="#id10">How it works</a><a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
 <p>Here comes the technical details, this part isn&#8217;t something you need to know,
 but you may be interested.</p>
 <p>All defined tasks are listed in a registry.  The registry contains
@@ -930,7 +959,7 @@ as the client.  This is a drawback, but the alternative is a technical
 challenge that has yet to be solved.</p>
 </div>
 <div class="section" id="tips-and-best-practices">
-<span id="task-best-practices"></span><h2><a class="toc-backref" href="#id14">Tips and Best Practices</a><a class="headerlink" href="#tips-and-best-practices" title="Permalink to this headline">¶</a></h2>
+<span id="task-best-practices"></span><h2><a class="toc-backref" href="#id11">Tips and Best Practices</a><a class="headerlink" href="#tips-and-best-practices" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="ignore-results-you-don-t-want">
 <span id="task-ignore-results"></span><h3>Ignore results you don&#8217;t want<a class="headerlink" href="#ignore-results-you-don-t-want" title="Permalink to this headline">¶</a></h3>
 <p>If you don&#8217;t care about the results of a task, be sure to set the
@@ -1008,7 +1037,7 @@ at <a class="reference internal" href="../getting-started/next-steps.html#design
 </div>
 </div>
 <div class="section" id="performance-and-strategies">
-<span id="task-performance-and-strategies"></span><h2><a class="toc-backref" href="#id15">Performance and Strategies</a><a class="headerlink" href="#performance-and-strategies" title="Permalink to this headline">¶</a></h2>
+<span id="task-performance-and-strategies"></span><h2><a class="toc-backref" href="#id12">Performance and Strategies</a><a class="headerlink" href="#performance-and-strategies" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="granularity">
 <span id="task-granularity"></span><h3>Granularity<a class="headerlink" href="#granularity" title="Permalink to this headline">¶</a></h3>
 <p>The task granularity is the amount of computation needed by each subtask.
@@ -1128,7 +1157,7 @@ depending on state from the current transaction</em>:</p>
 </div>
 </div>
 <div class="section" id="example">
-<span id="task-example"></span><h2><a class="toc-backref" href="#id16">Example</a><a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<span id="task-example"></span><h2><a class="toc-backref" href="#id13">Example</a><a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Let&#8217;s take a real wold example; A blog where comments posted needs to be
 filtered for spam.  When the comment is created, the spam filter runs in the
 background, so the user doesn&#8217;t have to wait for it to finish.</p>
@@ -1252,8 +1281,8 @@ need to pay.  You have to sign up to their service to get an API key.</p>
   <img class="logo" src="http://cloud.github.com/downloads/celery/celery/celery_128.png" alt="Logo"/>
 </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="overview.html"
-                        title="previous chapter">Overview</a></p>
+  <p class="topless"><a href="application.html"
+                        title="previous chapter">Application</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="calling.html"
                         title="next chapter">Calling Tasks</a></p>
@@ -1292,14 +1321,14 @@ need to pay.  You have to sign up to their service to get an API key.</p>
           <a href="calling.html" title="Calling Tasks"
              >next</a> |</li>
         <li class="right" >
-          <a href="overview.html" title="Overview"
+          <a href="application.html" title="Application"
              >previous</a> |</li>
         <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
           <li><a href="index.html" >User Guide</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

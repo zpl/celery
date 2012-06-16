@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.task.trace" href="celery.task.trace.html" />
@@ -70,7 +71,17 @@
 </div>
     <div class="section" id="celery-state">
 <h1>celery.state<a class="headerlink" href="#celery-state" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-celery.state"></span><dl class="function">
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#id1" id="id2">celery.state</a></li>
+</ul>
+</div>
+<span class="target" id="module-celery.state"></span><div class="section" id="id1">
+<h2><a class="toc-backref" href="#id2">celery.state</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>This is an internal module containing thread state
+like the current_app, and current_task.  But these
+should not be imported from here.</p>
+<dl class="function">
 <dt id="celery.state.get_current_app">
 <tt class="descclassname">celery.state.</tt><tt class="descname">get_current_app</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.state.get_current_app" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -95,6 +106,7 @@ a task (using <tt class="docutils literal"><span class="pre">task.__call__</span
 <tt class="descclassname">celery.state.</tt><tt class="descname">set_default_app</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.state.set_default_app" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</div>
 </div>
 
 
@@ -154,7 +166,7 @@ a task (using <tt class="docutils literal"><span class="pre">task.__call__</span
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

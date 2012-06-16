@@ -24,6 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="index.html" />
     <link rel="next" title="Django" href="django/index.html" />
     <link rel="prev" title="Signals" href="userguide/signals.html" /> 
@@ -141,6 +142,17 @@ The timezone value can be any time zone supported by the <tt class="xref py py-m
 library.  <tt class="xref py py-mod docutils literal"><span class="pre">pytz</span></tt> must be installed for the selected zone
 to be used.</p>
 <p>If not set then the systems default local time zone is used.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Celery requires the <tt class="xref py py-mod docutils literal"><span class="pre">pytz</span></tt> library to be installed,
+when using custom time zones (other than UTC).  You can
+install it using <strong class="program">pip</strong> or <strong class="program">easy_install</strong>:</p>
+<div class="highlight-python"><pre>$ pip install pytz</pre>
+</div>
+<p class="last">Pytz is a library that defines the timzones of the world,
+it changes quite frequently so it is not included in the Python Standard
+Library.</p>
+</div>
 </div>
 <div class="section" id="task-settings">
 <span id="conf-tasks"></span><h3><a class="toc-backref" href="#id8">Task settings</a><a class="headerlink" href="#task-settings" title="Permalink to this headline">¶</a></h3>
@@ -1310,7 +1322,7 @@ Please use the <em class="xref std std-option">--loglevel</em> argument instead.
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

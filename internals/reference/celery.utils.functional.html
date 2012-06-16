@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.utils.term" href="celery.utils.term.html" />
@@ -78,20 +79,6 @@
 <span class="target" id="module-celery.utils.functional"></span><div class="section" id="id1">
 <h2><a class="toc-backref" href="#id2">celery.utils.functional</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Utilities for functions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
-<li>2009 - 2012 by Ask Solem.</li>
-</ol>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
-</td>
-</tr>
-</tbody>
-</table>
 <dl class="class">
 <dt id="celery.utils.functional.LRUCache">
 <em class="property">class </em><tt class="descclassname">celery.utils.functional.</tt><tt class="descname">LRUCache</tt><big>(</big><em>limit=None</em><big>)</big><a class="headerlink" href="#celery.utils.functional.LRUCache" title="Permalink to this definition">¶</a></dt>
@@ -174,7 +161,8 @@ finds the first instance that returns a value for the given method.</p>
 <dl class="function">
 <dt id="celery.utils.functional.is_list">
 <tt class="descclassname">celery.utils.functional.</tt><tt class="descname">is_list</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#celery.utils.functional.is_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns true if object is list-like, but not a dict or string.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="celery.utils.functional.mattrgetter">
@@ -186,11 +174,12 @@ attributes instead of raising <a class="reference external" href="http://docs.py
 <dl class="function">
 <dt id="celery.utils.functional.maybe_list">
 <tt class="descclassname">celery.utils.functional.</tt><tt class="descname">maybe_list</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#celery.utils.functional.maybe_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns list of one element if <tt class="docutils literal"><span class="pre">l</span></tt> is a scalar.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="celery.utils.functional.memoize">
-<tt class="descclassname">celery.utils.functional.</tt><tt class="descname">memoize</tt><big>(</big><em>maxsize=None</em>, <em>Cache=&lt;class celery.utils.functional.LRUCache at 0x1019d6808&gt;</em><big>)</big><a class="headerlink" href="#celery.utils.functional.memoize" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">celery.utils.functional.</tt><tt class="descname">memoize</tt><big>(</big><em>maxsize=None</em>, <em>Cache=&lt;class celery.utils.functional.LRUCache at 0x101b0e120&gt;</em><big>)</big><a class="headerlink" href="#celery.utils.functional.memoize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="class">
@@ -229,13 +218,13 @@ will return the same value.</p>
 <tt class="descclassname">celery.utils.functional.</tt><tt class="descname">padlist</tt><big>(</big><em>container</em>, <em>size</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#celery.utils.functional.padlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pad list with default elements.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">city</span> <span class="o">=</span> <span class="n">padlist</span><span class="p">([</span><span class="s">&quot;George&quot;</span><span class="p">,</span> <span class="s">&quot;Costanza&quot;</span><span class="p">,</span> <span class="s">&quot;NYC&quot;</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
-<span class="go">(&quot;George&quot;, &quot;Costanza&quot;, &quot;NYC&quot;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">city</span> <span class="o">=</span> <span class="n">padlist</span><span class="p">([</span><span class="s">&quot;George&quot;</span><span class="p">,</span> <span class="s">&quot;Costanza&quot;</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
-<span class="go">(&quot;George&quot;, &quot;Costanza&quot;, None)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">city</span><span class="p">,</span> <span class="n">planet</span> <span class="o">=</span> <span class="n">padlist</span><span class="p">([</span><span class="s">&quot;George&quot;</span><span class="p">,</span> <span class="s">&quot;Costanza&quot;</span><span class="p">,</span>
-<span class="go">                                         &quot;NYC&quot;], 4, default=&quot;Earth&quot;)</span>
-<span class="go">(&quot;George&quot;, &quot;Costanza&quot;, &quot;NYC&quot;, &quot;Earth&quot;)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">city</span> <span class="o">=</span> <span class="n">padlist</span><span class="p">([</span><span class="s">&#39;George&#39;</span><span class="p">,</span> <span class="s">&#39;Costanza&#39;</span><span class="p">,</span> <span class="s">&#39;NYC&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">(&#39;George&#39;, &#39;Costanza&#39;, &#39;NYC&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">city</span> <span class="o">=</span> <span class="n">padlist</span><span class="p">([</span><span class="s">&#39;George&#39;</span><span class="p">,</span> <span class="s">&#39;Costanza&#39;</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">(&#39;George&#39;, &#39;Costanza&#39;, None)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">city</span><span class="p">,</span> <span class="n">planet</span> <span class="o">=</span> <span class="n">padlist</span><span class="p">([</span><span class="s">&#39;George&#39;</span><span class="p">,</span> <span class="s">&#39;Costanza&#39;</span><span class="p">,</span>
+<span class="go">                                         &#39;NYC&#39;], 4, default=&#39;Earth&#39;)</span>
+<span class="go">(&#39;George&#39;, &#39;Costanza&#39;, &#39;NYC&#39;, &#39;Earth&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -243,12 +232,16 @@ will return the same value.</p>
 <dl class="function">
 <dt id="celery.utils.functional.regen">
 <tt class="descclassname">celery.utils.functional.</tt><tt class="descname">regen</tt><big>(</big><em>it</em><big>)</big><a class="headerlink" href="#celery.utils.functional.regen" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Regen takes any iterable, and if the object is an
+generator it will cache the evaluated list on first access,
+so that the generator can be &#8220;consumed&#8221; multiple times.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="celery.utils.functional.uniq">
 <tt class="descclassname">celery.utils.functional.</tt><tt class="descname">uniq</tt><big>(</big><em>it</em><big>)</big><a class="headerlink" href="#celery.utils.functional.uniq" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns all unique elements in <tt class="docutils literal"><span class="pre">it</span></tt>, preserving order.</p>
+</dd></dl>
 
 </div>
 </div>
@@ -310,7 +303,7 @@ will return the same value.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

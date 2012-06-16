@@ -24,6 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="index.html" />
     <link rel="next" title="What’s new in Celery 2.5" href="whatsnew-2.5.html" />
     <link rel="prev" title="Frequently Asked Questions" href="faq.html" /> 
@@ -80,6 +81,25 @@ it is important that you read the following section.</p>
 read the <a class="reference external" href="http://bit.ly/djcelery-26-changelog">django-celery changelog</a> and upgrade to <a class="reference external" href="http://pypi.python.org/pypi/django-celery/">django-celery 2.6</a>.</p>
 <p>This version is officially supported on CPython 2.5, 2.6, 2.7, 3.2 and 3.3,
 as well as PyPy and Jython.</p>
+<div class="topic">
+<p class="topic-title first">Highlights</p>
+<ul>
+<li><p class="first">A new and improved API, that is both simpler and more powerful.</p>
+<blockquote>
+<div><p>Everyone should read the new <a class="reference internal" href="getting-started/first-steps-with-celery.html#first-steps"><em>First steps with Celery</em></a> tutorial,
+and the new <a class="reference internal" href="getting-started/next-steps.html#next-steps"><em>Next Steps</em></a> tutorial.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Documentation rewritten and updated to use the new API</p>
+</li>
+<li><p class="first">The worker is now thread-less, giving great performance improvements.</p>
+</li>
+<li><p class="first">This is the last version to support Python 2.5</p>
+</li>
+<li><p class="first">The new &#8220;Canvas&#8221; makes it easy to define complex workflows.</p>
+</li>
+</ul>
+</div>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#important-notes" id="id1">Important Notes</a></li>
@@ -743,7 +763,7 @@ and instead set different priorities.</p>
 </li>
 <li><p class="first">Renamed package <tt class="docutils literal"><span class="pre">celery.db</span></tt> -&gt; <a class="reference internal" href="internals/reference/celery.backends.database.html#module-celery.backends.database" title="celery.backends.database"><tt class="xref py py-mod docutils literal"><span class="pre">celery.backends.database</span></tt></a>.</p>
 </li>
-<li><p class="first">Renamed module <tt class="docutils literal"><span class="pre">celery.abstract</span></tt> -&gt; <a class="reference internal" href="internals/reference/celery.worker.abstract.html#module-celery.worker.abstract" title="celery.worker.abstract"><tt class="xref py py-mod docutils literal"><span class="pre">celery.worker.abstract</span></tt></a>.</p>
+<li><p class="first">Renamed module <tt class="docutils literal"><span class="pre">celery.abstract</span></tt> -&gt; <tt class="xref py py-mod docutils literal"><span class="pre">celery.worker.abstract</span></tt>.</p>
 </li>
 <li><p class="first">Command-line docs are now parsed from the module docstrings.</p>
 </li>
@@ -870,7 +890,7 @@ are on the control objects.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

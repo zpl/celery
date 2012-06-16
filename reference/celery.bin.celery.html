@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.bin.camqadm" href="celery.bin.camqadm.html" />
@@ -69,7 +70,8 @@
 </div>
     <div class="section" id="celery-bin-celery">
 <h1>celery.bin.celery<a class="headerlink" href="#celery-bin-celery" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-celery.bin.celery"></span><dl class="class">
+<span class="target" id="module-celery.bin.celery"></span><p>The <strong class="program">celery</strong> umbrella command.</p>
+<dl class="class">
 <dt id="celery.bin.celery.CeleryCommand">
 <em class="property">class </em><tt class="descclassname">celery.bin.celery.</tt><tt class="descname">CeleryCommand</tt><big>(</big><em>app=None</em>, <em>get_app=None</em><big>)</big><a class="headerlink" href="#celery.bin.celery.CeleryCommand" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
@@ -149,7 +151,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.Command.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2c43f8: -q/--quiet&gt;, &lt;Option at 0x10b2c4ab8: -C/--no-color&gt;)</em><a class="headerlink" href="#celery.bin.celery.Command.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae212d8: -q/--quiet&gt;, &lt;Option at 0x10aacb248: -C/--no-color&gt;)</em><a class="headerlink" href="#celery.bin.celery.Command.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -281,7 +283,7 @@ celery apply tasks.add --args='[2, 2]' --countdown=10</pre>
 
 <dl class="attribute">
 <dt id="celery.bin.celery.apply.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2c43f8: -q/--quiet&gt;, &lt;Option at 0x10b2c4ab8: -C/--no-color&gt;, &lt;Option at 0x10b2e5ea8: -a/--args&gt;, &lt;Option at 0x10b2e5170: -k/--kwargs&gt;, &lt;Option at 0x10b2e52d8: --eta&gt;, &lt;Option at 0x10b2a1200: --countdown&gt;, &lt;Option at 0x102aa2998: --expires&gt;, &lt;Option at 0x10b29b758: --serializer&gt;, &lt;Option at 0x10b29b170: --queue&gt;, &lt;Option at 0x10b29b638: --exchange&gt;, &lt;Option at 0x10b29b290: --routing-key&gt;)</em><a class="headerlink" href="#celery.bin.celery.apply.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae212d8: -q/--quiet&gt;, &lt;Option at 0x10aacb248: -C/--no-color&gt;, &lt;Option at 0x10ab518c0: -a/--args&gt;, &lt;Option at 0x10ab51830: -k/--kwargs&gt;, &lt;Option at 0x10ab51878: --eta&gt;, &lt;Option at 0x10aa34e18: --countdown&gt;, &lt;Option at 0x10a7646c8: --expires&gt;, &lt;Option at 0x108ba32d8: --serializer&gt;, &lt;Option at 0x109f11ab8: --queue&gt;, &lt;Option at 0x10a7538c0: --exchange&gt;, &lt;Option at 0x10a744c20: --routing-key&gt;)</em><a class="headerlink" href="#celery.bin.celery.apply.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -400,11 +402,6 @@ celery control -d w1.e.com add_consumer queue exchange direct rkey</pre>
 </dd></dl>
 
 </dd></dl>
-
-<dl class="function">
-<dt id="celery.bin.celery.create_delegate">
-<tt class="descclassname">celery.bin.celery.</tt><tt class="descname">create_delegate</tt><big>(</big><em>name</em>, <em>Command</em><big>)</big><a class="headerlink" href="#celery.bin.celery.create_delegate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="function">
 <dt id="celery.bin.celery.determine_exit_status">
@@ -612,7 +609,7 @@ celery result 8f511516-e2f5-4da4-9d2f-0fb83a86e500 --traceback</pre>
 
 <dl class="attribute">
 <dt id="celery.bin.celery.result.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2c43f8: -q/--quiet&gt;, &lt;Option at 0x10b2c4ab8: -C/--no-color&gt;, &lt;Option at 0x10b2ba560: -t/--task&gt;, &lt;Option at 0x10b2af998: --traceback&gt;)</em><a class="headerlink" href="#celery.bin.celery.result.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae212d8: -q/--quiet&gt;, &lt;Option at 0x10aacb248: -C/--no-color&gt;, &lt;Option at 0x10a080f80: -t/--task&gt;, &lt;Option at 0x10a078320: --traceback&gt;)</em><a class="headerlink" href="#celery.bin.celery.result.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -672,7 +669,7 @@ subtask, Task</li>
 
 <dl class="attribute">
 <dt id="celery.bin.celery.shell.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2c43f8: -q/--quiet&gt;, &lt;Option at 0x10b2c4ab8: -C/--no-color&gt;, &lt;Option at 0x10b0b2f80: -I/--ipython&gt;, &lt;Option at 0x102a94f80: -B/--bpython&gt;, &lt;Option at 0x102a947e8: -P/--python&gt;, &lt;Option at 0x10b2cb1b8: -T/--without-tasks&gt;, &lt;Option at 0x10b2cb710: --eventlet&gt;, &lt;Option at 0x10b2cbcf8: --gevent&gt;)</em><a class="headerlink" href="#celery.bin.celery.shell.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae212d8: -q/--quiet&gt;, &lt;Option at 0x10aacb248: -C/--no-color&gt;, &lt;Option at 0x10ab84cb0: -I/--ipython&gt;, &lt;Option at 0x10a773878: -B/--bpython&gt;, &lt;Option at 0x10a8dc1b8: -P/--python&gt;, &lt;Option at 0x10ad03c68: -T/--without-tasks&gt;, &lt;Option at 0x10ad03290: --eventlet&gt;, &lt;Option at 0x1043eaef0: --gevent&gt;)</em><a class="headerlink" href="#celery.bin.celery.shell.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -693,7 +690,7 @@ subtask, Task</li>
 <dd><p>Show list of workers that are online.</p>
 <dl class="attribute">
 <dt id="celery.bin.celery.status.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b2c43f8: -q/--quiet&gt;, &lt;Option at 0x10b2c4ab8: -C/--no-color&gt;, &lt;Option at 0x10b2af7e8: -t/--timeout&gt;, &lt;Option at 0x10b2af9e0: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.status.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10ae212d8: -q/--quiet&gt;, &lt;Option at 0x10aacb248: -C/--no-color&gt;, &lt;Option at 0x10a72c5f0: -t/--timeout&gt;, &lt;Option at 0x10ae0de18: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.status.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -791,7 +788,7 @@ celery worker --autoscale=10,0</pre>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

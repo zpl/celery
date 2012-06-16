@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.contrib.batches" href="celery.contrib.batches.html" />
@@ -109,11 +110,11 @@ objects that should support abortion by producers.</p>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_aborted</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                     <span class="c"># Respect the aborted status and terminate</span>
                     <span class="c"># gracefully</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Task aborted.&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;Task aborted.&#39;</span><span class="p">)</span>
                     <span class="k">return</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">do_something_expensive</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Task finished.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Task finished.&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">results</span>
 </pre></div>
 </div>
@@ -148,7 +149,7 @@ database backends.</p>
 <em class="property">class </em><tt class="descclassname">celery.contrib.abortable.</tt><tt class="descname">AbortableAsyncResult</tt><big>(</big><em>id</em>, <em>backend=None</em>, <em>task_name=None</em>, <em>app=None</em>, <em>parent=None</em><big>)</big><a class="headerlink" href="#celery.contrib.abortable.AbortableAsyncResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a abortable result.</p>
 <p>Specifically, this gives the <cite>AsyncResult</cite> a <a class="reference internal" href="#celery.contrib.abortable.AbortableAsyncResult.abort" title="celery.contrib.abortable.AbortableAsyncResult.abort"><tt class="xref py py-meth docutils literal"><span class="pre">abort()</span></tt></a> method,
-which sets the state of the underlying Task to <cite>&#8220;ABORTED&#8221;</cite>.</p>
+which sets the state of the underlying Task to <cite>&#8216;ABORTED&#8217;</cite>.</p>
 <dl class="method">
 <dt id="celery.contrib.abortable.AbortableAsyncResult.abort">
 <tt class="descname">abort</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.contrib.abortable.AbortableAsyncResult.abort" title="Permalink to this definition">¶</a></dt>
@@ -222,7 +223,7 @@ often (for performance).</p>
 
 <dl class="attribute">
 <dt id="celery.contrib.abortable.AbortableTask.request_stack">
-<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10b58f390&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.request_stack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10ac710b8&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.request_stack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -287,7 +288,7 @@ often (for performance).</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

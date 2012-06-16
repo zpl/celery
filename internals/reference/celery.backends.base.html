@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.backends.database" href="celery.backends.database.html" />
@@ -70,7 +71,20 @@
 </div>
     <div class="section" id="celery-backends-base">
 <h1>celery.backends.base<a class="headerlink" href="#celery-backends-base" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-celery.backends.base"></span><p>celery.backends.base</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#id1" id="id2">celery.backends.base</a></li>
+</ul>
+</div>
+<span class="target" id="module-celery.backends.base"></span><div class="section" id="id1">
+<h2><a class="toc-backref" href="#id2">celery.backends.base</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Result backend base classes.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#celery.backends.base.BaseBackend" title="celery.backends.base.BaseBackend"><tt class="xref py py-class docutils literal"><span class="pre">BaseBackend</span></tt></a> defines the interface.</li>
+<li><a class="reference internal" href="#celery.backends.base.BaseDictBackend" title="celery.backends.base.BaseDictBackend"><tt class="xref py py-class docutils literal"><span class="pre">BaseDictBackend</span></tt></a> assumes the fields are stored in a dict.</li>
+<li><a class="reference internal" href="#celery.backends.base.KeyValueStoreBackend" title="celery.backends.base.KeyValueStoreBackend"><tt class="xref py py-class docutils literal"><span class="pre">KeyValueStoreBackend</span></tt></a> is a common base class
+using K/V semantics like _get and _put.</li>
+</ul>
 <dl class="class">
 <dt id="celery.backends.base.BaseBackend">
 <em class="property">class </em><tt class="descclassname">celery.backends.base.</tt><tt class="descname">BaseBackend</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend" title="Permalink to this definition">¶</a></dt>
@@ -489,6 +503,7 @@ takes longer than <cite>timeout</cite> seconds.</p>
 </dd></dl>
 
 </div>
+</div>
 
 
           </div>
@@ -547,7 +562,7 @@ takes longer than <cite>timeout</cite> seconds.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

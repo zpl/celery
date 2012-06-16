@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.contrib.migrate" href="celery.contrib.migrate.html" />
@@ -80,13 +81,13 @@
 <span class="nd">@task</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="n">Batches</span><span class="p">,</span> <span class="n">flush_every</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">flush_interval</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">count_click</span><span class="p">(</span><span class="n">requests</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&quot;url&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">requests</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">requests</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">url</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">count</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt; Clicks: </span><span class="si">%s</span><span class="s"> -&gt; </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;&gt;&gt;&gt; Clicks: </span><span class="si">%s</span><span class="s"> -&gt; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Registering the click is done as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">count_click</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s">&quot;http://example.com&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">count_click</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s">&#39;http://example.com&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -97,20 +98,6 @@ the final multiplied value is higher than <tt class="docutils literal"><span cla
 <p class="last">In the future we hope to add the ability to direct batching tasks
 to a channel with different QoS requirements than the task channel.</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
-<li>2009 - 2012 by Ask Solem.</li>
-</ol>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
-</td>
-</tr>
-</tbody>
-</table>
 <p><strong>API</strong></p>
 <dl class="class">
 <dt id="celery.contrib.batches.Batches">
@@ -254,7 +241,7 @@ to a channel with different QoS requirements than the task channel.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.worker.heartbeat" href="celery.worker.heartbeat.html" />
@@ -83,20 +84,6 @@ When a task is allowed to be processed it&#8217;s moved
 over the the <tt class="docutils literal"><span class="pre">ready_queue</span></tt></p>
 <p>The <a class="reference internal" href="celery.worker.mediator.html#module-celery.worker.mediator" title="celery.worker.mediator"><tt class="xref py py-mod docutils literal"><span class="pre">celery.worker.mediator</span></tt></a> is then responsible
 for moving tasks from the <tt class="docutils literal"><span class="pre">ready_queue</span></tt> to the worker pool.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
-<li>2009 - 2012 by Ask Solem.</li>
-</ol>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
-</td>
-</tr>
-</tbody>
-</table>
 <dl class="class">
 <dt id="celery.worker.buckets.FastQueue">
 <em class="property">class </em><tt class="descclassname">celery.worker.buckets.</tt><tt class="descname">FastQueue</tt><big>(</big><em>maxsize=0</em><big>)</big><a class="headerlink" href="#celery.worker.buckets.FastQueue" title="Permalink to this definition">¶</a></dt>
@@ -143,9 +130,9 @@ the first available item.</p>
 <p>Say we have three types of tasks in the registry: <cite>twitter.update</cite>,
 <cite>feed.refresh</cite> and <cite>video.compress</cite>, the TaskBucket will consist
 of the following items:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;twitter.update&quot;</span><span class="p">:</span> <span class="n">TokenBucketQueue</span><span class="p">(</span><span class="n">fill_rate</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span>
- <span class="s">&quot;feed.refresh&quot;</span><span class="p">:</span> <span class="n">Queue</span><span class="p">(),</span>
- <span class="s">&quot;video.compress&quot;</span><span class="p">:</span> <span class="n">TokenBucketQueue</span><span class="p">(</span><span class="n">fill_rate</span><span class="o">=</span><span class="mi">2</span><span class="p">)}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;twitter.update&#39;</span><span class="p">:</span> <span class="n">TokenBucketQueue</span><span class="p">(</span><span class="n">fill_rate</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span>
+ <span class="s">&#39;feed.refresh&#39;</span><span class="p">:</span> <span class="n">Queue</span><span class="p">(),</span>
+ <span class="s">&#39;video.compress&#39;</span><span class="p">:</span> <span class="n">TokenBucketQueue</span><span class="p">(</span><span class="n">fill_rate</span><span class="o">=</span><span class="mi">2</span><span class="p">)}</span>
 </pre></div>
 </div>
 <p>The get operation will iterate over these until one of the buckets
@@ -440,7 +427,7 @@ that evaluates lazily.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

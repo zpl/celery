@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.utils.log" href="celery.utils.log.html" />
@@ -70,7 +71,15 @@
 </div>
     <div class="section" id="celery-utils-imports">
 <h1>celery.utils.imports<a class="headerlink" href="#celery-utils-imports" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-celery.utils.imports"></span><dl class="exception">
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#celery-utils-import" id="id1">celery.utils.import</a></li>
+</ul>
+</div>
+<span class="target" id="module-celery.utils.imports"></span><div class="section" id="celery-utils-import">
+<h2><a class="toc-backref" href="#id1">celery.utils.import</a><a class="headerlink" href="#celery-utils-import" title="Permalink to this headline">¶</a></h2>
+<p>Utilities related to importing modules and symbols by name.</p>
+<dl class="exception">
 <dt id="celery.utils.imports.NotAPackage">
 <em class="property">exception </em><tt class="descclassname">celery.utils.imports.</tt><tt class="descname">NotAPackage</tt><a class="headerlink" href="#celery.utils.imports.NotAPackage" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -136,12 +145,12 @@ precedence over modules located in <cite>sys.path</cite>.</p>
 mappings, the name is looked up in the aliases first.</p>
 <p>Examples:</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">symbol_by_name</span><span class="p">(</span><span class="s">&quot;celery.concurrency.processes.TaskPool&quot;</span><span class="p">)</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">symbol_by_name</span><span class="p">(</span><span class="s">&#39;celery.concurrency.processes.TaskPool&#39;</span><span class="p">)</span>
 <span class="go">&lt;class &#39;celery.concurrency.processes.TaskPool&#39;&gt;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">symbol_by_name</span><span class="p">(</span><span class="s">&quot;default&quot;</span><span class="p">,</span> <span class="p">{</span>
-<span class="gp">... </span>    <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;celery.concurrency.processes.TaskPool&quot;</span><span class="p">})</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">symbol_by_name</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">,</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&#39;default&#39;</span><span class="p">:</span> <span class="s">&#39;celery.concurrency.processes.TaskPool&#39;</span><span class="p">})</span>
 <span class="go">&lt;class &#39;celery.concurrency.processes.TaskPool&#39;&gt;</span>
 </pre></div>
 </div>
@@ -152,6 +161,7 @@ True</p>
 </div></blockquote>
 </dd></dl>
 
+</div>
 </div>
 
 
@@ -211,7 +221,7 @@ True</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

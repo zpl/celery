@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="prev" title="celery.utils.dispatch.saferef" href="celery.utils.dispatch.saferef.html" /> 
@@ -75,20 +76,6 @@
 <h2><a class="toc-backref" href="#id2">celery.platforms</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Utilities dealing with platform specifics: signals, daemonization,
 users, groups, and so on.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
-<li>2009 - 2012 by Ask Solem.</li>
-</ol>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">BSD, see LICENSE for more details.</p>
-</td>
-</tr>
-</tbody>
-</table>
 <dl class="class">
 <dt id="celery.platforms.DaemonContext">
 <em class="property">class </em><tt class="descclassname">celery.platforms.</tt><tt class="descname">DaemonContext</tt><big>(</big><em>pidfile=None</em>, <em>workdir=None</em>, <em>umask=None</em>, <em>fake=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.platforms.DaemonContext" title="Permalink to this definition">¶</a></dt>
@@ -186,23 +173,23 @@ the operation will be ignored.</p>
 <p><strong>Examples</strong>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery.platforms</span> <span class="kn">import</span> <span class="n">signals</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="p">[</span><span class="s">&quot;INT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">my_handler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="p">[</span><span class="s">&#39;INT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">my_handler</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="p">[</span><span class="s">&quot;INT&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="p">[</span><span class="s">&#39;INT&#39;</span><span class="p">]</span>
 <span class="go">my_handler</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">supported</span><span class="p">(</span><span class="s">&quot;INT&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">supported</span><span class="p">(</span><span class="s">&#39;INT&#39;</span><span class="p">)</span>
 <span class="go">True</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">signum</span><span class="p">(</span><span class="s">&quot;INT&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">signum</span><span class="p">(</span><span class="s">&#39;INT&#39;</span><span class="p">)</span>
 <span class="go">2</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s">&quot;USR1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="p">[</span><span class="s">&quot;USR1&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">signals</span><span class="o">.</span><span class="n">ignored</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s">&#39;USR1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="p">[</span><span class="s">&#39;USR1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">signals</span><span class="o">.</span><span class="n">ignored</span>
 <span class="go">True</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s">&quot;USR1&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="p">[</span><span class="s">&quot;USR1&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">signals</span><span class="o">.</span><span class="n">default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s">&#39;USR1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="p">[</span><span class="s">&#39;USR1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">signals</span><span class="o">.</span><span class="n">default</span>
 <span class="go">True</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">signals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">INT</span><span class="o">=</span><span class="n">exit_handler</span><span class="p">,</span>
@@ -274,7 +261,7 @@ exits.</p>
 </tbody>
 </table>
 <p><strong>Example</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pidlock</span> <span class="o">=</span> <span class="n">create_pidlock</span><span class="p">(</span><span class="s">&quot;/var/run/app.pid&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pidlock</span> <span class="o">=</span> <span class="n">create_pidlock</span><span class="p">(</span><span class="s">&#39;/var/run/app.pid&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -310,16 +297,16 @@ privileges to.</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">atexit</span>
 <span class="kn">from</span> <span class="nn">celery.platforms</span> <span class="kn">import</span> <span class="n">detached</span><span class="p">,</span> <span class="n">create_pidlock</span>
 
-<span class="k">with</span> <span class="n">detached</span><span class="p">(</span><span class="n">logfile</span><span class="o">=</span><span class="s">&quot;/var/log/app.log&quot;</span><span class="p">,</span> <span class="n">pidfile</span><span class="o">=</span><span class="s">&quot;/var/run/app.pid&quot;</span><span class="p">,</span>
-              <span class="n">uid</span><span class="o">=</span><span class="s">&quot;nobody&quot;</span><span class="p">):</span>
+<span class="k">with</span> <span class="n">detached</span><span class="p">(</span><span class="n">logfile</span><span class="o">=</span><span class="s">&#39;/var/log/app.log&#39;</span><span class="p">,</span> <span class="n">pidfile</span><span class="o">=</span><span class="s">&#39;/var/run/app.pid&#39;</span><span class="p">,</span>
+              <span class="n">uid</span><span class="o">=</span><span class="s">&#39;nobody&#39;</span><span class="p">):</span>
     <span class="c"># Now in detached child process with effective user set to nobody,</span>
     <span class="c"># and we know that our logfile can be written to, and that</span>
     <span class="c"># the pidfile is not locked.</span>
-    <span class="n">pidlock</span> <span class="o">=</span> <span class="n">create_pidlock</span><span class="p">(</span><span class="s">&quot;/var/run/app.pid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+    <span class="n">pidlock</span> <span class="o">=</span> <span class="n">create_pidlock</span><span class="p">(</span><span class="s">&#39;/var/run/app.pid&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
     <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">pidlock</span><span class="o">.</span><span class="n">release</span><span class="p">)</span>
 
     <span class="c"># Run the program</span>
-    <span class="n">program</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">logfile</span><span class="o">=</span><span class="s">&quot;/var/log/app.log&quot;</span><span class="p">)</span>
+    <span class="n">program</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">logfile</span><span class="o">=</span><span class="s">&#39;/var/log/app.log&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -486,7 +473,7 @@ the uid is taken from the password file.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>

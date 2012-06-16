@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
     <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
     <link rel="up" title="Django" href="index.html" />
     <link rel="next" title="Unit Testing" href="unit-testing.html" />
@@ -144,13 +145,13 @@ parts of the Celery documentation.</p>
 </div>
 <div class="section" id="starting-the-worker-process">
 <h2>Starting the worker process<a class="headerlink" href="#starting-the-worker-process" title="Permalink to this headline">¶</a></h2>
-<p>You can start a worker instance by using the <tt class="docutils literal"><span class="pre">celeryd</span></tt> manage command:</p>
-<div class="highlight-python"><pre>$ python manage.py celeryd --loglevel=info</pre>
+<p>You can start a worker instance by using the <tt class="docutils literal"><span class="pre">celery</span> <span class="pre">worker</span></tt> manage command:</p>
+<div class="highlight-python"><pre>$ python manage.py celery worker --loglevel=info</pre>
 </div>
 <p>In production you probably want to run the worker in the
 background as a daemon, see <a class="reference external" href="http://docs.celeryproject.org/en/latest/tutorials/daemonizing.html">Running Celery as a daemon</a>.
 For a complete listing of the command line options available, use the help command:</p>
-<div class="highlight-python"><pre>$ python manage.py help celeryd</pre>
+<div class="highlight-python"><pre>$ python manage.py celery help</pre>
 </div>
 </div>
 <div class="section" id="calling-our-task">
@@ -262,7 +263,7 @@ raised by the task.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2009-2012, Ask Solem &amp; Contributors.
+        &copy; <a href="../copyright.html">Copyright</a> 2009-2012, Ask Solem &amp; Contributors.
     </div>
   </body>
 </html>
