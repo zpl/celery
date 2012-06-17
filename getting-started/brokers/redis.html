@@ -83,7 +83,7 @@ ehter the <a class="reference external" href="http://pypi.python.org/pypi/celery
 <span id="broker-redis-configuration"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p>Configuration is easy, just configure the location of
 your Redis database:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;redis://localhost:6379/0&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;redis://localhost:6379/0&#39;</span>
 </pre></div>
 </div>
 <p>Where the URL is in the format of:</p>
@@ -93,7 +93,7 @@ your Redis database:</p>
 <span id="redis-results-configuration"></span><h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
 <p>If you also want to store the state and return values of tasks in Redis,
 you should configure these settings:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&quot;redis://localhost:6379/0&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&#39;redis://localhost:6379/0&#39;</span>
 </pre></div>
 </div>
 <p>For a complete list of options supported by the Redis result backend see

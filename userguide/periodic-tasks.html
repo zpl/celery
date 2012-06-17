@@ -105,10 +105,10 @@ and the service can operate without using locks.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
 
 <span class="n">CELERYBEAT_SCHEDULE</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;runs-every-30-seconds&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;task&quot;</span><span class="p">:</span> <span class="s">&quot;tasks.add&quot;</span><span class="p">,</span>
-        <span class="s">&quot;schedule&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
-        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="s">&#39;runs-every-30-seconds&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&#39;task&#39;</span><span class="p">:</span> <span class="s">&#39;tasks.add&#39;</span><span class="p">,</span>
+        <span class="s">&#39;schedule&#39;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+        <span class="s">&#39;args&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
     <span class="p">},</span>
 <span class="p">}</span>
 </pre></div>
@@ -173,10 +173,10 @@ the <a class="reference internal" href="../reference/celery.schedules.html#celer
 
 <span class="n">CELERYBEAT_SCHEDULE</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c"># Executes every Monday morning at 7:30 A.M</span>
-    <span class="s">&quot;every-monday-morning&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;task&quot;</span><span class="p">:</span> <span class="s">&quot;tasks.add&quot;</span><span class="p">,</span>
-        <span class="s">&quot;schedule&quot;</span><span class="p">:</span> <span class="n">crontab</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">day_of_week</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-        <span class="s">&quot;args&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+    <span class="s">&#39;every-monday-morning&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&#39;task&#39;</span><span class="p">:</span> <span class="s">&#39;tasks.add&#39;</span><span class="p">,</span>
+        <span class="s">&#39;schedule&#39;</span><span class="p">:</span> <span class="n">crontab</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">day_of_week</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="s">&#39;args&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
     <span class="p">},</span>
 <span class="p">}</span>
 </pre></div>
@@ -197,7 +197,7 @@ the <a class="reference internal" href="../reference/celery.schedules.html#celer
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour=0)</span></tt></td>
 <td>Execute daily at midnight.</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour=&quot;*/3&quot;)</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour='*/3')</span></tt></td>
 <td>Execute every three hours:
 3am, 6am, 9am, noon, 3pm, 6pm, 9pm.</td>
 </tr>
@@ -208,65 +208,65 @@ the <a class="reference internal" href="../reference/celery.schedules.html#celer
 </td>
 <td>Same as previous.</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(minute=&quot;*/15&quot;)</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(minute='*/15')</span></tt></td>
 <td>Execute every 15 minutes.</td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(day_of_week=&quot;sunday&quot;)</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(day_of_week='sunday')</span></tt></td>
 <td>Execute every minute (!) at Sundays.</td>
 </tr>
 <tr class="row-even"><td><dl class="first last docutils">
-<dt><tt class="docutils literal"><span class="pre">crontab(minute=&quot;*&quot;,</span></tt></dt>
-<dd><tt class="docutils literal"><span class="pre">hour=&quot;*&quot;,</span></tt>
-<tt class="docutils literal"><span class="pre">day_of_week=&quot;sun&quot;)</span></tt></dd>
+<dt><tt class="docutils literal"><span class="pre">crontab(minute='*',</span></tt></dt>
+<dd><tt class="docutils literal"><span class="pre">hour='*',</span></tt>
+<tt class="docutils literal"><span class="pre">day_of_week='sun')</span></tt></dd>
 </dl>
 </td>
 <td>Same as previous.</td>
 </tr>
 <tr class="row-odd"><td><dl class="first last docutils">
-<dt><tt class="docutils literal"><span class="pre">crontab(minute=&quot;*/10&quot;,</span></tt></dt>
-<dd><tt class="docutils literal"><span class="pre">hour=&quot;3,17,22&quot;,</span></tt>
-<tt class="docutils literal"><span class="pre">day_of_week=&quot;thu,fri&quot;)</span></tt></dd>
+<dt><tt class="docutils literal"><span class="pre">crontab(minute='*/10',</span></tt></dt>
+<dd><tt class="docutils literal"><span class="pre">hour='3,17,22',</span></tt>
+<tt class="docutils literal"><span class="pre">day_of_week='thu,fri')</span></tt></dd>
 </dl>
 </td>
 <td>Execute every ten minutes, but only
 between 3-4 am, 5-6 pm and 10-11 pm on
 Thursdays or Fridays.</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour=&quot;*/2,*/3&quot;)</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour='*/2,*/3')</span></tt></td>
 <td>Execute every even hour, and every hour
 divisible by three. This means:
 at every hour <em>except</em>: 1am,
 5am, 7am, 11am, 1pm, 5pm, 7pm,
 11pm</td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour=&quot;*/5&quot;)</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour='*/5')</span></tt></td>
 <td>Execute hour divisible by 5. This means
 that it is triggered at 3pm, not 5pm
 (since 3pm equals the 24-hour clock
 value of &#8220;15&#8221;, which is divisible by 5).</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour=&quot;*/3,8-17&quot;)</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(minute=0,</span> <span class="pre">hour='*/3,8-17')</span></tt></td>
 <td>Execute every hour divisible by 3, and
 every hour during office hours (8am-5pm).</td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(day_of_month=&quot;2&quot;)</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(day_of_month='2')</span></tt></td>
 <td>Execute on the second day of every month.</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(day_of_month=&quot;2-30/3&quot;)</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">crontab(day_of_month='2-30/3')</span></tt></td>
 <td>Execute on every even numbered day.</td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(day_of_month=&quot;1-7,15-21&quot;)</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(day_of_month='1-7,15-21')</span></tt></td>
 <td>Execute on the first and third weeks of
 the month.</td>
 </tr>
 <tr class="row-even"><td><dl class="first last docutils">
-<dt><tt class="docutils literal"><span class="pre">crontab(day_of_month=&quot;11&quot;,</span></tt></dt>
-<dd><tt class="docutils literal"><span class="pre">month_of_year=&quot;5&quot;)</span></tt></dd>
+<dt><tt class="docutils literal"><span class="pre">crontab(day_of_month='11',</span></tt></dt>
+<dd><tt class="docutils literal"><span class="pre">month_of_year='5')</span></tt></dd>
 </dl>
 </td>
 <td>Execute on 11th of May every year.</td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(month_of_year=&quot;*/3&quot;)</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">crontab(month_of_year='*/3')</span></tt></td>
 <td>Execute on the first month of every
 quarter.</td>
 </tr>
@@ -280,7 +280,7 @@ quarter.</td>
 timezone by enabling the <a class="reference internal" href="../configuration.html#std:setting-CELERY_ENABLE_UTC"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_ENABLE_UTC</span></tt></a> setting and configuring
 the <a class="reference internal" href="../configuration.html#std:setting-CELERY_TIMEZONE"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TIMEZONE</span></tt></a> setting:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ENABLE_UTC</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&quot;Europe/London&quot;</span>
+<span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&#39;Europe/London&#39;</span>
 </pre></div>
 </div>
 <div class="admonition-django-users admonition">

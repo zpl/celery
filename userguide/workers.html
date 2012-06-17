@@ -229,15 +229,15 @@ Some remote control commands also have higher-level interfaces using
 <a class="reference internal" href="../reference/celery.app.control.html#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a> in the background, like
 <a class="reference internal" href="../reference/celery.app.control.html#celery.app.control.Control.rate_limit" title="celery.app.control.Control.rate_limit"><tt class="xref py py-meth docutils literal"><span class="pre">rate_limit()</span></tt></a> and <a class="reference internal" href="../reference/celery.app.control.html#celery.app.control.Control.ping" title="celery.app.control.Control.ping"><tt class="xref py py-meth docutils literal"><span class="pre">ping()</span></tt></a>.</p>
 <p>Sending the <a class="reference internal" href="#std:control-rate_limit"><tt class="xref std std-control docutils literal"><span class="pre">rate_limit</span></tt></a> command and keyword arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;rate_limit&quot;</span><span class="p">,</span>
-<span class="gp">... </span>                         <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;task_name&quot;</span><span class="p">:</span> <span class="s">&quot;myapp.mytask&quot;</span><span class="p">,</span>
-<span class="gp">... </span>                                    <span class="s">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="s">&quot;200/m&quot;</span><span class="p">})</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&#39;rate_limit&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                         <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;task_name&#39;</span><span class="p">:</span> <span class="s">&#39;myapp.mytask&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                    <span class="s">&#39;rate_limit&#39;</span><span class="p">:</span> <span class="s">&#39;200/m&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>This will send the command asynchronously, without waiting for a reply.
 To request a reply you have to use the <cite>reply</cite> argument:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;rate_limit&quot;</span><span class="p">,</span> <span class="p">{</span>
-<span class="gp">... </span>    <span class="s">&quot;task_name&quot;</span><span class="p">:</span> <span class="s">&quot;myapp.mytask&quot;</span><span class="p">,</span> <span class="s">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="s">&quot;200/m&quot;</span><span class="p">},</span> <span class="n">reply</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&#39;rate_limit&#39;</span><span class="p">,</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&#39;task_name&#39;</span><span class="p">:</span> <span class="s">&#39;myapp.mytask&#39;</span><span class="p">,</span> <span class="s">&#39;rate_limit&#39;</span><span class="p">:</span> <span class="s">&#39;200/m&#39;</span><span class="p">},</span> <span class="n">reply</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="go">[{&#39;worker1.example.com&#39;: &#39;New rate limit set successfully&#39;},</span>
 <span class="go"> {&#39;worker2.example.com&#39;: &#39;New rate limit set successfully&#39;},</span>
 <span class="go"> {&#39;worker3.example.com&#39;: &#39;New rate limit set successfully&#39;}]</span>
@@ -245,10 +245,10 @@ To request a reply you have to use the <cite>reply</cite> argument:</p>
 </div>
 <p>Using the <cite>destination</cite> argument you can specify a list of workers
 to receive the command:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;rate_limit&quot;</span><span class="p">,</span> <span class="p">{</span>
-<span class="gp">... </span>    <span class="s">&quot;task_name&quot;</span><span class="p">:</span> <span class="s">&quot;myapp.mytask&quot;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="s">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="s">&quot;200/m&quot;</span><span class="p">},</span> <span class="n">reply</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span>                            <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;worker1.example.com&quot;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&#39;rate_limit&#39;</span><span class="p">,</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s">&#39;task_name&#39;</span><span class="p">:</span> <span class="s">&#39;myapp.mytask&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s">&#39;rate_limit&#39;</span><span class="p">:</span> <span class="s">&#39;200/m&#39;</span><span class="p">},</span> <span class="n">reply</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>                            <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;worker1.example.com&#39;</span><span class="p">])</span>
 <span class="go">[{&#39;worker1.example.com&#39;: &#39;New rate limit set successfully&#39;}]</span>
 </pre></div>
 </div>
@@ -273,13 +273,13 @@ of any signal defined in the <a class="reference external" href="http://docs.pyt
 Library.</p>
 <p>Terminating a task also revokes it.</p>
 <p><strong>Example</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="s">&quot;d9078da5-9915-40a0-bfa1-392c7bde42ed&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="s">&#39;d9078da5-9915-40a0-bfa1-392c7bde42ed&#39;</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="s">&quot;d9078da5-9915-40a0-bfa1-392c7bde42ed&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="s">&#39;d9078da5-9915-40a0-bfa1-392c7bde42ed&#39;</span><span class="p">,</span>
 <span class="gp">... </span>                      <span class="n">terminate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="s">&quot;d9078da5-9915-40a0-bfa1-392c7bde42ed&quot;</span><span class="p">,</span>
-<span class="gp">... </span>                      <span class="n">terminate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="s">&quot;SIGKILL&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="s">&#39;d9078da5-9915-40a0-bfa1-392c7bde42ed&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                      <span class="n">terminate</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="s">&#39;SIGKILL&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="section" id="persistent-revokes">
@@ -344,7 +344,7 @@ and hard time limits for a task — named <tt class="docutils literal"><span cla
 <p>Example changing the time limit for the <tt class="docutils literal"><span class="pre">tasks.crawl_the_web</span></tt> task
 to have a soft time limit of one minute, and a hard time limit of
 two minutes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">time_limit</span><span class="p">(</span><span class="s">&quot;tasks.crawl_the_web&quot;</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">time_limit</span><span class="p">(</span><span class="s">&#39;tasks.crawl_the_web&#39;</span><span class="p">,</span>
 <span class="go">                              soft=60, hard=120, reply=True)</span>
 <span class="go">[{&#39;worker1.example.com&#39;: {&#39;ok&#39;: &#39;time limits set successfully&#39;}}]</span>
 </pre></div>
@@ -358,13 +358,13 @@ two minutes:</p>
 <span id="std:control-rate_limit"></span><h3>Changing rate-limits at runtime<a class="headerlink" href="#changing-rate-limits-at-runtime" title="Permalink to this headline">¶</a></h3>
 <p>Example changing the rate limit for the <cite>myapp.mytask</cite> task to accept
 200 tasks a minute on all servers:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">rate_limit</span><span class="p">(</span><span class="s">&quot;myapp.mytask&quot;</span><span class="p">,</span> <span class="s">&quot;200/m&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">rate_limit</span><span class="p">(</span><span class="s">&#39;myapp.mytask&#39;</span><span class="p">,</span> <span class="s">&#39;200/m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Example changing the rate limit on a single host by specifying the
 destination host name:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">rate_limit</span><span class="p">(</span><span class="s">&quot;myapp.mytask&quot;</span><span class="p">,</span> <span class="s">&quot;200/m&quot;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;worker1.example.com&quot;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">rate_limit</span><span class="p">(</span><span class="s">&#39;myapp.mytask&#39;</span><span class="p">,</span> <span class="s">&#39;200/m&#39;</span><span class="p">,</span>
+<span class="gp">... </span>           <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;worker1.example.com&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -474,19 +474,19 @@ modules.  This command does not interrupt executing tasks.</p>
 <h4>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h4>
 <p>Running the following command will result in the <cite>foo</cite> and <cite>bar</cite> modules
 being imported by the worker processes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;pool_restart&quot;</span><span class="p">,</span>
-<span class="gp">... </span>                         <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;modules&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="s">&quot;bar&quot;</span><span class="p">]})</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&#39;pool_restart&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                         <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;modules&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">]})</span>
 </pre></div>
 </div>
 <p>Use the <tt class="docutils literal"><span class="pre">reload</span></tt> argument to reload modules it has already imported:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;pool_restart&quot;</span><span class="p">,</span>
-<span class="gp">... </span>                         <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;modules&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;foo&quot;</span><span class="p">],</span>
-<span class="gp">... </span>                                    <span class="s">&quot;reload&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&#39;pool_restart&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                         <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;modules&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;foo&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                                    <span class="s">&#39;reload&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>If you don&#8217;t specify any modules then all known tasks modules will
 be imported/reloaded:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;pool_restart&quot;</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;reload&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&#39;pool_restart&#39;</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;reload&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>The <tt class="docutils literal"><span class="pre">modules</span></tt> argument is a list of modules to modify. <tt class="docutils literal"><span class="pre">reload</span></tt>
@@ -521,11 +521,11 @@ and it supports the same commands as the <a class="reference internal" href="../
 <span class="o">&gt;&gt;&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="c"># Specify multiple nodes to inspect.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">inspect</span><span class="p">([</span><span class="s">&quot;worker1.example.com&quot;</span><span class="p">,</span>
-                                <span class="s">&quot;worker2.example.com&quot;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">inspect</span><span class="p">([</span><span class="s">&#39;worker1.example.com&#39;</span><span class="p">,</span>
+                                <span class="s">&#39;worker2.example.com&#39;</span><span class="p">])</span>
 
 <span class="c"># Specify a single node to inspect.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s">&quot;worker1.example.com&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s">&#39;worker1.example.com&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="section" id="dump-of-registered-tasks">
@@ -544,10 +544,10 @@ and it supports the same commands as the <a class="reference internal" href="../
 <tt class="xref py py-meth docutils literal"><span class="pre">active()</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">active</span><span class="p">()</span>
 <span class="go">[{&#39;worker1.example.com&#39;:</span>
-<span class="go">    [{&quot;name&quot;: &quot;tasks.sleeptask&quot;,</span>
-<span class="go">      &quot;id&quot;: &quot;32666e9b-809c-41fa-8e93-5ae0c80afbbf&quot;,</span>
-<span class="go">      &quot;args&quot;: &quot;(8,)&quot;,</span>
-<span class="go">      &quot;kwargs&quot;: &quot;{}&quot;}]}]</span>
+<span class="go">    [{&#39;name&#39;: &#39;tasks.sleeptask&#39;,</span>
+<span class="go">      &#39;id&#39;: &#39;32666e9b-809c-41fa-8e93-5ae0c80afbbf&#39;,</span>
+<span class="go">      &#39;args&#39;: &#39;(8,)&#39;,</span>
+<span class="go">      &#39;kwargs&#39;: &#39;{}&#39;}]}]</span>
 </pre></div>
 </div>
 </div>
@@ -557,18 +557,18 @@ and it supports the same commands as the <a class="reference internal" href="../
 <tt class="xref py py-meth docutils literal"><span class="pre">scheduled()</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">scheduled</span><span class="p">()</span>
 <span class="go">[{&#39;worker1.example.com&#39;:</span>
-<span class="go">    [{&quot;eta&quot;: &quot;2010-06-07 09:07:52&quot;, &quot;priority&quot;: 0,</span>
-<span class="go">      &quot;request&quot;: {</span>
-<span class="go">        &quot;name&quot;: &quot;tasks.sleeptask&quot;,</span>
-<span class="go">        &quot;id&quot;: &quot;1a7980ea-8b19-413e-91d2-0b74f3844c4d&quot;,</span>
-<span class="go">        &quot;args&quot;: &quot;[1]&quot;,</span>
-<span class="go">        &quot;kwargs&quot;: &quot;{}&quot;}},</span>
-<span class="go">     {&quot;eta&quot;: &quot;2010-06-07 09:07:53&quot;, &quot;priority&quot;: 0,</span>
-<span class="go">      &quot;request&quot;: {</span>
-<span class="go">        &quot;name&quot;: &quot;tasks.sleeptask&quot;,</span>
-<span class="go">        &quot;id&quot;: &quot;49661b9a-aa22-4120-94b7-9ee8031d219d&quot;,</span>
-<span class="go">        &quot;args&quot;: &quot;[2]&quot;,</span>
-<span class="go">        &quot;kwargs&quot;: &quot;{}&quot;}}]}]</span>
+<span class="go">    [{&#39;eta&#39;: &#39;2010-06-07 09:07:52&#39;, &#39;priority&#39;: 0,</span>
+<span class="go">      &#39;request&#39;: {</span>
+<span class="go">        &#39;name&#39;: &#39;tasks.sleeptask&#39;,</span>
+<span class="go">        &#39;id&#39;: &#39;1a7980ea-8b19-413e-91d2-0b74f3844c4d&#39;,</span>
+<span class="go">        &#39;args&#39;: &#39;[1]&#39;,</span>
+<span class="go">        &#39;kwargs&#39;: &#39;{}&#39;}},</span>
+<span class="go">     {&#39;eta&#39;: &#39;2010-06-07 09:07:53&#39;, &#39;priority&#39;: 0,</span>
+<span class="go">      &#39;request&#39;: {</span>
+<span class="go">        &#39;name&#39;: &#39;tasks.sleeptask&#39;,</span>
+<span class="go">        &#39;id&#39;: &#39;49661b9a-aa22-4120-94b7-9ee8031d219d&#39;,</span>
+<span class="go">        &#39;args&#39;: &#39;[2]&#39;,</span>
+<span class="go">        &#39;kwargs&#39;: &#39;{}&#39;}}]}]</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -584,10 +584,10 @@ executed.</p>
 <tt class="xref py py-meth docutils literal"><span class="pre">reserved()</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">reserved</span><span class="p">()</span>
 <span class="go">[{&#39;worker1.example.com&#39;:</span>
-<span class="go">    [{&quot;name&quot;: &quot;tasks.sleeptask&quot;,</span>
-<span class="go">      &quot;id&quot;: &quot;32666e9b-809c-41fa-8e93-5ae0c80afbbf&quot;,</span>
-<span class="go">      &quot;args&quot;: &quot;(8,)&quot;,</span>
-<span class="go">      &quot;kwargs&quot;: &quot;{}&quot;}]}]</span>
+<span class="go">    [{&#39;name&#39;: &#39;tasks.sleeptask&#39;,</span>
+<span class="go">      &#39;id&#39;: &#39;32666e9b-809c-41fa-8e93-5ae0c80afbbf&#39;,</span>
+<span class="go">      &#39;args&#39;: &#39;(8,)&#39;,</span>
+<span class="go">      &#39;kwargs&#39;: &#39;{}&#39;}]}]</span>
 </pre></div>
 </div>
 </div>
@@ -597,8 +597,8 @@ executed.</p>
 <div class="section" id="remote-shutdown">
 <span id="std:control-shutdown"></span><h3>Remote shutdown<a class="headerlink" href="#remote-shutdown" title="Permalink to this headline">¶</a></h3>
 <p>This command will gracefully shut down the worker remotely:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;shutdown&quot;</span><span class="p">)</span> <span class="c"># shutdown all workers</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&quot;shutdown, destination=&quot;</span><span class="n">worker1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="s">&quot;)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&#39;shutdown&#39;</span><span class="p">)</span> <span class="c"># shutdown all workers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s">&#39;shutdown, destination=&#39;</span><span class="n">worker1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="s">&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -645,9 +645,9 @@ From there you have access to the active
 
 <span class="nd">@Panel.register</span>
 <span class="k">def</span> <span class="nf">reset_connection</span><span class="p">(</span><span class="n">panel</span><span class="p">):</span>
-    <span class="n">panel</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&quot;Connection reset by remote control.&quot;</span><span class="p">)</span>
+    <span class="n">panel</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;Connection reset by remote control.&#39;</span><span class="p">)</span>
     <span class="n">panel</span><span class="o">.</span><span class="n">consumer</span><span class="o">.</span><span class="n">reset_connection</span><span class="p">()</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s">&quot;ok&quot;</span><span class="p">:</span> <span class="s">&quot;connection reset&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;ok&#39;</span><span class="p">:</span> <span class="s">&#39;connection reset&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>

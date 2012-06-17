@@ -161,13 +161,13 @@ a <a class="reference internal" href="next-steps.html#project-layout"><em>dedica
 <p>Let&#8217;s create the file <tt class="file docutils literal"><span class="pre">tasks.py</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 
-<span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&quot;tasks&quot;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&quot;amqp://guest@localhost//&quot;</span><span class="p">)</span>
+<span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&#39;tasks&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&#39;amqp://guest@localhost//&#39;</span><span class="p">)</span>
 
 <span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">celery</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -227,12 +227,12 @@ built-in result backends to choose from: <a class="reference external" href="htt
 as messages.  The backend is specified via the <tt class="docutils literal"><span class="pre">backend</span></tt> argument to
 <a class="reference internal" href="../reference/celery.html#celery.Celery" title="celery.Celery"><tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt></a>, (or via the <a class="reference internal" href="../configuration.html#std:setting-CELERY_RESULT_BACKEND"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_RESULT_BACKEND</span></tt></a> setting if
 you choose to use a configuration module):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&quot;tasks&quot;</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s">&quot;amqp&quot;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&quot;amqp://&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&#39;tasks&#39;</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s">&#39;amqp&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&#39;amqp://&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or if you want to use Redis as the result backend, but still use RabbitMQ as
 the message broker (a popular combination):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&quot;tasks&quot;</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s">&quot;redis://localhost&quot;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&quot;amqp://&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&#39;tasks&#39;</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s">&#39;redis://localhost&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&#39;amqp://&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To read more about result backends please see <a class="reference internal" href="../userguide/tasks.html#task-result-backends"><em>Result Backends</em></a>.</p>
@@ -282,14 +282,14 @@ can be configured, see the <a class="reference internal" href="../configuration.
 configuration module.
 As an example you can configure the default serializer used for serializing
 task payloads by changing the <a class="reference internal" href="../configuration.html#std:setting-CELERY_TASK_SERIALIZER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_SERIALIZER</span></tt></a> setting:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">CELERY_TASK_SERIALIZER</span> <span class="o">=</span> <span class="s">&quot;json&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">CELERY_TASK_SERIALIZER</span> <span class="o">=</span> <span class="s">&#39;json&#39;</span>
 </pre></div>
 </div>
 <p>If you are configuring many settings at once you can use <tt class="docutils literal"><span class="pre">update</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-    <span class="n">CELERY_TASK_SERIALIZER</span><span class="o">=</span><span class="s">&quot;json&quot;</span><span class="p">,</span>
-    <span class="n">CELERY_RESULT_SERIALIZER</span><span class="o">=</span><span class="s">&quot;json&quot;</span><span class="p">,</span>
-    <span class="n">CELERY_TIMEZONE</span><span class="o">=</span><span class="s">&quot;Europe/Oslo&quot;</span><span class="p">,</span>
+    <span class="n">CELERY_TASK_SERIALIZER</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">,</span>
+    <span class="n">CELERY_RESULT_SERIALIZER</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">,</span>
+    <span class="n">CELERY_TIMEZONE</span><span class="o">=</span><span class="s">&#39;Europe/Oslo&#39;</span><span class="p">,</span>
     <span class="n">CELERY_ENABLE_UTC</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -303,7 +303,7 @@ you can also imagine your sysadmin making simple changes to the configuration
 in the event of system trobule.</p>
 <p>You can tell your Celery instance to use a configuration module,
 by calling the <a class="reference internal" href="../reference/celery.html#celery.Celery.config_from_object" title="celery.Celery.config_from_object"><tt class="xref py py-meth docutils literal"><span class="pre">config_from_object()</span></tt></a> method:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s">&quot;celeryconfig&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s">&#39;celeryconfig&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This module is often called &#8220;<tt class="docutils literal"><span class="pre">celeryconfig</span></tt>&#8221;, but you can use any
@@ -311,12 +311,12 @@ module name.</p>
 <p>A module named <tt class="docutils literal"><span class="pre">celeryconfig.py</span></tt> must then be available to load from the
 current directory or on the Python path, it could look like this:</p>
 <p><tt class="file docutils literal"><span class="pre">celeryconfig.py</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;amqp://&quot;</span>
-<span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&quot;amqp://&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;amqp://&#39;</span>
+<span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&#39;amqp://&#39;</span>
 
-<span class="n">CELERY_TASK_SERIALIZER</span> <span class="o">=</span> <span class="s">&quot;json&quot;</span>
-<span class="n">CELERY_RESULT_SERIALIZER</span> <span class="o">=</span> <span class="s">&quot;json&quot;</span>
-<span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&quot;Europe/Oslo&quot;</span>
+<span class="n">CELERY_TASK_SERIALIZER</span> <span class="o">=</span> <span class="s">&#39;json&#39;</span>
+<span class="n">CELERY_RESULT_SERIALIZER</span> <span class="o">=</span> <span class="s">&#39;json&#39;</span>
+<span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&#39;Europe/Oslo&#39;</span>
 <span class="n">CELERY_ENABLE_UTC</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 </div>
@@ -329,7 +329,7 @@ contain any syntax errors, you can try to import it:</p>
 route a misbehaving task to a dedicated queue:</p>
 <p><tt class="file docutils literal"><span class="pre">celeryconfig.py</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ROUTES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;tasks.add&quot;</span><span class="p">:</span> <span class="s">&quot;low-priority&quot;</span><span class="p">,</span>
+    <span class="s">&#39;tasks.add&#39;</span><span class="p">:</span> <span class="s">&#39;low-priority&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -338,7 +338,7 @@ instead, so that only 10 tasks of this type can be processed in a minute
 (10/m):</p>
 <p><tt class="file docutils literal"><span class="pre">celeryconfig.py</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;tasks.add&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="s">&quot;10/m&quot;</span><span class="p">}</span>
+    <span class="s">&#39;tasks.add&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;rate_limit&#39;</span><span class="p">:</span> <span class="s">&#39;10/m&#39;</span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>

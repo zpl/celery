@@ -50,11 +50,11 @@ Celery is…
 
             from celery import Celery
 
-            celery = Celery("hello", broker="amqp://guest@localhost//")
+            celery = Celery('hello', broker='amqp://guest@localhost//')
 
             @celery.task()
             def hello():
-                return "hello world"
+                return 'hello world'
 
     - **Highly Available**
 

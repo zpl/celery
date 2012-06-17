@@ -122,7 +122,7 @@ the <a class="reference internal" href="../reference/celery.html#celery.Celery.t
 </div>
 <p>There are also many <a class="reference internal" href="#task-options"><em>options</em></a> that can be set for the task,
 these can be specified as arguments to the decorator:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="s">&quot;json&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
     <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
 </pre></div>
@@ -161,7 +161,7 @@ be the first in the list):</p>
 <p>Every task must have a unique name, and a new name
 will be generated out of the function name if a custom name is not provided.</p>
 <p>For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;sum-of-two-numbers&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;sum-of-two-numbers&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
@@ -172,7 +172,7 @@ will be generated out of the function name if a custom name is not provided.</p>
 <p>A best practice is to use the module name as a namespace,
 this way names won&#8217;t collide if there&#8217;s already a task with that name
 defined in another module.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;tasks.add&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;tasks.add&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
@@ -202,7 +202,7 @@ so if you&#8217;re using relative imports you should set the name explicitly.</p
 the worker imports the module as &#8220;myapp.tasks&#8221;, the generated names won&#8217;t match
 and an <a class="reference internal" href="../reference/celery.exceptions.html#celery.exceptions.NotRegistered" title="celery.exceptions.NotRegistered"><tt class="xref py py-exc docutils literal"><span class="pre">NotRegistered</span></tt></a> error will be raised by the worker.</p>
 <p>This is also the case if using Django and using <cite>project.myapp</cite>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;project.myapp&quot;</span><span class="p">,</span> <span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;project.myapp&#39;</span><span class="p">,</span> <span class="p">)</span>
 </pre></div>
 </div>
 <p>The worker will have the tasks registered as &#8220;project.myapp.tasks.*&#8221;,
@@ -219,7 +219,7 @@ add the project directory to the Python path:</p>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
 
-<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;myapp&quot;</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;myapp&#39;</span><span class="p">,</span> <span class="p">)</span>
 </pre></div>
 </div>
 <p>This makes more sense from the reusable app perspective anyway.</p>
@@ -264,7 +264,7 @@ to resend the task to the same destination queue.</td>
 <p>An example task accessing information in the context is:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">dump_context</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Executing task id </span><span class="si">%r</span><span class="s">, args: </span><span class="si">%r</span><span class="s"> kwargs: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Executing task id </span><span class="si">%r</span><span class="s">, args: </span><span class="si">%r</span><span class="s"> kwargs: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
         <span class="n">add</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">add</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="n">add</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">kwargs</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -284,7 +284,7 @@ for all of your tasks at the top of your module:</p>
 
 <span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Adding </span><span class="si">%s</span><span class="s"> + </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Adding </span><span class="si">%s</span><span class="s"> + </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
 </div>
@@ -509,7 +509,7 @@ or waiting to be retried.  Having a &#8220;started&#8221; status can be useful f
 when there are long running tasks and there is a need to report which
 task is currently running.</p>
 <p>The host name and process id of the worker executing the task
-will be available in the state metadata (e.g. <cite>result.info[&#8220;pid&#8221;]</cite>)</p>
+will be available in the state metadata (e.g. <cite>result.info[&#8216;pid&#8217;]</cite>)</p>
 <p>The global default can be overridden by the
 <a class="reference internal" href="../configuration.html#std:setting-CELERY_TRACK_STARTED"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TRACK_STARTED</span></tt></a> setting.</p>
 </dd></dl>
@@ -691,8 +691,8 @@ which defines its own custom <tt class="xref std std-state docutils literal"><sp
 <span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">upload_files</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="nb">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
-        <span class="n">current_task</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="s">&quot;PROGRESS&quot;</span><span class="p">,</span>
-            <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;current&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span> <span class="s">&quot;total&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)})</span>
+        <span class="n">current_task</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="s">&#39;PROGRESS&#39;</span><span class="p">,</span>
+            <span class="n">meta</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;current&#39;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span> <span class="s">&#39;total&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)})</span>
 </pre></div>
 </div>
 <p>Here we created the state <cite>&#8220;PROGRESS&#8221;</cite>, which tells any application
@@ -779,7 +779,7 @@ Actor.</p>
 <span class="k">class</span> <span class="nc">NaiveAuthenticateServer</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">users</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;george&quot;</span><span class="p">:</span> <span class="s">&quot;password&quot;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">users</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;george&#39;</span><span class="p">:</span> <span class="s">&#39;password&#39;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -811,7 +811,7 @@ base class for new task types.</p>
     <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
 
     <span class="k">def</span> <span class="nf">after_return</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&quot;Task returned: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Task returned: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="p">))</span>
 
 
 <span class="nd">@celery.task</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="n">DebugTask</span><span class="p">)</span>
@@ -1094,7 +1094,7 @@ that automatically expands some abbreviations in it:</p>
 
 <span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">expand_abbreviations</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
-    <span class="n">article</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;MyCorp&quot;</span><span class="p">,</span> <span class="s">&quot;My Corporation&quot;</span><span class="p">)</span>
+    <span class="n">article</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;MyCorp&#39;</span><span class="p">,</span> <span class="s">&#39;My Corporation&#39;</span><span class="p">)</span>
     <span class="n">article</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1113,7 +1113,7 @@ re-fetch the article in the task body:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">expand_abbreviations</span><span class="p">(</span><span class="n">article_id</span><span class="p">):</span>
     <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">article_id</span><span class="p">)</span>
-    <span class="n">article</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;MyCorp&quot;</span><span class="p">,</span> <span class="s">&quot;My Corporation&quot;</span><span class="p">)</span>
+    <span class="n">article</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;MyCorp&#39;</span><span class="p">,</span> <span class="s">&#39;My Corporation&#39;</span><span class="p">)</span>
     <span class="n">article</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">expand_abbreviations</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
@@ -1172,19 +1172,19 @@ application.</p>
 
 
 <span class="k">class</span> <span class="nc">Comment</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
-    <span class="n">email_address</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;email address&quot;</span><span class="p">))</span>
-    <span class="n">homepage</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;home page&quot;</span><span class="p">),</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+    <span class="n">email_address</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;email address&#39;</span><span class="p">))</span>
+    <span class="n">homepage</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;home page&#39;</span><span class="p">),</span>
                                <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verify_exists</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">comment</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;comment&quot;</span><span class="p">))</span>
-    <span class="n">pub_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Published date&quot;</span><span class="p">),</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;comment&#39;</span><span class="p">))</span>
+    <span class="n">pub_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Published date&#39;</span><span class="p">),</span>
                                     <span class="n">editable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">auto_add_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">is_spam</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;spam?&quot;</span><span class="p">),</span>
+    <span class="n">is_spam</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;spam?&#39;</span><span class="p">),</span>
                                   <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">&quot;comment&quot;</span><span class="p">)</span>
-        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">&quot;comments&quot;</span><span class="p">)</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;comment&#39;</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;comments&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In the view where the comment is posted, we first write the comment
@@ -1207,11 +1207,11 @@ to the database, then we launch the spam filter task in the background.</p>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Comment</span>
 
 
-<span class="k">def</span> <span class="nf">add_comment</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">,</span> <span class="n">template_name</span><span class="o">=</span><span class="s">&quot;comments/create.html&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">add_comment</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">,</span> <span class="n">template_name</span><span class="o">=</span><span class="s">&#39;comments/create.html&#39;</span><span class="p">):</span>
     <span class="n">post</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Entry</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
-    <span class="n">remote_addr</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;REMOTE_ADDR&quot;</span><span class="p">)</span>
+    <span class="n">remote_addr</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;REMOTE_ADDR&#39;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&quot;post&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;post&#39;</span><span class="p">:</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">CommentForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
             <span class="n">comment</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
@@ -1222,7 +1222,7 @@ to the database, then we launch the spam filter task in the background.</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">CommentForm</span><span class="p">()</span>
 
-    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="n">template_name</span><span class="p">,</span> <span class="n">context_instance</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1248,13 +1248,13 @@ need to pay.  You have to sign up to their service to get an API key.</p>
 <span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">spam_filter</span><span class="p">(</span><span class="n">comment_id</span><span class="p">,</span> <span class="n">remote_addr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">spam_filter</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Running spam filter for comment </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">comment_id</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Running spam filter for comment </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">comment_id</span><span class="p">)</span>
 
     <span class="n">comment</span> <span class="o">=</span> <span class="n">Comment</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">comment_id</span><span class="p">)</span>
     <span class="n">current_domain</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span><span class="o">.</span><span class="n">domain</span>
-    <span class="n">akismet</span> <span class="o">=</span> <span class="n">Akismet</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">AKISMET_KEY</span><span class="p">,</span> <span class="s">&quot;http://</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">domain</span><span class="p">)</span>
+    <span class="n">akismet</span> <span class="o">=</span> <span class="n">Akismet</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">AKISMET_KEY</span><span class="p">,</span> <span class="s">&#39;http://</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">domain</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">akismet</span><span class="o">.</span><span class="n">verify_key</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span><span class="s">&quot;Invalid AKISMET_KEY&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span><span class="s">&#39;Invalid AKISMET_KEY&#39;</span><span class="p">)</span>
 
 
     <span class="n">is_spam</span> <span class="o">=</span> <span class="n">akismet</span><span class="o">.</span><span class="n">comment_check</span><span class="p">(</span><span class="n">user_ip</span><span class="o">=</span><span class="n">remote_addr</span><span class="p">,</span>

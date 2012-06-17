@@ -217,7 +217,7 @@ has not returned yet.</p>
 <blockquote>
 <div><p>A <tt class="docutils literal"><span class="pre">DependencyGraph</span></tt> of the tasks dependencies.
 This can also be used to convert to dot format:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;graph.dot&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;graph.dot&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
     <span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_dot</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -258,7 +258,7 @@ a list).</p>
 </li>
 <li><p class="first">Adds <tt class="docutils literal"><span class="pre">subtask.link(subtask)</span></tt> + <tt class="docutils literal"><span class="pre">subtask.link_error(subtask)</span></tt></p>
 <blockquote>
-<div><p>Shortcut to <tt class="docutils literal"><span class="pre">s.options.setdefault(&quot;link&quot;,</span> <span class="pre">[]).append(subtask)</span></tt></p>
+<div><p>Shortcut to <tt class="docutils literal"><span class="pre">s.options.setdefault('link',</span> <span class="pre">[]).append(subtask)</span></tt></p>
 </div></blockquote>
 </li>
 <li><p class="first">Adds <tt class="docutils literal"><span class="pre">subtask.flatten_links()</span></tt></p>
@@ -283,7 +283,7 @@ a subtask.</p>
 
 as a shortcut to::
 
-    &gt;&gt;&gt; task.subtask((arg1, arg2), {"kw": 1})</pre>
+    &gt;&gt;&gt; task.subtask((arg1, arg2), {'kw': 1})</pre>
 </div>
 </li>
 <li><p class="first">Tasks can be chained by using the <tt class="docutils literal"><span class="pre">|</span></tt> operator:</p>
@@ -352,9 +352,9 @@ the connection is re-connected.</p>
 <p>These commands are available programmatically as
 <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.add_consumer" title="celery.app.control.Control.add_consumer"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.add_consumer()</span></tt></a> / <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.cancel_consumer" title="celery.app.control.Control.cancel_consumer"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.cancel_consumer()</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">add_consumer</span><span class="p">(</span><span class="n">queue_name</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;w1.example.com&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">cancel_consumer</span><span class="p">(</span><span class="n">queue_name</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;w1.example.com&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>or using the <strong class="program">celery control</strong> command:</p>
@@ -374,7 +374,7 @@ sent to <strong>all workers</strong>.</p>
 max/min concurrency settings.</p>
 <p>This command is available programmatically as <tt class="xref py py-meth docutils literal"><span class="pre">celery.control.autoscale()</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;w1.example.com&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>or using the <strong class="program">celery control</strong> command:</p>
@@ -387,8 +387,8 @@ max/min concurrency settings.</p>
 <div><p>Tells workers to add or remove pool processes.</p>
 <p>These commands are available programmatically as
 <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.pool_grow" title="celery.app.control.Control.pool_grow"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.pool_grow()</span></tt></a> / <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.pool_shrink" title="celery.app.control.Control.pool_shrink"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.pool_shrink()</span></tt></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pool_grow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">contorl</span><span class="o">.</span><span class="n">pool_shrink</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;w1.example.com&quot;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pool_grow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;w1.example.com&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">contorl</span><span class="o">.</span><span class="n">pool_shrink</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;w1.example.com&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>or using the <strong class="program">celery control</strong> command:</p>
@@ -458,7 +458,7 @@ to add module-level logger to your tasks module.</p>
 
 <span class="nd">@celery.task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Adding </span><span class="si">%r</span><span class="s"> + </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Adding </span><span class="si">%r</span><span class="s"> + </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
 </div>
@@ -506,7 +506,7 @@ class DebugTask(Task):
     abstract = True
 
     def __call__(self, *args, **kwargs):
-        print("CALLING %r" % (self, ))
+        print('CALLING %r' % (self, ))
         return self.run(*args, **kwargs)
 
 &gt;&gt;&gt; DebugTask
@@ -579,7 +579,7 @@ environment variable is set.</p>
 </li>
 <li><p class="first">The Celery instance can now be created with a broker URL</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s">&quot;redis://&quot;</span><span class="p">)</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s">&#39;redis://&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -587,7 +587,7 @@ environment variable is set.</p>
 <li><p class="first">Result backends can now be set using an URL</p>
 <blockquote>
 <div><p>Currently only supported by redis.  Example use:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&quot;redis://localhost/1&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&#39;redis://localhost/1&#39;</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -614,11 +614,11 @@ commands.</p>
 
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_inner</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&quot;ARGS: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;ARGS: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="p">))</span>
     <span class="k">return</span> <span class="n">_inner</span>
 
 <span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;tasks.add&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;@__call__&quot;</span><span class="p">:</span> <span class="n">debug_args</span><span class="p">},</span>
+    <span class="s">&#39;tasks.add&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;@__call__&#39;</span><span class="p">:</span> <span class="n">debug_args</span><span class="p">},</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -695,7 +695,7 @@ instead of converting on the fly.</p>
 <ul>
 <li><p class="first">Can now specify connection for <a class="reference internal" href="reference/celery.app.control.html#celery.app.control.Control.inspect" title="celery.app.control.Control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">celery.control.inspect</span></tt></a>.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="n">i</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">connection</span><span class="o">=</span><span class="n">BrokerConnection</span><span class="p">(</span><span class="s">&quot;redis://&quot;</span><span class="p">))</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">i</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">connection</span><span class="o">=</span><span class="n">BrokerConnection</span><span class="p">(</span><span class="s">&#39;redis://&#39;</span><span class="p">))</span>
 <span class="n">i</span><span class="o">.</span><span class="n">active_queues</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -788,7 +788,7 @@ to create tasks out of methods:</p>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Counter.increment&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">task_method</span><span class="p">)</span>
+    <span class="nd">@celery.task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Counter.increment&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">task_method</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>

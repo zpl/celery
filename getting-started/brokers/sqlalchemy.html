@@ -78,7 +78,7 @@
 <span id="broker-sqlalchemy-configuration"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p>Celery needs to know the location of your database, which should be the usual
 SQLAlchemy connection string, but with &#8216;sqla+&#8217; prepended to it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+sqlite:///celerydb.sqlite&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+sqlite:///celerydb.sqlite&#39;</span>
 </pre></div>
 </div>
 <p>This transport uses only the <a class="reference internal" href="../../configuration.html#std:setting-BROKER_URL"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_URL</span></tt></a> setting, which have to be
@@ -86,16 +86,16 @@ an SQLAlchemy database URI.</p>
 <p>Please see <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#supported-databases">SQLAlchemy: Supported Databases</a> for a table of supported databases.</p>
 <p>Here&#8217;s a list of examples using a selection of other <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#database-urls">SQLAlchemy Connection String</a>&#8216;s:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># sqlite (filename)</span>
-<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+sqlite:///celerydb.sqlite&quot;</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+sqlite:///celerydb.sqlite&#39;</span>
 
 <span class="c"># mysql</span>
-<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+mysql://scott:tiger@localhost/foo&quot;</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+mysql://scott:tiger@localhost/foo&#39;</span>
 
 <span class="c"># postgresql</span>
-<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+postgresql://scott:tiger@localhost/mydatabase&quot;</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+postgresql://scott:tiger@localhost/mydatabase&#39;</span>
 
 <span class="c"># oracle</span>
-<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&quot;sqla+oracle://scott:tiger@127.0.0.1:1521/sidname&quot;</span>
+<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+oracle://scott:tiger@127.0.0.1:1521/sidname&#39;</span>
 </pre></div>
 </div>
 <div class="section" id="results">

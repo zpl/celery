@@ -134,7 +134,7 @@ previous exchange:</p>
 </div>
 <p>As an alternative to deleting the old exchange you can
 configure a new name for the exchange:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_RESULT_EXCHANGE</span> <span class="o">=</span> <span class="s">&quot;celeryresults2&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_RESULT_EXCHANGE</span> <span class="o">=</span> <span class="s">&#39;celeryresults2&#39;</span>
 </pre></div>
 </div>
 <p class="last">But you have to make sure that all clients and workers
@@ -303,18 +303,18 @@ and their attributes.</p>
 for tasks and return a map of attributes to change.</p>
 <p>As an example, this is an annotation to change the <tt class="docutils literal"><span class="pre">rate_limit</span></tt> attribute
 for the <tt class="docutils literal"><span class="pre">tasks.add</span></tt> task:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;tasks.add&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="s">&quot;10/s&quot;</span><span class="p">}}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;tasks.add&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;rate_limit&#39;</span><span class="p">:</span> <span class="s">&#39;10/s&#39;</span><span class="p">}}</span>
 </pre></div>
 </div>
 <p>or change the same for all tasks:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;*&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="s">&quot;10/s&quot;</span><span class="p">}}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;*&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;rate_limit&#39;</span><span class="p">:</span> <span class="s">&#39;10/s&#39;</span><span class="p">}}</span>
 </pre></div>
 </div>
 <p>You can change methods too, for example the <tt class="docutils literal"><span class="pre">on_failure</span></tt> handler:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">my_on_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">einfo</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Oh no! Task failed: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Oh no! Task failed: </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="p">))</span>
 
-<span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;*&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;on_failure&quot;</span><span class="p">:</span> <span class="n">my_on_failure</span><span class="p">}}</span>
+<span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;*&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;on_failure&#39;</span><span class="p">:</span> <span class="n">my_on_failure</span><span class="p">}}</span>
 </pre></div>
 </div>
 <p>If you need more flexibility then you can also create objects
@@ -322,8 +322,8 @@ that filter for tasks to annotate:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyAnnotate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">annotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;tasks.&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s">&quot;rate_limit&quot;</span><span class="p">:</span> <span class="s">&quot;10/s&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;tasks.&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s">&#39;rate_limit&#39;</span><span class="p">:</span> <span class="s">&#39;10/s&#39;</span><span class="p">}</span>
 
 <span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">(</span><span class="n">MyAnnotate</span><span class="p">(),</span> <span class="p">{</span><span class="o">...</span><span class="p">})</span>
 </pre></div>

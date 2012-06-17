@@ -126,7 +126,7 @@ to perform actions as they trigger.</p>
 <span class="nd">@task_sent.connect</span>
 <span class="k">def</span> <span class="nf">task_sent_handler</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                       <span class="n">kwargs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \<span class="o">*</span>\<span class="o">*</span><span class="n">kwds</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Got signal task_sent for task id </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Got signal task_sent for task id </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="p">))</span>
 </pre></div>
 </div>
 <p>Some signals also have a sender which you can filter by. For example the
@@ -134,10 +134,10 @@ to perform actions as they trigger.</p>
 connect your handler to be called only when tasks with name <cite>&#8220;tasks.add&#8221;</cite>
 has been sent by providing the <cite>sender</cite> argument to
 <a class="reference internal" href="../internals/reference/celery.utils.dispatch.signal.html#celery.utils.dispatch.signal.Signal.connect" title="celery.utils.dispatch.signal.Signal.connect"><tt class="xref py py-class docutils literal"><span class="pre">connect</span></tt></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@task_sent.connect</span><span class="p">(</span><span class="n">task_sent_handler</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="s">&quot;tasks.add&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@task_sent.connect</span><span class="p">(</span><span class="n">task_sent_handler</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="s">&#39;tasks.add&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">task_sent_handler</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                       <span class="n">kwargs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \<span class="o">*</span>\<span class="o">*</span><span class="n">kwds</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Got signal task_sent for task id </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Got signal task_sent for task id </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -329,9 +329,9 @@ The <tt class="docutils literal"><span class="pre">sender</span></tt> is the hos
 to setup worker specific configuration:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.signals</span> <span class="kn">import</span> <span class="n">celeryd_init</span>
 
-<span class="nd">@celeryd_init.connect</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="s">&quot;worker12.example.com&quot;</span><span class="p">)</span>
+<span class="nd">@celeryd_init.connect</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="s">&#39;worker12.example.com&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">configure_worker12</span><span class="p">(</span><span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="n">conf</span><span class="o">.</span><span class="n">CELERY_DEFAULT_RATE_LIMIT</span> <span class="o">=</span> <span class="s">&quot;10/m&quot;</span>
+    <span class="n">conf</span><span class="o">.</span><span class="n">CELERY_DEFAULT_RATE_LIMIT</span> <span class="o">=</span> <span class="s">&#39;10/m&#39;</span>
 </pre></div>
 </div>
 <p>or to set up configuration for multiple workers you can omit specifying a
@@ -340,9 +340,9 @@ sender when you connect:</p>
 
 <span class="nd">@celeryd_init.connect</span>
 <span class="k">def</span> <span class="nf">configure_workers</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">sender</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&quot;worker1.example.com&quot;</span><span class="p">,</span> <span class="s">&quot;worker2.example.com&quot;</span><span class="p">):</span>
-        <span class="n">conf</span><span class="o">.</span><span class="n">CELERY_DEFAULT_RATE_LIMIT</span> <span class="o">=</span> <span class="s">&quot;10/m&quot;</span>
-    <span class="k">if</span> <span class="n">sender</span> <span class="o">==</span> <span class="s">&quot;worker3.example.com&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">sender</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;worker1.example.com&#39;</span><span class="p">,</span> <span class="s">&#39;worker2.example.com&#39;</span><span class="p">):</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">CELERY_DEFAULT_RATE_LIMIT</span> <span class="o">=</span> <span class="s">&#39;10/m&#39;</span>
+    <span class="k">if</span> <span class="n">sender</span> <span class="o">==</span> <span class="s">&#39;worker3.example.com&#39;</span><span class="p">:</span>
         <span class="n">conf</span><span class="o">.</span><span class="n">CELERYD_PREFETCH_MULTIPLIER</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>

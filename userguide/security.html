@@ -186,9 +186,9 @@ disable all insucure serializers so that the worker won&#8217;t accept
 messages with untrusted content types.</p>
 <p>This is an example configuration using the <cite>auth</cite> serializer,
 with the private key and certificate files located in :<cite>/etc/ssl</cite>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_SECURITY_KEY</span> <span class="o">=</span> <span class="s">&quot;/etc/ssl/private/worker.key&quot;</span>
-<span class="n">CELERY_SECURITY_CERTIFICATE</span> <span class="o">=</span> <span class="s">&quot;/etc/ssl/certs/worker.pem&quot;</span>
-<span class="n">CELERY_SECURITY_CERT_STORE</span> <span class="o">=</span> <span class="s">&quot;/etc/ssl/certs/\*.pem&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_SECURITY_KEY</span> <span class="o">=</span> <span class="s">&#39;/etc/ssl/private/worker.key&#39;</span>
+<span class="n">CELERY_SECURITY_CERTIFICATE</span> <span class="o">=</span> <span class="s">&#39;/etc/ssl/certs/worker.pem&#39;</span>
+<span class="n">CELERY_SECURITY_CERT_STORE</span> <span class="o">=</span> <span class="s">&#39;/etc/ssl/certs/\*.pem&#39;</span>
 <span class="kn">from</span> <span class="nn">celery.security</span> <span class="kn">import</span> <span class="n">setup_security</span>
 <span class="n">setup_security</span><span class="p">()</span>
 </pre></div>

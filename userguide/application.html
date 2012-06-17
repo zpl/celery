@@ -115,7 +115,7 @@ registry</em>.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">name</span>
 <span class="go">__main__.add</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="s">&quot;__main__.add&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="s">&#39;__main__.add&#39;</span><span class="p">]</span>
 <span class="go">&lt;@task: __main__.add&gt;</span>
 </pre></div>
 </div>
@@ -150,9 +150,9 @@ the tasks will be named starting with &#8220;<tt class="docutils literal"><span 
 </pre></div>
 </div>
 <p>You can specify another name for the main module:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&quot;tasks&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&#39;tasks&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">main</span>
-<span class="go">&quot;tasks&quot;</span>
+<span class="go">&#39;tasks&#39;</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">()</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -174,7 +174,7 @@ Celery work.  These options can be set on the app instance directly,
 or you can use a dedicated configuration module.</p>
 <p>The configuration is available as <a class="reference internal" href="../reference/celery.html#celery.Celery.conf" title="celery.Celery.conf"><tt class="xref py py-attr docutils literal"><span class="pre">Celery.conf</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">CELERY_TIMEZONE</span>
-<span class="go">&quot;Europe/London&quot;</span>
+<span class="go">&#39;Europe/London&#39;</span>
 </pre></div>
 </div>
 <p>where you can set configuration values directly:</p>
@@ -184,7 +184,7 @@ or you can use a dedicated configuration module.</p>
 <p>or you can update several keys at once by using the <tt class="docutils literal"><span class="pre">update</span></tt> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">CELERY_ENABLE_UTC</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">CELERY_TIMEZONE</span><span class="o">=</span><span class="s">&quot;Europe/London&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">CELERY_TIMEZONE</span><span class="o">=</span><span class="s">&#39;Europe/London&#39;</span><span class="p">,</span>
 <span class="go">...)</span>
 </pre></div>
 </div>
@@ -221,13 +221,13 @@ configuration you should do so after.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 
 <span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">()</span>
-<span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s">&quot;celeryconfig&quot;</span><span class="p">)</span>
+<span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s">&#39;celeryconfig&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The <tt class="docutils literal"><span class="pre">celeryconfig</span></tt> module may then look like this:</p>
 <p><tt class="file docutils literal"><span class="pre">celeryconfig.py</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ENABLE_UTC</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&quot;Europe/London&quot;</span>
+<span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&#39;Europe/London&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -249,7 +249,7 @@ configuration you should do so after.</p>
 
 <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
     <span class="n">CELERY_ENABLE_UTC</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&quot;Europe/London&quot;</span>
+    <span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&#39;Europe/London&#39;</span>
 
 <span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="n">Config</span><span class="p">)</span>
 </pre></div>
@@ -266,10 +266,10 @@ environment variable named <span class="target" id="index-0"></span><tt class="x
 <span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 
 <span class="c">#: Set default configuration module name</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&quot;CELERY_CONFIG_MODULE&quot;</span><span class="p">,</span> <span class="s">&quot;celeryconfig&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;CELERY_CONFIG_MODULE&#39;</span><span class="p">,</span> <span class="s">&#39;celeryconfig&#39;</span><span class="p">)</span>
 
 <span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">()</span>
-<span class="n">celery</span><span class="o">.</span><span class="n">config_from_envvar</span><span class="p">(</span><span class="s">&quot;CELERY_CONFIG_MODULE&quot;</span><span class="p">)</span>
+<span class="n">celery</span><span class="o">.</span><span class="n">config_from_envvar</span><span class="p">(</span><span class="s">&#39;CELERY_CONFIG_MODULE&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You can then specify the configuration module to use via the environment:</p>
@@ -407,12 +407,12 @@ a task:</p>
 <blockquote>
 <div><dl class="docutils">
 <dt>def hello(to):</dt>
-<dd>return &#8220;hello %s&#8221; % to</dd>
+<dd>return &#8216;hello %s&#8217; % to</dd>
 </dl>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery.execute</span> <span class="kn">import</span> <span class="n">apply_async</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">apply_async</span><span class="p">(</span><span class="n">hello</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;world!&quot;</span><span class="p">,</span> <span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">apply_async</span><span class="p">(</span><span class="n">hello</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;world!&#39;</span><span class="p">,</span> <span class="p">))</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -425,10 +425,10 @@ certain options, or override other behavior</p>
     <span class="n">send_error_emails</span> <span class="o">=</span> <span class="bp">True</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;hello </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">to</span>
+        <span class="k">return</span> <span class="s">&#39;hello </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">to</span>
 <span class="n">tasks</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Hello</span><span class="p">)</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Hello</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="s">&quot;world!&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Hello</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="s">&#39;world!&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Later, it was decided that passing arbitrary call-ables
@@ -439,7 +439,7 @@ in 2.0, replaced by task decorators:</p>
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">send_error_emails</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&quot;hello </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">to</span>
+    <span class="k">return</span> <span class="s">&#39;hello </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">to</span>
 </pre></div>
 </div>
 </div>
@@ -462,7 +462,7 @@ class: <tt class="xref py py-class docutils literal"><span class="pre">celery.Ta
     <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&quot;TASK STARTING: </span><span class="si">%s</span><span class="s">[</span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;TASK STARTING: </span><span class="si">%s</span><span class="s">[</span><span class="si">%s</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
