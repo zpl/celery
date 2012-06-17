@@ -562,7 +562,7 @@ to apply the starmap after 10 seconds::
 
     >>> add.starmap(zip(range(10), range(10))).apply_async(countdown=10)
 
-.. _chunking-ov:
+.. _chunking:
 
 Chunking
 ========
