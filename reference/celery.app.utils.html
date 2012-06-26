@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.app.utils &mdash; Celery 2.6.0rc4 documentation</title>
+    <title>celery.app.utils &mdash; Celery 2.6.0rc5 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc4',
+        VERSION:     '2.6.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc5 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.task" href="celery.task.html" />
     <link rel="prev" title="celery.app.log" href="celery.app.log.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.app.log.html" title="celery.app.log"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -104,10 +104,17 @@
 
 </dd></dl>
 
+<dl class="data">
+<dt id="celery.app.utils.BUGREPORT_INFO">
+<tt class="descclassname">celery.app.utils.</tt><tt class="descname">BUGREPORT_INFO</tt><em class="property"> = '\nsoftware -&gt; celery:%(celery_v)s kombu:%(kombu_v)s py:%(py_v)s\n            billiard:%(billiard_v)s %(driver_v)s\nplatform -&gt; system:%(system)s arch:%(arch)s imp:%(py_i)s\nloader   -&gt; %(loader)s\nsettings -&gt; transport:%(transport)s results:%(results)s\n\n%(human_settings)s\n'</em><a class="headerlink" href="#celery.app.utils.BUGREPORT_INFO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format used to generate bugreport information.</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="celery.app.utils.Settings">
 <em class="property">class </em><tt class="descclassname">celery.app.utils.</tt><tt class="descname">Settings</tt><big>(</big><em>changes</em>, <em>defaults</em><big>)</big><a class="headerlink" href="#celery.app.utils.Settings" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p>Celery settings object.</p>
+<dl class="attribute">
 <dt id="celery.app.utils.Settings.BROKER_BACKEND">
 <tt class="descname">BROKER_BACKEND</tt><a class="headerlink" href="#celery.app.utils.Settings.BROKER_BACKEND" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deprecated compat alias to <a class="reference internal" href="#celery.app.utils.Settings.BROKER_TRANSPORT" title="celery.app.utils.Settings.BROKER_TRANSPORT"><tt class="xref py py-attr docutils literal"><span class="pre">BROKER_TRANSPORT</span></tt></a>.</p>
@@ -121,47 +128,74 @@
 <dl class="attribute">
 <dt id="celery.app.utils.Settings.BROKER_TRANSPORT">
 <tt class="descname">BROKER_TRANSPORT</tt><a class="headerlink" href="#celery.app.utils.Settings.BROKER_TRANSPORT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resolves compat aliases <tt class="xref std std-setting docutils literal"><span class="pre">BROKER_BACKEND</span></tt>
-and <tt class="xref std std-setting docutils literal"><span class="pre">CARROT_BACKEND</span></tt>.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.app.utils.Settings.CELERY_RESULT_BACKEND">
 <tt class="descname">CELERY_RESULT_BACKEND</tt><a class="headerlink" href="#celery.app.utils.Settings.CELERY_RESULT_BACKEND" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resolves deprecated alias <tt class="docutils literal"><span class="pre">CELERY_BACKEND</span></tt>.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.app.utils.Settings.find_option">
 <tt class="descname">find_option</tt><big>(</big><em>name</em>, <em>namespace='celery'</em><big>)</big><a class="headerlink" href="#celery.app.utils.Settings.find_option" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Search for option by name.</p>
+<p>Will return <tt class="docutils literal"><span class="pre">(namespace,</span> <span class="pre">option_name,</span> <span class="pre">Option)</span></tt> tuple, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">find_option</span><span class="p">(</span><span class="s">&#39;disable_rate_limits&#39;</span><span class="p">)</span>
+<span class="go">(&#39;CELERY&#39;, &#39;DISABLE_RATE_LIMITS&#39;,</span>
+<span class="go"> &lt;Option: type-&gt;bool default-&gt;False&gt;))</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; Name of option, cannot be partial.</li>
+<li><strong>namespace</strong> &#8211; Preferred namespace (<tt class="docutils literal"><span class="pre">CELERY</span></tt> by default).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="celery.app.utils.Settings.find_value_for_key">
 <tt class="descname">find_value_for_key</tt><big>(</big><em>name</em>, <em>namespace='celery'</em><big>)</big><a class="headerlink" href="#celery.app.utils.Settings.find_value_for_key" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut to <tt class="docutils literal"><span class="pre">get_by_parts(*find_option(name)[:-1])</span></tt></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="celery.app.utils.Settings.get_by_parts">
 <tt class="descname">get_by_parts</tt><big>(</big><em>*parts</em><big>)</big><a class="headerlink" href="#celery.app.utils.Settings.get_by_parts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the current value for setting specified as a path.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get_by_parts</span><span class="p">(</span><span class="s">&#39;CELERY&#39;</span><span class="p">,</span> <span class="s">&#39;DISABLE_RATE_LIMITS&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="method">
 <dt id="celery.app.utils.Settings.humanize">
 <tt class="descname">humanize</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.utils.Settings.humanize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a human readable string showing changes to the
+configuration.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="celery.app.utils.Settings.without_defaults">
 <tt class="descname">without_defaults</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.utils.Settings.without_defaults" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the current configuration, but without defaults.</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="celery.app.utils.bugreport">
 <tt class="descclassname">celery.app.utils.</tt><tt class="descname">bugreport</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.utils.bugreport" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a string containing information useful in bug reports.</p>
+</dd></dl>
 
 </div>
 </div>
@@ -217,7 +251,7 @@ and <tt class="xref std std-setting docutils literal"><span class="pre">CARROT_B
         <li class="right" >
           <a href="celery.app.log.html" title="celery.app.log"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

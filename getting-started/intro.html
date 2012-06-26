@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction to Task Queues &mdash; Celery 2.6.0rc4 documentation</title>
+    <title>Introduction to Task Queues &mdash; Celery 2.6.0rc5 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc4',
+        VERSION:     '2.6.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc5 documentation" href="../index.html" />
     <link rel="up" title="Getting Started" href="index.html" />
     <link rel="next" title="Introduction" href="introduction.html" />
     <link rel="prev" title="Getting Started" href="index.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="index.html" title="Getting Started"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
       </ul>
     </div>  
@@ -108,8 +108,8 @@ across datacenters.</p>
 <ul>
 <li><p class="first"><strong>Simple</strong></p>
 <blockquote>
-<div><p>Celery is easy to use and maintain, and does <em>not need configuration files</em>
-It has an active, friendly community you can talk to for support,
+<div><p>Celery is easy to use and maintain, and does <em>not need configuration files</em>.</p>
+<p>It has an active, friendly community you can talk to for support,
 including a <a class="reference internal" href="resources.html#mailing-list"><em>mailing-list</em></a> and and <a class="reference internal" href="resources.html#irc-channel"><em>IRC
 channel</em></a>.</p>
 <p>Here&#8217;s one of the simplest applications you can make:</p>
@@ -128,7 +128,7 @@ channel</em></a>.</p>
 <blockquote>
 <div><p>Workers and clients will automatically retry in the event
 of connection loss or failure, and some brokers support
-HA in way of <em>Master/Master</em> or &#8211; <em>Master/Slave</em> replication.</p>
+HA in way of <em>Master/Master</em> or <em>Master/Slave</em> replication.</p>
 </div></blockquote>
 </li>
 <li><p class="first"><strong>Fast</strong></p>
@@ -153,10 +153,15 @@ schedulers, consumers, producers, autoscalers, broker transorts and much more.</
 <li><p class="first"><strong>Brokers</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="brokers/rabbitmq.html#broker-rabbitmq"><em>RabbitMQ</em></a>, <a class="reference internal" href="brokers/redis.html#broker-redis"><em>Redis</em></a>,</li>
-<li><a class="reference internal" href="brokers/mongodb.html#broker-mongodb"><em>MongoDB</em></a>, <a class="reference internal" href="brokers/beanstalk.html#broker-beanstalk"><em>Beanstalk</em></a>,</li>
-<li><a class="reference internal" href="brokers/couchdb.html#broker-couchdb"><em>CouchDB</em></a>, <a class="reference internal" href="brokers/sqlalchemy.html#broker-sqlalchemy"><em>SQLAlchemy</em></a>,</li>
-<li><a class="reference internal" href="brokers/django.html#broker-django"><em>Django ORM</em></a>, <a class="reference internal" href="brokers/sqs.html#broker-sqs"><em>Amazon SQS</em></a>, and more…</li>
+<li><a class="reference internal" href="brokers/rabbitmq.html#broker-rabbitmq"><em>RabbitMQ</em></a></li>
+<li><a class="reference internal" href="brokers/redis.html#broker-redis"><em>Redis</em></a>,</li>
+<li><a class="reference internal" href="brokers/mongodb.html#broker-mongodb"><em>MongoDB</em></a></li>
+<li><a class="reference internal" href="brokers/beanstalk.html#broker-beanstalk"><em>Beanstalk</em></a></li>
+<li><a class="reference internal" href="brokers/couchdb.html#broker-couchdb"><em>CouchDB</em></a></li>
+<li><a class="reference internal" href="brokers/sqlalchemy.html#broker-sqlalchemy"><em>SQLAlchemy</em></a></li>
+<li><a class="reference internal" href="brokers/django.html#broker-django"><em>Django ORM</em></a></li>
+<li><a class="reference internal" href="brokers/sqs.html#broker-sqs"><em>Amazon SQS</em></a></li>
+<li>and more…</li>
 </ul>
 </div></blockquote>
 </li>
@@ -170,25 +175,40 @@ schedulers, consumers, producers, autoscalers, broker transorts and much more.</
 </ul>
 </div></blockquote>
 </li>
-</ul>
-</td><td><ul>
 <li><p class="first"><strong>Result Stores</strong></p>
 <blockquote>
 <div><ul class="simple">
-<li>AMQP, Redis</li>
-<li>memcached, MongoDB,</li>
-<li>SQLAlchemy/Django ORM,</li>
-<li>Apache Cassandra.</li>
+<li>AMQP</li>
+<li>Redis</li>
+<li>memcached</li>
+<li>MongoDB</li>
+<li>SQLAlchemy</li>
+<li>Django ORM</li>
+<li>Apache Cassandra</li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first"><strong>Serialization &amp; Compression</strong></p>
+</ul>
+</td><td><ul>
+<li><p class="first"><strong>Serialization</strong></p>
 <blockquote>
 <div><ul class="simple">
 <li><em>pickle</em>, <em>json</em>, <em>yaml</em>, <em>msgpack</em>.</li>
-<li><em>zlib</em>, <em>bzip2</em>, or uncompressed.</li>
-<li>Cryptographic message signing.</li>
 <li>Fine-grained serialization settings.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Compression</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><em>zlib</em>, <em>bzip2</em>, or uncompressed.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Crypto</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Cryptographic message signing.</li>
 </ul>
 </div></blockquote>
 </li>
@@ -200,7 +220,7 @@ schedulers, consumers, producers, autoscalers, broker transorts and much more.</
 <table class="hlist"><tr><td><ul>
 <li><p class="first"><strong>Monitoring</strong></p>
 <blockquote>
-<div><p>The stream of monitoring events emit by the worker are used
+<div><p>The stream of monitoring events emitted by the worker are used
 by built-in and external tools to tell you what your cluster
 is doing in real-time.</p>
 <p><a class="reference internal" href="../userguide/monitoring.html#guide-monitoring"><em>Read more…</em></a>.</p>
@@ -236,7 +256,7 @@ enforce a given quality of service.</p>
 <blockquote>
 <div><p>The <em class="xref std std-option">--maxtasksperchild</em> option is used for user tasks
 leaking resources, like memory or file descriptors, that
-are out simply out of your control.</p>
+are simply out of your control.</p>
 <p><a class="reference internal" href="../userguide/workers.html#worker-maxtasksperchild"><em>Read more…</em></a>.</p>
 </div></blockquote>
 </li>
@@ -244,7 +264,7 @@ are out simply out of your control.</p>
 <blockquote>
 <div><p>Each worker component can be customized, and additional components
 can be defined by the user.  The worker is built up using &#8220;boot steps&#8221; — a
-dependency graph enabling fine grained control of the workers
+dependency graph enabling fine grained control of the worker&#8217;s
 internals.</p>
 </div></blockquote>
 </li>
@@ -364,7 +384,7 @@ internals.</p>
         <li class="right" >
           <a href="index.html" title="Getting Started"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" >Getting Started</a> &raquo;</li> 
       </ul>
     </div>

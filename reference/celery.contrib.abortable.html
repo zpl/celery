@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.contrib.abortable &mdash; Celery 2.6.0rc4 documentation</title>
+    <title>celery.contrib.abortable &mdash; Celery 2.6.0rc5 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc4',
+        VERSION:     '2.6.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc5 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.contrib.batches" href="celery.contrib.batches.html" />
     <link rel="prev" title="celery.states" href="celery.states.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.states.html" title="celery.states"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -98,11 +98,13 @@ objects that should support abortion by producers.</p>
 <h3><a class="toc-backref" href="#id2">Usage example</a><a class="headerlink" href="#usage-example" title="Permalink to this headline">¶</a></h3>
 <p>In the consumer:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.contrib.abortable</span> <span class="kn">import</span> <span class="n">AbortableTask</span>
+<span class="kn">from</span> <span class="nn">celery.utils.log</span> <span class="kn">import</span> <span class="n">get_task_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">MyLongRunningTask</span><span class="p">(</span><span class="n">AbortableTask</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_logger</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
             <span class="c"># Check after every 5 loops..</span>
@@ -223,7 +225,7 @@ often (for performance).</p>
 
 <dl class="attribute">
 <dt id="celery.contrib.abortable.AbortableTask.request_stack">
-<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x102ac23f8&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.request_stack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10b27d940&gt;</em><a class="headerlink" href="#celery.contrib.abortable.AbortableTask.request_stack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -283,7 +285,7 @@ often (for performance).</p>
         <li class="right" >
           <a href="celery.states.html" title="celery.states"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

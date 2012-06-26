@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Change history &mdash; Celery 2.6.0rc4 documentation</title>
+    <title>Change history &mdash; Celery 2.6.0rc5 documentation</title>
     
     <link rel="stylesheet" href="_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.6.0rc4',
+        VERSION:     '2.6.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc4 documentation" href="index.html" />
+    <link rel="top" title="Celery 2.6.0rc5 documentation" href="index.html" />
     <link rel="next" title="API Reference" href="reference/index.html" />
     <link rel="prev" title="What’s new in Celery 2.5" href="whatsnew-2.5.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="whatsnew-2.5.html" title="What’s new in Celery 2.5"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -2415,7 +2415,7 @@ is the <a class="reference internal" href="internals/reference/celery.beat.html#
 <li><p class="first">Redis result backend: Removed deprecated settings <cite>REDIS_TIMEOUT</cite> and
 <cite>REDIS_CONNECT_RETRY</cite>.</p>
 </li>
-<li><p class="first">CentOS init script for <strong class="program">celeryd</strong> now available in <cite>contrib/centos</cite>.</p>
+<li><p class="first">CentOS init script for <strong class="program">celeryd</strong> now available in <cite>extra/centos</cite>.</p>
 </li>
 <li><p class="first">Now depends on <cite>pyparsing</cite> version 1.5.0 or higher.</p>
 <blockquote>
@@ -3280,7 +3280,7 @@ not be started if this file exists and the pid contained is still alive.</p>
 </li>
 <li><p class="first">Added generic init.d script using <cite>celeryd-multi</cite></p>
 <blockquote>
-<div><p><a class="reference external" href="http://github.com/celery/celery/tree/master/contrib/generic-init.d/celeryd">http://github.com/celery/celery/tree/master/contrib/generic-init.d/celeryd</a></p>
+<div><p><a class="reference external" href="http://github.com/celery/celery/tree/master/extra/generic-init.d/celeryd">http://github.com/celery/celery/tree/master/extra/generic-init.d/celeryd</a></p>
 </div></blockquote>
 </li>
 </ul>
@@ -4351,7 +4351,7 @@ queues:</p>
 and <span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CELERY_LOADER</span></tt> environment variables, so when <cite>nosetests</cite>
 imports that, the unit test environment is all set up.</p>
 <p>Before you run the tests you need to install the test requirements:</p>
-<div class="highlight-python"><pre>$ pip install -r contrib/requirements/test.txt</pre>
+<div class="highlight-python"><pre>$ pip install -r requirements/test.txt</pre>
 </div>
 <p>Running all tests:</p>
 <div class="highlight-python"><pre>$ nosetests</pre>
@@ -5072,7 +5072,7 @@ copied to <cite>cls.run.__doc__</cite>)</p>
 <cite>nose</cite> + <cite>django-nose</cite> for test discovery, and <cite>unittest2</cite> for test
 cases.</p>
 </li>
-<li><p class="first">New pip requirements files available in <cite>contrib/requirements</cite>.</p>
+<li><p class="first">New pip requirements files available in <tt class="file docutils literal"><span class="pre">requirements</span></tt>.</p>
 </li>
 <li><p class="first">TaskPublisher: Declarations are now done once (per process).</p>
 </li>
@@ -5111,24 +5111,24 @@ celeryd/celerybeat/celerymon into background processes.</p>
 <blockquote>
 <div><p>We&#8217;ve had too many problems with celeryd daemonizing itself, so it was
 decided it has to be removed. Example startup scripts has been added to
-<cite>contrib/</cite>:</p>
+the <cite>extra/</cite> directory:</p>
 <ul>
 <li><p class="first">Debian, Ubuntu, (start-stop-daemon)</p>
 <blockquote>
-<div><p><cite>contrib/debian/init.d/celeryd</cite>
-<cite>contrib/debian/init.d/celerybeat</cite></p>
+<div><p><cite>extra/debian/init.d/celeryd</cite>
+<cite>extra/debian/init.d/celerybeat</cite></p>
 </div></blockquote>
 </li>
 <li><p class="first">Mac OS X launchd</p>
 <blockquote>
-<div><p><cite>contrib/mac/org.celeryq.celeryd.plist</cite>
-<cite>contrib/mac/org.celeryq.celerybeat.plist</cite>
-<cite>contrib/mac/org.celeryq.celerymon.plist</cite></p>
+<div><p><cite>extra/mac/org.celeryq.celeryd.plist</cite>
+<cite>extra/mac/org.celeryq.celerybeat.plist</cite>
+<cite>extra/mac/org.celeryq.celerymon.plist</cite></p>
 </div></blockquote>
 </li>
 <li><p class="first">Supervisord (<a class="reference external" href="http://supervisord.org">http://supervisord.org</a>)</p>
 <blockquote>
-<div><p><cite>contrib/supervisord/supervisord.conf</cite></p>
+<div><p><cite>extra/supervisord/supervisord.conf</cite></p>
 </div></blockquote>
 </li>
 </ul>
@@ -6597,7 +6597,7 @@ the name change request is in <cite>docs/name_change_request.txt</cite>.</p>
         <li class="right" >
           <a href="whatsnew-2.5.html" title="What’s new in Celery 2.5"
              >previous</a> |</li>
-        <li><a href="index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

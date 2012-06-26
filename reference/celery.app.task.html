@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.app.task &mdash; Celery 2.6.0rc4 documentation</title>
+    <title>celery.app.task &mdash; Celery 2.6.0rc5 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc4',
+        VERSION:     '2.6.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc5 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.app.amqp" href="celery.app.amqp.html" />
     <link rel="prev" title="celery.app" href="celery.app.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.app.html" title="celery.app"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -342,7 +342,7 @@ be replaced by a local <a class="reference internal" href="#celery.app.task.Task
 
 <dl class="attribute">
 <dt id="celery.app.task.Task.backend">
-<tt class="descclassname">Task.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x107522bd0&gt;</em><a class="headerlink" href="#celery.app.task.Task.backend" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Task.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x106719d90&gt;</em><a class="headerlink" href="#celery.app.task.Task.backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>The result store backend used for this task.</p>
 </dd></dl>
 
@@ -412,12 +412,6 @@ executed.  3 minutes by default.</p>
 <dd><p>If enabled the worker will not store task state and return values
 for this task.  Defaults to the <a class="reference internal" href="../configuration.html#std:setting-CELERY_IGNORE_RESULT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_IGNORE_RESULT</span></tt></a>
 setting.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.app.task.Task.logger">
-<tt class="descclassname">Task.</tt><tt class="descname">logger</tt><a class="headerlink" href="#celery.app.task.Task.logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get task-aware logger object.</p>
 </dd></dl>
 
 <dl class="method">
@@ -523,6 +517,12 @@ instance, containing the traceback.</li>
 <dd><p>Rate limit for this task type.  Examples: <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt> (no rate
 limit), <cite>&#8216;100/s&#8217;</cite> (hundred tasks a second), <cite>&#8216;100/m&#8217;</cite> (hundred tasks
 a minute),`&#8216;100/h&#8217;` (hundred tasks an hour)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.app.task.Task.request">
+<tt class="descclassname">Task.</tt><tt class="descname">request</tt><a class="headerlink" href="#celery.app.task.Task.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current request object.</p>
 </dd></dl>
 
 <dl class="method">
@@ -746,7 +746,7 @@ set to the name of the module it was defined in, and the class name.</p>
         <li class="right" >
           <a href="celery.app.html" title="celery.app"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

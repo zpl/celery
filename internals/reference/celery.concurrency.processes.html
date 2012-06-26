@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.concurrency.processes &mdash; Celery 2.6.0rc4 documentation</title>
+    <title>celery.concurrency.processes &mdash; Celery 2.6.0rc5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.6.0rc4',
+        VERSION:     '2.6.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 2.6.0rc5 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.concurrency.eventlet† (experimental)" href="celery.concurrency.eventlet.html" />
     <link rel="prev" title="celery.concurrency.solo" href="celery.concurrency.solo.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.concurrency.solo.html" title="celery.concurrency.solo"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -181,7 +181,7 @@ waiting for process termination.</p>
 
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.Pool.ResultHandler.handle_event">
-<tt class="descname">handle_event</tt><big>(</big><em>fileno</em>, <em>event</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler.handle_event" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_event</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.ResultHandler.handle_event" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -381,11 +381,6 @@ be iterables as well and will be unpacked as arguments. Hence
 <tt class="descclassname">TaskPool.</tt><tt class="descname">init_callbacks</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.init_callbacks" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="celery.concurrency.processes.TaskPool.maintain_pool">
-<tt class="descclassname">TaskPool.</tt><tt class="descname">maintain_pool</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.maintain_pool" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="celery.concurrency.processes.TaskPool.num_processes">
 <tt class="descclassname">TaskPool.</tt><tt class="descname">num_processes</tt><a class="headerlink" href="#celery.concurrency.processes.TaskPool.num_processes" title="Permalink to this definition">¶</a></dt>
@@ -394,16 +389,6 @@ be iterables as well and will be unpacked as arguments. Hence
 <dl class="method">
 <dt id="celery.concurrency.processes.TaskPool.on_close">
 <tt class="descclassname">TaskPool.</tt><tt class="descname">on_close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.on_close" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.concurrency.processes.TaskPool.on_hard_timeout">
-<tt class="descclassname">TaskPool.</tt><tt class="descname">on_hard_timeout</tt><big>(</big><em>job</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.on_hard_timeout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.concurrency.processes.TaskPool.on_soft_timeout">
-<tt class="descclassname">TaskPool.</tt><tt class="descname">on_soft_timeout</tt><big>(</big><em>job</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.on_soft_timeout" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -539,7 +524,7 @@ be iterables as well and will be unpacked as arguments. Hence
         <li class="right" >
           <a href="celery.concurrency.solo.html" title="celery.concurrency.solo"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

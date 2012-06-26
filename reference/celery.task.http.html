@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.task.http &mdash; Celery 2.6.0rc4 documentation</title>
+    <title>celery.task.http &mdash; Celery 2.6.0rc5 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc4',
+        VERSION:     '2.6.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc4 documentation" href="../index.html" />
+    <link rel="top" title="Celery 2.6.0rc5 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.schedules" href="celery.schedules.html" />
     <link rel="prev" title="celery.result" href="celery.result.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.result.html" title="celery.result"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -80,7 +80,7 @@
 <p>Webhook task implementation.</p>
 <dl class="class">
 <dt id="celery.task.http.HttpDispatch">
-<em class="property">class </em><tt class="descclassname">celery.task.http.</tt><tt class="descname">HttpDispatch</tt><big>(</big><em>url</em>, <em>method</em>, <em>task_kwargs</em>, <em>logger=None</em><big>)</big><a class="headerlink" href="#celery.task.http.HttpDispatch" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.task.http.</tt><tt class="descname">HttpDispatch</tt><big>(</big><em>url</em>, <em>method</em>, <em>task_kwargs</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.task.http.HttpDispatch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make task HTTP request and collect the task result.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -121,7 +121,7 @@ and <cite>POST</cite>.</li>
 
 <dl class="attribute">
 <dt id="celery.task.http.HttpDispatch.user_agent">
-<tt class="descname">user_agent</tt><em class="property"> = 'celery/2.6.0rc4'</em><a class="headerlink" href="#celery.task.http.HttpDispatch.user_agent" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">user_agent</tt><em class="property"> = 'celery/2.6.0rc5'</em><a class="headerlink" href="#celery.task.http.HttpDispatch.user_agent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -192,7 +192,7 @@ argument, as this attribute is intended for subclasses.</p>
 
 <dl class="attribute">
 <dt id="celery.task.http.HttpDispatchTask.request_stack">
-<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10470af58&gt;</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.request_stack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">request_stack</tt><em class="property"> = &lt;celery.utils.threads.LocalStack object at 0x10b27de20&gt;</em><a class="headerlink" href="#celery.task.http.HttpDispatchTask.request_stack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -284,7 +284,7 @@ By default this is <a class="reference internal" href="#celery.task.http.HttpDis
 
 <dl class="function">
 <dt id="celery.task.http.extract_response">
-<tt class="descclassname">celery.task.http.</tt><tt class="descname">extract_response</tt><big>(</big><em>raw_response</em>, <em>loads=&lt;function &lt;lambda&gt; at 0x101b7d668&gt;</em><big>)</big><a class="headerlink" href="#celery.task.http.extract_response" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">celery.task.http.</tt><tt class="descname">extract_response</tt><big>(</big><em>raw_response</em>, <em>loads=&lt;function loads at 0x101b7d848&gt;</em><big>)</big><a class="headerlink" href="#celery.task.http.extract_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the response text from a raw JSON response.</p>
 </dd></dl>
 
@@ -355,7 +355,7 @@ keys/values encoded.</p>
         <li class="right" >
           <a href="celery.result.html" title="celery.result"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc4 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>
