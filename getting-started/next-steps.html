@@ -251,7 +251,7 @@ subtasks.</p>
 is the task id.</p>
 <p>The <tt class="docutils literal"><span class="pre">delay</span></tt> and <tt class="docutils literal"><span class="pre">apply_async</span></tt> methods return an <a class="reference internal" href="../reference/celery.result.html#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a>
 instance, which can be used to keep track of the tasks execution state.
-But for this you need to enable a <em class="xref std std-ref">result backend</em> so that
+But for this you need to enable a <a class="reference internal" href="../userguide/tasks.html#task-result-backends"><em>result backend</em></a> so that
 the state can be stored somewhere.</p>
 <p>Results are disabled by default because of the fact that there is no result
 backend that suits every application, so to choose one you need to consider
@@ -366,7 +366,7 @@ and a countdown of 10 seconds like this:</p>
 </div>
 <div class="section" id="and-there-s-that-calling-api-again">
 <h3>And there&#8217;s that calling API again...<a class="headerlink" href="#and-there-s-that-calling-api-again" title="Permalink to this headline">¶</a></h3>
-<p>Subtask instances also support the calling API, which means you can use
+<p>Subtask instances also supports the calling API, which means you can use
 <tt class="docutils literal"><span class="pre">delay</span></tt>, <tt class="docutils literal"><span class="pre">apply_async</span></tt>, or <em>calling</em> it directly.</p>
 <p>But there is a difference in that the subtask may already have
 an argument signature specified.  The <tt class="docutils literal"><span class="pre">add</span></tt> task takes two arguments,
@@ -383,7 +383,7 @@ so a subtask specifying two arguments would make a complete signature:</p>
 &gt;&gt;&gt; s2 = add.s(2)</pre>
 </div>
 <p><tt class="docutils literal"><span class="pre">s2</span></tt> is now a partial subtask that needs another argument to be complete,
-and this can actually be resolved when calling the subtask:</p>
+and this can be resolved when calling the subtask:</p>
 <div class="highlight-python"><pre># resolves the partial: add(8, 2)
 &gt;&gt;&gt; res = s2.delay(8)
 &gt;&gt;&gt; res.get()
@@ -397,8 +397,7 @@ existing keyword arguments, but with new arguments taking precedence:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s3</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>   <span class="c"># debug is now False.</span>
 </pre></div>
 </div>
-<p>As stated subtasks supports the calling API, and with the introduction
-of partial arguments, which means that:</p>
+<p>As stated subtasks supports the calling API, which means that:</p>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">subtask.apply_async(args=(),</span> <span class="pre">kwargs={},</span> <span class="pre">**options)</span></tt></p>
 <blockquote>
@@ -586,11 +585,9 @@ of the group is not passed on to the callback:</p>
 <span class="go">160</span>
 </pre></div>
 </div>
-<p>Which means that you can combine chains too:</p>
+<p>Which means that you can combine chains:</p>
 <div class="highlight-python"><pre># ((4 + 16) * 2 + 4) * 8
 &gt;&gt;&gt; c2 = (add.s(4, 16) | mul.s(2) | (add.s(4) | mul.s(8)))
-&gt;&gt;&gt; c2
-tasks.add(16) | tasks.mul(2) | tasks.add(4) | tasks.mul(8)
 
 &gt;&gt;&gt; res = c2()
 &gt;&gt;&gt; res.get()
