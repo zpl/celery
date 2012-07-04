@@ -202,8 +202,8 @@ by passing in the <cite>&#8211;help</cite> flag:</p>
 <div class="highlight-python"><pre>$ celery worker --help</pre>
 </div>
 <p>These options are described in more detailed in the <a class="reference internal" href="../userguide/workers.html#guide-workers"><em>Workers Guide</em></a>.</p>
-<div class="sidebar">
-<p class="first sidebar-title">About the <em class="xref std std-option">--app</em> argument</p>
+<div class="section" id="about-the-app-argument">
+<span id="app-argument"></span><h4>About the <em class="xref std std-option">--app</em> argument<a class="headerlink" href="#about-the-app-argument" title="Permalink to this headline">¶</a></h4>
 <p>The <em class="xref std std-option">--app</em> argument specifies the Celery app instance to use,
 it must be in the form of <tt class="docutils literal"><span class="pre">module.path:celery</span></tt>, where the part before the colon
 is the name of the module, and the attribute name comes last.
@@ -211,7 +211,7 @@ If a package name is specified instead it will automatically
 try to find a <tt class="docutils literal"><span class="pre">celery</span></tt> module in that package, and if the name
 is a module it will try to find a <tt class="docutils literal"><span class="pre">celery</span></tt> attribute in that module.
 This means that these are all equal:</p>
-<blockquote class="last">
+<blockquote>
 <div>$ celery &#8211;app=proj
 $ celery &#8211;app=proj.celery:
 $ celery &#8211;app=proj.celery:celery</div></blockquote>
