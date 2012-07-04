@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.bin.celery &mdash; Celery 2.6.0rc5 documentation</title>
+    <title>celery.bin.celery &mdash; Celery 3.0.0rc5 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.6.0rc5',
+        VERSION:     '3.0.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc5 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.0.0rc5 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.bin.camqadm" href="celery.bin.camqadm.html" />
     <link rel="prev" title="celery.bin.celeryev" href="celery.bin.celeryev.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.bin.celeryev.html" title="celery.bin.celeryev"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -151,7 +151,7 @@
 
 <dl class="attribute">
 <dt id="celery.bin.celery.Command.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b5f97a0: -q/--quiet&gt;, &lt;Option at 0x10b7525f0: -C/--no-color&gt;)</em><a class="headerlink" href="#celery.bin.celery.Command.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10678db00: -q/--quiet&gt;, &lt;Option at 0x10678d5a8: -C/--no-color&gt;)</em><a class="headerlink" href="#celery.bin.celery.Command.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -212,11 +212,6 @@
 <dl class="method">
 <dt id="celery.bin.celery.Command.usage">
 <tt class="descname">usage</tt><big>(</big><em>command</em><big>)</big><a class="headerlink" href="#celery.bin.celery.Command.usage" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.bin.celery.Command.version">
-<tt class="descname">version</tt><em class="property"> = '2.6.0rc5'</em><a class="headerlink" href="#celery.bin.celery.Command.version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -309,7 +304,7 @@ celery call tasks.add --args='[2, 2]' --countdown=10</pre>
 
 <dl class="attribute">
 <dt id="celery.bin.celery.call.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b5f97a0: -q/--quiet&gt;, &lt;Option at 0x10b7525f0: -C/--no-color&gt;, &lt;Option at 0x102f53830: -a/--args&gt;, &lt;Option at 0x10b741b48: -k/--kwargs&gt;, &lt;Option at 0x10b7325a8: --eta&gt;, &lt;Option at 0x10b70e7a0: --countdown&gt;, &lt;Option at 0x10b70a488: --expires&gt;, &lt;Option at 0x10b70a0e0: --serializer&gt;, &lt;Option at 0x102f1b3f8: --queue&gt;, &lt;Option at 0x102f1b440: --exchange&gt;, &lt;Option at 0x10b74f3b0: --routing-key&gt;)</em><a class="headerlink" href="#celery.bin.celery.call.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10678db00: -q/--quiet&gt;, &lt;Option at 0x10678d5a8: -C/--no-color&gt;, &lt;Option at 0x10678dea8: -a/--args&gt;, &lt;Option at 0x10678de60: -k/--kwargs&gt;, &lt;Option at 0x10678d488: --eta&gt;, &lt;Option at 0x1015bf998: --countdown&gt;, &lt;Option at 0x10a4109e0: --expires&gt;, &lt;Option at 0x109078518: --serializer&gt;, &lt;Option at 0x10906b1b8: --queue&gt;, &lt;Option at 0x10ab14ea8: --exchange&gt;, &lt;Option at 0x1090875f0: --routing-key&gt;)</em><a class="headerlink" href="#celery.bin.celery.call.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -555,7 +550,7 @@ celery migrate django:// redis://localhost</pre>
 
 <dl class="attribute">
 <dt id="celery.bin.celery.migrate.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b5f97a0: -q/--quiet&gt;, &lt;Option at 0x10b7525f0: -C/--no-color&gt;, &lt;Option at 0x10b740758: -n/--limit&gt;, &lt;Option at 0x10b720440: -t/--timeout&gt;, &lt;Option at 0x10b7202d8: -a/--ack-messages&gt;, &lt;Option at 0x102aadb90: -T/--tasks&gt;, &lt;Option at 0x102aa2d88: -Q/--queues&gt;, &lt;Option at 0x10b750440: -F/--forever&gt;)</em><a class="headerlink" href="#celery.bin.celery.migrate.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10678db00: -q/--quiet&gt;, &lt;Option at 0x10678d5a8: -C/--no-color&gt;, &lt;Option at 0x1066f1ef0: -n/--limit&gt;, &lt;Option at 0x10908f7a0: -t/--timeout&gt;, &lt;Option at 0x10908f4d0: -a/--ack-messages&gt;, &lt;Option at 0x10ad500e0: -T/--tasks&gt;, &lt;Option at 0x10ad50170: -Q/--queues&gt;, &lt;Option at 0x10ad50950: -F/--forever&gt;)</em><a class="headerlink" href="#celery.bin.celery.migrate.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -640,7 +635,7 @@ celery result 8f511516-e2f5-4da4-9d2f-0fb83a86e500 --traceback</pre>
 
 <dl class="attribute">
 <dt id="celery.bin.celery.result.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b5f97a0: -q/--quiet&gt;, &lt;Option at 0x10b7525f0: -C/--no-color&gt;, &lt;Option at 0x10b74f098: -t/--task&gt;, &lt;Option at 0x10b765a28: --traceback&gt;)</em><a class="headerlink" href="#celery.bin.celery.result.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10678db00: -q/--quiet&gt;, &lt;Option at 0x10678d5a8: -C/--no-color&gt;, &lt;Option at 0x10ad09680: -t/--task&gt;, &lt;Option at 0x10ad09908: --traceback&gt;)</em><a class="headerlink" href="#celery.bin.celery.result.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -700,7 +695,7 @@ subtask, Task</li>
 
 <dl class="attribute">
 <dt id="celery.bin.celery.shell.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b5f97a0: -q/--quiet&gt;, &lt;Option at 0x10b7525f0: -C/--no-color&gt;, &lt;Option at 0x10b7505a8: -I/--ipython&gt;, &lt;Option at 0x10b7503b0: -B/--bpython&gt;, &lt;Option at 0x10b750248: -P/--python&gt;, &lt;Option at 0x10b7501b8: -T/--without-tasks&gt;, &lt;Option at 0x10b7611b8: --eventlet&gt;, &lt;Option at 0x10b761f38: --gevent&gt;)</em><a class="headerlink" href="#celery.bin.celery.shell.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10678db00: -q/--quiet&gt;, &lt;Option at 0x10678d5a8: -C/--no-color&gt;, &lt;Option at 0x10abd3ef0: -I/--ipython&gt;, &lt;Option at 0x10abd3b90: -B/--bpython&gt;, &lt;Option at 0x10abd3830: -P/--python&gt;, &lt;Option at 0x10a9066c8: -T/--without-tasks&gt;, &lt;Option at 0x10a8fbe18: --eventlet&gt;, &lt;Option at 0x10aa73998: --gevent&gt;)</em><a class="headerlink" href="#celery.bin.celery.shell.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -721,7 +716,7 @@ subtask, Task</li>
 <dd><p>Show list of workers that are online.</p>
 <dl class="attribute">
 <dt id="celery.bin.celery.status.option_list">
-<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10b5f97a0: -q/--quiet&gt;, &lt;Option at 0x10b7525f0: -C/--no-color&gt;, &lt;Option at 0x10b765e18: -t/--timeout&gt;, &lt;Option at 0x10b7401b8: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.status.option_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">option_list</tt><em class="property"> = (&lt;Option at 0x10678db00: -q/--quiet&gt;, &lt;Option at 0x10678d5a8: -C/--no-color&gt;, &lt;Option at 0x1066f1f38: -t/--timeout&gt;, &lt;Option at 0x1066f1e60: -d/--destination&gt;)</em><a class="headerlink" href="#celery.bin.celery.status.option_list" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -814,7 +809,7 @@ celery worker --autoscale=10,0</pre>
         <li class="right" >
           <a href="celery.bin.celeryev.html" title="celery.bin.celeryev"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

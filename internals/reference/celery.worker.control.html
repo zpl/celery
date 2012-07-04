@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.worker.control &mdash; Celery 2.6.0rc5 documentation</title>
+    <title>celery.worker.control &mdash; Celery 3.0.0rc5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '2.6.0rc5',
+        VERSION:     '3.0.0rc5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 2.6.0rc5 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.0rc5 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.worker.state" href="celery.worker.state.html" />
     <link rel="prev" title="celery.worker.hub" href="celery.worker.hub.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.worker.hub.html" title="celery.worker.hub"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -84,7 +84,7 @@
 <em class="property">class </em><tt class="descclassname">celery.worker.control.</tt><tt class="descname">Panel</tt><big>(</big><em>dict=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.Panel" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.worker.control.Panel.data">
-<tt class="descname">data</tt><em class="property"> = {'time_limit': &lt;function time_limit at 0x10a9998c0&gt;, 'revoke': &lt;function revoke at 0x10a8c1f50&gt;, 'dump_active': &lt;function dump_active at 0x10a999a28&gt;, 'report': &lt;function report at 0x1057120c8&gt;, 'cancel_consumer': &lt;function cancel_consumer at 0x10a999f50&gt;, 'dump_reserved': &lt;function dump_reserved at 0x10a9999b0&gt;, 'shutdown': &lt;function shutdown at 0x10a999e60&gt;, 'autoscale': &lt;function autoscale at 0x10a999de8&gt;, 'ping': &lt;function ping at 0x10a999c08&gt;, 'disable_events': &lt;function disable_events at 0x10a9990c8&gt;, 'pool_shrink': &lt;function pool_shrink at 0x10a999cf8&gt;, 'pool_restart': &lt;function pool_restart at 0x10a999d70&gt;, 'dump_schedule': &lt;function dump_schedule at 0x10a999938&gt;, 'active_queues': &lt;function active_queues at 0x10aa21050&gt;, 'stats': &lt;function stats at 0x10a999aa0&gt;, 'dump_tasks': &lt;function dump_tasks at 0x10a999b90&gt;, 'add_consumer': &lt;function add_consumer at 0x10a999ed8&gt;, 'enable_events': &lt;function enable_events at 0x105712140&gt;, 'dump_revoked': &lt;function dump_revoked at 0x10a999b18&gt;, 'rate_limit': &lt;function rate_limit at 0x10a999848&gt;, 'pool_grow': &lt;function pool_grow at 0x10a999c80&gt;, 'heartbeat': &lt;function heartbeat at 0x10a999500&gt;}</em><a class="headerlink" href="#celery.worker.control.Panel.data" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">data</tt><em class="property"> = {'time_limit': &lt;function time_limit at 0x10a3f5c08&gt;, 'revoke': &lt;function revoke at 0x10a3f58c0&gt;, 'dump_active': &lt;function dump_active at 0x10a3f5d70&gt;, 'report': &lt;function report at 0x10a3f59b0&gt;, 'cancel_consumer': &lt;function cancel_consumer at 0x10a4f2320&gt;, 'dump_reserved': &lt;function dump_reserved at 0x10a3f5cf8&gt;, 'shutdown': &lt;function shutdown at 0x10a4f2230&gt;, 'autoscale': &lt;function autoscale at 0x10a4f21b8&gt;, 'ping': &lt;function ping at 0x10a3f5f50&gt;, 'disable_events': &lt;function disable_events at 0x10a3f5aa0&gt;, 'pool_shrink': &lt;function pool_shrink at 0x10a4f20c8&gt;, 'pool_restart': &lt;function pool_restart at 0x10a4f2140&gt;, 'dump_schedule': &lt;function dump_schedule at 0x10a3f5c80&gt;, 'active_queues': &lt;function active_queues at 0x10a4f2398&gt;, 'stats': &lt;function stats at 0x10a3f5de8&gt;, 'dump_tasks': &lt;function dump_tasks at 0x10a3f5ed8&gt;, 'add_consumer': &lt;function add_consumer at 0x10a4f22a8&gt;, 'enable_events': &lt;function enable_events at 0x10a3f5a28&gt;, 'dump_revoked': &lt;function dump_revoked at 0x10a3f5e60&gt;, 'rate_limit': &lt;function rate_limit at 0x10a3f5b90&gt;, 'pool_grow': &lt;function pool_grow at 0x10a4f2050&gt;, 'heartbeat': &lt;function heartbeat at 0x10a3f5b18&gt;}</em><a class="headerlink" href="#celery.worker.control.Panel.data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="classmethod">
@@ -274,7 +274,7 @@
         <li class="right" >
           <a href="celery.worker.hub.html" title="celery.worker.hub"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 2.6.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>
