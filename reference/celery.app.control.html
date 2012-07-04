@@ -165,7 +165,7 @@ Server implementation is in <a class="reference internal" href="../internals/ref
 
 <dl class="method">
 <dt id="celery.app.control.Control.add_consumer">
-<tt class="descclassname">Control.</tt><tt class="descname">add_consumer</tt><big>(</big><em>queue</em>, <em>exchange=None</em>, <em>exchange_type='direct'</em>, <em>routing_key=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.add_consumer" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Control.</tt><tt class="descname">add_consumer</tt><big>(</big><em>queue</em>, <em>exchange=None</em>, <em>exchange_type='direct'</em>, <em>routing_key=None</em>, <em>options=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.control.Control.add_consumer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tell all (or specific) workers to start consuming from a new queue.</p>
 <p>Only the queue name is required as if only the queue is specified
 then the exchange/routing key will be set to the same name (

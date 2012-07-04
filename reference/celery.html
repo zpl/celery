@@ -431,7 +431,7 @@ be an iterable of tasks to chain.</p>
 <span class="go">8</span>
 </pre></div>
 </div>
-<p>Applying a chain will return the result of the last task in the chain.
+<p>Calling a chain will return the result of the last task in the chain.
 You can get to the other tasks by following the <tt class="docutils literal"><span class="pre">result.parent</span></tt>&#8216;s:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 <span class="go">4</span>

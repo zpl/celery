@@ -101,9 +101,11 @@ used by task instances and the <a class="reference internal" href="canvas.html#g
 options.</p>
 </div></blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">apply()</span></tt></p>
+<li><p class="first"><em>calling</em> (<tt class="docutils literal"><span class="pre">__call__</span></tt>)</p>
 <blockquote>
-<div><p>Does not send a message but executes the task inline instead.</p>
+<div><p>Applying an object supporting the calling API (e.g. <tt class="docutils literal"><span class="pre">add(2,</span> <span class="pre">2)</span></tt>)
+means that the task will be executed in the current process, and
+not by a worker (a message will not be sent).</p>
 </div></blockquote>
 </li>
 </ul>

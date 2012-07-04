@@ -83,10 +83,11 @@
 <li><a class="reference internal" href="#rate-limits" id="id9">Rate Limits</a></li>
 <li><a class="reference internal" href="#max-tasks-per-child-setting" id="id10">Max tasks per child setting</a></li>
 <li><a class="reference internal" href="#autoscaling" id="id11">Autoscaling</a></li>
-<li><a class="reference internal" href="#autoreloading" id="id12">Autoreloading</a></li>
-<li><a class="reference internal" href="#inspecting-workers" id="id13">Inspecting workers</a></li>
-<li><a class="reference internal" href="#additional-commands" id="id14">Additional Commands</a></li>
-<li><a class="reference internal" href="#writing-your-own-remote-control-commands" id="id15">Writing your own remote control commands</a></li>
+<li><a class="reference internal" href="#queues" id="id12">Queues</a></li>
+<li><a class="reference internal" href="#autoreloading" id="id13">Autoreloading</a></li>
+<li><a class="reference internal" href="#inspecting-workers" id="id14">Inspecting workers</a></li>
+<li><a class="reference internal" href="#additional-commands" id="id15">Additional Commands</a></li>
+<li><a class="reference internal" href="#writing-your-own-remote-control-commands" id="id16">Writing your own remote control commands</a></li>
 </ul>
 </div>
 <div class="section" id="starting-the-worker">
@@ -416,8 +417,108 @@ numbers: the maximum and minumum number of pool processes:</p>
 Some ideas for metrics include load average or the amount of memory available.
 You can specify a custom autoscaler with the <a class="reference internal" href="../configuration.html#std:setting-CELERYD_AUTOSCALER"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_AUTOSCALER</span></tt></a> setting.</p>
 </div>
+<div class="section" id="queues">
+<span id="worker-queues"></span><h2><a class="toc-backref" href="#id12">Queues</a><a class="headerlink" href="#queues" title="Permalink to this headline">¶</a></h2>
+<p>A worker instance can consume from any number of queues.
+By default it will consume from all queues defined in the
+<a class="reference internal" href="../configuration.html#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a> setting (which if not specified defaults to the
+queue named <tt class="docutils literal"><span class="pre">celery</span></tt>).</p>
+<p>You can specify what queues to consume from at startup,
+by giving a comma separated list of queues to the <em class="xref std std-option">-Q</em> option:</p>
+<div class="highlight-python"><pre>$ celery worker -l info -Q foo,bar,baz</pre>
+</div>
+<p>If the queue name is defined in <a class="reference internal" href="../configuration.html#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a> it will use that
+configuration, but if it&#8217;s not defined in the list of queues Celery will
+automatically generate a new queue for you (depending on the
+<a class="reference internal" href="../configuration.html#std:setting-CELERY_CREATE_MISSING_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_CREATE_MISSING_QUEUES</span></tt></a> option).</p>
+<p>You can also tell the worker to start and stop consuming from a queue at
+runtime using the remote control commands <a class="reference internal" href="#std:control-add_consumer"><tt class="xref std std-control docutils literal"><span class="pre">add_consumer</span></tt></a> and
+<a class="reference internal" href="#std:control-cancel_consumer"><tt class="xref std std-control docutils literal"><span class="pre">cancel_consumer</span></tt></a>.</p>
+<div class="section" id="queues-adding-consumers">
+<span id="std:control-add_consumer"></span><h3>Queues: Adding consumers<a class="headerlink" href="#queues-adding-consumers" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="#std:control-add_consumer"><tt class="xref std std-control docutils literal"><span class="pre">add_consumer</span></tt></a> control command will tell one or more workers
+to start consuming from a queue. This operation is idempotent.</p>
+<p>To tell all workers in the cluster to start consuming from a queue
+named &#8220;<tt class="docutils literal"><span class="pre">foo</span></tt>&#8221; you can use the <strong class="program">celery control</strong> program:</p>
+<div class="highlight-python"><pre>$ celery control add_consumer foo
+-&gt; worker1.local: OK
+    started consuming from u'foo'</pre>
+</div>
+<p>If you want to specify a specific worker you can use the
+<em class="xref std std-option">--destination`</em> argument:</p>
+<div class="highlight-python"><pre>$ celery control add_consumer foo -d worker1.local</pre>
+</div>
+<p>The same can be accomplished dynamically using the <a class="reference internal" href="../reference/celery.app.control.html#celery.app.control.Control.add_consumer" title="celery.app.control.Control.add_consumer"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.add_consumer()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">myapp</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">add_consumer</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="n">reply</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">[{u&#39;worker1.local&#39;: {u&#39;ok&#39;: u&quot;already consuming from u&#39;foo&#39;&quot;}}]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myapp</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">add_consumer</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="n">reply</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;worker1.local&#39;</span><span class="p">])</span>
+<span class="go">[{u&#39;worker1.local&#39;: {u&#39;ok&#39;: u&quot;already consuming from u&#39;foo&#39;&quot;}}]</span>
+</pre></div>
+</div>
+<p>By now we have only used automatic queues, which is only using a queue name.
+If you need more control you can also specify the exchange, routing_key and
+other options:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">myapp</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">add_consumer</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">queue</span><span class="o">=</span><span class="s">&#39;baz&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">exchange</span><span class="o">=</span><span class="s">&#39;ex&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">exchange_type</span><span class="o">=</span><span class="s">&#39;topic&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">routing_key</span><span class="o">=</span><span class="s">&#39;media.*&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">options</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">... </span>        <span class="s">&#39;queue_durable&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s">&#39;exchange_durable&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">},</span>
+<span class="gp">... </span>    <span class="n">reply</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">destination</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;worker1.local&#39;</span><span class="p">,</span> <span class="s">&#39;worker2.local&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="queues-cancelling-consumers">
+<span id="std:control-cancel_consumer"></span><h3>Queues: Cancelling consumers<a class="headerlink" href="#queues-cancelling-consumers" title="Permalink to this headline">¶</a></h3>
+<p>You can cancel a consumer by queue name using the <a class="reference internal" href="#std:control-cancel_consumer"><tt class="xref std std-control docutils literal"><span class="pre">cancel_consumer</span></tt></a>
+control command.</p>
+<p>To force all workers in the cluster to cancel consuming from a queue
+you can use the <strong class="program">celery control</strong> program:</p>
+<div class="highlight-python"><pre>$ celery control cancel_consumer foo</pre>
+</div>
+<p>The <em class="xref std std-option">--destination</em> argument can be used to specify a worker, or a
+list of workers, to act on the command:</p>
+<div class="highlight-python"><pre>$ celery control cancel_consumer foo -d worker1.local</pre>
+</div>
+<p>You can also cancel consumers programmatically using the
+<a class="reference internal" href="../reference/celery.app.control.html#celery.app.control.Control.cancel_consumer" title="celery.app.control.Control.cancel_consumer"><tt class="xref py py-meth docutils literal"><span class="pre">celery.control.cancel_consumer()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">myapp</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">cancel_consumer</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="n">reply</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">[{u&#39;worker1.local&#39;: {u&#39;ok&#39;: u&quot;no longer consuming from u&#39;foo&#39;&quot;}}]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="queues-list-of-active-queues">
+<span id="std:control-active_queues"></span><h3>Queues: List of active queues<a class="headerlink" href="#queues-list-of-active-queues" title="Permalink to this headline">¶</a></h3>
+<p>You can get a list of queues that a worker consumes from by using
+the <a class="reference internal" href="#std:control-active_queues"><tt class="xref std std-control docutils literal"><span class="pre">active_queues</span></tt></a> control command:</p>
+<div class="highlight-python"><pre>$ celery inspect active_queues
+[...]</pre>
+</div>
+<p>Like all other remote control commands this also supports the
+<em class="xref std std-option">--destination</em> argument used to specify which workers should
+reply to the request:</p>
+<div class="highlight-python"><pre>$ celery inspect active_queues -d worker1.local
+[...]</pre>
+</div>
+<p>This can also be done programmatically by using the
+<tt class="xref py py-meth docutils literal"><span class="pre">celery.control.inspect.active_queues()</span></tt> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">myapp</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span><span class="o">.</span><span class="n">active_queues</span><span class="p">()</span>
+<span class="go">[...]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myapp</span><span class="o">.</span><span class="n">inspect</span><span class="p">([</span><span class="s">&#39;worker1.local&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">active_queues</span><span class="p">()</span>
+<span class="go">[...]</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="autoreloading">
-<span id="worker-autoreloading"></span><h2><a class="toc-backref" href="#id12">Autoreloading</a><a class="headerlink" href="#autoreloading" title="Permalink to this headline">¶</a></h2>
+<span id="worker-autoreloading"></span><h2><a class="toc-backref" href="#id13">Autoreloading</a><a class="headerlink" href="#autoreloading" title="Permalink to this headline">¶</a></h2>
 <p class="versionadded">
 <span class="versionmodified">New in version 2.5.</span></p>
 <p>pool support: <em>processes, eventlet, gevent, threads, solo</em></p>
@@ -512,7 +613,7 @@ for reloading.</p>
 </div>
 </div>
 <div class="section" id="inspecting-workers">
-<span id="worker-inspect"></span><h2><a class="toc-backref" href="#id13">Inspecting workers</a><a class="headerlink" href="#inspecting-workers" title="Permalink to this headline">¶</a></h2>
+<span id="worker-inspect"></span><h2><a class="toc-backref" href="#id14">Inspecting workers</a><a class="headerlink" href="#inspecting-workers" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="../reference/celery.app.control.html#celery.app.control.Control.inspect" title="celery.app.control.Control.inspect"><tt class="xref py py-class docutils literal"><span class="pre">celery.control.inspect</span></tt></a> lets you inspect running workers.  It
 uses remote control commands under the hood.</p>
 <p>You can also use the <tt class="docutils literal"><span class="pre">celery</span></tt> command to inspect workers,
@@ -593,7 +694,7 @@ executed.</p>
 </div>
 </div>
 <div class="section" id="additional-commands">
-<h2><a class="toc-backref" href="#id14">Additional Commands</a><a class="headerlink" href="#additional-commands" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id15">Additional Commands</a><a class="headerlink" href="#additional-commands" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="remote-shutdown">
 <span id="std:control-shutdown"></span><h3>Remote shutdown<a class="headerlink" href="#remote-shutdown" title="Permalink to this headline">¶</a></h3>
 <p>This command will gracefully shut down the worker remotely:</p>
@@ -634,7 +735,7 @@ a worker using <strong class="program">celery events</strong>/<strong class="pro
 </div>
 </div>
 <div class="section" id="writing-your-own-remote-control-commands">
-<span id="worker-custom-control-commands"></span><h2><a class="toc-backref" href="#id15">Writing your own remote control commands</a><a class="headerlink" href="#writing-your-own-remote-control-commands" title="Permalink to this headline">¶</a></h2>
+<span id="worker-custom-control-commands"></span><h2><a class="toc-backref" href="#id16">Writing your own remote control commands</a><a class="headerlink" href="#writing-your-own-remote-control-commands" title="Permalink to this headline">¶</a></h2>
 <p>Remote control commands are registered in the control panel and
 they take a single argument: the current
 <tt class="xref py py-class docutils literal"><span class="pre">ControlDispatch</span></tt> instance.

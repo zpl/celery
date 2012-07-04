@@ -75,12 +75,13 @@ we will demonstrate what Celery offers in more detail, including
 how to add Celery support for your application and library.</p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#using-celery-in-your-application" id="id2">Using Celery in your Application</a></li>
-<li><a class="reference internal" href="#canvas-designing-workflows" id="id3"><em>Canvas</em>: Designing Workflows</a></li>
+<li><a class="reference internal" href="#using-celery-in-your-application" id="id5">Using Celery in your Application</a></li>
+<li><a class="reference internal" href="#calling-tasks" id="id6">Calling Tasks</a></li>
+<li><a class="reference internal" href="#canvas-designing-workflows" id="id7"><em>Canvas</em>: Designing Workflows</a></li>
 </ul>
 </div>
 <div class="section" id="using-celery-in-your-application">
-<h2><a class="toc-backref" href="#id2">Using Celery in your Application</a><a class="headerlink" href="#using-celery-in-your-application" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">Using Celery in your Application</a><a class="headerlink" href="#using-celery-in-your-application" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="our-project">
 <span id="project-layout"></span><h3>Our Project<a class="headerlink" href="#our-project" title="Permalink to this headline">¶</a></h3>
 <p>Project layout:</p>
@@ -217,8 +218,410 @@ $ celery &#8211;app=proj.celery:celery</div></blockquote>
 </div>
 </div>
 </div>
+<div class="section" id="calling-tasks">
+<span id="id2"></span><h2><a class="toc-backref" href="#id6">Calling Tasks</a><a class="headerlink" href="#calling-tasks" title="Permalink to this headline">¶</a></h2>
+<p>You can call a task using the <tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This method is actually a star-argument shortcut to another method called
+<tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The latter enables you to specify execution options like the time to run
+(countdown), the queue it should be sent to and so on:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">queue</span><span class="o">=</span><span class="s">&#39;lopri&#39;</span><span class="p">,</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the above example the task will be sent to a queue named <tt class="docutils literal"><span class="pre">lopri</span></tt> and the
+task will execute, at the earliest, 10 seconds after the message was sent.</p>
+<p>Applying the task directly will execute the task in the current process,
+so that no message is sent:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p>These three methods - <tt class="xref py py-meth docutils literal"><span class="pre">delay()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt>, and applying
+(<tt class="docutils literal"><span class="pre">__call__</span></tt>), represents the Celery calling API, which are also used for
+subtasks.</p>
+<p>A more detailed overview of the Calling API can be found in the
+<a class="reference internal" href="../userguide/calling.html#guide-calling"><em>Calling User Guide</em></a>.</p>
+<p>Every task invocation will be given a unique identifier (an UUID), this
+is the task id.</p>
+<p>The <tt class="docutils literal"><span class="pre">delay</span></tt> and <tt class="docutils literal"><span class="pre">apply_async</span></tt> methods return an <a class="reference internal" href="../reference/celery.result.html#celery.result.AsyncResult" title="celery.result.AsyncResult"><tt class="xref py py-class docutils literal"><span class="pre">AsyncResult</span></tt></a>
+instance, which can be used to keep track of the tasks execution state.
+But for this you need to enable a <em class="xref std std-ref">result backend</em> so that
+the state can be stored somewhere.</p>
+<p>Results are disabled by default because of the fact that there is no result
+backend that suits every application, so to choose one you need to consider
+the drawbacks of each individual backend.  For many tasks
+keeping the return value isn&#8217;t even very useful, so it&#8217;s a sensible default to
+have.  Also note that result backends are not used for monitoring tasks and workers,
+for that we use dedicated event messages (see <a class="reference internal" href="../userguide/monitoring.html#guide-monitoring"><em>Monitoring and Management Guide</em></a>).</p>
+<p>If you have a result backend configured we can retrieve the return
+value of a task:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p>You can find the task&#8217;s id by looking at the <tt class="xref py py-attr docutils literal"><span class="pre">id</span></tt> attribute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">id</span>
+<span class="go">d6b3aea2-fb9b-4ebc-8da4-848818db9114</span>
+</pre></div>
+</div>
+<p>We can also inspect the exception and traceback if the task raised an
+exception, in fact <tt class="docutils literal"><span class="pre">result.get()</span></tt> will propagate any errors by default:</p>
+<div class="highlight-python"><pre>&gt;&gt;&gt; res = add.delay(2)
+&gt;&gt;&gt; res.get(timeout=1)
+Traceback (most recent call last):
+File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+File "/opt/devel/celery/celery/result.py", line 113, in get
+    interval=interval)
+File "/opt/devel/celery/celery/backends/amqp.py", line 138, in wait_for
+    raise self.exception_to_python(meta['result'])
+TypeError: add() takes exactly 2 arguments (1 given)</pre>
+</div>
+<p>If you don&#8217;t wish for the errors to propagate then you can disable that
+by passing the <tt class="docutils literal"><span class="pre">propagate</span></tt> argument:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">propagate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">TypeError(&#39;add() takes exactly 2 arguments (1 given)&#39;,)</span>
+</pre></div>
+</div>
+<p>In this case it will return the exception instance raised instead,
+and so to check whether the task succeeded or failed you will have to
+use the corresponding methods on the result instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">failed</span><span class="p">()</span>
+<span class="go">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">successful</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>So how does it know if the task has failed or not?  It can find out by looking
+at the tasks <em>state</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">state</span>
+<span class="go">&#39;FAILURE&#39;</span>
+</pre></div>
+</div>
+<p>A task can only be in a single state, but it can progress through several
+states. The stages of a typical task can be:</p>
+<div class="highlight-python"><pre>PENDING -&gt; STARTED -&gt; SUCCESS</pre>
+</div>
+<p>The started state is a special state that is only recorded if the
+<a class="reference internal" href="../configuration.html#std:setting-CELERY_TRACK_STARTED"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TRACK_STARTED</span></tt></a> setting is enabled, or if the
+<tt class="docutils literal"><span class="pre">&#64;task(track_started=True)</span></tt> option is set for the task.</p>
+<p>The pending state is actually not a recorded state, but rather
+the default state for any task id that is unknown, which you can see
+from this example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.celery</span> <span class="kn">import</span> <span class="n">celery</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">celery</span><span class="o">.</span><span class="n">AsyncResult</span><span class="p">(</span><span class="s">&#39;this-id-does-not-exist&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">state</span>
+<span class="go">&#39;PENDING&#39;</span>
+</pre></div>
+</div>
+<p>If the task is retried the stages can become even more complex,
+e.g, for a task that is retried two times the stages would be:</p>
+<div class="highlight-python"><pre>PENDING -&gt; STARTED -&gt; RETRY -&gt; STARTED -&gt; RETRY -&gt; STARTED -&gt; SUCCESS</pre>
+</div>
+<p>To read more about task states you should see the <a class="reference internal" href="../userguide/tasks.html#task-states"><em>States</em></a> section
+in the tasks user guide.</p>
+</div>
 <div class="section" id="canvas-designing-workflows">
-<span id="designing-workflows"></span><h2><a class="toc-backref" href="#id3"><em>Canvas</em>: Designing Workflows</a><a class="headerlink" href="#canvas-designing-workflows" title="Permalink to this headline">¶</a></h2>
+<span id="designing-workflows"></span><h2><a class="toc-backref" href="#id7"><em>Canvas</em>: Designing Workflows</a><a class="headerlink" href="#canvas-designing-workflows" title="Permalink to this headline">¶</a></h2>
+<p>We just learned how to call a task using the tasks <tt class="docutils literal"><span class="pre">delay</span></tt> method,
+and this is often all you need, but sometimes you may want to pass the
+signature of a task invocation to another process or as an argument to another
+function, for this Celery uses something called <em>subtasks</em>.</p>
+<p>A subtask wraps the arguments and execution options of a single task
+invocation in a way such that it can be passed to functions or even serialized
+and sent across the wire.</p>
+<p>You can create a subtask for the <tt class="docutils literal"><span class="pre">add</span></tt> task using the arguments <tt class="docutils literal"><span class="pre">(2,</span> <span class="pre">2)</span></tt>,
+and a countdown of 10 seconds like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">tasks.add(2, 2)</span>
+</pre></div>
+</div>
+<p>There is also a shortcut using star arguments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">tasks.add(2, 2)</span>
+</pre></div>
+</div>
+<p>and it also supports keyword arguments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">tasks.add(2, 2, debug=True)</span>
+</pre></div>
+</div>
+<p>From any subtask instance we can inspect the different fields:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">{</span><span class="s">&#39;debug&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">args</span>
+<span class="go">(2, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">kwargs</span>
+<span class="go">{&#39;debug&#39;: True}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">options</span>
+<span class="go">{&#39;countdown&#39;: 10}</span>
+</pre></div>
+</div>
+<div class="section" id="and-there-s-that-calling-api-again">
+<h3>And there&#8217;s that calling API again...<a class="headerlink" href="#and-there-s-that-calling-api-again" title="Permalink to this headline">¶</a></h3>
+<p>Subtask instances also support the calling API, which means you can use
+<tt class="docutils literal"><span class="pre">delay</span></tt>, <tt class="docutils literal"><span class="pre">apply_async</span></tt>, or <em>calling</em> it directly.</p>
+<p>But there is a difference in that the subtask may already have
+an argument signature specified.  The <tt class="docutils literal"><span class="pre">add</span></tt> task takes two arguments,
+so a subtask specifying two arguments would make a complete signature:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p>But, you can also make incomplete signatures to create what we call
+<em>partials</em>:</p>
+<div class="highlight-python"><pre># incomplete partial:  add(?, 2)
+&gt;&gt;&gt; s2 = add.s(2)</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">s2</span></tt> is now a partial subtask that needs another argument to be complete,
+and this can actually be resolved when calling the subtask:</p>
+<div class="highlight-python"><pre># resolves the partial: add(8, 2)
+&gt;&gt;&gt; res = s2.delay(8)
+&gt;&gt;&gt; res.get()
+10</pre>
+</div>
+<p>Here we added the argument 8, which was prepended to the existing argument 2
+forming a complete signature of <tt class="docutils literal"><span class="pre">add(8,</span> <span class="pre">2)</span></tt>.</p>
+<p>Keyword arguments can also be added later, these are then merged with any
+existing keyword arguments, but with new arguments taking precedence:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s3</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s3</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>   <span class="c"># debug is now False.</span>
+</pre></div>
+</div>
+<p>As stated subtasks supports the calling API, and with the introduction
+of partial arguments, which means that:</p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">subtask.apply_async(args=(),</span> <span class="pre">kwargs={},</span> <span class="pre">**options)</span></tt></p>
+<blockquote>
+<div><p>Calls the subtask with optional partial arguments and partial
+keyword arguments.  Also supports partial execution options.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">subtask.delay(*args,</span> <span class="pre">**kwargs)</span></tt></p>
+<p>Star argument version of <tt class="docutils literal"><span class="pre">apply_async</span></tt>.  Any arguments will be prepended
+to the arguments in the signature, and keyword arguments is merged with any
+existing keys.</p>
+</li>
+</ul>
+<p>So this all seems very useful, but what can we actually do with these?
+To get to that we must introduce the canvas primitives...</p>
+</div>
+<div class="section" id="the-primitives">
+<h3>The Primitives<a class="headerlink" href="#the-primitives" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">group</span></tt></p>
+<blockquote>
+<div><p>The group primitive is a subtask that takes a list of tasks that should
+be applied in parallel.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">chain</span></tt></p>
+<blockquote>
+<div><p>The chain primitive lets us link together subtasks so that one is called
+after the other, essentially forming a <em>chain</em> of callbacks.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">chord</span></tt></p>
+<blockquote>
+<div><p>A chord is just like a group but with a callback.  A group consists
+of a header group and a body,  where the body is a task that should execute
+after all of the tasks in the header is complete.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">map</span></tt></p>
+<blockquote>
+<div><p>The map primitive works like the built-in <tt class="docutils literal"><span class="pre">map</span></tt> function, but creates
+a temporary task where a list of arguments is applied to the task.
+E.g. <tt class="docutils literal"><span class="pre">task.map([1,</span> <span class="pre">2])</span></tt> results in a single task
+being called, appyling the arguments in order to the task function so
+that the result is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">task</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">task</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">starmap</span></tt></p>
+<blockquote>
+<div><p>Works exactly like map except the arguments are applied as <tt class="docutils literal"><span class="pre">*args</span></tt>.
+For example <tt class="docutils literal"><span class="pre">add.starmap([(2,</span> <span class="pre">2),</span> <span class="pre">(4,</span> <span class="pre">4)])</span></tt> results in a single
+task calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">chunks</span></tt></p>
+<blockquote>
+<div><p>Chunking splits a long list of arguments into parts, e.g the operation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>will create 10 tasks that apply 100 items each.</p>
+</div></blockquote>
+</li>
+</ul>
+<p>The primitives are also subtasks themselves, so that they can be combined
+in any number of ways to compose complex workflows.</p>
+<p>Here&#8217;s some examples:</p>
+<div class="highlight-python"><pre>- Simple chain</pre>
+</div>
+<blockquote>
+<div><p>Here&#8217;s a simple chain, the first task executes passing its return value
+to the next task in the chain, and so on.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># 2 + 2 + 4 + 8</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="mi">16</span>
+</pre></div>
+</div>
+<p>This can also be written using pipes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">16</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul>
+<li><p class="first">Immutable subtasks</p>
+<blockquote>
+<div><p>As we have learned signatures can be partial, so that arguments can be
+added to the existing arguments, but you may not always want that,
+for example if you don&#8217;t want the result of the previous task in a chain.</p>
+<p>In that case you can mark the subtask as immutable, so that the arguments
+cannot be changed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">immutable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There&#8217;s also an <tt class="docutils literal"><span class="pre">.si</span></tt> shortcut for this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we can create a chain of independent tasks instead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">16</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">8</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Simple group</p>
+<blockquote>
+<div><p>We can easily create a group of tasks to execute in parallel:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">[0, 2, 4, 6, 8, 10, 12, 14, 16, 18]</span>
+</pre></div>
+</div>
+<ul>
+<li><p class="first">For primitives <cite>.apply_async</cite> is special...</p>
+<blockquote>
+<div><p>as it will create a temporary task to apply the tasks in,
+for example by <em>applying the group</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="p">()</span>  <span class="c"># &lt;&lt; applying</span>
+</pre></div>
+</div>
+<p>the act of sending the messages for the tasks in the group
+will happen in the current process,
+but with <tt class="docutils literal"><span class="pre">.apply_async</span></tt> this happens in a temporary task
+instead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is useful because we can e.g. specify a time for the
+messages in the group to be called:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Simple chord</p>
+<blockquote>
+<div><p>The chord primitive enables us to add callback to be called when
+all of the tasks in a group has finished executing, which is often
+required for algorithms that aren&#8217;t embarrassingly parallel:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chord</span><span class="p">((</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">xsum</span><span class="o">.</span><span class="n">s</span><span class="p">())()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">90</span>
+</pre></div>
+</div>
+<p>The above example creates 10 task that all start in parallel,
+and when all of them is complete the return values is combined
+into a list and sent to the <tt class="docutils literal"><span class="pre">xsum</span></tt> task.</p>
+<p>The body of a chord can also be immutable, so that the return value
+of the group is not passed on to the callback:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chord</span><span class="p">((</span><span class="n">import_contact</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contacts</span><span class="p">),</span>
+<span class="gp">... </span>      <span class="n">notify_complete</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="n">import_id</span><span class="p">))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note the use of <tt class="docutils literal"><span class="pre">.si</span></tt> above which creates an immutable subtask.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Blow your mind by combining</p>
+<blockquote>
+<div><p>Chains can be partial too:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span> <span class="o">=</span> <span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+
+<span class="go"># (16 + 4) * 8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">c1</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">160</span>
+</pre></div>
+</div>
+<p>Which means that you can combine chains too:</p>
+<div class="highlight-python"><pre># ((4 + 16) * 2 + 4) * 8
+&gt;&gt;&gt; c2 = (add.s(4, 16) | mul.s(2) | (add.s(4) | mul.s(8)))
+&gt;&gt;&gt; c2
+tasks.add(16) | tasks.mul(2) | tasks.add(4) | tasks.mul(8)
+
+&gt;&gt;&gt; res = c2()
+&gt;&gt;&gt; res.get()
+352</pre>
+</div>
+<p>Chaining a group together with another task will automatically
+upgrade it to be a chord:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c3</span> <span class="o">=</span> <span class="p">(</span><span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">|</span> <span class="n">xsum</span><span class="o">.</span><span class="n">s</span><span class="p">()))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">c3</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">90</span>
+</pre></div>
+</div>
+<p>Groups and chords accepts partial arguments too, so in a chain
+the return value of the previous task is forwarded to all tasks in the group:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_user_workflow</span> <span class="o">=</span> <span class="p">(</span><span class="n">create_user</span><span class="o">.</span><span class="n">s</span><span class="p">()</span> <span class="o">|</span> <span class="n">group</span><span class="p">(</span>
+<span class="gp">... </span>                     <span class="n">import_contacts</span><span class="o">.</span><span class="n">s</span><span class="p">(),</span>
+<span class="gp">... </span>                     <span class="n">send_welcome_email</span><span class="o">.</span><span class="n">s</span><span class="p">()))</span>
+<span class="gp">... </span><span class="n">new_user_workflow</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;artv&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">first</span><span class="o">=</span><span class="s">&#39;Art&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">last</span><span class="o">=</span><span class="s">&#39;Vandelay&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">email</span><span class="o">=</span><span class="s">&#39;art@vandelay.com&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<p>Be sure to read more about workflows in the <a class="reference internal" href="../userguide/canvas.html#guide-canvas"><em>Canvas</em></a> user
+guide.</p>
+<p><a href="#id3"><span class="problematic" id="id4">**</span></a>This document is incomplete - and ends here :(*</p>
+</div>
 </div>
 </div>
 

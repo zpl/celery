@@ -1164,7 +1164,7 @@ added.</p>
 <li><p class="first">Automatic connection pool support.</p>
 <blockquote>
 <div><p>The pool is used by everything that requires a broker connection.  For
-example applying tasks, sending broadcast commands, retrieving results
+example calling tasks, sending broadcast commands, retrieving results
 with the AMQP result backend, and so on.</p>
 <p>The pool is disabled by default, but you can enable it by configuring the
 <a class="reference internal" href="configuration.html#std:setting-BROKER_POOL_LIMIT"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_POOL_LIMIT</span></tt></a> setting:</p>
@@ -2380,7 +2380,7 @@ track tasks before the workers receive them.</p>
 </div></blockquote>
 </li>
 <li><dl class="first docutils">
-<dt><cite>celerybeat</cite>: Now reuses the broker connection when applying</dt>
+<dt><cite>celerybeat</cite>: Now reuses the broker connection when calling</dt>
 <dd><p class="first last">scheduled tasks.</p>
 </dd>
 </dl>
@@ -6001,7 +6001,7 @@ by running `python manage.py celerystats</cite>. See
 restarted if it crashes). To use this start celeryd with the
 &#8211;supervised` option (or alternatively <cite>-S</cite>).</p>
 </li>
-<li><p class="first">views.apply: View applying a task. Example</p>
+<li><p class="first">views.apply: View calling a task. Example</p>
 <blockquote>
 <div><div class="highlight-python"><pre>http://e.com/celery/apply/task_name/arg1/arg2//?kwarg1=a&amp;kwarg2=b</pre>
 </div>

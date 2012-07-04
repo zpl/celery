@@ -166,7 +166,7 @@ task being executed:</p>
 <div class="highlight-python"><pre>[INFO/MainProcess] Task celery.task.http.HttpDispatchTask
         [f2cc8efc-2a14-40cd-85ad-f1c77c94beeb] processed: 100</pre>
 </div>
-<p>Since applying tasks can be done via HTTP using the
+<p>Since calling tasks can be done via HTTP using the
 <a class="reference external" href="http://django-celery.readthedocs.org/en/latest/reference/djcelery.views.html#djcelery.views.apply" title="(in django-celery v2.5)"><tt class="xref py py-func docutils literal"><span class="pre">djcelery.views.apply()</span></tt></a> view, calling tasks from other languages is easy.
 For an example service exposing tasks via HTTP you should have a look at
 <cite>examples/celery_http_gateway</cite> in the Celery distribution:

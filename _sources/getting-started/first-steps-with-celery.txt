@@ -1,9 +1,9 @@
 .. _tut-celery:
 .. _first-steps:
 
-========================
+=========================
  First Steps with Celery
-========================
+=========================
 
 Celery is a task queue with batteries included.
 It is easy to use so that you can get started without learning
@@ -42,44 +42,66 @@ comes in the form of a separate service called a *message broker*.
 
 There are several choices available, including:
 
-* :ref:`broker-rabbitmq`
+RabbitMQ
+--------
 
-`RabbitMQ`_ is feature-complete, stable, durable and easy to install.
+`RabbitMQ`_ is feature-complete, stable, durable and easy to install. It's an excellent choice for a production environment. Detailed information about using RabbitMQ:
+    
+    :ref:`broker-rabbitmq`
 
-If you are using Ubuntu or Debian you can install RabbitMQ by executing this
+.. _`RabbitMQ`: http://www.rabbitmq.com/
+
+If you are using Ubuntu or Debian install RabbitMQ by executing this
 command::
 
     $ sudo apt-get install rabbitmq-server
 
 When the command completes the broker is already running in the background,
-ready to move messages for you.
+ready to move messages for you: ``Starting rabbitmq-server: SUCCESS``.
 
-And don't worry if you're not running Ubuntu or Debian,
-you can go to this website to find similarly simple installation instructions
-for other platforms, including Microsoft Windows:
+And don't worry if you're not running Ubuntu or Debian, you can go to this
+website to find similarly simple installation instructions for other
+platforms, including Microsoft Windows:
 
     http://www.rabbitmq.com/download.html
 
-* :ref:`broker-redis`
+
+Redis
+-----
 
 `Redis`_ is also feature-complete, but is more susceptible to data loss in
-the event of abrupt termination or power failures.
+the event of abrupt termination or power failures. Detailed information about using Redis:
+    
+    :ref:`broker-redis`
 
-* :ref:`broker-sqlalchemy`
-* :ref:`broker-django`
+.. _`Redis`: http://redis.io/
+
+
+Using a database
+----------------
 
 Using a database as a message queue is not recommended, but can be sufficient
-for very small installations.  Celery can use the SQLAlchemy and Django ORM.
+for very small installations.  Your options include:
+    
+* :ref:`broker-sqlalchemy`
+* :ref:`broker-django`
+* :ref:`broker-mongodb`
 
-* and more.
+If you're already using a Django database for example, using it as your
+message broker can be convenient while developing even if you use a more
+robust system in production.
+                         
+Other brokers
+-------------
 
-In addition to the above, there are several other transport implementations
-to choose from, including :ref:`broker-mongodb`, :ref:`broker-django`,
-:ref:`broker-sqlalchemy`, and :ref:`Amazon SQS <broker-sqs>`.
+In addition to the above, there are other transport implementations
+to choose from, including
 
-.. _`RabbitMQ`: http://www.rabbitmq.com/
-.. _`Redis`: http://redis.io/
-.. _`Transport Comparison`: http://kombu.rtfd.org/transport-comparison
+* :ref:`Amazon SQS <broker-sqs>`
+
+See also `Transport Comparison`_.
+
+.. _`Transport Comparison`: http://kombu.readthedocs.org/en/latest/introduction.html#transport-comparison
 
 .. _celerytut-installation:
 
@@ -100,7 +122,7 @@ the entry-point for everything you want to do in Celery, like creating tasks and
 managing workers, it must be possible for other modules to import it.
 
 In this tutorial we will keep everything contained in a single module,
-but for larger projects you probably want to create
+but for larger projects you want to create
 a :ref:`dedicated module <project-layout>`.
 
 Let's create the file :file:`tasks.py`:
@@ -136,12 +158,12 @@ We defined a single task, called ``add``, which returns the sum of two numbers.
 Running the celery worker server
 ================================
 
-We can now run the worker by executing our program with the ``worker``
+We now run the worker by executing our program with the ``worker``
 argument::
 
     $ python tasks.py worker --loglevel=info
 
-In production you will probably want to run the worker in the
+In production you will want to run the worker in the
 background as a daemon.  To do this you need to use the tools provided
 by your platform, or something like `supervisord`_ (see :ref:`daemonizing`
 for more information).
@@ -170,10 +192,10 @@ method which gives greater control of the task execution (see
     >>> from tasks import add
     >>> add.delay(4, 4)
 
-The task should now be processed by the worker you started earlier,
+The task has now been processed by the worker you started earlier,
 and you can verify that by looking at the workers console output.
 
-Applying a task returns an :class:`~@AsyncResult` instance,
+Calling a task returns an :class:`~@AsyncResult` instance,
 which can be used to check the state of the task, wait for the task to finish
 or get its return value (or if the task failed, the exception and traceback).
 But this isn't enabled by default, and you have to configure Celery to
@@ -184,7 +206,7 @@ use a result backend, which is detailed in the next section.
 Keeping Results
 ===============
 
-If you want to keep track of the tasks state, Celery needs to store or send
+If you want to keep track of the tasks' states, Celery needs to store or send
 the states somewhere.  There are several
 built-in result backends to choose from: `SQLAlchemy`_/`Django`_ ORM,
 `Memcached`_, `Redis`_, AMQP (`RabbitMQ`_), and `MongoDB`_ -- or you can define your own.
@@ -210,7 +232,7 @@ To read more about result backends please see :ref:`task-result-backends`.
 
 Now with the result backend configured, let's call the task again.
 This time we'll hold on to the :class:`~@AsyncResult` instance returned
-when you apply a task::
+when you call a task::
 
     >>> result = add.delay(4, 4)
 

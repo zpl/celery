@@ -176,7 +176,7 @@ to be immutable:</p>
 </pre></div>
 </div>
 <p>Only the execution options can be set when a subtask is immutable,
-and it&#8217;s not possible to apply the subtask with partial args/kwargs.</p>
+so it&#8217;s not possible to call the subtask with partial args/kwargs.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>In this tutorial we use the prefix operator <cite>~</cite> to subtasks.
@@ -293,7 +293,7 @@ you chain tasks together:</p>
 <span class="go">proj.tasks.add(4, 4) | proj.tasks.mul(8)</span>
 </pre></div>
 </div>
-<p>Calling the chain will apply the tasks in the current process
+<p>Calling the chain will call the tasks in the current process
 and return the result of the last task in the chain:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
@@ -301,7 +301,7 @@ and return the result of the last task in the chain:</p>
 </pre></div>
 </div>
 <p>And calling <tt class="docutils literal"><span class="pre">apply_async</span></tt> will create a dedicated
-task so that the act of applying the chain happens
+task so that the act of calling the chain happens
 in a worker:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
@@ -371,7 +371,7 @@ or tell how many tasks are ready and so on:</p>
 </pre></div>
 </div>
 <p>However, if you call <tt class="docutils literal"><span class="pre">apply_async</span></tt> on the group it will
-send a special grouping task, so that the action of applying
+send a special grouping task, so that the action of calling
 the tasks happens in a worker instead of the current process:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
@@ -519,7 +519,7 @@ for other tasks</em></a>)</p>
 <div class="section" id="important-notes">
 <span id="chord-important-notes"></span><h3>Important Notes<a class="headerlink" href="#important-notes" title="Permalink to this headline">¶</a></h3>
 <p>By default the synchronization step is implemented by having a recurring task
-poll the completion of the taskset every second, applying the subtask when
+poll the completion of the taskset every second, calling the subtask when
 ready.</p>
 <p>Example implementation:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">unlock_chord</span><span class="p">(</span><span class="n">taskset</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -583,7 +583,7 @@ that calls the task for every element in a sequence.</p>
 </div>
 <p>Both <tt class="docutils literal"><span class="pre">map</span></tt> and <tt class="docutils literal"><span class="pre">starmap</span></tt> are subtasks, so they can be used as
 other subtasks and combined in groups etc., for example
-to apply the starmap after 10 seconds:</p>
+to call the starmap after 10 seconds:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -604,7 +604,7 @@ it may considerably increase performance.</p>
 </pre></div>
 </div>
 <p>As with <a class="reference internal" href="../reference/celery.html#celery.group" title="celery.group"><tt class="xref py py-class docutils literal"><span class="pre">group</span></tt></a> the act of <strong>calling</strong>
-the chunks will apply the tasks in the current process:</p>
+the chunks will call the tasks in the current process:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span> <span class="mi">10</span><span class="p">)()</span>

@@ -68,15 +68,17 @@
 </div>
     <div class="section" id="what-s-new-in-celery-2-6">
 <span id="whatsnew-2-6"></span><h1>What&#8217;s new in Celery 2.6<a class="headerlink" href="#what-s-new-in-celery-2-6" title="Permalink to this headline">¶</a></h1>
-<p>Celery aims to be a flexible and reliable, best-of-breed solution
-to process vast amounts of messages in a distributed fashion, while
-providing operations with the tools to maintain such a system.</p>
+<p>Celery is a simple, flexible and reliable distributed system to
+process vast amounts of messages, while providing operations with
+the tools required to maintain such a system.</p>
+<p>It&#8217;s a task queue with focus on real-time processing, while also
+supporting task scheduling.</p>
 <p>Celery has a large and diverse community of users and contributors,
 you should come join us <a class="reference internal" href="getting-started/resources.html#irc-channel"><em>on IRC</em></a>
 or <a class="reference internal" href="getting-started/resources.html#mailing-list"><em>our mailing-list</em></a>.</p>
-<p>To read more about Celery you should visit our <a class="reference external" href="http://celeryproject.org/">website</a>.</p>
+<p>To read more about Celery you should go read the <a class="reference internal" href="getting-started/introduction.html#intro"><em>introduction</em></a>.</p>
 <p>While this version is backward compatible with previous versions
-it is important that you read the following section.</p>
+it&#8217;s important that you read the following section.</p>
 <p>If you use Celery in combination with Django you must also
 read the <a class="reference external" href="http://bit.ly/djcelery-26-changelog">django-celery changelog</a> and upgrade to <a class="reference external" href="http://pypi.python.org/pypi/django-celery/">django-celery 2.6</a>.</p>
 <p>This version is officially supported on CPython 2.5, 2.6, 2.7, 3.2 and 3.3,
@@ -86,17 +88,33 @@ as well as PyPy and Jython.</p>
 <ul>
 <li><p class="first">A new and improved API, that is both simpler and more powerful.</p>
 <blockquote>
-<div><p>Everyone should read the new <a class="reference internal" href="getting-started/first-steps-with-celery.html#first-steps"><em>First Steps with Celery</em></a> tutorial,
+<div><p>Everyone must read the new <a class="reference internal" href="getting-started/first-steps-with-celery.html#first-steps"><em>First Steps with Celery</em></a> tutorial,
 and the new <a class="reference internal" href="getting-started/next-steps.html#next-steps"><em>Next Steps</em></a> tutorial.</p>
+<p>There&#8217;s no plans to deprecate the old API, so you don&#8217;t have
+to be in a hurry to port your applications to the new API,
+but it&#8217;s better to be prepared.</p>
 </div></blockquote>
-</li>
-<li><p class="first">Documentation rewritten and updated to use the new API</p>
 </li>
 <li><p class="first">The worker is now thread-less, giving great performance improvements.</p>
 </li>
 <li><p class="first">This is the last version to support Python 2.5</p>
 </li>
 <li><p class="first">The new &#8220;Canvas&#8221; makes it easy to define complex workflows.</p>
+<blockquote>
+<div><p>Ever wanted to chain tasks together? This is possible, but
+not just that, now you can even chain together groups and chords,
+or even combine multiple chains.</p>
+<p>Read more in the <a class="reference internal" href="userguide/canvas.html#guide-canvas"><em>Canvas</em></a> user guide.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Support for the new librabbitmq C client.</p>
+<blockquote>
+<div><p>Celery will automatically use the <tt class="xref py py-mod docutils literal"><span class="pre">librabbitmq</span></tt> module
+if installed, which is a very fast and memory-optimized
+replacement for the amqplib module.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Redis support is more reliable with improved ack emulation.</p>
 </li>
 </ul>
 </div>
@@ -293,9 +311,6 @@ a list).</p>
 <div class="section" id="group-chord-chain-are-now-subtasks">
 <h3><a class="toc-backref" href="#id7"><cite>group</cite>/<cite>chord</cite>/<cite>chain</cite> are now subtasks</a><a class="headerlink" href="#group-chord-chain-are-now-subtasks" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">The source code for these, including subtask, has been moved
-to new module celery.canvas.</p>
-</li>
 <li><p class="first">group is no longer an alias to TaskSet, but new alltogether,
 since it was very difficult to migrate the TaskSet class to become
 a subtask.</p>
@@ -434,7 +449,7 @@ commands.</p>
 <div class="section" id="immutable-subtasks">
 <h3><a class="toc-backref" href="#id10">Immutable subtasks</a><a class="headerlink" href="#immutable-subtasks" title="Permalink to this headline">¶</a></h3>
 <p><tt class="docutils literal"><span class="pre">subtask</span></tt>&#8216;s can now be immutable, which means that the arguments
-will not be modified when applying callbacks:</p>
+will not be modified when calling callbacks:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">clear_static_electricity</span><span class="o">.</span><span class="n">si</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -521,7 +536,7 @@ by setting the <tt class="docutils literal"><span class="pre">shared</span></tt>
 by default, it will first be bound (and configured) when
 a concrete subclass is created.</p>
 <p>This means that you can safely import and make task base classes,
-without also initializing the default app environment:</p>
+without also initializing the app environment:</p>
 <div class="highlight-python"><pre>from celery.task import Task
 
 class DebugTask(Task):
@@ -683,7 +698,7 @@ annotated methods end up being bound.</p>
 </li>
 <li><p class="first"><tt class="docutils literal"><span class="pre">xmap(task,</span> <span class="pre">sequence)</span></tt> and <tt class="docutils literal"><span class="pre">xstarmap(task,</span> <span class="pre">sequence)</span></tt></p>
 <blockquote>
-<div><p>Returns a list of the results applying the task to every item
+<div><p>Returns a list of the results applying the task function to every item
 in the sequence.</p>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">xstarmap</span>
