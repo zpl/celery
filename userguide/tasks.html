@@ -543,7 +543,7 @@ the state can be cached (it can if the task is ready).</p>
 <span id="task-result-backends"></span><h3>Result Backends<a class="headerlink" href="#result-backends" title="Permalink to this headline">¶</a></h3>
 <p>Celery needs to store or send the states somewhere.  There are several
 built-in backends to choose from: SQLAlchemy/Django ORM, Memcached, Redis,
-AMQP, MongoDB, Tokyo Tyrant and Redis &#8211; or you can define your own.</p>
+RabbitMQ (amqp), MongoDB, Tokyo Tyrant and Redis &#8211; or you can define your own.</p>
 <p>No backend works well for every use case.
 You should read about the strengths and weaknesses of each backend, and choose
 the most appropriate for your needs.</p>
@@ -551,18 +551,18 @@ the most appropriate for your needs.</p>
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="../configuration.html#conf-result-backend"><em>Task result backend settings</em></a></p>
 </div>
-<div class="section" id="amqp-result-backend">
-<h4>AMQP Result Backend<a class="headerlink" href="#amqp-result-backend" title="Permalink to this headline">¶</a></h4>
-<p>The AMQP result backend is special as it does not actually <em>store</em> the states,
-but rather sends them as messages.  This is an important difference as it
+<div class="section" id="rabbitmq-result-backend">
+<h4>RabbitMQ Result Backend<a class="headerlink" href="#rabbitmq-result-backend" title="Permalink to this headline">¶</a></h4>
+<p>The RabbitMQ result backend (amqp) is special as it does not actually <em>store</em>
+the states, but rather sends them as messages.  This is an important difference as it
 means that a result <em>can only be retrieved once</em>; If you have two processes
 waiting for the same result, one of the processes will never receive the
 result!</p>
 <p>Even with that limitation, it is an excellent choice if you need to receive
 state changes in real-time.  Using messaging means the client does not have to
 poll for new states.</p>
-<p>There are several other pitfalls you should be aware of when using the AMQP
-backend:</p>
+<p>There are several other pitfalls you should be aware of when using the
+RabbitMQ result backend:</p>
 <ul class="simple">
 <li>Every new task creates a new queue on the server, with thousands of tasks
 the broker may be overloaded with queues and this will affect performance in
@@ -575,7 +575,7 @@ descriptors your OS allows.</li>
 expire after 1 day: if you have a very busy cluster you should lower
 this value.</li>
 </ul>
-<p>For a list of options supported by the AMQP result backend, please see
+<p>For a list of options supported by the RabbitMQ result backend, please see
 <a class="reference internal" href="../configuration.html#conf-amqp-result-backend"><em>AMQP backend settings</em></a>.</p>
 </div>
 <div class="section" id="database-result-backend">

@@ -108,6 +108,16 @@ recommended.</td></tr>
 </div>
 <div class="section" id="general-settings">
 <span id="optimizing-general-settings"></span><h2>General Settings<a class="headerlink" href="#general-settings" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="librabbitmq">
+<span id="optimizing-librabbitmq"></span><h3>librabbitmq<a class="headerlink" href="#librabbitmq" title="Permalink to this headline">¶</a></h3>
+<p>If you&#8217;re using RabbitMQ (AMQP) as the broker then you can install the
+<tt class="xref py py-mod docutils literal"><span class="pre">librabbitmq</span></tt> module to use an optimized client written in C:</p>
+<div class="highlight-python"><pre>$ pip install librabbitmq</pre>
+</div>
+<p>The &#8216;amqp&#8217; transport will automatically use the librabbitmq module if it&#8217;s
+installed, or you can also specify the transport you want directly by using
+the <tt class="docutils literal"><span class="pre">amqplib://</span></tt> or <tt class="docutils literal"><span class="pre">librabbitmq://</span></tt> prefixes.</p>
+</div>
 <div class="section" id="broker-connection-pools">
 <span id="optimizing-connection-pools"></span><h3>Broker Connection Pools<a class="headerlink" href="#broker-connection-pools" title="Permalink to this headline">¶</a></h3>
 <p>The broker connection pool is enabled by default since version 2.5.</p>

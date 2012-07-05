@@ -349,25 +349,10 @@ and a countdown of 10 seconds like this:</p>
 <span class="go">tasks.add(2, 2)</span>
 </pre></div>
 </div>
-<p>and it also supports keyword arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="go">tasks.add(2, 2, debug=True)</span>
-</pre></div>
-</div>
-<p>From any subtask instance we can inspect the different fields:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">{</span><span class="s">&#39;debug&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span> <span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">args</span>
-<span class="go">(2, 2)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">kwargs</span>
-<span class="go">{&#39;debug&#39;: True}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">options</span>
-<span class="go">{&#39;countdown&#39;: 10}</span>
-</pre></div>
-</div>
 <div class="section" id="and-there-s-that-calling-api-again">
 <h3>And there&#8217;s that calling API again...<a class="headerlink" href="#and-there-s-that-calling-api-again" title="Permalink to this headline">¶</a></h3>
-<p>Subtask instances also supports the calling API, which means you can use
-<tt class="docutils literal"><span class="pre">delay</span></tt>, <tt class="docutils literal"><span class="pre">apply_async</span></tt>, or <em>calling</em> it directly.</p>
+<p>Subtask instances also supports the calling API, which means that they
+have the <tt class="docutils literal"><span class="pre">delay</span></tt> and <tt class="docutils literal"><span class="pre">apply_async</span></tt> methods.</p>
 <p>But there is a difference in that the subtask may already have
 an argument signature specified.  The <tt class="docutils literal"><span class="pre">add</span></tt> task takes two arguments,
 so a subtask specifying two arguments would make a complete signature:</p>
@@ -416,205 +401,23 @@ To get to that we must introduce the canvas primitives...</p>
 </div>
 <div class="section" id="the-primitives">
 <h3>The Primitives<a class="headerlink" href="#the-primitives" title="Permalink to this headline">¶</a></h3>
-<ul>
-<li><p class="first"><tt class="docutils literal"><span class="pre">group</span></tt></p>
-<blockquote>
-<div><p>The group primitive is a subtask that takes a list of tasks that should
-be applied in parallel.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">chain</span></tt></p>
-<blockquote>
-<div><p>The chain primitive lets us link together subtasks so that one is called
-after the other, essentially forming a <em>chain</em> of callbacks.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">chord</span></tt></p>
-<blockquote>
-<div><p>A chord is just like a group but with a callback.  A group consists
-of a header group and a body,  where the body is a task that should execute
-after all of the tasks in the header is complete.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">map</span></tt></p>
-<blockquote>
-<div><p>The map primitive works like the built-in <tt class="docutils literal"><span class="pre">map</span></tt> function, but creates
-a temporary task where a list of arguments is applied to the task.
-E.g. <tt class="docutils literal"><span class="pre">task.map([1,</span> <span class="pre">2])</span></tt> results in a single task
-being called, appyling the arguments in order to the task function so
-that the result is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">task</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">task</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">starmap</span></tt></p>
-<blockquote>
-<div><p>Works exactly like map except the arguments are applied as <tt class="docutils literal"><span class="pre">*args</span></tt>.
-For example <tt class="docutils literal"><span class="pre">add.starmap([(2,</span> <span class="pre">2),</span> <span class="pre">(4,</span> <span class="pre">4)])</span></tt> results in a single
-task calling:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">chunks</span></tt></p>
-<blockquote>
-<div><p>Chunking splits a long list of arguments into parts, e.g the operation:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">chunks</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="mi">10</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>will create 10 tasks that apply 100 items each.</p>
-</div></blockquote>
-</li>
+<div class="topic">
+<p class="topic-title first">overview of primitives</p>
+<table class="hlist"><tr><td><ul class="simple">
+<li><a class="reference internal" href="../userguide/canvas.html#canvas-group"><em>group</em></a></li>
+<li><a class="reference internal" href="../userguide/canvas.html#canvas-chain"><em>chain</em></a></li>
+<li><a class="reference internal" href="../userguide/canvas.html#canvas-chord"><em>chord</em></a></li>
 </ul>
+</td><td><ul class="simple">
+<li><a class="reference internal" href="../userguide/canvas.html#canvas-map"><em>map</em></a></li>
+<li><a class="reference internal" href="../userguide/canvas.html#canvas-map"><em>starmap</em></a></li>
+<li><a class="reference internal" href="../userguide/canvas.html#canvas-chunks"><em>chunks</em></a></li>
+</ul>
+</td></tr></table>
+</div>
 <p>The primitives are also subtasks themselves, so that they can be combined
 in any number of ways to compose complex workflows.</p>
 <p>Here&#8217;s some examples:</p>
-<div class="highlight-python"><pre>- Simple chain</pre>
-</div>
-<blockquote>
-<div><p>Here&#8217;s a simple chain, the first task executes passing its return value
-to the next task in the chain, and so on.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># 2 + 2 + 4 + 8</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="mi">16</span>
-</pre></div>
-</div>
-<p>This can also be written using pipes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="go">16</span>
-</pre></div>
-</div>
-</div></blockquote>
-<ul>
-<li><p class="first">Immutable subtasks</p>
-<blockquote>
-<div><p>As we have learned signatures can be partial, so that arguments can be
-added to the existing arguments, but you may not always want that,
-for example if you don&#8217;t want the result of the previous task in a chain.</p>
-<p>In that case you can mark the subtask as immutable, so that the arguments
-cannot be changed:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">immutable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>There&#8217;s also an <tt class="docutils literal"><span class="pre">.si</span></tt> shortcut for this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Now we can create a chain of independent tasks instead:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="go">16</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="go">8</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="go">4</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p class="first">Simple group</p>
-<blockquote>
-<div><p>We can easily create a group of tasks to execute in parallel:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">[0, 2, 4, 6, 8, 10, 12, 14, 16, 18]</span>
-</pre></div>
-</div>
-<ul>
-<li><p class="first">For primitives <cite>.apply_async</cite> is special...</p>
-<blockquote>
-<div><p>as it will create a temporary task to apply the tasks in,
-for example by <em>applying the group</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="p">()</span>  <span class="c"># &lt;&lt; applying</span>
-</pre></div>
-</div>
-<p>the act of sending the messages for the tasks in the group
-will happen in the current process,
-but with <tt class="docutils literal"><span class="pre">.apply_async</span></tt> this happens in a temporary task
-instead:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>This is useful because we can e.g. specify a time for the
-messages in the group to be called:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-</ul>
-</div></blockquote>
-</li>
-<li><p class="first">Simple chord</p>
-<blockquote>
-<div><p>The chord primitive enables us to add callback to be called when
-all of the tasks in a group has finished executing, which is often
-required for algorithms that aren&#8217;t embarrassingly parallel:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chord</span><span class="p">((</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">xsum</span><span class="o">.</span><span class="n">s</span><span class="p">())()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="go">90</span>
-</pre></div>
-</div>
-<p>The above example creates 10 task that all start in parallel,
-and when all of them is complete the return values is combined
-into a list and sent to the <tt class="docutils literal"><span class="pre">xsum</span></tt> task.</p>
-<p>The body of a chord can also be immutable, so that the return value
-of the group is not passed on to the callback:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chord</span><span class="p">((</span><span class="n">import_contact</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contacts</span><span class="p">),</span>
-<span class="gp">... </span>      <span class="n">notify_complete</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="n">import_id</span><span class="p">))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Note the use of <tt class="docutils literal"><span class="pre">.si</span></tt> above which creates an immutable subtask.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Blow your mind by combining</p>
-<blockquote>
-<div><p>Chains can be partial too:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span> <span class="o">=</span> <span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
-
-<span class="go"># (16 + 4) * 8</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">c1</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="go">160</span>
-</pre></div>
-</div>
-<p>Which means that you can combine chains:</p>
-<div class="highlight-python"><pre># ((4 + 16) * 2 + 4) * 8
-&gt;&gt;&gt; c2 = (add.s(4, 16) | mul.s(2) | (add.s(4) | mul.s(8)))
-
-&gt;&gt;&gt; res = c2()
-&gt;&gt;&gt; res.get()
-352</pre>
-</div>
-<p>Chaining a group together with another task will automatically
-upgrade it to be a chord:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c3</span> <span class="o">=</span> <span class="p">(</span><span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">|</span> <span class="n">xsum</span><span class="o">.</span><span class="n">s</span><span class="p">()))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">c3</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="go">90</span>
-</pre></div>
-</div>
-<p>Groups and chords accepts partial arguments too, so in a chain
-the return value of the previous task is forwarded to all tasks in the group:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_user_workflow</span> <span class="o">=</span> <span class="p">(</span><span class="n">create_user</span><span class="o">.</span><span class="n">s</span><span class="p">()</span> <span class="o">|</span> <span class="n">group</span><span class="p">(</span>
-<span class="gp">... </span>                     <span class="n">import_contacts</span><span class="o">.</span><span class="n">s</span><span class="p">(),</span>
-<span class="gp">... </span>                     <span class="n">send_welcome_email</span><span class="o">.</span><span class="n">s</span><span class="p">()))</span>
-<span class="gp">... </span><span class="n">new_user_workflow</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;artv&#39;</span><span class="p">,</span>
-<span class="gp">... </span>                        <span class="n">first</span><span class="o">=</span><span class="s">&#39;Art&#39;</span><span class="p">,</span>
-<span class="gp">... </span>                        <span class="n">last</span><span class="o">=</span><span class="s">&#39;Vandelay&#39;</span><span class="p">,</span>
-<span class="gp">... </span>                        <span class="n">email</span><span class="o">=</span><span class="s">&#39;art@vandelay.com&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-</ul>
 <p>Be sure to read more about workflows in the <a class="reference internal" href="../userguide/canvas.html#guide-canvas"><em>Canvas</em></a> user
 guide.</p>
 <p><strong>This document is incomplete - and ends here :(</strong></p>

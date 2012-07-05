@@ -180,7 +180,7 @@ operation times out.</li>
 <li><strong>propagate</strong> &#8211; Re-raise exception if the task failed.</li>
 <li><strong>interval</strong> &#8211; Time to wait (in seconds) before retrying to
 retrieve the result.  Note that this does not have any effect
-when using the AMQP result store backend, as it does not
+when using the amqp result store backend, as it does not
 use polling.</li>
 </ul>
 </td>
@@ -356,7 +356,7 @@ operation times out.</li>
 <li><strong>propagate</strong> &#8211; Re-raise exception if the task failed.</li>
 <li><strong>interval</strong> &#8211; Time to wait (in seconds) before retrying to
 retrieve the result.  Note that this does not have any effect
-when using the AMQP result store backend, as it does not
+when using the amqp result store backend, as it does not
 use polling.</li>
 </ul>
 </td>
@@ -422,6 +422,11 @@ be re-raised.</p>
 <tt class="descname">status</tt><a class="headerlink" href="#celery.result.EagerResult.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>The tasks state.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="celery.result.EagerResult.supports_native_join">
+<tt class="descname">supports_native_join</tt><a class="headerlink" href="#celery.result.EagerResult.supports_native_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.result.EagerResult.traceback">
@@ -593,7 +598,7 @@ current result backend.</p>
 <span class="versionmodified">New in version 2.2.</span></p>
 <p>Note that this does not support collecting the results
 for different task types using different backends.</p>
-<p>This is currently only supported by the AMQP, Redis and cache
+<p>This is currently only supported by the amqp, Redis and cache
 result backends.</p>
 </dd></dl>
 
@@ -639,7 +644,7 @@ the operation times out.</li>
 exception will be re-raised.</li>
 <li><strong>interval</strong> &#8211; Time to wait (in seconds) before retrying to
 retrieve a result from the set.  Note that this
-does not have any effect when using the AMQP
+does not have any effect when using the amqp
 result store backend, as it does not use polling.</li>
 </ul>
 </td>
@@ -662,7 +667,7 @@ seconds.</p>
 <span class="versionmodified">New in version 2.2.</span></p>
 <p>Note that this does not support collecting the results
 for different task types using different backends.</p>
-<p>This is currently only supported by the AMQP, Redis and cache
+<p>This is currently only supported by the amqp, Redis and cache
 result backends.</p>
 </dd></dl>
 

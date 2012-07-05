@@ -85,7 +85,7 @@ as well as PyPy and Jython.</p>
 <ul class="simple">
 <li><a class="reference internal" href="#important-notes" id="id2">Important Notes</a><ul>
 <li><a class="reference internal" href="#broker-connection-pool-now-enabled-by-default" id="id3">Broker connection pool now enabled by default</a></li>
-<li><a class="reference internal" href="#amqp-result-backend-exchange-is-no-longer-auto-delete" id="id4">AMQP Result Backend: Exchange is no longer <em>auto delete</em></a></li>
+<li><a class="reference internal" href="#rabbit-result-backend-exchange-is-no-longer-auto-delete" id="id4">Rabbit Result Backend: Exchange is no longer <em>auto delete</em></a></li>
 <li><a class="reference internal" href="#solution-for-hanging-workers-but-must-be-manually-enabled" id="id5">Solution for hanging workers (but must be manually enabled)</a></li>
 </ul>
 </li>
@@ -120,10 +120,11 @@ this default or the default retry policy see
 <a class="reference internal" href="configuration.html#std:setting-CELERY_TASK_PUBLISH_RETRY"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_PUBLISH_RETRY</span></tt></a> and
 <a class="reference internal" href="configuration.html#std:setting-CELERY_TASK_PUBLISH_RETRY_POLICY"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TASK_PUBLISH_RETRY_POLICY</span></tt></a>.</p>
 </div>
-<div class="section" id="amqp-result-backend-exchange-is-no-longer-auto-delete">
-<h3><a class="toc-backref" href="#id4">AMQP Result Backend: Exchange is no longer <em>auto delete</em></a><a class="headerlink" href="#amqp-result-backend-exchange-is-no-longer-auto-delete" title="Permalink to this headline">¶</a></h3>
-<p>The exchange used for results used to have the <em>auto_delete</em> flag set,
-that could result in a race condition leading to an annoying warning.</p>
+<div class="section" id="rabbit-result-backend-exchange-is-no-longer-auto-delete">
+<h3><a class="toc-backref" href="#id4">Rabbit Result Backend: Exchange is no longer <em>auto delete</em></a><a class="headerlink" href="#rabbit-result-backend-exchange-is-no-longer-auto-delete" title="Permalink to this headline">¶</a></h3>
+<p>The exchange used for results in the Rabbit (AMQP) result backend
+used to have the <em>auto_delete</em> flag set, which could result in a
+race condition leading to an annoying warning.</p>
 <div class="admonition-for-rabbitmq-users admonition">
 <p class="first admonition-title">For RabbitMQ users</p>
 <p>Old exchanges created with the <em>auto_delete</em> flag enabled has
@@ -367,9 +368,9 @@ chords.</p>
 <p>Contributed by Dan McGee.</p>
 </div></blockquote>
 </li>
-<li><p class="first">Adds Chord support for the AMQP backend</p>
+<li><p class="first">Adds Chord support for the Rabbit result backend (amqp)</p>
 <blockquote>
-<div><p>The AMQP backend can now use the fallback chord solution.</p>
+<div><p>The Rabbit result backend can now use the fallback chord solution.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Sending <tt class="xref std std-sig docutils literal"><span class="pre">QUIT</span></tt> to celeryd will now cause it cold terminate.</p>
