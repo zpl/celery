@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.task.trace &mdash; Celery 3.0.0rc5 documentation</title>
+    <title>celery.task.trace &mdash; Celery 3.1.0a1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.0.0rc5',
+        VERSION:     '3.1.0a1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.0.0rc5 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.app.abstract" href="celery.app.abstract.html" />
     <link rel="prev" title="celery.backends.cassandra" href="celery.backends.cassandra.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.backends.cassandra.html" title="celery.backends.cassandra"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -115,7 +115,35 @@ errors are recorded, handlers are applied and so on.</p>
 <dl class="function">
 <dt id="celery.task.trace.build_tracer">
 <tt class="descclassname">celery.task.trace.</tt><tt class="descname">build_tracer</tt><big>(</big><em>name</em>, <em>task</em>, <em>loader=None</em>, <em>hostname=None</em>, <em>store_errors=True</em>, <em>Info=&lt;class 'celery.task.trace.TraceInfo'&gt;</em>, <em>eager=False</em>, <em>propagate=False</em><big>)</big><a class="headerlink" href="#celery.task.trace.build_tracer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Builts a function that tracing the tasks execution; catches all
+exceptions, and saves the state and result of the task execution
+to the result backend.</p>
+<p>If the call was successful, it saves the result to the task result
+backend, and sets the task status to <cite>&#8220;SUCCESS&#8221;</cite>.</p>
+<p>If the call raises <a class="reference internal" href="../../reference/celery.exceptions.html#celery.exceptions.RetryTaskError" title="celery.exceptions.RetryTaskError"><tt class="xref py py-exc docutils literal"><span class="pre">RetryTaskError</span></tt></a>, it extracts
+the original exception, uses that as the result and sets the task status
+to <cite>&#8220;RETRY&#8221;</cite>.</p>
+<p>If the call results in an exception, it saves the exception as the task
+result, and sets the task status to <cite>&#8220;FAILURE&#8221;</cite>.</p>
+<p>Returns a function that takes the following arguments:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param uuid:</th><td class="field-body">The unique id of the task.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param args:</th><td class="field-body">List of positional args to pass on to the function.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param kwargs:</th><td class="field-body">Keyword arguments mapping to pass on to the function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">keyword request:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Request dict.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
 
 <dl class="function">
 <dt id="celery.task.trace.eager_trace_task">
@@ -214,7 +242,7 @@ defines <tt class="docutils literal"><span class="pre">attr</span></tt> (excludi
         <li class="right" >
           <a href="celery.backends.cassandra.html" title="celery.backends.cassandra"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

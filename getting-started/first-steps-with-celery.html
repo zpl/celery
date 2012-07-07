@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>First Steps with Celery &mdash; Celery 3.0.0rc5 documentation</title>
+    <title>First Steps with Celery &mdash; Celery 3.1.0a1 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.0.0rc5',
+        VERSION:     '3.1.0a1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.0.0rc5 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
     <link rel="up" title="Getting Started" href="index.html" />
     <link rel="next" title="Next Steps" href="next-steps.html" />
     <link rel="prev" title="Using Beanstalk" href="brokers/beanstalk.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="brokers/beanstalk.html" title="Using Beanstalk"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
       </ul>
     </div>  
@@ -117,7 +117,9 @@ comes in the form of a separate service called a <em>message broker</em>.</p>
 <p>There are several choices available, including:</p>
 <div class="section" id="rabbitmq">
 <h3><a class="toc-backref" href="#id4">RabbitMQ</a><a class="headerlink" href="#rabbitmq" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="http://www.rabbitmq.com/">RabbitMQ</a> is feature-complete, stable, durable and easy to install. It&#8217;s an excellent choice for a production environment. Detailed information about using RabbitMQ:</p>
+<p><a class="reference external" href="http://www.rabbitmq.com/">RabbitMQ</a> is feature-complete, stable, durable and easy to install.
+It&#8217;s an excellent choice for a production environment.
+Detailed information about using RabbitMQ with Celery:</p>
 <blockquote>
 <div><a class="reference internal" href="brokers/rabbitmq.html#broker-rabbitmq"><em>Using RabbitMQ</em></a></div></blockquote>
 <p>If you are using Ubuntu or Debian install RabbitMQ by executing this
@@ -146,7 +148,6 @@ for very small installations.  Your options include:</p>
 <ul class="simple">
 <li><a class="reference internal" href="brokers/sqlalchemy.html#broker-sqlalchemy"><em>Using SQLAlchemy</em></a></li>
 <li><a class="reference internal" href="brokers/django.html#broker-django"><em>Using the Django Database</em></a></li>
-<li><a class="reference internal" href="brokers/mongodb.html#broker-mongodb"><em>Using MongoDB</em></a></li>
 </ul>
 <p>If you&#8217;re already using a Django database for example, using it as your
 message broker can be convenient while developing even if you use a more
@@ -158,6 +159,7 @@ robust system in production.</p>
 to choose from, including</p>
 <ul class="simple">
 <li><a class="reference internal" href="brokers/sqs.html#broker-sqs"><em>Amazon SQS</em></a></li>
+<li><a class="reference internal" href="brokers/mongodb.html#broker-mongodb"><em>Using MongoDB</em></a></li>
 </ul>
 <p>See also <a class="reference external" href="http://kombu.readthedocs.org/en/latest/introduction.html#transport-comparison">Transport Comparison</a>.</p>
 </div>
@@ -183,7 +185,7 @@ a <a class="reference internal" href="next-steps.html#project-layout"><em>dedica
 
 <span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&#39;tasks&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&#39;amqp://guest@localhost//&#39;</span><span class="p">)</span>
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
@@ -314,10 +316,10 @@ task payloads by changing the <a class="reference internal" href="../configurati
 <p>For larger projects using a dedicated configuration module is useful,
 in fact you are discouraged from hard coding
 periodic task intervals and task routing options, as it is much
-better to keep this in a centralized location, and especially for libaries
+better to keep this in a centralized location, and especially for libraries
 it makes it possible for users to control how they want your tasks to behave,
-you can also imagine your sysadmin making simple changes to the configuration
-in the event of system trobule.</p>
+you can also imagine your SysAdmin making simple changes to the configuration
+in the event of system trouble.</p>
 <p>You can tell your Celery instance to use a configuration module,
 by calling the <a class="reference internal" href="../reference/celery.html#celery.Celery.config_from_object" title="celery.Celery.config_from_object"><tt class="xref py py-meth docutils literal"><span class="pre">config_from_object()</span></tt></a> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s">&#39;celeryconfig&#39;</span><span class="p">)</span>
@@ -337,7 +339,7 @@ current directory or on the Python path, it could look like this:</p>
 <span class="n">CELERY_ENABLE_UTC</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 </div>
-<p>To verify that your configuration file works properly, and does&#8217;t
+<p>To verify that your configuration file works properly, and doesn&#8217;t
 contain any syntax errors, you can try to import it:</p>
 <div class="highlight-python"><pre>$ python -m celeryconfig</pre>
 </div>
@@ -430,7 +432,7 @@ can study the <a class="reference internal" href="../userguide/index.html#guide"
         <li class="right" >
           <a href="brokers/beanstalk.html" title="Using Beanstalk"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="index.html" >Getting Started</a> &raquo;</li> 
       </ul>
     </div>

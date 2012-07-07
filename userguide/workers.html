@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Workers Guide &mdash; Celery 3.0.0rc5 documentation</title>
+    <title>Workers Guide &mdash; Celery 3.1.0a1 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.0.0rc5',
+        VERSION:     '3.1.0a1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.0.0rc5 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
     <link rel="up" title="User Guide" href="index.html" />
     <link rel="next" title="Periodic Tasks" href="periodic-tasks.html" />
     <link rel="prev" title="Canvas: Designing Workflows" href="canvas.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="canvas.html" title="Canvas: Designing Workflows"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">User Guide</a> &raquo;</li> 
       </ul>
     </div>  
@@ -221,7 +221,7 @@ to the number of destination hosts.</p>
 <p class="last">The solo and threads pool supports remote control commands,
 but any task executing will block any waiting control command,
 so it is of limited use if the worker is very busy.  In that
-case you must increase the timeout waitin for replies in the client.</p>
+case you must increase the timeout waiting for replies in the client.</p>
 </div>
 <div class="section" id="the-broadcast-function">
 <span id="worker-broadcast-fun"></span><h3>The <a class="reference internal" href="../reference/celery.app.control.html#celery.app.control.Control.broadcast" title="celery.app.control.Control.broadcast"><tt class="xref py py-meth docutils literal"><span class="pre">broadcast()</span></tt></a> function.<a class="headerlink" href="#the-broadcast-function" title="Permalink to this headline">¶</a></h3>
@@ -292,7 +292,7 @@ specify a file for these to be stored in, either by using the <cite>&#8211;state
 argument to <strong class="program">celery worker</strong> or the <a class="reference internal" href="../configuration.html#std:setting-CELERYD_STATE_DB"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_STATE_DB</span></tt></a>
 setting.</p>
 <p>Note that remote control commands must be working for revokes to work.
-Remote control commands are only supported by the amqp, redis and mongodb
+Remote control commands are only supported by the RabbitMQ (amqp), Redis and MongDB
 transports at this point.</p>
 </div>
 </div>
@@ -405,7 +405,7 @@ based on load:</p>
 </li>
 </ul>
 <p>It&#8217;s enabled by the <em class="xref std std-option">--autoscale</em> option, which needs two
-numbers: the maximum and minumum number of pool processes:</p>
+numbers: the maximum and minimum number of pool processes:</p>
 <div class="highlight-python"><pre>--autoscale=AUTOSCALE
      Enable autoscaling by providing
      max_concurrency,min_concurrency.  Example:
@@ -805,7 +805,7 @@ From there you have access to the active
         <li class="right" >
           <a href="canvas.html" title="Canvas: Designing Workflows"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="index.html" >User Guide</a> &raquo;</li> 
       </ul>
     </div>

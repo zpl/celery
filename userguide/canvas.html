@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Canvas: Designing Workflows &mdash; Celery 3.0.0rc5 documentation</title>
+    <title>Canvas: Designing Workflows &mdash; Celery 3.1.0a1 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.0.0rc5',
+        VERSION:     '3.1.0a1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.0.0rc5 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
     <link rel="up" title="User Guide" href="index.html" />
     <link rel="next" title="Workers Guide" href="workers.html" />
     <link rel="prev" title="Calling Tasks" href="calling.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="calling.html" title="Calling Tasks"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">User Guide</a> &raquo;</li> 
       </ul>
     </div>  
@@ -290,7 +290,7 @@ after all of the tasks in the header is complete.</p>
 <div><p>The map primitive works like the built-in <tt class="docutils literal"><span class="pre">map</span></tt> function, but creates
 a temporary task where a list of arguments is applied to the task.
 E.g. <tt class="docutils literal"><span class="pre">task.map([1,</span> <span class="pre">2])</span></tt> results in a single task
-being called, appyling the arguments in order to the task function so
+being called, applying the arguments in order to the task function so
 that the result is:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">task</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">task</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
 </pre></div>
@@ -326,10 +326,12 @@ in any number of ways to compose complex workflows.</p>
 <blockquote>
 <div><p>Here&#8217;s a simple chain, the first task executes passing its return value
 to the next task in the chain, and so on.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># 2 + 2 + 4 + 8</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="mi">16</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">chain</span>
+
+<span class="go"># 2 + 2 + 4 + 8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">16</span>
 </pre></div>
 </div>
 <p>This can also be written using pipes:</p>
@@ -370,7 +372,8 @@ cannot be changed:</p>
 <li><p class="first">Simple group</p>
 <blockquote>
 <div><p>We can easily create a group of tasks to execute in parallel:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">group</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">[0, 2, 4, 6, 8, 10, 12, 14, 16, 18]</span>
 </pre></div>
@@ -407,7 +410,8 @@ messages in the group to be called:</p>
 <div><p>The chord primitive enables us to add callback to be called when
 all of the tasks in a group has finished executing, which is often
 required for algorithms that aren&#8217;t embarrassingly parallel:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chord</span><span class="p">((</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">xsum</span><span class="o">.</span><span class="n">s</span><span class="p">())()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">chord</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chord</span><span class="p">((</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">xsum</span><span class="o">.</span><span class="n">s</span><span class="p">())()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 <span class="go">90</span>
 </pre></div>
@@ -460,6 +464,26 @@ the return value of the previous task is forwarded to all tasks in the group:</p
 <span class="gp">... </span>                        <span class="n">first</span><span class="o">=</span><span class="s">&#39;Art&#39;</span><span class="p">,</span>
 <span class="gp">... </span>                        <span class="n">last</span><span class="o">=</span><span class="s">&#39;Vandelay&#39;</span><span class="p">,</span>
 <span class="gp">... </span>                        <span class="n">email</span><span class="o">=</span><span class="s">&#39;art@vandelay.com&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you don&#8217;t want to forward arguments to the group then
+you can make the subtasks in the group immutable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">si</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)))()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">&lt;GroupResult: de44df8c-821d-4c84-9a6a-44769c738f98 [</span>
+<span class="go">    bc01831b-9486-4e51-b046-480d7c9b78de,</span>
+<span class="go">    2650a1b8-32bf-4771-a645-b0a35dcc791b,</span>
+<span class="go">    dcbee2a5-e92d-4b03-b6eb-7aec60fd30cf,</span>
+<span class="go">    59f92e0a-23ea-41ce-9fad-8645a0e7759c,</span>
+<span class="go">    26e1e707-eccf-4bf4-bbd8-1e1729c3cce3,</span>
+<span class="go">    2d10a5f4-37f0-41b2-96ac-a973b1df024d,</span>
+<span class="go">    e13d3bdb-7ae3-4101-81a4-6f17ee21df2d,</span>
+<span class="go">    104b2be0-7b75-44eb-ac8e-f9220bdfa140,</span>
+<span class="go">    c5c551a5-0386-4973-aa37-b65cbeb2624b,</span>
+<span class="go">    83f72d71-4b71-428e-b604-6f16599a9f37]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">8</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -944,7 +968,7 @@ a countdown of 2 and so on.</p>
         <li class="right" >
           <a href="calling.html" title="Calling Tasks"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="index.html" >User Guide</a> &raquo;</li> 
       </ul>
     </div>

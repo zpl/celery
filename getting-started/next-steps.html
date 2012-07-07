@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Next Steps &mdash; Celery 3.0.0rc5 documentation</title>
+    <title>Next Steps &mdash; Celery 3.1.0a1 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.0.0rc5',
+        VERSION:     '3.1.0a1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.0.0rc5 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
     <link rel="up" title="Getting Started" href="index.html" />
     <link rel="next" title="Resources" href="resources.html" />
     <link rel="prev" title="First Steps with Celery" href="first-steps-with-celery.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="first-steps-with-celery.html" title="First Steps with Celery"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
       </ul>
     </div>  
@@ -73,11 +73,19 @@
 <p>The <a class="reference internal" href="first-steps-with-celery.html#first-steps"><em>First Steps with Celery</em></a> guide is intentionally minimal.  In this guide
 we will demonstrate what Celery offers in more detail, including
 how to add Celery support for your application and library.</p>
+<p>This document does not document all of Celery&#8217;s features and
+best practices, so it&#8217;s recommended that you also read the
+<a class="reference internal" href="../userguide/index.html#guide"><em>User Guide</em></a></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#using-celery-in-your-application" id="id3">Using Celery in your Application</a></li>
 <li><a class="reference internal" href="#calling-tasks" id="id4">Calling Tasks</a></li>
 <li><a class="reference internal" href="#canvas-designing-workflows" id="id5"><em>Canvas</em>: Designing Workflows</a></li>
+<li><a class="reference internal" href="#routing" id="id6">Routing</a></li>
+<li><a class="reference internal" href="#remote-control" id="id7">Remote Control</a></li>
+<li><a class="reference internal" href="#timezone" id="id8">Timezone</a></li>
+<li><a class="reference internal" href="#optimization" id="id9">Optimization</a></li>
+<li><a class="reference internal" href="#what-to-do-now" id="id10">What to do now?</a></li>
 </ul>
 </div>
 <div class="section" id="using-celery-in-your-application">
@@ -98,6 +106,11 @@ how to add Celery support for your application and library.</p>
 <span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="s">&#39;amqp://&#39;</span><span class="p">,</span>
                 <span class="n">backend</span><span class="o">=</span><span class="s">&#39;amqp://&#39;</span><span class="p">,</span>
                 <span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;proj.tasks&#39;</span><span class="p">])</span>
+
+<span class="c"># Optional configuration, see the application user guide.</span>
+<span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="n">CELERY_TASK_RESULT_EXPIRES</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>In this module we created our <a class="reference internal" href="../reference/celery.html#celery.Celery" title="celery.Celery"><tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt></a> instance (sometimes
@@ -115,7 +128,7 @@ you simply import this instance.</p>
 While results are disabled by default we use the amqp backend here
 to demonstrate how retrieving the results work, you may want to use
 a different backend for your application, as they all have different
-strenghts and weaknesses.  If you don&#8217;t need results it&#8217;s best
+strengths and weaknesses.  If you don&#8217;t need results it&#8217;s best
 to disable them.  Results can also be disabled for individual tasks
 by setting the <tt class="docutils literal"><span class="pre">&#64;task(ignore_result=True)</span></tt> option.</p>
 <p>See <a class="reference internal" href="first-steps-with-celery.html#celerytut-keeping-results"><em>Keeping Results</em></a> for more information.</p>
@@ -134,17 +147,17 @@ that the worker is able to find our tasks.</p>
 <span class="kn">from</span> <span class="nn">proj.celery</span> <span class="kn">import</span> <span class="n">celery</span>
 
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">mul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
 
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">xsum</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
 </pre></div>
@@ -202,6 +215,61 @@ by passing in the <cite>&#8211;help</cite> flag:</p>
 <div class="highlight-python"><pre>$ celery worker --help</pre>
 </div>
 <p>These options are described in more detailed in the <a class="reference internal" href="../userguide/workers.html#guide-workers"><em>Workers Guide</em></a>.</p>
+<div class="section" id="stopping-the-worker">
+<h4>Stopping the worker<a class="headerlink" href="#stopping-the-worker" title="Permalink to this headline">¶</a></h4>
+<p>To stop the worker simply hit Ctrl+C.  A list of signals supported
+by the worker is detailed in the <em class="xref std std-ref">Worker Guide</em>.</p>
+</div>
+<div class="section" id="in-the-background">
+<h4>In the background<a class="headerlink" href="#in-the-background" title="Permalink to this headline">¶</a></h4>
+<p>In production you will want to run the worker in the background, this is
+described in detail in the <a class="reference internal" href="../tutorials/daemonizing.html#daemonizing"><em>daemonization tutorial</em></a>.</p>
+<p>The daemonization scripts uses the <strong class="program">celery multi</strong> command to
+start one or more workers in the background:</p>
+<div class="highlight-python"><pre>$ celery multi start w1 -A proj -l info
+celeryd-multi v3.0.0 (Chiastic Slide)
+&gt; Starting nodes...
+    &gt; w1.halcyon.local: OK</pre>
+</div>
+<p>You can restart it too:</p>
+<div class="highlight-python"><pre>$ celery multi restart w1 -A proj -l info
+celeryd-multi v3.0.0 (Chiastic Slide)
+&gt; Stopping nodes...
+    &gt; w1.halcyon.local: TERM -&gt; 64024
+&gt; Waiting for 1 node.....
+    &gt; w1.halcyon.local: OK
+&gt; Restarting node w1.halcyon.local: OK
+celeryd-multi v3.0.0 (Chiastic Slide)
+&gt; Stopping nodes...
+    &gt; w1.halcyon.local: TERM -&gt; 64052</pre>
+</div>
+<p>or stop it:</p>
+<div class="highlight-python"><pre>$ celery multi stop -w1 -A proj -l info</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong class="program">celery multi</strong> doesn&#8217;t store information about workers
+so you need to use the same command line parameters when restarting.
+Also the same pidfile and logfile arguments must be used when
+stopping/killing.</p>
+</div>
+<p>By default it will create pid and log files in the current directory,
+to protect against multiple workers launching on top of each other
+you are encouraged to put these in a dedicated directory:</p>
+<div class="highlight-python"><pre>$ mkdir -p /var/run/celery
+$ mkdir -p /var/log/celery
+$ celery multi start w1 -A proj -l info --pidfile=/var/run/celery/%n.pid \
+                                        --logfile=/var/log/celery/%n.pid</pre>
+</div>
+<p>With the multi command you can start multiple workers, and there is a powerful
+command line syntax to specify arguments for different workers too,
+e.g:</p>
+<div class="highlight-python"><pre>$ celeryd multi start 10 -A proj -l info -Q:1-3 images,video -Q:4,5 data \
+    -Q default -L:4,5 debug</pre>
+</div>
+<p>For more examples see the <a class="reference internal" href="../reference/celery.bin.celeryd_multi.html#module-celery.bin.celeryd_multi" title="celery.bin.celeryd_multi"><tt class="xref py py-mod docutils literal"><span class="pre">celeryd_multi</span></tt></a> module in the API
+reference.</p>
+</div>
 <div class="section" id="about-the-app-argument">
 <span id="app-argument"></span><h4>About the <em class="xref std std-option">--app</em> argument<a class="headerlink" href="#about-the-app-argument" title="Permalink to this headline">¶</a></h4>
 <p>The <em class="xref std std-option">--app</em> argument specifies the Celery app instance to use,
@@ -328,6 +396,8 @@ e.g, for a task that is retried two times the stages would be:</p>
 </div>
 <p>To read more about task states you should see the <a class="reference internal" href="../userguide/tasks.html#task-states"><em>States</em></a> section
 in the tasks user guide.</p>
+<p>Calling tasks is described in detail in the
+<a class="reference internal" href="../userguide/calling.html#guide-calling"><em>Calling Guide</em></a>.</p>
 </div>
 <div class="section" id="canvas-designing-workflows">
 <span id="designing-workflows"></span><h2><a class="toc-backref" href="#id5"><em>Canvas</em>: Designing Workflows</a><a class="headerlink" href="#canvas-designing-workflows" title="Permalink to this headline">¶</a></h2>
@@ -402,7 +472,7 @@ To get to that we must introduce the canvas primitives...</p>
 <div class="section" id="the-primitives">
 <h3>The Primitives<a class="headerlink" href="#the-primitives" title="Permalink to this headline">¶</a></h3>
 <div class="topic">
-<p class="topic-title first">overview of primitives</p>
+<p class="topic-title first"></p>
 <table class="hlist"><tr><td><ul class="simple">
 <li><a class="reference internal" href="../userguide/canvas.html#canvas-group"><em>group</em></a></li>
 <li><a class="reference internal" href="../userguide/canvas.html#canvas-chain"><em>chain</em></a></li>
@@ -415,13 +485,200 @@ To get to that we must introduce the canvas primitives...</p>
 </ul>
 </td></tr></table>
 </div>
-<p>The primitives are also subtasks themselves, so that they can be combined
+<p>The primitives are subtasks themselves, so that they can be combined
 in any number of ways to compose complex workflows.</p>
-<p>Here&#8217;s some examples:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">These examples retrieve results, so to try them out you need
+to configure a result backend. The example project
+above already does that (see the backend argument to <a class="reference internal" href="../reference/celery.html#celery.Celery" title="celery.Celery"><tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt></a>).</p>
+</div>
+<p>Let&#8217;s look at some examples:</p>
+<div class="section" id="groups">
+<h4>Groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h4>
+<p>A <a class="reference internal" href="../reference/celery.html#celery.group" title="celery.group"><tt class="xref py py-class docutils literal"><span class="pre">group</span></tt></a> calls a list of tasks in parallel,
+and it returns a special result instance that lets you inspect the results
+as a group, and retrieve the return values in order.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">group</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">[0, 2, 4, 6, 8, 10, 12, 14, 16, 18]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Partial group</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">[10, 11, 12, 13, 14, 15, 16, 17, 18, 19]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="chains">
+<h4>Chains<a class="headerlink" href="#chains" title="Permalink to this headline">¶</a></h4>
+<p>Tasks can be linked together so that after one task returns the other
+is called:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="nn">imoport</span> <span class="nn">chain</span><span class="gp">&gt;&gt;&gt; </span>
+<span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">mul</span>
+
+<span class="go"># (4 + 4) * 8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">64</span>
+</pre></div>
+</div>
+<p>or a partial chain:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># (? + 4) * 8</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="mi">64</span>
+</pre></div>
+</div>
+<p>Chains can also be written like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">mul</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">8</span><span class="p">))()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">64</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="chords">
+<h4>Chords<a class="headerlink" href="#chords" title="Permalink to this headline">¶</a></h4>
+<p>A chord is a group with a callback:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">chord</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">xsum</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chord</span><span class="p">((</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">xsum</span><span class="o">.</span><span class="n">s</span><span class="p">())()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">90</span>
+</pre></div>
+</div>
+<p>A group chained to another task will be automatically converted
+to a chord:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">group</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span> <span class="o">|</span> <span class="n">xsum</span><span class="o">.</span><span class="n">s</span><span class="p">())()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">90</span>
+</pre></div>
+</div>
+<p>Since these primitives are all of the subtask type they
+can be combined almost however you want, e.g:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">upload_document</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span> <span class="o">|</span> <span class="n">group</span><span class="p">(</span><span class="n">apply_filter</span><span class="o">.</span><span class="n">s</span><span class="p">()</span> <span class="k">for</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Be sure to read more about workflows in the <a class="reference internal" href="../userguide/canvas.html#guide-canvas"><em>Canvas</em></a> user
 guide.</p>
-<p><strong>This document is incomplete - and ends here :(</strong></p>
 </div>
+</div>
+</div>
+<div class="section" id="routing">
+<h2><a class="toc-backref" href="#id6">Routing</a><a class="headerlink" href="#routing" title="Permalink to this headline">¶</a></h2>
+<p>Celery supports all of the routing facilities provided by AMQP,
+but it also supports simple routing where messages are sent to named queues.</p>
+<p>The <a class="reference internal" href="../configuration.html#std:setting-CELERY_ROUTES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_ROUTES</span></tt></a> setting enables you to route tasks by name
+and keep everything centralized in one location:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="n">CELERY_ROUTES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;proj.tasks.add&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;queue&#39;</span><span class="p">:</span> <span class="s">&#39;hipri&#39;</span><span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also specify the queue at runtime
+with the <tt class="docutils literal"><span class="pre">queue</span></tt> argument to <tt class="docutils literal"><span class="pre">apply_async</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">proj.tasks</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">apply_async</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">queue</span><span class="o">=</span><span class="s">&#39;hipri&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can then make a worker consume from this queue by
+specifying the <em class="xref std std-option">-Q</em> option:</p>
+<div class="highlight-python"><pre>$ celery -A proj worker -Q hipri</pre>
+</div>
+<p>You may specify multiple queues by using a comma separated list,
+for example you can make the worker consume from both the default
+queue, and the <tt class="docutils literal"><span class="pre">hipri</span></tt> queue, where
+the default queue is named <tt class="docutils literal"><span class="pre">celery</span></tt> for historical reasons:</p>
+<div class="highlight-python"><pre>$ celery -A proj worker -Q hipri,celery</pre>
+</div>
+<p>The order of the queues doesn&#8217;t matter as the worker will
+give equal weight to the queues.</p>
+<p>To learn more about routing, including taking use of the full
+power of AMQP routing, see the <a class="reference internal" href="../userguide/routing.html#guide-routing"><em>Routing Guide</em></a>.</p>
+</div>
+<div class="section" id="remote-control">
+<h2><a class="toc-backref" href="#id7">Remote Control</a><a class="headerlink" href="#remote-control" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;re using RabbitMQ (AMQP), Redis or MongoDB as the broker then
+you can control and inspect the worker at runtime.</p>
+<p>For example you can see what tasks the worker is currently working on:</p>
+<div class="highlight-python"><pre>$ celery -A proj inspect active</pre>
+</div>
+<p>This is implemented by using broadcast messaging, so all remote
+control commands are received by every worker in the cluster.</p>
+<p>You can also specify one or more workers to act on the request
+using the <em class="xref std std-option">--destination</em> option, which is a comma separated
+list of worker host names:</p>
+<div class="highlight-python"><pre>$ celery -A proj inspect active --destination=worker1.example.com</pre>
+</div>
+<p>If a destination is not provided then every worker will act and reply
+to the request.</p>
+<p>The <strong class="program">celery inspect</strong> command contains commands that
+does not change anything in the worker, it only replies information
+and statistics about what is going on inside the worker.
+For a list of inspect commands you can execute:</p>
+<div class="highlight-python"><pre>$ celery -A proj inspect --help</pre>
+</div>
+<p>Then there is the <strong class="program">celery control</strong> command, which contains
+commands that actually changes things in the worker at runtime:</p>
+<div class="highlight-python"><pre>$ celery -A proj control --help</pre>
+</div>
+<p>For example you can force workers to enable event messages (used
+for monitoring tasks and workers):</p>
+<div class="highlight-python"><pre>$ celery -A proj control enable_events</pre>
+</div>
+<p>When events are enabled you can then start the event dumper
+to see what the workers are doing:</p>
+<div class="highlight-python"><pre>$ celery -A proj events --dump</pre>
+</div>
+<p>or you can start the curses interface:</p>
+<div class="highlight-python"><pre>$ celery -A proj events</pre>
+</div>
+<p>when you&#8217;re finished monitoring you can disable events again:</p>
+<div class="highlight-python"><pre>$ celery -A proj control disable_events</pre>
+</div>
+<p>The <strong class="program">celery status</strong> command also uses remote control commands
+and shows a list of online workers in the cluster:</p>
+<div class="highlight-python"><pre>$ celery -A proj status</pre>
+</div>
+<p>You can read more about the <strong class="program">celery</strong> command and monitoring
+in the <a class="reference internal" href="../userguide/monitoring.html#guide-monitoring"><em>Monitoring Guide</em></a>.</p>
+</div>
+<div class="section" id="timezone">
+<h2><a class="toc-backref" href="#id8">Timezone</a><a class="headerlink" href="#timezone" title="Permalink to this headline">¶</a></h2>
+<p>All times and dates, internally and in messages uses the UTC timezone.</p>
+<p>When the worker receives a message, for example with a countdown set it
+converts that UTC time to local time.  If you wish to use
+a different timezone than the system timezone then you must
+configure that using the <a class="reference internal" href="../configuration.html#std:setting-CELERY_TIMEZONE"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TIMEZONE</span></tt></a> setting.</p>
+<p>To use custom timezones you also have to install the <tt class="xref py py-mod docutils literal"><span class="pre">pytz</span></tt> library:</p>
+<div class="highlight-python"><pre>$ pip install pytz</pre>
+</div>
+<p>Setting a custom timezone:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&#39;Europe/London&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="optimization">
+<h2><a class="toc-backref" href="#id9">Optimization</a><a class="headerlink" href="#optimization" title="Permalink to this headline">¶</a></h2>
+<p>The default configuration is not optimized for throughput by default,
+it tries to walk the middle way between many short tasks and fewer long
+tasks, a compromise between throughput and fair scheduling.</p>
+<p>If you have strict fair scheduling requirements, or want to optimize
+for throughput then you should read the <a class="reference internal" href="../userguide/optimizing.html#guide-optimizing"><em>Optimizing Guide</em></a>.</p>
+<p>If you&#8217;re using RabbitMQ then you should install the <tt class="xref py py-mod docutils literal"><span class="pre">librabbitmq</span></tt>
+module, which is an AMQP client implemented in C:</p>
+<div class="highlight-python"><pre>$ pip install librabbitmq</pre>
+</div>
+</div>
+<div class="section" id="what-to-do-now">
+<h2><a class="toc-backref" href="#id10">What to do now?</a><a class="headerlink" href="#what-to-do-now" title="Permalink to this headline">¶</a></h2>
+<p>Now that you have read this document you should continue
+to the <a class="reference internal" href="../userguide/index.html#guide"><em>User Guide</em></a>.</p>
+<p>There&#8217;s also an <a class="reference internal" href="../reference/index.html#apiref"><em>API reference</em></a> if you are so inclined.</p>
 </div>
 </div>
 
@@ -476,7 +733,7 @@ guide.</p>
         <li class="right" >
           <a href="first-steps-with-celery.html" title="First Steps with Celery"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.0.0rc5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
           <li><a href="index.html" >Getting Started</a> &raquo;</li> 
       </ul>
     </div>
