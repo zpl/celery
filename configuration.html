@@ -174,7 +174,7 @@ task:</p>
 </div>
 <p>You can change methods too, for example the <tt class="docutils literal"><span class="pre">on_failure</span></tt> handler:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">my_on_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">einfo</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Oh no! Task failed: </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Oh no! Task failed: {0!r}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
 
 <span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;*&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;on_failure&quot;</span><span class="p">:</span> <span class="n">my_on_failure</span><span class="p">}}</span>
 </pre></div>
@@ -576,6 +576,27 @@ exchange type <cite>direct</cite>.</p>
 When deciding the final destination of a task the routers are consulted
 in order.  See <a class="reference internal" href="userguide/routing.html#routers"><em>Routers</em></a> for more information.</p>
 </div>
+<div class="section" id="celery-worker-direct">
+<span id="std:setting-CELERY_WORKER_DIRECT"></span><h4>CELERY_WORKER_DIRECT<a class="headerlink" href="#celery-worker-direct" title="Permalink to this headline">¶</a></h4>
+<p>This option enables so that every worker has a dedicated queue,
+so that tasks can be routed to specific workers.</p>
+<p>The queue name for each worker is automatically generated based on
+the worker hostname and a <tt class="docutils literal"><span class="pre">.dq</span></tt> suffix, using the <tt class="docutils literal"><span class="pre">C.dq</span></tt> exchange.</p>
+<p>For example the queue name for the worker with hostname <tt class="docutils literal"><span class="pre">w1.example.com</span></tt>
+becomes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">w1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">dq</span>
+</pre></div>
+</div>
+<p>Then you can route the task to the task by specifying the hostname
+as the routung key and the <tt class="docutils literal"><span class="pre">C.dq</span></tt> exchange:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ROUTES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;tasks.add&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;exchange&#39;</span><span class="p">:</span> <span class="s">&#39;C.dq&#39;</span><span class="p">,</span> <span class="s">&#39;routing_key&#39;</span><span class="p">:</span> <span class="s">&#39;w1.example.com&#39;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This setting is mandatory if you want to use the <tt class="docutils literal"><span class="pre">move_to_worker</span></tt> features
+of <a class="reference internal" href="reference/celery.contrib.migrate.html#module-celery.contrib.migrate" title="celery.contrib.migrate"><tt class="xref py py-mod docutils literal"><span class="pre">celery.contrib.migrate</span></tt></a>.</p>
+</div>
 <div class="section" id="celery-create-missing-queues">
 <span id="std:setting-CELERY_CREATE_MISSING_QUEUES"></span><h4>CELERY_CREATE_MISSING_QUEUES<a class="headerlink" href="#celery-create-missing-queues" title="Permalink to this headline">¶</a></h4>
 <p>If enabled (default), any queues specified that is not defined in
@@ -649,6 +670,29 @@ default is <tt class="docutils literal"><span class="pre">amqp</span></tt>, but 
 <tt class="docutils literal"><span class="pre">sqlalchemy</span></tt>, <tt class="docutils literal"><span class="pre">django</span></tt>, <tt class="docutils literal"><span class="pre">mongodb</span></tt>, <tt class="docutils literal"><span class="pre">couchdb</span></tt> and <tt class="docutils literal"><span class="pre">pika</span></tt>.
 It can also be a fully qualified path to your own transport implementation.</p>
 <p>See the Kombu documentation for more information about broker URLs.</p>
+</div>
+<div class="section" id="broker-heartbeat">
+<span id="std:setting-BROKER_HEARTBEAT"></span><h4>BROKER_HEARTBEAT<a class="headerlink" href="#broker-heartbeat" title="Permalink to this headline">¶</a></h4>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">transports supported:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><tt class="docutils literal"><span class="pre">pyamqp</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p>It&#8217;s not always possible to detect connection loss in a timely
+manner using TCP/IP alone, so AMQP defines something called heartbeats
+that&#8217;s is used both by the client and the broker to detect if
+a connection was closed.</p>
+<p>Heartbeats are currently only supported by the <tt class="docutils literal"><span class="pre">pyamqp://</span></tt> transport,
+and this requires the <tt class="xref py py-mod docutils literal"><span class="pre">amqp</span></tt> module:</p>
+<div class="highlight-python"><pre>$ pip install amqp</pre>
+</div>
+<p>The default heartbeat value is 10 seconds,
+the heartbeat will then be monitored at double the rate of the heartbeat value
+(so for the default 10 seconds, the heartbeat is checked every 5 seconds).</p>
 </div>
 <div class="section" id="broker-use-ssl">
 <span id="std:setting-BROKER_USE_SSL"></span><h4>BROKER_USE_SSL<a class="headerlink" href="#broker-use-ssl" title="Permalink to this headline">¶</a></h4>

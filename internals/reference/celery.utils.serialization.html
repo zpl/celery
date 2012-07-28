@@ -99,7 +99,7 @@
 <p><strong>Example</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">something_raising_unpickleable_exc</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">exc</span> <span class="o">=</span> <span class="n">UnpickleableException</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__module__</span><span class="p">,</span>
 <span class="gp">... </span>                                <span class="n">e</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
 <span class="gp">... </span>                                <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>

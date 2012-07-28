@@ -79,15 +79,6 @@
 <span class="target" id="module-celery.utils"></span><div class="section" id="id1">
 <h2><a class="toc-backref" href="#id2">celery.utils</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Utility functions.</p>
-<dl class="data">
-<dt id="celery.utils.MP_MAIN_FILE">
-<tt class="descclassname">celery.utils.</tt><tt class="descname">MP_MAIN_FILE</tt><em class="property"> = None</em><a class="headerlink" href="#celery.utils.MP_MAIN_FILE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Billiard sets this when execv is enabled.
-We use it to find out the name of the original <tt class="docutils literal"><span class="pre">__main__</span></tt>
-module, so that we can properly rewrite the name of the
-task to be that of <tt class="docutils literal"><span class="pre">App.main</span></tt>.</p>
-</dd></dl>
-
 <dl class="function">
 <dt id="celery.utils.cry">
 <tt class="descclassname">celery.utils.</tt><tt class="descname">cry</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.cry" title="Permalink to this definition">¶</a></dt>
@@ -149,6 +140,12 @@ of using the <tt class="xref py py-meth docutils literal"><span class="pre">insp
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="celery.utils.jsonify">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">jsonify</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#celery.utils.jsonify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms object making it suitable for json serialization</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="celery.utils.lpmerge">
 <tt class="descclassname">celery.utils.</tt><tt class="descname">lpmerge</tt><big>(</big><em>L</em>, <em>R</em><big>)</big><a class="headerlink" href="#celery.utils.lpmerge" title="Permalink to this definition">¶</a></dt>
 <dd><p>In place left precedent dictionary merge.</p>
@@ -170,6 +167,11 @@ otherwise.</p>
 <dl class="function">
 <dt id="celery.utils.warn_deprecated">
 <tt class="descclassname">celery.utils.</tt><tt class="descname">warn_deprecated</tt><big>(</big><em>description=None</em>, <em>deprecation=None</em>, <em>removal=None</em>, <em>alternative=None</em><big>)</big><a class="headerlink" href="#celery.utils.warn_deprecated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.worker_direct">
+<tt class="descclassname">celery.utils.</tt><tt class="descname">worker_direct</tt><big>(</big><em>hostname</em><big>)</big><a class="headerlink" href="#celery.utils.worker_direct" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

@@ -191,14 +191,8 @@ stop unless forced via <a class="reference external" href="http://docs.python.or
 </dd></dl>
 
 <dl class="method">
-<dt id="celery.events.EventReceiver.consumer">
-<tt class="descname">consumer</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#celery.events.EventReceiver.consumer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create event consumer.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.events.EventReceiver.drain_events">
-<tt class="descname">drain_events</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.events.EventReceiver.drain_events" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.events.EventReceiver.get_consumers">
+<tt class="descname">get_consumers</tt><big>(</big><em>Consumer</em>, <em>channel</em><big>)</big><a class="headerlink" href="#celery.events.EventReceiver.get_consumers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -214,6 +208,11 @@ stop unless forced via <a class="reference external" href="http://docs.python.or
 <dl class="method">
 <dt id="celery.events.EventReceiver.itercapture">
 <tt class="descname">itercapture</tt><big>(</big><em>limit=None</em>, <em>timeout=None</em>, <em>wakeup=True</em><big>)</big><a class="headerlink" href="#celery.events.EventReceiver.itercapture" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.events.EventReceiver.on_consume_ready">
+<tt class="descname">on_consume_ready</tt><big>(</big><em>connection</em>, <em>channel</em>, <em>consumers</em>, <em>wakeup=True</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.events.EventReceiver.on_consume_ready" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

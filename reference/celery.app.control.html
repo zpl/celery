@@ -185,6 +185,8 @@ options in the configuration.</p>
 <li><strong>exchange_type</strong> &#8211; Type of exchange (defaults to &#8216;direct&#8217;)
 command to, when empty broadcast to all workers.</li>
 <li><strong>routing_key</strong> &#8211; Optional routing key.</li>
+<li><strong>options</strong> &#8211; Additional options as supported
+by <tt class="xref py py-meth docutils literal"><span class="pre">kombu.entitiy.Queue.from_dict()</span></tt>.</li>
 </ul>
 </td>
 </tr>
@@ -370,7 +372,7 @@ a task by type.</p>
 
 <dl class="class">
 <dt id="celery.app.control.Inspect">
-<em class="property">class </em><tt class="descclassname">celery.app.control.</tt><tt class="descname">Inspect</tt><big>(</big><em>destination=None</em>, <em>timeout=1</em>, <em>callback=None</em>, <em>connection=None</em>, <em>app=None</em><big>)</big><a class="headerlink" href="#celery.app.control.Inspect" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.app.control.</tt><tt class="descname">Inspect</tt><big>(</big><em>destination=None</em>, <em>timeout=1</em>, <em>callback=None</em>, <em>connection=None</em>, <em>app=None</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#celery.app.control.Inspect" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="celery.app.control.Inspect.active">
 <tt class="descname">active</tt><big>(</big><em>safe=False</em><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.active" title="Permalink to this definition">¶</a></dt>
@@ -387,18 +389,23 @@ a task by type.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="celery.app.control.Inspect.conf">
+<tt class="descname">conf</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.conf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.app.control.Inspect.ping">
 <tt class="descname">ping</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.ping" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.app.control.Inspect.registered">
-<tt class="descname">registered</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.registered" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">registered</tt><big>(</big><em>*taskinfoitems</em><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.registered" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.app.control.Inspect.registered_tasks">
-<tt class="descname">registered_tasks</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.registered_tasks" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">registered_tasks</tt><big>(</big><em>*taskinfoitems</em><big>)</big><a class="headerlink" href="#celery.app.control.Inspect.registered_tasks" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

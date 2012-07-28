@@ -93,7 +93,7 @@
 <span class="k">def</span> <span class="nf">refresh_feed</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Feed</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span>
+    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">refresh_feed</span><span class="o">.</span><span class="n">retry</span><span class="p">(</span><span class="n">exc</span><span class="o">=</span><span class="n">exc</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -124,7 +124,7 @@
 <span class="k">def</span> <span class="nf">refresh_feed</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Feed</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span>
+    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">current</span><span class="o">.</span><span class="n">retry</span><span class="p">(</span><span class="n">exc</span><span class="o">=</span><span class="n">exc</span><span class="p">)</span>
 </pre></div>
 </div>

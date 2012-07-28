@@ -180,7 +180,7 @@ as this means that they can be set by either instantiation or inheritance.</p>
 <p><strong>Example:</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Producer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">active</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">serializer</span> <span class="o">=</span> <span class="s">&quot;json&quot;</span>
+    <span class="n">serializer</span> <span class="o">=</span> <span class="s">&#39;json&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">serializer</span> <span class="o">=</span> <span class="n">serializer</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">serializer</span>
@@ -191,11 +191,11 @@ as this means that they can be set by either instantiation or inheritance.</p>
 </div>
 <p>A subclass can change the default value:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">TaskProducer</span><span class="p">(</span><span class="n">Producer</span><span class="p">):</span>
-    <span class="n">serializer</span> <span class="o">=</span> <span class="s">&quot;pickle&quot;</span>
+    <span class="n">serializer</span> <span class="o">=</span> <span class="s">&#39;pickle&#39;</span>
 </pre></div>
 </div>
 <p>and the value can be set at instantiation:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">producer</span> <span class="o">=</span> <span class="n">TaskProducer</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="s">&quot;msgpack&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">producer</span> <span class="o">=</span> <span class="n">TaskProducer</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="s">&#39;msgpack&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -289,7 +289,7 @@ from a module in the project, this module could look something like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 
 <span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">()</span>
-<span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="n">BROKER_URL</span><span class="o">=</span><span class="s">&quot;amqp://&quot;</span><span class="p">)</span>
+<span class="n">celery</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="n">BROKER_URL</span><span class="o">=</span><span class="s">&#39;amqp://&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -222,6 +222,23 @@ of a module to import.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="celery.Celery.add_defaults">
+<tt class="descname">add_defaults</tt><big>(</big><em>d</em><big>)</big><a class="headerlink" href="#celery.Celery.add_defaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add default configuration from dict <tt class="docutils literal"><span class="pre">d</span></tt>.</p>
+<p>If the argument is a callable function then it will be regarded
+as a promise, and it won&#8217;t be loaded until the configuration is
+actually needed.</p>
+<p>This method can be compared to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with a difference that 1) no copy will be made and 2) the dict will
+not be transferred when the worker spawns child processes, so
+it&#8217;s important that the same configuration happens at import time
+when pickle restores the object on the other side.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="celery.Celery.start">
 <tt class="descname">start</tt><big>(</big><em>argv=None</em><big>)</big><a class="headerlink" href="#celery.Celery.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run <strong class="program">celery</strong> using <cite>argv</cite>.</p>
@@ -343,8 +360,8 @@ setting.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="celery.Celery.default_connection">
-<tt class="descname">default_connection</tt><big>(</big><em>connection=None</em><big>)</big><a class="headerlink" href="#celery.Celery.default_connection" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.Celery.connection_or_acquire">
+<tt class="descname">connection_or_acquire</tt><big>(</big><em>connection=None</em><big>)</big><a class="headerlink" href="#celery.Celery.connection_or_acquire" title="Permalink to this definition">¶</a></dt>
 <dd><p>For use within a with-statement to get a connection from the pool
 if one is not already provided.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -353,6 +370,22 @@ if one is not already provided.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>connection</strong> &#8211; If not provided, then a connection will be
 acquired from the connection pool.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.Celery.producer_or_acquire">
+<tt class="descname">producer_or_acquire</tt><big>(</big><em>producer=None</em><big>)</big><a class="headerlink" href="#celery.Celery.producer_or_acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>For use within a with-statement to get a producer from the pool
+if one is not already provided</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>producer</strong> &#8211; If not provided, then a producer will be
+acquired from the producer pool.</td>
 </tr>
 </tbody>
 </table>
@@ -426,7 +459,7 @@ be an iterable of tasks to chain.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>is effectively <img class="math" src="../_images/math/d9026d633628a5785ff6598e44deabc7988e53c7.png" alt="(2 + 2) + 4)"/>:</p>
+<p>is effectively <span class="math">(2 + 2) + 4)</span>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 <span class="go">8</span>
 </pre></div>
@@ -449,7 +482,7 @@ called.  A chord is essentially a callback for a group of tasks.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chord</span><span class="p">([</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])(</span><span class="n">sum_task</span><span class="o">.</span><span class="n">s</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>is effectively <img class="math" src="../_images/math/0e9aea08df589fd6f4f3e4d692b44e10d02d4b7b.png" alt="\Sigma ((2 + 2) + (4 + 4))"/>:</p>
+<p>is effectively <span class="math">\Sigma ((2 + 2) + (4 + 4))</span>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 <span class="go">12</span>
 </pre></div>

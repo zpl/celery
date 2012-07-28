@@ -113,12 +113,12 @@ Commands
 
         $ celery inspect stats
 
-* **inspect enable_events**: Enable events
+* **control enable_events**: Enable events
     ::
 
-        $ celery inspect enable_events
+        $ celery control enable_events
 
-* **inspect disable_events**: Disable events
+* **control disable_events**: Disable events
     ::
 
         $ celery inspect disable_events
@@ -150,6 +150,43 @@ You can specify a single, or a list of workers by using the
 
     $ celery inspect -d w1,w2 reserved
 
+
+.. _monitoring-flower:
+
+Celery Flower: Web interface
+----------------------------
+
+Celery Flower is a web based, real-time monitor and administration tool.
+
+Features
+~~~~~~~~
+
+- Workers monitoring and management
+- Configuration viewer
+- Worker pool control
+- Broker options viewer
+- Queues management
+- Tasks execution statistics
+- Task viewer
+
+**Screenshot**
+
+.. figure:: ../images/dashboard.png
+
+More screenshots_:
+
+.. _screenshots: https://github.com/mher/flower/tree/master/docs/screenshots
+
+Usage
+~~~~~
+
+Install Celery Flower: ::
+
+    $ pip install flower
+
+Launch Celery Flower and open http://localhost:8008 in browser: ::
+
+    $ celery flower
 
 .. _monitoring-django-admin:
 
@@ -187,7 +224,7 @@ To start the camera run::
 
 If you haven't already enabled the sending of events you need to do so::
 
-    $ python manage.py celery inspect enable_events
+    $ python manage.py celery control enable_events
 
 :Tip: You can enable events when the worker starts using the `-E` argument.
 
@@ -502,10 +539,10 @@ Here is an example camera, dumping the snapshot to screen:
             if not state.event_count:
                 # No new events since last snapshot.
                 return
-            print('Workers: %s' % (pformat(state.workers, indent=4), ))
-            print('Tasks: %s' % (pformat(state.tasks, indent=4), ))
-            print('Total: %s events, %s tasks' % (
-                state.event_count, state.task_count))
+            print('Workers: {0}'.format(pformat(state.workers, indent=4)))
+            print('Tasks: {0}'.format(pformat(state.tasks, indent=4)))
+            print('Total: {0.event_count} events, %s {0.task_count}'.format(
+                state))
 
 See the API reference for :mod:`celery.events.state` to read more
 about state objects.
@@ -545,7 +582,8 @@ This list contains the events sent by the worker, and their arguments.
 Task Events
 ~~~~~~~~~~~
 
-* ``task-sent(uuid, name, args, kwargs, retries, eta, expires, queue)``
+* ``task-sent(uuid, name, args, kwargs, retries, eta, expires,
+  queue, exchange, routing_key)``
 
    Sent when a task message is published and
    the :setting:`CELERY_SEND_TASK_SENT_EVENT` setting is enabled.

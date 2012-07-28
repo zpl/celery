@@ -342,7 +342,7 @@ be replaced by a local <a class="reference internal" href="#celery.app.task.Task
 
 <dl class="attribute">
 <dt id="celery.app.task.Task.backend">
-<tt class="descclassname">Task.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x107306a10&gt;</em><a class="headerlink" href="#celery.app.task.Task.backend" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Task.</tt><tt class="descname">backend</tt><em class="property"> = &lt;celery.backends.cache.CacheBackend object at 0x1060ed050&gt;</em><a class="headerlink" href="#celery.app.task.Task.backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>The result store backend used for this task.</p>
 </dd></dl>
 
@@ -543,6 +543,8 @@ when the max restart limit has been exceeded.</li>
 <li><strong>eta</strong> &#8211; Explicit time and date to run the retry at
 (must be a <a class="reference external" href="http://docs.python.org/dev/library/datetime.html#datetime.datetime" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a> instance).</li>
 <li><strong>max_retries</strong> &#8211; If set, overrides the default retry limit.</li>
+<li><strong>timeout</strong> &#8211; If set, overrides the default timeout.</li>
+<li><strong>soft_timeout</strong> &#8211; If set, overrides the default soft timeout.</li>
 <li><strong>**options</strong> &#8211; Any extra options to pass on to
 meth:<cite>apply_async</cite>.</li>
 <li><strong>throw</strong> &#8211; If this is <tt class="xref py py-const docutils literal"><span class="pre">False</span></tt>, do not raise the
@@ -569,7 +571,7 @@ to <tt class="xref py py-const docutils literal"><span class="pre">False</span><
 <span class="gp">... </span>    <span class="n">twitter</span> <span class="o">=</span> <span class="n">Twitter</span><span class="p">(</span><span class="n">oauth</span><span class="o">=</span><span class="n">auth</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="n">twitter</span><span class="o">.</span><span class="n">post_status_update</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">except</span> <span class="n">twitter</span><span class="o">.</span><span class="n">FailWhale</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">except</span> <span class="n">twitter</span><span class="o">.</span><span class="n">FailWhale</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="c"># Retry in 5 minutes.</span>
 <span class="gp">... </span>        <span class="k">raise</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retry</span><span class="p">(</span><span class="n">countdown</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="n">exc</span><span class="p">)</span>
 </pre></div>

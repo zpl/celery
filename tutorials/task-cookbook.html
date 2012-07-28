@@ -102,7 +102,7 @@ consisting of the MD5 checksum of the feed URL.</p>
     <span class="c"># The cache key consists of the task name and the MD5 digest</span>
     <span class="c"># of the feed URL.</span>
     <span class="n">feed_url_digest</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="n">feed_url</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-    <span class="n">lock_id</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">-lock-</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">feed_url_hexdigest</span><span class="p">)</span>
+    <span class="n">lock_id</span> <span class="o">=</span> <span class="s">&#39;{0}-lock-{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">feed_url_hexdigest</span><span class="p">)</span>
 
     <span class="c"># cache.add fails if if the key already exists</span>
     <span class="n">acquire_lock</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">cache</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">lock_id</span><span class="p">,</span> <span class="s">&#39;true&#39;</span><span class="p">,</span> <span class="n">LOCK_EXPIRE</span><span class="p">)</span>
@@ -110,7 +110,7 @@ consisting of the MD5 checksum of the feed URL.</p>
     <span class="c"># advantage of using add() for atomic locking</span>
     <span class="n">release_lock</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">lock_id</span><span class="p">)</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Importing feed: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">feed_url</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Importing feed: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">feed_url</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">acquire_lock</span><span class="p">():</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">feed</span> <span class="o">=</span> <span class="n">Feed</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">import_feed</span><span class="p">(</span><span class="n">feed_url</span><span class="p">)</span>
@@ -119,7 +119,7 @@ consisting of the MD5 checksum of the feed URL.</p>
         <span class="k">return</span> <span class="n">feed</span><span class="o">.</span><span class="n">url</span>
 
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="s">&#39;Feed </span><span class="si">%s</span><span class="s"> is already being imported by another worker&#39;</span> <span class="o">%</span> <span class="n">feed_url</span><span class="p">)</span>
+        <span class="s">&#39;Feed </span><span class="si">%s</span><span class="s"> is already being imported by another worker&#39;</span><span class="p">,</span> <span class="n">feed_url</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -403,7 +403,7 @@ created.</p>
 <p>For example, in the beginning it was possible to use any callable as
 a task:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">to</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&#39;hello </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">to</span>
+    <span class="k">return</span> <span class="s">&#39;hello {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">to</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">celery.execute</span> <span class="kn">import</span> <span class="n">apply_async</span>
 
@@ -419,7 +419,7 @@ certain options, or override other behavior</p>
     <span class="n">send_error_emails</span> <span class="o">=</span> <span class="bp">True</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;hello </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">to</span>
+        <span class="k">return</span> <span class="s">&#39;hello {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">to</span><span class="p">)</span>
 <span class="n">tasks</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Hello</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Hello</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="s">&#39;world!&#39;</span><span class="p">)</span>
@@ -433,7 +433,7 @@ in 2.0, replaced by task decorators:</p>
 
 <span class="nd">@task</span><span class="p">(</span><span class="n">send_error_emails</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&#39;hello </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">to</span>
+    <span class="k">return</span> <span class="s">&#39;hello {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">to</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -456,7 +456,7 @@ class: <tt class="xref py py-class docutils literal"><span class="pre">celery.Ta
     <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&#39;TASK STARTING: </span><span class="si">%s</span><span class="s">[</span><span class="si">%s</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;TASK STARTING: {0.name}[{0.request.id}].format(self))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>

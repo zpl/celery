@@ -82,7 +82,7 @@
 which specifies how tasks are executed.</p>
 <dl class="class">
 <dt id="celery.worker.job.Request">
-<em class="property">class </em><tt class="descclassname">celery.worker.job.</tt><tt class="descname">Request</tt><big>(</big><em>body</em>, <em>on_ack=&lt;function noop at 0x101b18488&gt;</em>, <em>hostname=None</em>, <em>eventer=None</em>, <em>app=None</em>, <em>connection_errors=None</em>, <em>request_dict=None</em>, <em>delivery_info=None</em>, <em>task=None</em>, <em>**opts</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.job.</tt><tt class="descname">Request</tt><big>(</big><em>body</em>, <em>on_ack=&lt;function noop at 0x101a9bde8&gt;</em>, <em>hostname=None</em>, <em>eventer=None</em>, <em>app=None</em>, <em>connection_errors=None</em>, <em>request_dict=None</em>, <em>delivery_info=None</em>, <em>task=None</em>, <em>**opts</em><big>)</big><a class="headerlink" href="#celery.worker.job.Request" title="Permalink to this definition">¶</a></dt>
 <dd><p>A request for task execution.</p>
 <dl class="method">
 <dt id="celery.worker.job.Request.acknowledge">
@@ -106,11 +106,6 @@ which specifies how tasks are executed.</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="celery.worker.job.Request.callbacks">
-<tt class="descname">callbacks</tt><a class="headerlink" href="#celery.worker.job.Request.callbacks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="celery.worker.job.Request.connection_errors">
 <tt class="descname">connection_errors</tt><a class="headerlink" href="#celery.worker.job.Request.connection_errors" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -118,11 +113,6 @@ which specifies how tasks are executed.</p>
 <dl class="attribute">
 <dt id="celery.worker.job.Request.delivery_info">
 <tt class="descname">delivery_info</tt><a class="headerlink" href="#celery.worker.job.Request.delivery_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.job.Request.errbacks">
-<tt class="descname">errbacks</tt><a class="headerlink" href="#celery.worker.job.Request.errbacks" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -168,6 +158,10 @@ which specifies how tasks are executed.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pool</strong> &#8211; A <tt class="xref py py-class docutils literal"><span class="pre">celery.concurrency.base.TaskPool</span></tt> instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="../../reference/celery.exceptions.html#celery.exceptions.TaskRevokedError" title="celery.exceptions.TaskRevokedError">celery.exceptions.TaskRevokedError</a>:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if the task was revoked
+and ignored.</td>
 </tr>
 </tbody>
 </table>

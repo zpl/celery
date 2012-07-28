@@ -139,9 +139,15 @@ For celeryd this means the pool must finish the tasks it has acked
 early, <em>then</em> close the connection.</p>
 </li>
 </ul>
+<dl class="data">
+<dt id="celery.worker.consumer.AMQHEARTBEAT_RATE">
+<tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">AMQHEARTBEAT_RATE</tt><em class="property"> = 2.0</em><a class="headerlink" href="#celery.worker.consumer.AMQHEARTBEAT_RATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Heartbeat check is called every heartbeat_seconds&#8217; / rate&#8217;.</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="celery.worker.consumer.BlockingConsumer">
-<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">BlockingConsumer</tt><big>(</big><em>ready_queue</em>, <em>init_callback=&lt;function noop at 0x101b18488&gt;</em>, <em>send_events=False</em>, <em>hostname=None</em>, <em>initial_prefetch_count=2</em>, <em>pool=None</em>, <em>app=None</em>, <em>timer=None</em>, <em>controller=None</em>, <em>hub=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.BlockingConsumer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">BlockingConsumer</tt><big>(</big><em>ready_queue</em>, <em>init_callback=&lt;function noop at 0x101a9bde8&gt;</em>, <em>send_events=False</em>, <em>hostname=None</em>, <em>initial_prefetch_count=2</em>, <em>pool=None</em>, <em>app=None</em>, <em>timer=None</em>, <em>controller=None</em>, <em>hub=None</em>, <em>amqheartbeat=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.BlockingConsumer" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="celery.worker.consumer.BlockingConsumer.consume_messages">
 <tt class="descname">consume_messages</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.consumer.BlockingConsumer.consume_messages" title="Permalink to this definition">¶</a></dt>
@@ -181,7 +187,7 @@ early, <em>then</em> close the connection.</p>
 
 <dl class="class">
 <dt id="celery.worker.consumer.Consumer">
-<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">Consumer</tt><big>(</big><em>ready_queue</em>, <em>init_callback=&lt;function noop at 0x101b18488&gt;</em>, <em>send_events=False</em>, <em>hostname=None</em>, <em>initial_prefetch_count=2</em>, <em>pool=None</em>, <em>app=None</em>, <em>timer=None</em>, <em>controller=None</em>, <em>hub=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.consumer.</tt><tt class="descname">Consumer</tt><big>(</big><em>ready_queue</em>, <em>init_callback=&lt;function noop at 0x101a9bde8&gt;</em>, <em>send_events=False</em>, <em>hostname=None</em>, <em>initial_prefetch_count=2</em>, <em>pool=None</em>, <em>app=None</em>, <em>timer=None</em>, <em>controller=None</em>, <em>hub=None</em>, <em>amqheartbeat=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Listen for messages received from the broker and
 move them to the ready queue for task processing.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -197,6 +203,11 @@ move them to the ready queue for task processing.</p>
 </tbody>
 </table>
 <dl class="method">
+<dt id="celery.worker.consumer.Consumer.add_task_queue">
+<tt class="descname">add_task_queue</tt><big>(</big><em>queue</em>, <em>exchange=None</em>, <em>exchange_type=None</em>, <em>routing_key=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.add_task_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="celery.worker.consumer.Consumer.apply_eta_task">
 <tt class="descname">apply_eta_task</tt><big>(</big><em>task</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.apply_eta_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method called by the timer to apply a task with an
@@ -208,6 +219,11 @@ ETA/countdown.</p>
 <tt class="descname">broadcast_consumer</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.consumer.Consumer.broadcast_consumer" title="Permalink to this definition">¶</a></dt>
 <dd><p>The consumer used to consume broadcast commands.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.consumer.Consumer.cancel_task_queue">
+<tt class="descname">cancel_task_queue</tt><big>(</big><em>queue</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.cancel_task_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.worker.consumer.Consumer.close">
@@ -228,7 +244,7 @@ ETA/countdown.</p>
 
 <dl class="method">
 <dt id="celery.worker.consumer.Consumer.consume_messages">
-<tt class="descname">consume_messages</tt><big>(</big><em>sleep=&lt;built-in function sleep&gt;</em>, <em>min=&lt;built-in function min&gt;</em>, <em>Empty=&lt;class 'Queue.Empty'&gt;</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.consume_messages" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">consume_messages</tt><big>(</big><em>sleep=&lt;built-in function sleep&gt;</em>, <em>min=&lt;built-in function min&gt;</em>, <em>Empty=&lt;class 'Queue.Empty'&gt;</em>, <em>hbrate=2.0</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.consume_messages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Consume messages forever (or until an exception is raised).</p>
 </dd></dl>
 
@@ -336,7 +352,7 @@ doesn&#8217;t enter a loop.</p>
 
 <dl class="method">
 <dt id="celery.worker.consumer.Consumer.on_task">
-<tt class="descname">on_task</tt><big>(</big><em>task</em>, <em>task_reserved=&lt;built-in method add of set object at 0x10471da48&gt;</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.on_task" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">on_task</tt><big>(</big><em>task</em>, <em>task_reserved=&lt;built-in method add of set object at 0x10502e960&gt;</em><big>)</big><a class="headerlink" href="#celery.worker.consumer.Consumer.on_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle received task.</p>
 <p>If the task has an <cite>eta</cite> we enter it into the ETA schedule,
 otherwise we move it the ready queue for immediate processing.</p>

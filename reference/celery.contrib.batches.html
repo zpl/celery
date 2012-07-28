@@ -83,7 +83,7 @@
     <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
     <span class="n">count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">requests</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">url</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">count</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&#39;&gt;&gt;&gt; Clicks: </span><span class="si">%s</span><span class="s"> -&gt; </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;&gt;&gt;&gt; Clicks: {0} -&gt; {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Registering the click is done as follows:</p>

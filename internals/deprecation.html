@@ -187,12 +187,12 @@ for example:</p>
     <span class="k">print</span><span class="p">(</span><span class="s">&quot;My task id is </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="p">))</span>
 </pre></div>
 </div>
-<p>must be rewritten into:</p>
+<p>should be rewritten into:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">task</span>
 
 <span class="nd">@task</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;My task id is </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;My task id is {0.request.id}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">add</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -307,9 +307,6 @@ for example:</p>
 </tr>
 <tr class="row-even"><td><tt class="docutils literal"><span class="pre">BROKER_VHOST</span></tt></td>
 <td><a class="reference internal" href="../configuration.html#std:setting-BROKER_URL"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_URL</span></tt></a></td>
-</tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">BROKER_INSIST</span></tt></td>
-<td><em>no alternative</em></td>
 </tr>
 </tbody>
 </table>

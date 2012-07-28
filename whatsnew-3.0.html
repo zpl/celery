@@ -343,20 +343,21 @@ This can also be used to convert to dot format:</p>
 </div></blockquote>
 </li>
 <li><p class="first">A new special subtask called <tt class="docutils literal"><span class="pre">chain</span></tt> is also included:</p>
-<div class="highlight-python"><pre>.. code-block:: python
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">chain</span>
 
-    &gt;&gt;&gt; from celery import chain
+<span class="go"># (2 + 2) * 8 / 2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="go">                mul.subtask((8, )),</span>
+<span class="go">                div.subtask((2,))).apply_async()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="mi">16</span>
 
-    # (2 + 2) * 8 / 2
-    &gt;&gt;&gt; res = chain(add.subtask((2, 2)),
-                    mul.subtask((8, )),
-                    div.subtask((2,))).apply_async()
-    &gt;&gt;&gt; res.get() == 16
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="mi">32</span>
 
-    &gt;&gt;&gt; res.parent.get() == 32
-
-    &gt;&gt;&gt; res.parent.parent.get() == 4</pre>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="mi">4</span>
+</pre></div>
 </div>
+</div></blockquote>
 </li>
 <li><p class="first">Adds <tt class="xref py py-meth docutils literal"><span class="pre">AsyncResult.get_leaf()</span></tt></p>
 <blockquote>
@@ -396,7 +397,7 @@ transport option, which must be a list of numbers in <strong>sorted order</stron
 </div>
 <p>Priorities implemented in this way is not as reliable as
 priorities on the server side, which is why
-nickname the feature &#8220;quasi-priorities&#8221;;
+the feature is nicknamed &#8220;quasi-priorities&#8221;;
 <strong>Using routing is still the suggested way of ensuring
 quality of service</strong>, as client implemented priorities
 fall short in a number of ways, e.g. if the worker
@@ -424,12 +425,15 @@ since it was very difficult to migrate the TaskSet class to become
 a subtask.</p>
 </li>
 <li><p class="first">A new shortcut has been added to tasks:</p>
-<div class="highlight-python"><pre>    &gt;&gt;&gt; task.s(arg1, arg2, kw=1)
-
-as a shortcut to::
-
-    &gt;&gt;&gt; task.subtask((arg1, arg2), {'kw': 1})</pre>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">task</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="n">kw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>as a shortcut to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">task</span><span class="o">.</span><span class="n">subtask</span><span class="p">((</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">),</span> <span class="p">{</span><span class="s">&#39;kw&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</pre></div>
+</div>
+</div></blockquote>
 </li>
 <li><p class="first">Tasks can be chained by using the <tt class="docutils literal"><span class="pre">|</span></tt> operator:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">pow</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
@@ -437,15 +441,18 @@ as a shortcut to::
 </div>
 </li>
 <li><p class="first">Subtasks can be &#8220;evaluated&#8221; using the <tt class="docutils literal"><span class="pre">~</span></tt> operator:</p>
-<div class="highlight-python"><pre>    &gt;&gt;&gt; ~add.s(2, 2)
-    4
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="o">~</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">4</span>
 
-    &gt;&gt;&gt; ~(add.s(2, 2) | pow.s(2))
-
-is the same as::
-
-    &gt;&gt;&gt; chain(add.s(2, 2), pow.s(2)).apply_async().get()</pre>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">~</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="nb">pow</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
 </div>
+<p>is the same as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chain</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">pow</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
 </li>
 <li><p class="first">A new subtask_type key has been added to the subtask dicts</p>
 <blockquote>
@@ -890,7 +897,7 @@ and instead set different priorities.</p>
 <li><p class="first">Worker/Celerybeat no longer logs the startup banner.</p>
 <blockquote>
 <div><p>Previously it would be logged with severity warning,
-no it&#8217;s only written to stdout.</p>
+now it&#8217;s only written to stdout.</p>
 </div></blockquote>
 </li>
 <li><p class="first">The <tt class="docutils literal"><span class="pre">contrib/</span></tt> directory in the distribution has been renamed to
@@ -937,7 +944,7 @@ twice.</p>
 </div></blockquote>
 </li>
 <li><p class="first">Now using <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.utils.encoding.html#kombu.utils.encoding" title="(in Kombu v2.2)"><tt class="xref py py-mod docutils literal"><span class="pre">kombu.utils.encoding</span></tt></a> instead of
-<cite>:mod:`celery.utils.encoding</cite>.</p>
+<tt class="xref py py-mod docutils literal"><span class="pre">celery.utils.encoding</span></tt>.</p>
 </li>
 <li><p class="first">Renamed module <tt class="docutils literal"><span class="pre">celery.routes</span></tt> -&gt; <a class="reference internal" href="internals/reference/celery.app.routes.html#module-celery.app.routes" title="celery.app.routes"><tt class="xref py py-mod docutils literal"><span class="pre">celery.app.routes</span></tt></a>.</p>
 </li>

@@ -477,7 +477,7 @@ distribution.</p>
 </div>
 <p>If you only want to test specific Python versions use the <em class="xref std std-option">-e</em>
 option:</p>
-<div class="highlight-python"><pre>$ tox -e py25,py26</pre>
+<div class="highlight-python"><pre>$ tox -e py26</pre>
 </div>
 </div>
 </div>
@@ -637,7 +637,8 @@ additional rules apply:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">If the module uses the with statement it must also enable that:</p>
+<li><p class="first">If the module uses the with statement and must be compatible
+with Python 2.5 (celery is not) then it must also enable that:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
 </pre></div>
 </div>

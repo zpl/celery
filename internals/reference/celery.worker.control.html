@@ -84,7 +84,7 @@
 <em class="property">class </em><tt class="descclassname">celery.worker.control.</tt><tt class="descname">Panel</tt><big>(</big><em>dict=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.Panel" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.worker.control.Panel.data">
-<tt class="descname">data</tt><em class="property"> = {'time_limit': &lt;function time_limit at 0x10aa7ab90&gt;, 'revoke': &lt;function revoke at 0x10a87fed8&gt;, 'dump_active': &lt;function dump_active at 0x10aa7acf8&gt;, 'report': &lt;function report at 0x10589e0c8&gt;, 'cancel_consumer': &lt;function cancel_consumer at 0x10aafe2a8&gt;, 'dump_reserved': &lt;function dump_reserved at 0x10aa7ac80&gt;, 'shutdown': &lt;function shutdown at 0x10aafe1b8&gt;, 'autoscale': &lt;function autoscale at 0x10aafe140&gt;, 'ping': &lt;function ping at 0x10aa7aed8&gt;, 'disable_events': &lt;function disable_events at 0x10aa7a410&gt;, 'pool_shrink': &lt;function pool_shrink at 0x10aafe050&gt;, 'pool_restart': &lt;function pool_restart at 0x10aafe0c8&gt;, 'dump_schedule': &lt;function dump_schedule at 0x10aa7ac08&gt;, 'active_queues': &lt;function active_queues at 0x10aafe320&gt;, 'stats': &lt;function stats at 0x10aa7ad70&gt;, 'dump_tasks': &lt;function dump_tasks at 0x10aa7ae60&gt;, 'add_consumer': &lt;function add_consumer at 0x10aafe230&gt;, 'enable_events': &lt;function enable_events at 0x10589e230&gt;, 'dump_revoked': &lt;function dump_revoked at 0x10aa7ade8&gt;, 'rate_limit': &lt;function rate_limit at 0x10aa7a9b0&gt;, 'pool_grow': &lt;function pool_grow at 0x10aa7af50&gt;, 'heartbeat': &lt;function heartbeat at 0x10aa7a320&gt;}</em><a class="headerlink" href="#celery.worker.control.Panel.data" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">data</tt><em class="property"> = {'time_limit': &lt;function time_limit at 0x105225c08&gt;, 'revoke': &lt;function revoke at 0x107f41e60&gt;, 'dump_active': &lt;function dump_active at 0x105225d70&gt;, 'report': &lt;function report at 0x105825cf8&gt;, 'cancel_consumer': &lt;function cancel_consumer at 0x102aa2398&gt;, 'dump_reserved': &lt;function dump_reserved at 0x105225cf8&gt;, 'shutdown': &lt;function shutdown at 0x102aa2668&gt;, 'autoscale': &lt;function autoscale at 0x102aa2410&gt;, 'ping': &lt;function ping at 0x10583dc80&gt;, 'disable_events': &lt;function disable_events at 0x105225aa0&gt;, 'pool_shrink': &lt;function pool_shrink at 0x105860b18&gt;, 'pool_restart': &lt;function pool_restart at 0x105860b90&gt;, 'dump_schedule': &lt;function dump_schedule at 0x105225c80&gt;, 'active_queues': &lt;function active_queues at 0x1080aec08&gt;, 'stats': &lt;function stats at 0x105225de8&gt;, 'dump_tasks': &lt;function dump_tasks at 0x10583dc08&gt;, 'add_consumer': &lt;function add_consumer at 0x102aa2ed8&gt;, 'enable_events': &lt;function enable_events at 0x105225a28&gt;, 'dump_revoked': &lt;function dump_revoked at 0x105225e60&gt;, 'rate_limit': &lt;function rate_limit at 0x105225b90&gt;, 'dump_conf': &lt;function dump_conf at 0x1080aeb18&gt;, 'pool_grow': &lt;function pool_grow at 0x1058609b0&gt;, 'heartbeat': &lt;function heartbeat at 0x105225b18&gt;}</em><a class="headerlink" href="#celery.worker.control.Panel.data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="classmethod">
@@ -126,6 +126,11 @@
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="celery.worker.control.dump_conf">
+<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_conf</tt><big>(</big><em>panel</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_conf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="celery.worker.control.dump_reserved">
 <tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_reserved</tt><big>(</big><em>panel</em>, <em>safe=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_reserved" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -142,7 +147,7 @@
 
 <dl class="function">
 <dt id="celery.worker.control.dump_tasks">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_tasks</tt><big>(</big><em>panel</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_tasks" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_tasks</tt><big>(</big><em>panel</em>, <em>taskinfoitems=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_tasks" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">

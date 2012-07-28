@@ -169,8 +169,7 @@ detaching.</p>
 <dl class="attribute">
 <dt id="celery.bin.base.Command.args">
 <tt class="descname">args</tt><em class="property"> = ''</em><a class="headerlink" href="#celery.bin.base.Command.args" title="Permalink to this definition">¶</a></dt>
-<dd><p>Arg list used in help.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.bin.base.Command.check_args">
@@ -185,8 +184,7 @@ detaching.</p>
 <dl class="attribute">
 <dt id="celery.bin.base.Command.description">
 <tt class="descname">description</tt><em class="property"> = ''</em><a class="headerlink" href="#celery.bin.base.Command.description" title="Permalink to this definition">¶</a></dt>
-<dd><p>Text to print in &#8211;help before option list.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.bin.base.Command.die">
@@ -206,14 +204,12 @@ detaching.</p>
 <dl class="attribute">
 <dt id="celery.bin.base.Command.enable_config_from_cmdline">
 <tt class="descname">enable_config_from_cmdline</tt><em class="property"> = False</em><a class="headerlink" href="#celery.bin.base.Command.enable_config_from_cmdline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable if the application should support config from the cmdline.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.bin.base.Command.epilog">
 <tt class="descname">epilog</tt><em class="property"> = None</em><a class="headerlink" href="#celery.bin.base.Command.epilog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Text to print at end of &#8211;help</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.bin.base.Command.execute_from_commandline">
@@ -273,16 +269,29 @@ and <tt class="docutils literal"><span class="pre">argv</span></tt> contains pos
 </dd></dl>
 
 <dl class="attribute">
+<dt id="celery.bin.base.Command.leaf">
+<tt class="descname">leaf</tt><em class="property"> = True</em><a class="headerlink" href="#celery.bin.base.Command.leaf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.bin.base.Command.maybe_patch_concurrency">
+<tt class="descname">maybe_patch_concurrency</tt><big>(</big><em>argv</em>, <em>short_opts=None</em>, <em>long_opts=None</em><big>)</big><a class="headerlink" href="#celery.bin.base.Command.maybe_patch_concurrency" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="celery.bin.base.Command.namespace">
 <tt class="descname">namespace</tt><em class="property"> = 'celery'</em><a class="headerlink" href="#celery.bin.base.Command.namespace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Default configuration namespace.</p>
-</dd></dl>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.bin.base.Command.on_concurrency_setup">
+<tt class="descname">on_concurrency_setup</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.bin.base.Command.on_concurrency_setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="celery.bin.base.Command.option_list">
 <tt class="descname">option_list</tt><em class="property"> = ()</em><a class="headerlink" href="#celery.bin.base.Command.option_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of options (without preload options).</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.bin.base.Command.parse_doc">
@@ -302,9 +311,8 @@ and <tt class="docutils literal"><span class="pre">argv</span></tt> contains pos
 
 <dl class="attribute">
 <dt id="celery.bin.base.Command.preload_options">
-<tt class="descname">preload_options</tt><em class="property"> = (&lt;Option at 0x1058cbea8: -A/--app&gt;, &lt;Option at 0x10b323b90: -b/--broker&gt;, &lt;Option at 0x1093cd560: --loader&gt;, &lt;Option at 0x10b380a28: --config&gt;)</em><a class="headerlink" href="#celery.bin.base.Command.preload_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of options to parse before parsing other options.</p>
-</dd></dl>
+<tt class="descname">preload_options</tt><em class="property"> = (&lt;Option at 0x1089dabd8: -A/--app&gt;, &lt;Option at 0x102ab8cb0: -b/--broker&gt;, &lt;Option at 0x1089e0ef0: --loader&gt;, &lt;Option at 0x108d18ef0: --config&gt;)</em><a class="headerlink" href="#celery.bin.base.Command.preload_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.bin.base.Command.prepare_args">
@@ -340,12 +348,15 @@ until after this is called.</p>
 <tt class="descname">setup_app_from_commandline</tt><big>(</big><em>argv</em><big>)</big><a class="headerlink" href="#celery.bin.base.Command.setup_app_from_commandline" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.bin.base.Command.simple_format">
+<tt class="descname">simple_format</tt><big>(</big><em>s</em>, <em>match=&lt;_sre.SRE_Pattern object at 0x108606be0&gt;</em>, <em>expand='\1'</em>, <em>**keys</em><big>)</big><a class="headerlink" href="#celery.bin.base.Command.simple_format" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="celery.bin.base.Command.supports_args">
 <tt class="descname">supports_args</tt><em class="property"> = True</em><a class="headerlink" href="#celery.bin.base.Command.supports_args" title="Permalink to this definition">¶</a></dt>
-<dd><p>If false the parser will raise an exception if positional
-args are provided.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.bin.base.Command.symbol_by_name">
@@ -361,7 +372,18 @@ args are provided.</p>
 <dl class="attribute">
 <dt id="celery.bin.base.Command.version">
 <tt class="descname">version</tt><em class="property"> = '3.1.0a1 (DEVEL)'</em><a class="headerlink" href="#celery.bin.base.Command.version" title="Permalink to this definition">¶</a></dt>
-<dd><p>Application version.</p>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.bin.base.Command.with_pool_option">
+<tt class="descname">with_pool_option</tt><big>(</big><em>argv</em><big>)</big><a class="headerlink" href="#celery.bin.base.Command.with_pool_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns tuple of <tt class="docutils literal"><span class="pre">(short_opts,</span> <span class="pre">long_opts)</span></tt> if the command
+supports a pool argument, and used to monkey patch eventlet/gevent
+environments as early as possible.</p>
+<dl class="docutils">
+<dt>E.g::</dt>
+<dd>has_pool_option = ([&#8216;-P&#8217;], [&#8216;&#8211;pool&#8217;])</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

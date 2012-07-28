@@ -91,7 +91,7 @@ range even if it is released more times than it was acquired.</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s">&#39;HELLO </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s">&#39;HELLO {0!r}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>

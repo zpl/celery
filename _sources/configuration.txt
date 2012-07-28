@@ -119,7 +119,7 @@ You can change methods too, for example the ``on_failure`` handler:
 .. code-block:: python
 
     def my_on_failure(self, exc, task_id, args, kwargs, einfo):
-        print("Oh no! Task failed: %r" % (exc, ))
+        print("Oh no! Task failed: {0!r}".format(exc))
 
     CELERY_ANNOTATIONS = {"*": {"on_failure": my_on_failure}}
 
@@ -605,6 +605,32 @@ A list of routers, or a single router used to route tasks to queues.
 When deciding the final destination of a task the routers are consulted
 in order.  See :ref:`routers` for more information.
 
+.. setting:: CELERY_WORKER_DIRECT
+
+CELERY_WORKER_DIRECT
+~~~~~~~~~~~~~~~~~~~~
+
+This option enables so that every worker has a dedicated queue,
+so that tasks can be routed to specific workers.
+
+The queue name for each worker is automatically generated based on
+the worker hostname and a ``.dq`` suffix, using the ``C.dq`` exchange.
+
+For example the queue name for the worker with hostname ``w1.example.com``
+becomes::
+
+    w1.example.com.dq
+
+Then you can route the task to the task by specifying the hostname
+as the routung key and the ``C.dq`` exchange::
+
+    CELERY_ROUTES = {
+        'tasks.add': {'exchange': 'C.dq', 'routing_key': 'w1.example.com'}
+    }
+
+This setting is mandatory if you want to use the ``move_to_worker`` features
+of :mod:`celery.contrib.migrate`.
+
 .. setting:: CELERY_CREATE_MISSING_QUEUES
 
 CELERY_CREATE_MISSING_QUEUES
@@ -702,6 +728,26 @@ default is ``amqp``, but there are many other choices including
 It can also be a fully qualified path to your own transport implementation.
 
 See the Kombu documentation for more information about broker URLs.
+
+.. setting:: BROKER_HEARTBEAT
+
+BROKER_HEARTBEAT
+~~~~~~~~~~~~~~~~
+:transports supported: ``pyamqp``
+
+It's not always possible to detect connection loss in a timely
+manner using TCP/IP alone, so AMQP defines something called heartbeats
+that's is used both by the client and the broker to detect if
+a connection was closed.
+
+Heartbeats are currently only supported by the ``pyamqp://`` transport,
+and this requires the :mod:`amqp` module::
+
+    $ pip install amqp
+
+The default heartbeat value is 10 seconds,
+the heartbeat will then be monitored at double the rate of the heartbeat value
+(so for the default 10 seconds, the heartbeat is checked every 5 seconds).
 
 .. setting:: BROKER_USE_SSL
 
