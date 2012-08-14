@@ -144,7 +144,7 @@ including a <a class="reference external" href="http://groups.google.com/group/c
 
 <span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&#39;amqp://guest@localhost//&#39;</span><span class="p">)</span>
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
     <span class="k">return</span> <span class="s">&#39;hello world&#39;</span>
 </pre></div>

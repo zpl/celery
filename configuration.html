@@ -148,7 +148,8 @@ to be used.</p>
 <p>Celery requires the <tt class="xref py py-mod docutils literal"><span class="pre">pytz</span></tt> library to be installed,
 when using custom time zones (other than UTC).  You can
 install it using <strong class="program">pip</strong> or <strong class="program">easy_install</strong>:</p>
-<div class="highlight-python"><pre>$ pip install pytz</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install pytz
+</pre></div>
 </div>
 <p class="last">Pytz is a library that defines the timzones of the world,
 it changes quite frequently so it is not included in the Python Standard
@@ -403,7 +404,8 @@ setting:</p>
 <p>The Redis backend requires the <tt class="xref py py-mod docutils literal"><span class="pre">redis</span></tt> library:
 <a class="reference external" href="http://pypi.python.org/pypi/redis/">http://pypi.python.org/pypi/redis/</a></p>
 <p>To install the redis package use <cite>pip</cite> or <cite>easy_install</cite>:</p>
-<div class="last highlight-python"><pre>$ pip install redis</pre>
+<div class="last highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install redis
+</pre></div>
 </div>
 </div>
 <p>This backend requires the <a class="reference internal" href="#std:setting-CELERY_RESULT_BACKEND"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_RESULT_BACKEND</span></tt></a>
@@ -514,7 +516,8 @@ Defaults to &#8220;celery_taskmeta&#8221;.</p>
 <p>The Cassandra backend requires the <tt class="xref py py-mod docutils literal"><span class="pre">pycassa</span></tt> library:
 <a class="reference external" href="http://pypi.python.org/pypi/pycassa/">http://pypi.python.org/pypi/pycassa/</a></p>
 <p>To install the pycassa package use <cite>pip</cite> or <cite>easy_install</cite>:</p>
-<div class="last highlight-python"><pre>$ pip install pycassa</pre>
+<div class="last highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install pycassa
+</pre></div>
 </div>
 </div>
 <p>This backend requires the following configuration directives to be set.</p>
@@ -688,7 +691,8 @@ that&#8217;s is used both by the client and the broker to detect if
 a connection was closed.</p>
 <p>Heartbeats are currently only supported by the <tt class="docutils literal"><span class="pre">pyamqp://</span></tt> transport,
 and this requires the <tt class="xref py py-mod docutils literal"><span class="pre">amqp</span></tt> module:</p>
-<div class="highlight-python"><pre>$ pip install amqp</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install amqp
+</pre></div>
 </div>
 <p>The default heartbeat value is 10 seconds,
 the heartbeat will then be monitored at double the rate of the heartbeat value
@@ -900,7 +904,7 @@ e.g. clean up before the hard time limit comes.</p>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.exceptions</span> <span class="kn">import</span> <span class="n">SoftTimeLimitExceeded</span>
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">mytask</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">do_work</span><span class="p">()</span>
@@ -1143,6 +1147,12 @@ classes, that augments functionality in the worker.</p>
 <p>You can use a custom pool class name, or select one of
 the built-in aliases: <tt class="docutils literal"><span class="pre">processes</span></tt>, <tt class="docutils literal"><span class="pre">eventlet</span></tt>, <tt class="docutils literal"><span class="pre">gevent</span></tt>.</p>
 <p>Default is <tt class="docutils literal"><span class="pre">processes</span></tt>.</p>
+</div>
+<div class="section" id="celeryd-pool-restarts">
+<span id="std:setting-CELERYD_POOL_RESTARTS"></span><h4>CELERYD_POOL_RESTARTS<a class="headerlink" href="#celeryd-pool-restarts" title="Permalink to this headline">¶</a></h4>
+<p>If enabled the worker pool can be restarted using the
+<a class="reference internal" href="userguide/workers.html#std:control-pool_restart"><tt class="xref std std-control docutils literal"><span class="pre">pool_restart</span></tt></a> remote control command.</p>
+<p>Disabled by default.</p>
 </div>
 <div class="section" id="celeryd-autoscaler">
 <span id="std:setting-CELERYD_AUTOSCALER"></span><h4>CELERYD_AUTOSCALER<a class="headerlink" href="#celeryd-autoscaler" title="Permalink to this headline">¶</a></h4>

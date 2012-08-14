@@ -143,8 +143,9 @@ replacement for the amqplib module.</p>
 has been removed, and that makes it incompatible with earlier versions.</p>
 <p>You can manually delete the old exchanges if you want,
 using the <strong class="program">celery amqp</strong> command (previously called <tt class="docutils literal"><span class="pre">camqadm</span></tt>):</p>
-<div class="highlight-python"><pre>$ celery amqp exchange.delete celeryd.pidbox
-$ celery amqp exchange.delete reply.celeryd.pidbox</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery amqp exchange.delete celeryd.pidbox
+<span class="nv">$ </span>celery amqp exchange.delete reply.celeryd.pidbox
+</pre></div>
 </div>
 </div>
 <div class="section" id="eventloop">
@@ -168,7 +169,8 @@ by default if the eventloop is not used.</p>
 <p>All Celery&#8217;s command line programs are now available from a single
 <strong class="program">celery</strong> umbrella command.</p>
 <p>You can see a list of subcommands and options by running:</p>
-<div class="highlight-python"><pre>$ celery help</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery <span class="nb">help</span>
+</pre></div>
 </div>
 <p>Commands include:</p>
 <ul class="simple">
@@ -200,8 +202,9 @@ for the no-execv patch to work.</p>
 <p>The setup.py install script will try to remove the old package,
 but if that doesn&#8217;t work for some reason you have to remove
 it manually.  This command helps:</p>
-<div class="highlight-python"><pre>$ rm -r $(dirname $(python -c '
-    import celery;print(celery.__file__)'))/app/task/</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>rm -r <span class="k">$(</span>dirname <span class="k">$(</span>python -c <span class="s1">&#39;</span>
+<span class="s1">    import celery;print(celery.__file__)&#39;</span><span class="k">))</span>/app/task/
+</pre></div>
 </div>
 <p>If you experience an error like <tt class="docutils literal"><span class="pre">ImportError:</span> <span class="pre">cannot</span> <span class="pre">import</span> <span class="pre">name</span> <span class="pre">_unpickle_task</span></tt>,
 you just have to remove the old package and everything is fine.</p>
@@ -332,7 +335,8 @@ This can also be used to convert to dot format:</p>
 </pre></div>
 </div>
 <p>which can than be used to produce an image:</p>
-<div class="highlight-python"><pre>$ dot -Tpng graph.dot -o graph.png</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>dot -Tpng graph.dot -o graph.png
+</pre></div>
 </div>
 </div></blockquote>
 </li>
@@ -512,8 +516,9 @@ the connection is re-connected.</p>
 </pre></div>
 </div>
 <p>or using the <strong class="program">celery control</strong> command:</p>
-<div class="highlight-python"><pre>$ celery control -d w1.example.com add_consumer queue
-$ celery control -d w1.example.com cancel_consumer queue</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery control -d w1.example.com add_consumer queue
+<span class="nv">$ </span>celery control -d w1.example.com cancel_consumer queue
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -532,7 +537,8 @@ max/min concurrency settings.</p>
 </pre></div>
 </div>
 <p>or using the <strong class="program">celery control</strong> command:</p>
-<div class="highlight-python"><pre>$ celery control -d w1.example.com autoscale 10 5</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery control -d w1.example.com autoscale 10 5
+</pre></div>
 </div>
 </div></blockquote>
 </li>
@@ -546,8 +552,9 @@ max/min concurrency settings.</p>
 </pre></div>
 </div>
 <p>or using the <strong class="program">celery control</strong> command:</p>
-<div class="highlight-python"><pre>$ celery control -d w1.example.com pool_grow 2
-$ celery control -d w1.example.com pool_shrink 2</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery control -d w1.example.com pool_grow 2
+<span class="nv">$ </span>celery control -d w1.example.com pool_shrink 2
+</pre></div>
 </div>
 </div></blockquote>
 </li>
@@ -610,7 +617,7 @@ to add a module-level logger to your tasks module.</p>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_task_logger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Adding </span><span class="si">%r</span><span class="s"> + </span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
@@ -698,9 +705,10 @@ and get the celery attribute from that module.</li>
 <p>E.g. if you have a project named &#8216;proj&#8217; where the
 celery app is located in &#8216;from proj.celery import celery&#8217;,
 then the following will be equivalent:</p>
-<div class="highlight-python"><pre>$ celery worker --app=proj
-$ celery worker --app=proj.celery:
-$ celery worker --app=proj.celery:celery</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery worker --app<span class="o">=</span>proj
+<span class="nv">$ </span>celery worker --app<span class="o">=</span>proj.celery:
+<span class="nv">$ </span>celery worker --app<span class="o">=</span>proj.celery:celery
+</pre></div>
 </div>
 </div>
 <div class="section" id="in-other-news">
@@ -790,12 +798,18 @@ annotated methods end up being bound.</p>
 </div>
 </li>
 <li><p class="first">Using the <tt class="docutils literal"><span class="pre">celery</span></tt> command-line program:</p>
-<div class="highlight-python"><pre>$ celery report</pre>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery report
+</pre></div>
 </div>
+</div></blockquote>
 </li>
 <li><p class="first">Get it from remote workers:</p>
-<div class="highlight-python"><pre>$ celery inspect report</pre>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery inspect report
+</pre></div>
 </div>
+</div></blockquote>
 </li>
 </ul>
 </div></blockquote>
@@ -873,7 +887,7 @@ library to be installed (exept if the timezone is set to <cite>UTC</cite>).</p>
 </li>
 <li><p class="first">The Tokyo Tyrant backend has been removed and is no longer supported.</p>
 </li>
-<li><p class="first">Now uses <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.common.html#kombu.common.maybe_declare" title="(in Kombu v2.2)"><tt class="xref py py-func docutils literal"><span class="pre">maybe_declare()</span></tt></a> to cache queue declarations.</p>
+<li><p class="first">Now uses <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.common.html#kombu.common.maybe_declare" title="(in Kombu v2.3)"><tt class="xref py py-func docutils literal"><span class="pre">maybe_declare()</span></tt></a> to cache queue declarations.</p>
 </li>
 <li><p class="first">There is no longer a global default for the
 <a class="reference internal" href="configuration.html#std:setting-CELERYBEAT_MAX_LOOP_INTERVAL"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYBEAT_MAX_LOOP_INTERVAL</span></tt></a> setting, it is instead
@@ -943,7 +957,7 @@ twice.</p>
 <a class="reference internal" href="internals/reference/celery.utils.functional.html#module-celery.utils.functional" title="celery.utils.functional"><tt class="xref py py-mod docutils literal"><span class="pre">celery.utils.functional</span></tt></a></p>
 </div></blockquote>
 </li>
-<li><p class="first">Now using <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.utils.encoding.html#kombu.utils.encoding" title="(in Kombu v2.2)"><tt class="xref py py-mod docutils literal"><span class="pre">kombu.utils.encoding</span></tt></a> instead of
+<li><p class="first">Now using <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.utils.encoding.html#kombu.utils.encoding" title="(in Kombu v2.3)"><tt class="xref py py-mod docutils literal"><span class="pre">kombu.utils.encoding</span></tt></a> instead of
 <tt class="xref py py-mod docutils literal"><span class="pre">celery.utils.encoding</span></tt>.</p>
 </li>
 <li><p class="first">Renamed module <tt class="docutils literal"><span class="pre">celery.routes</span></tt> -&gt; <a class="reference internal" href="internals/reference/celery.app.routes.html#module-celery.app.routes" title="celery.app.routes"><tt class="xref py py-mod docutils literal"><span class="pre">celery.app.routes</span></tt></a>.</p>

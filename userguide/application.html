@@ -105,7 +105,7 @@ This works similarly to how host names works on the internet: every worker
 maintains a mapping of task names to their actual functions, called the <em>task
 registry</em>.</p>
 <p>Whenever you define a task, that task will also be added to the local registry:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
@@ -119,7 +119,7 @@ registry</em>.</p>
 <span class="go">&lt;@task: __main__.add&gt;</span>
 </pre></div>
 </div>
-<p>and there we see that <tt class="docutils literal"><span class="pre">__main__</span></tt> again; whenever Celery is not able
+<p>and there you see that <tt class="docutils literal"><span class="pre">__main__</span></tt> again; whenever Celery is not able
 to detect what module the function belongs to, it uses the main module
 name to generate the beginning of the task name.</p>
 <p>This is only a problem in a limited set of use cases:</p>
@@ -134,7 +134,7 @@ name to generate the beginning of the task name.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
 <span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">()</span>
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
@@ -154,7 +154,7 @@ the tasks will be named starting with &#8220;<tt class="docutils literal"><span 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">main</span>
 <span class="go">&#39;tasks&#39;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
@@ -273,7 +273,8 @@ environment variable named <span class="target" id="index-0"></span><tt class="x
 </pre></div>
 </div>
 <p>You can then specify the configuration module to use via the environment:</p>
-<div class="highlight-python"><pre>$ CELERY_CONFIG_MODULE="celeryconfig.prod" celery worker -l info</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ CELERY_CONFIG_MODULE</span><span class="o">=</span><span class="s2">&quot;celeryconfig.prod&quot;</span> celery worker -l info
+</pre></div>
 </div>
 </div>
 </div>
@@ -296,8 +297,8 @@ tasks at the point when it&#8217;s called, instead it will defer the creation
 of the task to happen either when the task is used, or after the
 application has been <em>finalized</em>,</p>
 <p>This example shows how the task is not created until
-we use the task, or access an attribute (in this case <tt class="xref py py-meth docutils literal"><span class="pre">repr()</span></tt>):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span><span class="p">()</span>
+you use the task, or access an attribute (in this case <tt class="xref py py-meth docutils literal"><span class="pre">repr()</span></tt>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nd">@celery.task</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
@@ -364,7 +365,7 @@ module-based API.</p>
 <p>While it&#8217;s possible to depend on the current app
 being set, the best practice is to always pass the app instance
 around to anything that needs it.</p>
-<p>We call this the &#8220;app chain&#8221;, since it creates a chain
+<p>I call this the &#8220;app chain&#8221;, since it creates a chain
 of instances depending on the app being passed.</p>
 <p>The following example is considered bad practice:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">current_app</span>
@@ -394,7 +395,8 @@ so that everything also works in the module-based compatibility API</p>
 <p>In development you can set the <span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CELERY_TRACE_APP</span></tt>
 environment variable to raise an exception if the app
 chain breaks:</p>
-<div class="highlight-python"><pre>$ CELERY_TRACE_APP=1 celery worker -l info</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ CELERY_TRACE_APP</span><span class="o">=</span>1 celery worker -l info
+</pre></div>
 </div>
 <div class="topic">
 <p class="topic-title first">Evolving the API</p>
@@ -479,7 +481,7 @@ by changing its <a class="reference internal" href="../reference/celery.html#cel
 <span class="gp">&gt;&gt;&gt; </span><span class="n">celery</span><span class="o">.</span><span class="n">Task</span>
 <span class="go">&lt;unbound MyBaseTask&gt;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@x.task</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@x.task</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 

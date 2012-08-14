@@ -369,9 +369,10 @@ Thanks to howsthedotcom.</p>
 <span id="faq-worker-stops-processing"></span><h3><a class="toc-backref" href="#id23">Why aren&#8217;t my tasks processed?</a><a class="headerlink" href="#why-aren-t-my-tasks-processed" title="Permalink to this headline">¶</a></h3>
 <p><strong>Answer:</strong> With RabbitMQ you can see how many consumers are currently
 receiving tasks by running the following command:</p>
-<div class="highlight-python"><pre>$ rabbitmqctl list_queues -p &lt;myvhost&gt; name messages consumers
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>rabbitmqctl list_queues -p &lt;myvhost&gt; name messages consumers
 Listing queues ...
-celery     2891    2</pre>
+celery     2891    2
+</pre></div>
 </div>
 <p>This shows that there&#8217;s 2891 messages waiting to be processed in the task
 queue, and there are two consumers processing them.</p>
@@ -412,7 +413,8 @@ other error is happening.</p>
 <span id="faq-purge-the-queue"></span><h3><a class="toc-backref" href="#id26">How do I purge all waiting tasks?</a><a class="headerlink" href="#how-do-i-purge-all-waiting-tasks" title="Permalink to this headline">¶</a></h3>
 <p><strong>Answer:</strong> You can use the <tt class="docutils literal"><span class="pre">celery</span> <span class="pre">purge</span></tt> command to purge
 all configured task queues:</p>
-<div class="highlight-python"><pre>$ celery purge</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery purge
+</pre></div>
 </div>
 <p>or programatically:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">current_app</span> <span class="k">as</span> <span class="n">celery</span>
@@ -422,7 +424,8 @@ all configured task queues:</p>
 </div>
 <p>If you only want to purge messages from a specific queue
 you have to use the AMQP API or the <strong class="program">celery amqp</strong> utility:</p>
-<div class="highlight-python"><pre>$ celery amqp queue.purge &lt;queue name&gt;</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery amqp queue.purge &lt;queue name&gt;
+</pre></div>
 </div>
 <p>The number 1753 is the number of messages deleted.</p>
 <p>You can also start <a class="reference internal" href="reference/celery.bin.celeryd.html#module-celery.bin.celeryd" title="celery.bin.celeryd"><tt class="xref py py-mod docutils literal"><span class="pre">celeryd</span></tt></a> with the
@@ -599,7 +602,7 @@ that has an AMQP client.</p>
 <div class="section" id="how-can-i-get-the-task-id-of-the-current-task">
 <span id="faq-get-current-task-id"></span><h3><a class="toc-backref" href="#id43">How can I get the task id of the current task?</a><a class="headerlink" href="#how-can-i-get-the-task-id-of-the-current-task" title="Permalink to this headline">¶</a></h3>
 <p><strong>Answer</strong>: The current id and more is available in the task request:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">mytask</span><span class="p">():</span>
     <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">mytask</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s">&quot;Running&quot;</span><span class="p">)</span>
 </pre></div>
@@ -632,7 +635,7 @@ Also, a common pattern is to add callbacks to tasks:</p>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_task_logger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
-<span class="nd">@celery.task</span><span class="p">()</span>
+<span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
@@ -668,8 +671,9 @@ so if you have more than one worker with the same host name, the
 control commands will be received in round-robin between them.</p>
 <p>To work around this you can explicitly set the host name for every worker
 using the <em class="xref std std-option">--hostname</em> argument to <a class="reference internal" href="reference/celery.bin.celeryd.html#module-celery.bin.celeryd" title="celery.bin.celeryd"><tt class="xref py py-mod docutils literal"><span class="pre">celeryd</span></tt></a>:</p>
-<div class="highlight-python"><pre>$ celeryd --hostname=$(hostname).1
-$ celeryd --hostname=$(hostname).2</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celeryd --hostname<span class="o">=</span><span class="k">$(</span>hostname<span class="k">)</span>.1
+<span class="nv">$ </span>celeryd --hostname<span class="o">=</span><span class="k">$(</span>hostname<span class="k">)</span>.2
+</pre></div>
 </div>
 <p>etc., etc...</p>
 </div>
@@ -718,7 +722,7 @@ it does it is usually an unrecoverable error that requires human
 intervention (bug in the worker, or task code).</p>
 <p>In an ideal world you could safely retry any task that has failed, but
 this is rarely the case. Imagine the following task:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">process_upload</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">tmpfile</span><span class="p">):</span>
     <span class="c"># Increment a file count stored in a database</span>
     <span class="n">increment_file_counter</span><span class="p">()</span>
@@ -809,7 +813,8 @@ also several other helper tables (<tt class="docutils literal"><span class="pre"
 <span id="faq-windows-worker-spawn-loop"></span><h3><a class="toc-backref" href="#id60">celeryd keeps spawning processes at startup</a><a class="headerlink" href="#celeryd-keeps-spawning-processes-at-startup" title="Permalink to this headline">¶</a></h3>
 <p><strong>Answer</strong>: This is a known issue on Windows.
 You have to start celeryd with the command:</p>
-<div class="highlight-python"><pre>$ python -m celery.bin.celeryd</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python -m celery.bin.celeryd
+</pre></div>
 </div>
 <p>Any additional arguments can be appended to this command.</p>
 <p>See <a class="reference external" href="http://bit.ly/bo9RSw">http://bit.ly/bo9RSw</a></p>
@@ -823,7 +828,8 @@ services instead.</p>
 <span id="faq-windows-django-settings"></span><h3><a class="toc-backref" href="#id62"><cite>django-celery</cite> can&#8217;t find settings?</a><a class="headerlink" href="#django-celery-can-t-find-settings" title="Permalink to this headline">¶</a></h3>
 <p><strong>Answer</strong>: You need to specify the <em class="xref std std-option">--settings</em> argument to
 <strong class="program">manage.py</strong>:</p>
-<div class="highlight-python"><pre>$ python manage.py celeryd start --settings=settings</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py celeryd start --settings<span class="o">=</span>settings
+</pre></div>
 </div>
 <p>See <a class="reference external" href="http://bit.ly/bo9RSw">http://bit.ly/bo9RSw</a></p>
 </div>

@@ -131,7 +131,8 @@ race condition leading to an annoying warning.</p>
 to be removed.</p>
 <p>The <strong class="program">camqadm</strong> command can be used to delete the
 previous exchange:</p>
-<div class="highlight-python"><pre>$ camqadm exchange.delete celeryresults</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>camqadm exchange.delete celeryresults
+</pre></div>
 </div>
 <p>As an alternative to deleting the old exchange you can
 configure a new name for the exchange:</p>
@@ -277,7 +278,8 @@ implementations:</p>
 If you are running on Linux this is the recommended implementation,
 to install the <tt class="xref py py-mod docutils literal"><span class="pre">pyinotify</span></tt> library you have to run the following
 command:</p>
-<div class="highlight-python"><pre>$ pip install pyinotify</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install pyinotify
+</pre></div>
 </div>
 </div></blockquote>
 </li>
@@ -292,7 +294,8 @@ expensive.</p>
 </ul>
 <p>You can force an implementation by setting the <span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">CELERYD_FSNOTIFY</span></tt>
 environment variable:</p>
-<div class="highlight-python"><pre>$ env CELERYD_FSNOTIFY=stat celeryd -l info --autoreload</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>env <span class="nv">CELERYD_FSNOTIFY</span><span class="o">=</span>stat celeryd -l info --autoreload
+</pre></div>
 </div>
 <p>Contributed by Mher Movsisyan.</p>
 </div>
@@ -399,7 +402,8 @@ with steps (e.g. 1-59/2).</p>
 <li><p class="first">celerybeat can now be configured on the command line like celeryd.</p>
 <p>Additional configuration must be added at the end of the argument list
 followed by <tt class="docutils literal"><span class="pre">--</span></tt>, for example:</p>
-<div class="highlight-python"><pre>$ celerybeat -l info -- celerybeat.max_loop_interval=10.0</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celerybeat -l info -- celerybeat.max_loop_interval<span class="o">=</span>10.0
+</pre></div>
 </div>
 </li>
 <li><p class="first">Now limits the number of frames in a traceback so that celeryd does not
@@ -451,9 +455,10 @@ automatically added to locals.</p>
 Note that this is experimental and you should have a backup
 of the data before proceeding.</p>
 <p><strong>Examples</strong>:</p>
-<div class="highlight-python"><pre>$ celeryctl migrate redis://localhost amqp://localhost
-$ celeryctl migrate amqp://localhost//v1 amqp://localhost//v2
-$ python manage.py celeryctl migrate django:// redis://</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celeryctl migrate redis://localhost amqp://localhost
+<span class="nv">$ </span>celeryctl migrate amqp://localhost//v1 amqp://localhost//v2
+<span class="nv">$ </span>python manage.py celeryctl migrate django:// redis://
+</pre></div>
 </div>
 </div></blockquote>
 </li>

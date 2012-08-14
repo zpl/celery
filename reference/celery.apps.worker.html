@@ -83,277 +83,62 @@ as an actual application, like installing signal handlers,
 platform tweaks, and so on.</p>
 <dl class="class">
 <dt id="celery.apps.worker.Worker">
-<em class="property">class </em><tt class="descclassname">celery.apps.worker.</tt><tt class="descname">Worker</tt><big>(</big><em>hostname=None</em>, <em>purge=False</em>, <em>beat=False</em>, <em>queues=None</em>, <em>include=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>autoscale=None</em>, <em>autoreload=False</em>, <em>no_execv=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="class">
-<dt id="celery.apps.worker.Worker.WorkController">
-<em class="property">class </em><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x101a9bde8&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unmanaged worker instance.</p>
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.CLOSE">
-<tt class="descname">CLOSE</tt><em class="property"> = 2</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.CLOSE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.RUN">
-<tt class="descname">RUN</tt><em class="property"> = 1</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.RUN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.TERMINATE">
-<tt class="descname">TERMINATE</tt><em class="property"> = 3</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.TERMINATE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.app">
-<tt class="descname">app</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.app" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.autoreloader_cls">
-<tt class="descname">autoreloader_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.autoreloader_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.autoscaler_cls">
-<tt class="descname">autoscaler_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.autoscaler_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.concurrency">
-<tt class="descname">concurrency</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.concurrency" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.consumer_cls">
-<tt class="descname">consumer_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.consumer_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.disable_rate_limits">
-<tt class="descname">disable_rate_limits</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.disable_rate_limits" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.force_execv">
-<tt class="descname">force_execv</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.force_execv" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.logfile">
-<tt class="descname">logfile</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.logfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.loglevel">
-<tt class="descname">loglevel</tt><em class="property"> = 40</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.loglevel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.max_tasks_per_child">
-<tt class="descname">max_tasks_per_child</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.max_tasks_per_child" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.mediator_cls">
-<tt class="descname">mediator_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.mediator_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.pool_cls">
-<tt class="descname">pool_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.pool_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.pool_putlocks">
-<tt class="descname">pool_putlocks</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.pool_putlocks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.prefetch_multiplier">
-<tt class="descname">prefetch_multiplier</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.prefetch_multiplier" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.WorkController.process_task">
-<tt class="descname">process_task</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.process_task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Process task by sending it to the pool of workers.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.WorkController.process_task_sem">
-<tt class="descname">process_task_sem</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.process_task_sem" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.WorkController.reload">
-<tt class="descname">reload</tt><big>(</big><em>modules=None</em>, <em>reload=False</em>, <em>reloader=None</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.reload" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.schedule_filename">
-<tt class="descname">schedule_filename</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.schedule_filename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.scheduler_cls">
-<tt class="descname">scheduler_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.scheduler_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.send_events">
-<tt class="descname">send_events</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.send_events" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.WorkController.should_use_eventloop">
-<tt class="descname">should_use_eventloop</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.should_use_eventloop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.WorkController.signal_consumer_close">
-<tt class="descname">signal_consumer_close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.signal_consumer_close" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.WorkController.start">
-<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Starts the workers main loop.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.state">
-<tt class="descname">state</tt><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.state" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.state_db">
-<tt class="descname">state_db</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.state_db" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.WorkController.stop">
-<tt class="descname">stop</tt><big>(</big><em>in_sighandler=False</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.stop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Graceful shutdown of the worker server.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.task_soft_time_limit">
-<tt class="descname">task_soft_time_limit</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.task_soft_time_limit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.task_time_limit">
-<tt class="descname">task_time_limit</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.task_time_limit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.WorkController.terminate">
-<tt class="descname">terminate</tt><big>(</big><em>in_sighandler=False</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.terminate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Not so graceful shutdown of the worker server.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.timer_cls">
-<tt class="descname">timer_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.timer_cls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.timer_precision">
-<tt class="descname">timer_precision</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.timer_precision" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.WorkController.worker_lost_wait">
-<tt class="descname">worker_lost_wait</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.WorkController.worker_lost_wait" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.app">
-<tt class="descclassname">Worker.</tt><tt class="descname">app</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.app" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
+<em class="property">class </em><tt class="descclassname">celery.apps.worker.</tt><tt class="descname">Worker</tt><big>(</big><em>app=None</em>, <em>hostname=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
 <dt id="celery.apps.worker.Worker.extra_info">
-<tt class="descclassname">Worker.</tt><tt class="descname">extra_info</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.extra_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.inherit_confopts">
-<tt class="descclassname">Worker.</tt><tt class="descname">inherit_confopts</tt><em class="property"> = (&lt;class 'celery.worker.WorkController'&gt;,)</em><a class="headerlink" href="#celery.apps.worker.Worker.inherit_confopts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.init_queues">
-<tt class="descclassname">Worker.</tt><tt class="descname">init_queues</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.init_queues" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">extra_info</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.extra_info" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.install_platform_tweaks">
-<tt class="descclassname">Worker.</tt><tt class="descname">install_platform_tweaks</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.install_platform_tweaks" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">install_platform_tweaks</tt><big>(</big><em>worker</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.install_platform_tweaks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Install platform specific tweaks and workarounds.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.loglevel">
-<tt class="descclassname">Worker.</tt><tt class="descname">loglevel</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.loglevel" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="celery.apps.worker.Worker.on_before_init">
+<tt class="descname">on_before_init</tt><big>(</big><em>purge=False</em>, <em>redirect_stdouts=None</em>, <em>redirect_stdouts_level=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.on_before_init" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.on_consumer_ready">
-<tt class="descclassname">Worker.</tt><tt class="descname">on_consumer_ready</tt><big>(</big><em>consumer</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.on_consumer_ready" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">on_consumer_ready</tt><big>(</big><em>consumer</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.on_consumer_ready" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.apps.worker.Worker.on_start">
+<tt class="descname">on_start</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.on_start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.osx_proxy_detection_workaround">
-<tt class="descclassname">Worker.</tt><tt class="descname">osx_proxy_detection_workaround</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.osx_proxy_detection_workaround" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">osx_proxy_detection_workaround</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.osx_proxy_detection_workaround" title="Permalink to this definition">¶</a></dt>
 <dd><p>See <a class="reference external" href="http://github.com/celery/celery/issues#issue/161">http://github.com/celery/celery/issues#issue/161</a></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.purge_messages">
-<tt class="descclassname">Worker.</tt><tt class="descname">purge_messages</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.purge_messages" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.redirect_stdouts">
-<tt class="descclassname">Worker.</tt><tt class="descname">redirect_stdouts</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.redirect_stdouts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.apps.worker.Worker.redirect_stdouts_level">
-<tt class="descclassname">Worker.</tt><tt class="descname">redirect_stdouts_level</tt><em class="property"> = None</em><a class="headerlink" href="#celery.apps.worker.Worker.redirect_stdouts_level" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">purge_messages</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.purge_messages" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.redirect_stdouts_to_logger">
-<tt class="descclassname">Worker.</tt><tt class="descname">redirect_stdouts_to_logger</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.redirect_stdouts_to_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.run">
-<tt class="descclassname">Worker.</tt><tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.apps.worker.Worker.run_worker">
-<tt class="descclassname">Worker.</tt><tt class="descname">run_worker</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.run_worker" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">redirect_stdouts_to_logger</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.redirect_stdouts_to_logger" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.set_process_status">
-<tt class="descclassname">Worker.</tt><tt class="descname">set_process_status</tt><big>(</big><em>info</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.set_process_status" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">set_process_status</tt><big>(</big><em>info</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.set_process_status" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.startup_info">
-<tt class="descclassname">Worker.</tt><tt class="descname">startup_info</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.startup_info" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">startup_info</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.startup_info" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.apps.worker.Worker.tasklist">
-<tt class="descclassname">Worker.</tt><tt class="descname">tasklist</tt><big>(</big><em>include_builtins=True</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.tasklist" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">tasklist</tt><big>(</big><em>include_builtins=True</em><big>)</big><a class="headerlink" href="#celery.apps.worker.Worker.tasklist" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

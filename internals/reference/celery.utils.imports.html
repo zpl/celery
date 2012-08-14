@@ -108,7 +108,7 @@ precedence over modules located in <cite>sys.path</cite>.</p>
 <dt id="celery.utils.imports.instantiate">
 <tt class="descclassname">celery.utils.imports.</tt><tt class="descname">instantiate</tt><big>(</big><em>name</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.utils.imports.instantiate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instantiate class by name.</p>
-<p>See <a class="reference internal" href="#celery.utils.imports.symbol_by_name" title="celery.utils.imports.symbol_by_name"><tt class="xref py py-func docutils literal"><span class="pre">symbol_by_name()</span></tt></a>.</p>
+<p>See <tt class="xref py py-func docutils literal"><span class="pre">symbol_by_name()</span></tt>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -125,41 +125,6 @@ precedence over modules located in <cite>sys.path</cite>.</p>
 <dt id="celery.utils.imports.reload_from_cwd">
 <tt class="descclassname">celery.utils.imports.</tt><tt class="descname">reload_from_cwd</tt><big>(</big><em>module</em>, <em>reloader=None</em><big>)</big><a class="headerlink" href="#celery.utils.imports.reload_from_cwd" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.imports.symbol_by_name">
-<tt class="descclassname">celery.utils.imports.</tt><tt class="descname">symbol_by_name</tt><big>(</big><em>name</em>, <em>aliases={}</em>, <em>imp=None</em>, <em>package=None</em>, <em>sep='.'</em>, <em>default=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.utils.imports.symbol_by_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get symbol by qualified name.</p>
-<p>The name should be the full dot-separated path to the class:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">modulename</span><span class="o">.</span><span class="n">ClassName</span>
-</pre></div>
-</div>
-<p>Example:</p>
-<div class="highlight-python"><pre>celery.concurrency.processes.TaskPool
-                            ^- class name</pre>
-</div>
-<p>or using &#8216;:&#8217; to separate module and symbol:</p>
-<div class="highlight-python"><pre>celery.concurrency.processes:TaskPool</pre>
-</div>
-<p>If <cite>aliases</cite> is provided, a dict containing short name/long name
-mappings, the name is looked up in the aliases first.</p>
-<p>Examples:</p>
-<blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">symbol_by_name</span><span class="p">(</span><span class="s">&#39;celery.concurrency.processes.TaskPool&#39;</span><span class="p">)</span>
-<span class="go">&lt;class &#39;celery.concurrency.processes.TaskPool&#39;&gt;</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">symbol_by_name</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">,</span> <span class="p">{</span>
-<span class="gp">... </span>    <span class="s">&#39;default&#39;</span><span class="p">:</span> <span class="s">&#39;celery.concurrency.processes.TaskPool&#39;</span><span class="p">})</span>
-<span class="go">&lt;class &#39;celery.concurrency.processes.TaskPool&#39;&gt;</span>
-</pre></div>
-</div>
-<p># Does not try to look up non-string names.
-&gt;&gt;&gt; from celery.concurrency.processes import TaskPool
-&gt;&gt;&gt; symbol_by_name(TaskPool) is TaskPool
-True</p>
-</div></blockquote>
-</dd></dl>
 
 </div>
 </div>

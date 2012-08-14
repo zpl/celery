@@ -154,7 +154,7 @@ function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">task</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="n">kwarg1</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="n">kwarg2</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Using <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.apply_async" title="celery.app.task.Task.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a> instead we have to write:</p>
+<p>Using <a class="reference internal" href="../reference/celery.app.task.html#celery.app.task.Task.apply_async" title="celery.app.task.Task.apply_async"><tt class="xref py py-meth docutils literal"><span class="pre">apply_async()</span></tt></a> instead you have to write:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">task</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">],</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;kwarg1&#39;</span><span class="p">:</span> <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;kwarg2&#39;</span><span class="p">:</span> <span class="s">&#39;y&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
@@ -168,7 +168,7 @@ options you have to use <tt class="docutils literal"><span class="pre">apply_asy
 <p>The rest of this document will go into the task execution
 options in detail.  All examples use a task
 called <cite>add</cite>, returning the sum of two arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 </pre></div>
@@ -194,7 +194,7 @@ as a partial argument:</p>
 </div>
 <div class="sidebar">
 <p class="first sidebar-title">What is <tt class="docutils literal"><span class="pre">s</span></tt>?</p>
-<p>The <tt class="docutils literal"><span class="pre">add.s</span></tt> call used here is called a subtask, we talk
+<p>The <tt class="docutils literal"><span class="pre">add.s</span></tt> call used here is called a subtask, I talk
 more about subtasks in the <a class="reference internal" href="canvas.html#guide-canvas"><em>canvas guide</em></a>,
 where you can also learn about <a class="reference internal" href="../reference/celery.html#celery.chain" title="celery.chain"><tt class="xref py py-class docutils literal"><span class="pre">chain</span></tt></a>, which
 is a simpler way to chain tasks together.</p>
@@ -213,7 +213,7 @@ the exception raised, and so this way the error callback requires
 a result backend to be enabled, and the task must retrieve the result
 of the task instead.</p>
 <p>This is an example error callback:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">error_handler</span><span class="p">(</span><span class="n">uuid</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">AsyncResult</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
     <span class="n">exc</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">propagate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -423,7 +423,7 @@ to use when sending a task:</p>
 <span id="calling-compression"></span><h2><a class="toc-backref" href="#id7">Compression</a><a class="headerlink" href="#compression" title="Permalink to this headline">¶</a></h2>
 <p>Celery can compress the messages using either <em>gzip</em>, or <em>bzip2</em>.
 You can also create your own compression schemes and register
-them in the <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.compression.html#kombu.compression.register" title="(in Kombu v2.2)"><tt class="xref py py-func docutils literal"><span class="pre">kombu</span> <span class="pre">compression</span> <span class="pre">registry</span></tt></a>.</p>
+them in the <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.compression.html#kombu.compression.register" title="(in Kombu v2.3)"><tt class="xref py py-func docutils literal"><span class="pre">kombu</span> <span class="pre">compression</span> <span class="pre">registry</span></tt></a>.</p>
 <p>The following order is used to decide which compression scheme
 to use when sending a task:</p>
 <blockquote>
@@ -480,7 +480,8 @@ publisher:</p>
 </div>
 <p>You can then assign workers to the <tt class="docutils literal"><span class="pre">priority.high</span></tt> queue by using
 the workers <em class="xref std std-option">-Q</em> argument:</p>
-<div class="highlight-python"><pre>$ celery worker -l info -Q celery,priority.high</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery worker -l info -Q celery,priority.high
+</pre></div>
 </div>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
@@ -496,7 +497,7 @@ AMQP&#8217;s full routing capabilities. Interested parties may read the
 <ul>
 <li><p class="first">exchange</p>
 <blockquote>
-<div><p>Name of exchange (or a <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.entity.html#kombu.entity.Exchange" title="(in Kombu v2.2)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.entity.Exchange</span></tt></a>) to
+<div><p>Name of exchange (or a <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.entity.html#kombu.entity.Exchange" title="(in Kombu v2.3)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.entity.Exchange</span></tt></a>) to
 send the message to.</p>
 </div></blockquote>
 </li>

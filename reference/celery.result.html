@@ -250,10 +250,24 @@ instance.</p>
 
 <dl class="method">
 <dt id="celery.result.AsyncResult.revoke">
-<tt class="descclassname">AsyncResult.</tt><tt class="descname">revoke</tt><big>(</big><em>connection=None</em><big>)</big><a class="headerlink" href="#celery.result.AsyncResult.revoke" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">AsyncResult.</tt><tt class="descname">revoke</tt><big>(</big><em>connection=None</em>, <em>terminate=False</em>, <em>signal=None</em><big>)</big><a class="headerlink" href="#celery.result.AsyncResult.revoke" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send revoke signal to all workers.</p>
 <p>Any worker receiving the task, or having reserved the
 task, <em>must</em> ignore it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>terminate</strong> &#8211; Also terminate the process currently working
+on the task (if any).</li>
+<li><strong>signal</strong> &#8211; Name of signal to send to process if terminate.
+Default is TERM.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">

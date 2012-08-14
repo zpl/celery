@@ -76,7 +76,9 @@ If not set then the systems default local time zone is used.
 
     Celery requires the :mod:`pytz` library to be installed,
     when using custom time zones (other than UTC).  You can
-    install it using :program:`pip` or :program:`easy_install`::
+    install it using :program:`pip` or :program:`easy_install`:
+
+    .. code-block:: bash
 
         $ pip install pytz
 
@@ -404,7 +406,9 @@ Configuring the backend URL
     The Redis backend requires the :mod:`redis` library:
     http://pypi.python.org/pypi/redis/
 
-    To install the redis package use `pip` or `easy_install`::
+    To install the redis package use `pip` or `easy_install`:
+
+    .. code-block:: bash
 
         $ pip install redis
 
@@ -509,7 +513,9 @@ Cassandra backend settings
     The Cassandra backend requires the :mod:`pycassa` library:
     http://pypi.python.org/pypi/pycassa/
 
-    To install the pycassa package use `pip` or `easy_install`::
+    To install the pycassa package use `pip` or `easy_install`:
+
+    .. code-block:: bash
 
         $ pip install pycassa
 
@@ -741,7 +747,9 @@ that's is used both by the client and the broker to detect if
 a connection was closed.
 
 Heartbeats are currently only supported by the ``pyamqp://`` transport,
-and this requires the :mod:`amqp` module::
+and this requires the :mod:`amqp` module:
+
+.. code-block:: bash
 
     $ pip install amqp
 
@@ -1065,7 +1073,7 @@ Example:
 
     from celery.exceptions import SoftTimeLimitExceeded
 
-    @celery.task()
+    @celery.task
     def mytask():
         try:
             return do_work()
@@ -1428,6 +1436,16 @@ You can use a custom pool class name, or select one of
 the built-in aliases: ``processes``, ``eventlet``, ``gevent``.
 
 Default is ``processes``.
+
+.. setting:: CELERYD_POOL_RESTARTS
+
+CELERYD_POOL_RESTARTS
+~~~~~~~~~~~~~~~~~~~~~
+
+If enabled the worker pool can be restarted using the
+:control:`pool_restart` remote control command.
+
+Disabled by default.
 
 .. setting:: CELERYD_AUTOSCALER
 

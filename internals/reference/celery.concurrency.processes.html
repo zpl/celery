@@ -87,7 +87,7 @@ numerous improvements.</p>
 <dd><p>Multiprocessing Pool implementation.</p>
 <dl class="class">
 <dt id="celery.concurrency.processes.TaskPool.Pool">
-<em class="property">class </em><tt class="descname">Pool</tt><big>(</big><em>processes=None</em>, <em>initializer=None</em>, <em>initargs=()</em>, <em>maxtasksperchild=None</em>, <em>timeout=None</em>, <em>soft_timeout=None</em>, <em>lost_worker_timeout=10.0</em>, <em>max_restarts=None</em>, <em>max_restart_freq=1</em>, <em>on_process_up=None</em>, <em>on_process_down=None</em>, <em>on_timeout_set=None</em>, <em>on_timeout_cancel=None</em>, <em>threads=True</em>, <em>semaphore=None</em>, <em>putlocks=False</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Pool</tt><big>(</big><em>processes=None</em>, <em>initializer=None</em>, <em>initargs=()</em>, <em>maxtasksperchild=None</em>, <em>timeout=None</em>, <em>soft_timeout=None</em>, <em>lost_worker_timeout=10.0</em>, <em>max_restarts=None</em>, <em>max_restart_freq=1</em>, <em>on_process_up=None</em>, <em>on_process_down=None</em>, <em>on_timeout_set=None</em>, <em>on_timeout_cancel=None</em>, <em>threads=True</em>, <em>semaphore=None</em>, <em>putlocks=False</em>, <em>allow_restart=False</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class which supports an async version of applying functions to arguments.</p>
 <dl class="class">
 <dt id="celery.concurrency.processes.TaskPool.Pool.Process">
@@ -359,6 +359,11 @@ be iterables as well and will be unpacked as arguments. Hence
 <tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">terminate</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.terminate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.concurrency.processes.TaskPool.Pool.terminate_job">
+<tt class="descclassname">TaskPool.Pool.</tt><tt class="descname">terminate_job</tt><big>(</big><em>pid</em>, <em>sig=None</em><big>)</big><a class="headerlink" href="#celery.concurrency.processes.TaskPool.Pool.terminate_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="method">
@@ -450,18 +455,6 @@ be iterables as well and will be unpacked as arguments. Hence
 <tt class="descclassname">TaskPool.</tt><tt class="descname">writers</tt><a class="headerlink" href="#celery.concurrency.processes.TaskPool.writers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.concurrency.processes.WORKER_SIGIGNORE">
-<tt class="descclassname">celery.concurrency.processes.</tt><tt class="descname">WORKER_SIGIGNORE</tt><em class="property"> = frozenset(['SIGINT'])</em><a class="headerlink" href="#celery.concurrency.processes.WORKER_SIGIGNORE" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of signals to ignore when a child process starts.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.concurrency.processes.WORKER_SIGRESET">
-<tt class="descclassname">celery.concurrency.processes.</tt><tt class="descname">WORKER_SIGRESET</tt><em class="property"> = frozenset(['SIGHUP', 'SIGTERM', 'SIGTTOU', 'SIGTTIN', 'SIGUSR1'])</em><a class="headerlink" href="#celery.concurrency.processes.WORKER_SIGRESET" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of signals to reset when a child process starts.</p>
 </dd></dl>
 
 <dl class="function">

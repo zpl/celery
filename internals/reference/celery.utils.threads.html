@@ -80,13 +80,42 @@
 <h2><a class="toc-backref" href="#id2">celery.utils.threads</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Threading utilities.</p>
 <dl class="class">
-<dt id="celery.utils.threads.LocalStack">
-<em class="property">class </em><tt class="descclassname">celery.utils.threads.</tt><tt class="descname">LocalStack</tt><a class="headerlink" href="#celery.utils.threads.LocalStack" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="celery.utils.threads.LocalStack.top">
-<tt class="descname">top</tt><a class="headerlink" href="#celery.utils.threads.LocalStack.top" title="Permalink to this definition">¶</a></dt>
+<dt id="celery.utils.threads.Local">
+<em class="property">class </em><tt class="descclassname">celery.utils.threads.</tt><tt class="descname">Local</tt><a class="headerlink" href="#celery.utils.threads.Local" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="class">
+<dt id="celery.utils.threads.LocalManager">
+<em class="property">class </em><tt class="descclassname">celery.utils.threads.</tt><tt class="descname">LocalManager</tt><big>(</big><em>locals=None</em>, <em>ident_func=None</em><big>)</big><a class="headerlink" href="#celery.utils.threads.LocalManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local objects cannot manage themselves. For that you need a local
+manager.  You can pass a local manager multiple locals or add them
+later by appending them to <cite>manager.locals</cite>.  Everytime the manager
+cleans up it, will clean up all the data left in the locals for this
+context.</p>
+<p>The <cite>ident_func</cite> parameter can be added to override the default ident
+function for the wrapped locals.</p>
+<dl class="method">
+<dt id="celery.utils.threads.LocalManager.cleanup">
+<tt class="descname">cleanup</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.threads.LocalManager.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually clean up the data in the locals for this context.</p>
+<p>Call this at the end of the request or use <cite>make_middleware()</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.utils.threads.LocalManager.get_ident">
+<tt class="descname">get_ident</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.threads.LocalManager.get_ident" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the context identifier the local objects use internally
+for this context.  You cannot override this method to change the
+behavior but use it to link other context local objects (such as
+SQLAlchemy&#8217;s scoped sessions) to the Werkzeug locals.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="celery.utils.threads.LocalStack">
+<tt class="descclassname">celery.utils.threads.</tt><tt class="descname">LocalStack</tt><a class="headerlink" href="#celery.utils.threads.LocalStack" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_FastLocalStack</span></tt></p>
 </dd></dl>
 
 <dl class="class">
@@ -113,6 +142,28 @@
 <dd><p>Graceful shutdown.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="celery.utils.threads.release_local">
+<tt class="descclassname">celery.utils.threads.</tt><tt class="descname">release_local</tt><big>(</big><em>local</em><big>)</big><a class="headerlink" href="#celery.utils.threads.release_local" title="Permalink to this definition">¶</a></dt>
+<dd><p>Releases the contents of the local for the current context.
+This makes it possible to use locals without a manager.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">loc</span> <span class="o">=</span> <span class="n">Local</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loc</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">release_local</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="s">&#39;foo&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>With this function one can release <a class="reference internal" href="#celery.utils.threads.Local" title="celery.utils.threads.Local"><tt class="xref py py-class docutils literal"><span class="pre">Local</span></tt></a> objects as well
+as <tt class="xref py py-class docutils literal"><span class="pre">StackLocal</span></tt> objects.  However it is not possible to
+release data held by proxies that way, one always has to retain
+a reference to the underlying local object in order to be able
+to release it.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.6.1.</span></p>
 </dd></dl>
 
 </div>

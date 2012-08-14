@@ -127,11 +127,13 @@ configuration:</p>
 <cite>&#8220;feeds&#8221;</cite> queue, while all other tasks will be routed to the default queue
 (named <cite>&#8220;celery&#8221;</cite> for historical reasons).</p>
 <p>Now you can start server <cite>z</cite> to only process the feeds queue like this:</p>
-<div class="highlight-python"><pre>(z)$ celery worker -Q feeds</pre>
+<div class="highlight-bash"><div class="highlight"><pre>user@z:/<span class="nv">$ </span>celery worker -Q feeds
+</pre></div>
 </div>
 <p>You can specify as many queues as you want, so you can make this server
 process the default queue as well:</p>
-<div class="highlight-python"><pre>(z)$ celery worker -Q feeds,celery</pre>
+<div class="highlight-bash"><div class="highlight"><pre>user@z:/<span class="nv">$ </span>celery worker -Q feeds,celery
+</pre></div>
 </div>
 <div class="section" id="changing-the-name-of-the-default-queue">
 <span id="routing-changing-default-queue"></span><h4><a class="toc-backref" href="#id7">Changing the name of the default queue</a><a class="headerlink" href="#changing-the-name-of-the-default-queue" title="Permalink to this headline">¶</a></h4>
@@ -204,15 +206,17 @@ will be taken from the <a class="reference internal" href="../configuration.html
 </div>
 <p>To make server <cite>z</cite> consume from the feed queue exclusively you can
 start it with the <tt class="docutils literal"><span class="pre">-Q</span></tt> option:</p>
-<div class="highlight-python"><pre>(z)$ celery worker -Q feed_tasks --hostname=z.example.com</pre>
+<div class="highlight-bash"><div class="highlight"><pre>user@z:/<span class="nv">$ </span>celery worker -Q feed_tasks --hostname<span class="o">=</span>z.example.com
+</pre></div>
 </div>
 <p>Servers <cite>x</cite> and <cite>y</cite> must be configured to consume from the default queue:</p>
-<div class="highlight-python"><pre>(x)$ celery worker -Q default --hostname=x.example.com
-(y)$ celery worker -Q default --hostname=y.example.com</pre>
+<div class="highlight-bash"><div class="highlight"><pre>user@x:/<span class="nv">$ </span>celery worker -Q default --hostname<span class="o">=</span>x.example.com
+user@y:/<span class="nv">$ </span>celery worker -Q default --hostname<span class="o">=</span>y.example.com
+</pre></div>
 </div>
 <p>If you want, you can even have your feed processing worker handle regular
 tasks as well, maybe in times when there&#8217;s a lot of work to do:</p>
-<div class="highlight-python"><pre>(z)$ celery worker -Q feed_tasks,default --hostname=z.example.com</pre>
+<div class="highlight-python"><pre>user@z:/$ celery worker -Q feed_tasks,default --hostname=z.example.com</pre>
 </div>
 <p>If you have another queue but on another exchange you want to add,
 just specify a custom exchange and exchange type:</p>
@@ -391,34 +395,39 @@ queues or sending messages.  It can also be used for non-AMQP brokers,
 but different implementation may not implement all commands.</p>
 <p>You can write commands directly in the arguments to <strong class="program">celery amqp</strong>,
 or just start with no arguments to start it in shell-mode:</p>
-<div class="highlight-python"><pre>$ celery amqp
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery amqp
 -&gt; connecting to amqp://guest@localhost:5672/.
 -&gt; connected.
-1&gt;</pre>
+1&gt;
+</pre></div>
 </div>
 <p>Here <tt class="docutils literal"><span class="pre">1&gt;</span></tt> is the prompt.  The number 1, is the number of commands you
 have executed so far.  Type <tt class="docutils literal"><span class="pre">help</span></tt> for a list of commands available.
 It also supports auto-completion, so you can start typing a command and then
 hit the <cite>tab</cite> key to show a list of possible matches.</p>
-<p>Let&#8217;s create a queue we can send messages to:</p>
-<div class="highlight-python"><pre>1&gt; exchange.declare testexchange direct
+<p>Let&#8217;s create a queue you can send messages to:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery amqp
+1&gt; exchange.declare testexchange direct
 ok.
 2&gt; queue.declare testqueue
 ok. queue:testqueue messages:0 consumers:0.
 3&gt; queue.bind testqueue testexchange testkey
-ok.</pre>
+ok.
+</pre></div>
 </div>
 <p>This created the direct exchange <tt class="docutils literal"><span class="pre">testexchange</span></tt>, and a queue
 named <tt class="docutils literal"><span class="pre">testqueue</span></tt>.  The queue is bound to the exchange using
 the routing key <tt class="docutils literal"><span class="pre">testkey</span></tt>.</p>
 <p>From now on all messages sent to the exchange <tt class="docutils literal"><span class="pre">testexchange</span></tt> with routing
-key <tt class="docutils literal"><span class="pre">testkey</span></tt> will be moved to this queue.  We can send a message by
+key <tt class="docutils literal"><span class="pre">testkey</span></tt> will be moved to this queue.  You can send a message by
 using the <tt class="docutils literal"><span class="pre">basic.publish</span></tt> command:</p>
 <div class="highlight-python"><pre>4&gt; basic.publish 'This is a message!' testexchange testkey
 ok.</pre>
 </div>
-<p>Now that the message is sent we can retrieve it again.  We use the
-<tt class="docutils literal"><span class="pre">basic.get`</span></tt> command here, which polls for new messages on the queue.</p>
+<p>Now that the message is sent you can retrieve it again.  You can use the
+<tt class="docutils literal"><span class="pre">basic.get`</span></tt> command here, which polls for new messages on the queue
+(which is alright for maintainence tasks, for services you&#8217;d want to use
+<tt class="docutils literal"><span class="pre">basic.consume</span></tt> instead)</p>
 <p>Pop a message off the queue:</p>
 <div class="highlight-python"><pre>5&gt; basic.get testqueue
 {'body': 'This is a message!',
@@ -438,11 +447,11 @@ channel, every received message has a unique delivery tag,
 This tag is used to acknowledge the message.  Also note that
 delivery tags are not unique across connections, so in another client
 the delivery tag <cite>1</cite> might point to a different message than in this channel.</p>
-<p>You can acknowledge the message we received using <tt class="docutils literal"><span class="pre">basic.ack</span></tt>:</p>
+<p>You can acknowledge the message you received using <tt class="docutils literal"><span class="pre">basic.ack</span></tt>:</p>
 <div class="highlight-python"><pre>6&gt; basic.ack 1
 ok.</pre>
 </div>
-<p>To clean up after our test session we should delete the entities we created:</p>
+<p>To clean up after our test session you should delete the entities you created:</p>
 <div class="highlight-python"><pre>7&gt; queue.delete testqueue
 ok. 0 messages deleted.
 8&gt; exchange.delete testexchange
@@ -507,14 +516,15 @@ as task attributes.</p>
 </div>
 <p>If you return the <tt class="docutils literal"><span class="pre">queue</span></tt> key, it will expand with the defined settings of
 that queue in <a class="reference internal" href="../configuration.html#std:setting-CELERY_QUEUES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_QUEUES</span></tt></a>:</p>
-<div class="highlight-python"><pre>{'queue': 'video', 'routing_key': 'video.compress'}
-
-becomes --&gt;
-
-    {'queue': 'video',
-     'exchange': 'video',
-     'exchange_type': 'topic',
-     'routing_key': 'video.compress'}</pre>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span><span class="s1">&#39;queue&#39;</span><span class="o">:</span> <span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="s1">&#39;routing_key&#39;</span><span class="o">:</span> <span class="s1">&#39;video.compress&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>becomes &#8211;&gt;</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span><span class="s1">&#39;queue&#39;</span><span class="o">:</span> <span class="s1">&#39;video&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;exchange&#39;</span><span class="o">:</span> <span class="s1">&#39;video&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;exchange_type&#39;</span><span class="o">:</span> <span class="s1">&#39;topic&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;routing_key&#39;</span><span class="o">:</span> <span class="s1">&#39;video.compress&#39;</span><span class="p">}</span>
+</pre></div>
 </div>
 <p>You install router classes by adding them to the <a class="reference internal" href="../configuration.html#std:setting-CELERY_ROUTES"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_ROUTES</span></tt></a>
 setting:</p>

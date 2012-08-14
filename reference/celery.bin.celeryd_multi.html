@@ -77,84 +77,85 @@
 </div>
 <span class="target" id="module-celery.bin.celeryd_multi"></span><div class="section" id="examples">
 <h2><a class="toc-backref" href="#id1">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><pre># Single worker with explicit name and events enabled.
-$ celeryd-multi start Leslie -E
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Single worker with explicit name and events enabled.</span>
+<span class="nv">$ </span>celeryd-multi start Leslie -E
 
-# Pidfiles and logfiles are stored in the current directory
-# by default.  Use --pidfile and --logfile argument to change
-# this.  The abbreviation %n will be expanded to the current
-# node name.
-$ celeryd-multi start Leslie -E --pidfile=/var/run/celery/%n.pid
-                                --logfile=/var/log/celery/%n.log
+<span class="c"># Pidfiles and logfiles are stored in the current directory</span>
+<span class="c"># by default.  Use --pidfile and --logfile argument to change</span>
+<span class="c"># this.  The abbreviation %n will be expanded to the current</span>
+<span class="c"># node name.</span>
+<span class="nv">$ </span>celeryd-multi start Leslie -E --pidfile<span class="o">=</span>/var/run/celery/%n.pid
+                                --logfile<span class="o">=</span>/var/log/celery/%n.log
 
 
-# You need to add the same arguments when you restart,
-# as these are not persisted anywhere.
-$ celeryd-multi restart Leslie -E --pidfile=/var/run/celery/%n.pid
-                                  --logfile=/var/run/celery/%n.log
+<span class="c"># You need to add the same arguments when you restart,</span>
+<span class="c"># as these are not persisted anywhere.</span>
+<span class="nv">$ </span>celeryd-multi restart Leslie -E --pidfile<span class="o">=</span>/var/run/celery/%n.pid
+                                  --logfile<span class="o">=</span>/var/run/celery/%n.log
 
-# To stop the node, you need to specify the same pidfile.
-$ celeryd-multi stop Leslie --pidfile=/var/run/celery/%n.pid
+<span class="c"># To stop the node, you need to specify the same pidfile.</span>
+<span class="nv">$ </span>celeryd-multi stop Leslie --pidfile<span class="o">=</span>/var/run/celery/%n.pid
 
-# 3 workers, with 3 processes each
-$ celeryd-multi start 3 -c 3
+<span class="c"># 3 workers, with 3 processes each</span>
+<span class="nv">$ </span>celeryd-multi start 3 -c 3
 celeryd -n celeryd1.myhost -c 3
 celeryd -n celeryd2.myhost -c 3
 celeryd- n celeryd3.myhost -c 3
 
-# start 3 named workers
-$ celeryd-multi start image video data -c 3
+<span class="c"># start 3 named workers</span>
+<span class="nv">$ </span>celeryd-multi start image video data -c 3
 celeryd -n image.myhost -c 3
 celeryd -n video.myhost -c 3
 celeryd -n data.myhost -c 3
 
-# specify custom hostname
-$ celeryd-multi start 2 -n worker.example.com -c 3
+<span class="c"># specify custom hostname</span>
+<span class="nv">$ </span>celeryd-multi start 2 -n worker.example.com -c 3
 celeryd -n celeryd1.worker.example.com -c 3
 celeryd -n celeryd2.worker.example.com -c 3
 
-# Advanced example starting 10 workers in the background:
-#   * Three of the workers processes the images and video queue
-#   * Two of the workers processes the data queue with loglevel DEBUG
-#   * the rest processes the default' queue.
-$ celeryd-multi start 10 -l INFO -Q:1-3 images,video -Q:4,5 data
+<span class="c"># Advanced example starting 10 workers in the background:</span>
+<span class="c">#   * Three of the workers processes the images and video queue</span>
+<span class="c">#   * Two of the workers processes the data queue with loglevel DEBUG</span>
+<span class="c">#   * the rest processes the default&#39; queue.</span>
+<span class="nv">$ </span>celeryd-multi start 10 -l INFO -Q:1-3 images,video -Q:4,5 data
     -Q default -L:4,5 DEBUG
 
-# You can show the commands necessary to start the workers with
-# the 'show' command:
-$ celeryd-multi show 10 -l INFO -Q:1-3 images,video -Q:4,5 data
+<span class="c"># You can show the commands necessary to start the workers with</span>
+<span class="c"># the &#39;show&#39; command:</span>
+<span class="nv">$ </span>celeryd-multi show 10 -l INFO -Q:1-3 images,video -Q:4,5 data
     -Q default -L:4,5 DEBUG
 
-# Additional options are added to each celeryd',
-# but you can also modify the options for ranges of, or specific workers
+<span class="c"># Additional options are added to each celeryd&#39;,</span>
+<span class="c"># but you can also modify the options for ranges of, or specific workers</span>
 
-# 3 workers: Two with 3 processes, and one with 10 processes.
-$ celeryd-multi start 3 -c 3 -c:1 10
+<span class="c"># 3 workers: Two with 3 processes, and one with 10 processes.</span>
+<span class="nv">$ </span>celeryd-multi start 3 -c 3 -c:1 10
 celeryd -n celeryd1.myhost -c 10
 celeryd -n celeryd2.myhost -c 3
 celeryd -n celeryd3.myhost -c 3
 
-# can also specify options for named workers
-$ celeryd-multi start image video data -c 3 -c:image 10
+<span class="c"># can also specify options for named workers</span>
+<span class="nv">$ </span>celeryd-multi start image video data -c 3 -c:image 10
 celeryd -n image.myhost -c 10
 celeryd -n video.myhost -c 3
 celeryd -n data.myhost -c 3
 
-# ranges and lists of workers in options is also allowed:
-# (-c:1-3 can also be written as -c:1,2,3)
-$ celeryd-multi start 5 -c 3  -c:1-3 10
+<span class="c"># ranges and lists of workers in options is also allowed:</span>
+<span class="c"># (-c:1-3 can also be written as -c:1,2,3)</span>
+<span class="nv">$ </span>celeryd-multi start 5 -c 3  -c:1-3 10
 celeryd -n celeryd1.myhost -c 10
 celeryd -n celeryd2.myhost -c 10
 celeryd -n celeryd3.myhost -c 10
 celeryd -n celeryd4.myhost -c 3
 celeryd -n celeryd5.myhost -c 3
 
-# lists also works with named workers
-$ celeryd-multi start foo bar baz xuzzy -c 3 -c:foo,bar,baz 10
+<span class="c"># lists also works with named workers</span>
+<span class="nv">$ </span>celeryd-multi start foo bar baz xuzzy -c 3 -c:foo,bar,baz 10
 celeryd -n foo.myhost -c 10
 celeryd -n bar.myhost -c 10
 celeryd -n baz.myhost -c 10
-celeryd -n xuzzy.myhost -c 3</pre>
+celeryd -n xuzzy.myhost -c 3
+</pre></div>
 </div>
 <dl class="class">
 <dt id="celery.bin.celeryd_multi.MultiTool">

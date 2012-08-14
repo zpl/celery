@@ -71,7 +71,7 @@
     <div class="section" id="next-steps">
 <span id="id1"></span><h1>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference internal" href="first-steps-with-celery.html#first-steps"><em>First Steps with Celery</em></a> guide is intentionally minimal.  In this guide
-we will demonstrate what Celery offers in more detail, including
+I will demonstrate what Celery offers in more detail, including
 how to add Celery support for your application and library.</p>
 <p>This document does not document all of Celery&#8217;s features and
 best practices, so it&#8217;s recommended that you also read the
@@ -113,7 +113,7 @@ best practices, so it&#8217;s recommended that you also read the
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>In this module we created our <a class="reference internal" href="../reference/celery.html#celery.Celery" title="celery.Celery"><tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt></a> instance (sometimes
+<p>In this module you created our <a class="reference internal" href="../reference/celery.html#celery.Celery" title="celery.Celery"><tt class="xref py py-class docutils literal"><span class="pre">Celery</span></tt></a> instance (sometimes
 referred to as the <em>app</em>).  To use Celery within your project
 you simply import this instance.</p>
 <ul>
@@ -125,17 +125,17 @@ you simply import this instance.</p>
 <li><p class="first">The <tt class="docutils literal"><span class="pre">backend</span></tt> argument specifies the result backend to use,</p>
 <blockquote>
 <div><p>It&#8217;s used to keep track of task state and results.
-While results are disabled by default we use the amqp backend here
-to demonstrate how retrieving the results work, you may want to use
-a different backend for your application, as they all have different
-strengths and weaknesses.  If you don&#8217;t need results it&#8217;s best
+While results are disabled by default I use the amqp backend here
+because I demonstrate how retrieving results work later, you may want to use
+a different backend for your application. They all have different
+strengths and weaknesses.  If you don&#8217;t need results it&#8217;s better
 to disable them.  Results can also be disabled for individual tasks
 by setting the <tt class="docutils literal"><span class="pre">&#64;task(ignore_result=True)</span></tt> option.</p>
 <p>See <a class="reference internal" href="first-steps-with-celery.html#celerytut-keeping-results"><em>Keeping Results</em></a> for more information.</p>
 </div></blockquote>
 </li>
 <li><p class="first">The <tt class="docutils literal"><span class="pre">include</span></tt> argument is a list of modules to import when
-the worker starts.  We need to add our tasks module here so
+the worker starts.  You need to add our tasks module here so
 that the worker is able to find our tasks.</p>
 </li>
 </ul>
@@ -167,7 +167,8 @@ that the worker is able to find our tasks.</p>
 <div class="section" id="starting-the-worker">
 <h3>Starting the worker<a class="headerlink" href="#starting-the-worker" title="Permalink to this headline">¶</a></h3>
 <p>The <strong class="program">celery</strong> program can be used to start the worker:</p>
-<div class="highlight-python"><pre>$ celery worker --app=proj -l info</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery worker --app<span class="o">=</span>proj -l info
+</pre></div>
 </div>
 <p>When the worker starts you should see a banner and some messages:</p>
 <div class="highlight-python"><pre>-------------- celery@halcyon.local v3.0 (Chiastic Slide)
@@ -212,7 +213,8 @@ as a means for Quality of Service, separation of concerns,
 and emulating priorities, all described in the <a class="reference internal" href="../userguide/routing.html#guide-routing"><em>Routing Guide</em></a>.</p>
 <p>You can get a complete list of command line arguments
 by passing in the <cite>&#8211;help</cite> flag:</p>
-<div class="highlight-python"><pre>$ celery worker --help</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery worker --help
+</pre></div>
 </div>
 <p>These options are described in more detailed in the <a class="reference internal" href="../userguide/workers.html#guide-workers"><em>Workers Guide</em></a>.</p>
 <div class="section" id="stopping-the-worker">
@@ -226,25 +228,28 @@ by the worker is detailed in the <a class="reference internal" href="../userguid
 described in detail in the <a class="reference internal" href="../tutorials/daemonizing.html#daemonizing"><em>daemonization tutorial</em></a>.</p>
 <p>The daemonization scripts uses the <strong class="program">celery multi</strong> command to
 start one or more workers in the background:</p>
-<div class="highlight-python"><pre>$ celery multi start w1 -A proj -l info
-celeryd-multi v3.0.0 (Chiastic Slide)
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery multi start w1 -A proj -l info
+celeryd-multi v3.0.0 <span class="o">(</span>Chiastic Slide<span class="o">)</span>
 &gt; Starting nodes...
-    &gt; w1.halcyon.local: OK</pre>
+    &gt; w1.halcyon.local: OK
+</pre></div>
 </div>
 <p>You can restart it too:</p>
-<div class="highlight-python"><pre>$ celery multi restart w1 -A proj -l info
-celeryd-multi v3.0.0 (Chiastic Slide)
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery multi restart w1 -A proj -l info
+celeryd-multi v3.0.0 <span class="o">(</span>Chiastic Slide<span class="o">)</span>
 &gt; Stopping nodes...
     &gt; w1.halcyon.local: TERM -&gt; 64024
-&gt; Waiting for 1 node.....
+&gt; Waiting <span class="k">for </span>1 node.....
     &gt; w1.halcyon.local: OK
 &gt; Restarting node w1.halcyon.local: OK
-celeryd-multi v3.0.0 (Chiastic Slide)
+celeryd-multi v3.0.0 <span class="o">(</span>Chiastic Slide<span class="o">)</span>
 &gt; Stopping nodes...
-    &gt; w1.halcyon.local: TERM -&gt; 64052</pre>
+    &gt; w1.halcyon.local: TERM -&gt; 64052
+</pre></div>
 </div>
 <p>or stop it:</p>
-<div class="highlight-python"><pre>$ celery multi stop -w1 -A proj -l info</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery multi stop -w1 -A proj -l info
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -256,16 +261,18 @@ stopping/killing.</p>
 <p>By default it will create pid and log files in the current directory,
 to protect against multiple workers launching on top of each other
 you are encouraged to put these in a dedicated directory:</p>
-<div class="highlight-python"><pre>$ mkdir -p /var/run/celery
-$ mkdir -p /var/log/celery
-$ celery multi start w1 -A proj -l info --pidfile=/var/run/celery/%n.pid \
-                                        --logfile=/var/log/celery/%n.pid</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir -p /var/run/celery
+<span class="nv">$ </span>mkdir -p /var/log/celery
+<span class="nv">$ </span>celery multi start w1 -A proj -l info --pidfile<span class="o">=</span>/var/run/celery/%n.pid <span class="se">\</span>
+                                        --logfile<span class="o">=</span>/var/log/celery/%n.pid
+</pre></div>
 </div>
 <p>With the multi command you can start multiple workers, and there is a powerful
 command line syntax to specify arguments for different workers too,
 e.g:</p>
-<div class="highlight-python"><pre>$ celeryd multi start 10 -A proj -l info -Q:1-3 images,video -Q:4,5 data \
-    -Q default -L:4,5 debug</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celeryd multi start 10 -A proj -l info -Q:1-3 images,video -Q:4,5 data <span class="se">\</span>
+    -Q default -L:4,5 debug
+</pre></div>
 </div>
 <p>For more examples see the <a class="reference internal" href="../reference/celery.bin.celeryd_multi.html#module-celery.bin.celeryd_multi" title="celery.bin.celeryd_multi"><tt class="xref py py-mod docutils literal"><span class="pre">celeryd_multi</span></tt></a> module in the API
 reference.</p>
@@ -279,10 +286,11 @@ If a package name is specified instead it will automatically
 try to find a <tt class="docutils literal"><span class="pre">celery</span></tt> module in that package, and if the name
 is a module it will try to find a <tt class="docutils literal"><span class="pre">celery</span></tt> attribute in that module.
 This means that these are all equal:</p>
-<blockquote>
-<div>$ celery &#8211;app=proj
-$ celery &#8211;app=proj.celery:
-$ celery &#8211;app=proj.celery:celery</div></blockquote>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery --app<span class="o">=</span>proj
+<span class="nv">$ </span>celery --app<span class="o">=</span>proj.celery:
+<span class="nv">$ </span>celery --app<span class="o">=</span>proj.celery:celery
+</pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -326,8 +334,8 @@ backend that suits every application, so to choose one you need to consider
 the drawbacks of each individual backend.  For many tasks
 keeping the return value isn&#8217;t even very useful, so it&#8217;s a sensible default to
 have.  Also note that result backends are not used for monitoring tasks and workers,
-for that we use dedicated event messages (see <a class="reference internal" href="../userguide/monitoring.html#guide-monitoring"><em>Monitoring and Management Guide</em></a>).</p>
-<p>If you have a result backend configured we can retrieve the return
+for that Celery uses dedicated event messages (see <a class="reference internal" href="../userguide/monitoring.html#guide-monitoring"><em>Monitoring and Management Guide</em></a>).</p>
+<p>If you have a result backend configured you can retrieve the return
 value of a task:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -339,7 +347,7 @@ value of a task:</p>
 <span class="go">d6b3aea2-fb9b-4ebc-8da4-848818db9114</span>
 </pre></div>
 </div>
-<p>We can also inspect the exception and traceback if the task raised an
+<p>You can also inspect the exception and traceback if the task raised an
 exception, in fact <tt class="docutils literal"><span class="pre">result.get()</span></tt> will propagate any errors by default:</p>
 <div class="highlight-python"><pre>&gt;&gt;&gt; res = add.delay(2)
 &gt;&gt;&gt; res.get(timeout=1)
@@ -401,7 +409,7 @@ in the tasks user guide.</p>
 </div>
 <div class="section" id="canvas-designing-workflows">
 <span id="designing-workflows"></span><h2><a class="toc-backref" href="#id5"><em>Canvas</em>: Designing Workflows</a><a class="headerlink" href="#canvas-designing-workflows" title="Permalink to this headline">¶</a></h2>
-<p>We just learned how to call a task using the tasks <tt class="docutils literal"><span class="pre">delay</span></tt> method,
+<p>You just learned how to call a task using the tasks <tt class="docutils literal"><span class="pre">delay</span></tt> method,
 and this is often all you need, but sometimes you may want to pass the
 signature of a task invocation to another process or as an argument to another
 function, for this Celery uses something called <em>subtasks</em>.</p>
@@ -444,7 +452,7 @@ and this can be resolved when calling the subtask:</p>
 &gt;&gt;&gt; res.get()
 10</pre>
 </div>
-<p>Here we added the argument 8, which was prepended to the existing argument 2
+<p>Here you added the argument 8, which was prepended to the existing argument 2
 forming a complete signature of <tt class="docutils literal"><span class="pre">add(8,</span> <span class="pre">2)</span></tt>.</p>
 <p>Keyword arguments can also be added later, these are then merged with any
 existing keyword arguments, but with new arguments taking precedence:</p>
@@ -466,8 +474,8 @@ to the arguments in the signature, and keyword arguments is merged with any
 existing keys.</p>
 </li>
 </ul>
-<p>So this all seems very useful, but what can we actually do with these?
-To get to that we must introduce the canvas primitives...</p>
+<p>So this all seems very useful, but what can you actually do with these?
+To get to that I must introduce the canvas primitives...</p>
 </div>
 <div class="section" id="the-primitives">
 <h3>The Primitives<a class="headerlink" href="#the-primitives" title="Permalink to this headline">¶</a></h3>
@@ -587,13 +595,15 @@ with the <tt class="docutils literal"><span class="pre">queue</span></tt> argume
 </div>
 <p>You can then make a worker consume from this queue by
 specifying the <em class="xref std std-option">-Q</em> option:</p>
-<div class="highlight-python"><pre>$ celery -A proj worker -Q hipri</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj worker -Q hipri
+</pre></div>
 </div>
 <p>You may specify multiple queues by using a comma separated list,
 for example you can make the worker consume from both the default
 queue, and the <tt class="docutils literal"><span class="pre">hipri</span></tt> queue, where
 the default queue is named <tt class="docutils literal"><span class="pre">celery</span></tt> for historical reasons:</p>
-<div class="highlight-python"><pre>$ celery -A proj worker -Q hipri,celery</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj worker -Q hipri,celery
+</pre></div>
 </div>
 <p>The order of the queues doesn&#8217;t matter as the worker will
 give equal weight to the queues.</p>
@@ -605,14 +615,16 @@ power of AMQP routing, see the <a class="reference internal" href="../userguide/
 <p>If you&#8217;re using RabbitMQ (AMQP), Redis or MongoDB as the broker then
 you can control and inspect the worker at runtime.</p>
 <p>For example you can see what tasks the worker is currently working on:</p>
-<div class="highlight-python"><pre>$ celery -A proj inspect active</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj inspect active
+</pre></div>
 </div>
 <p>This is implemented by using broadcast messaging, so all remote
 control commands are received by every worker in the cluster.</p>
 <p>You can also specify one or more workers to act on the request
 using the <em class="xref std std-option">--destination</em> option, which is a comma separated
 list of worker host names:</p>
-<div class="highlight-python"><pre>$ celery -A proj inspect active --destination=worker1.example.com</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj inspect active --destination<span class="o">=</span>worker1.example.com
+</pre></div>
 </div>
 <p>If a destination is not provided then every worker will act and reply
 to the request.</p>
@@ -620,29 +632,36 @@ to the request.</p>
 does not change anything in the worker, it only replies information
 and statistics about what is going on inside the worker.
 For a list of inspect commands you can execute:</p>
-<div class="highlight-python"><pre>$ celery -A proj inspect --help</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj inspect --help
+</pre></div>
 </div>
 <p>Then there is the <strong class="program">celery control</strong> command, which contains
 commands that actually changes things in the worker at runtime:</p>
-<div class="highlight-python"><pre>$ celery -A proj control --help</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj control --help
+</pre></div>
 </div>
 <p>For example you can force workers to enable event messages (used
 for monitoring tasks and workers):</p>
-<div class="highlight-python"><pre>$ celery -A proj control enable_events</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj control enable_events
+</pre></div>
 </div>
 <p>When events are enabled you can then start the event dumper
 to see what the workers are doing:</p>
-<div class="highlight-python"><pre>$ celery -A proj events --dump</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj events --dump
+</pre></div>
 </div>
 <p>or you can start the curses interface:</p>
-<div class="highlight-python"><pre>$ celery -A proj events</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj events
+</pre></div>
 </div>
 <p>when you&#8217;re finished monitoring you can disable events again:</p>
-<div class="highlight-python"><pre>$ celery -A proj control disable_events</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj control disable_events
+</pre></div>
 </div>
 <p>The <strong class="program">celery status</strong> command also uses remote control commands
 and shows a list of online workers in the cluster:</p>
-<div class="highlight-python"><pre>$ celery -A proj status</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>celery -A proj status
+</pre></div>
 </div>
 <p>You can read more about the <strong class="program">celery</strong> command and monitoring
 in the <a class="reference internal" href="../userguide/monitoring.html#guide-monitoring"><em>Monitoring Guide</em></a>.</p>
@@ -655,7 +674,8 @@ converts that UTC time to local time.  If you wish to use
 a different timezone than the system timezone then you must
 configure that using the <a class="reference internal" href="../configuration.html#std:setting-CELERY_TIMEZONE"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TIMEZONE</span></tt></a> setting.</p>
 <p>To use custom timezones you also have to install the <tt class="xref py py-mod docutils literal"><span class="pre">pytz</span></tt> library:</p>
-<div class="highlight-python"><pre>$ pip install pytz</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install pytz
+</pre></div>
 </div>
 <p>Setting a custom timezone:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">celery</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">CELERY_TIMEZONE</span> <span class="o">=</span> <span class="s">&#39;Europe/London&#39;</span>
@@ -671,7 +691,8 @@ tasks, a compromise between throughput and fair scheduling.</p>
 for throughput then you should read the <a class="reference internal" href="../userguide/optimizing.html#guide-optimizing"><em>Optimizing Guide</em></a>.</p>
 <p>If you&#8217;re using RabbitMQ then you should install the <tt class="xref py py-mod docutils literal"><span class="pre">librabbitmq</span></tt>
 module, which is an AMQP client implemented in C:</p>
-<div class="highlight-python"><pre>$ pip install librabbitmq</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install librabbitmq
+</pre></div>
 </div>
 </div>
 <div class="section" id="what-to-do-now">

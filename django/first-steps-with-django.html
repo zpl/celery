@@ -76,24 +76,31 @@
 <blockquote>
 <div><ol class="arabic">
 <li><p class="first">Install the <tt class="docutils literal"><span class="pre">django-celery</span></tt> library:</p>
-<div class="highlight-python"><pre>$ pip install django-celery</pre>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install django-celery
+</pre></div>
 </div>
+</div></blockquote>
 </li>
 <li><p class="first">Add the following lines to <tt class="docutils literal"><span class="pre">settings.py</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">djcelery</span>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">djcelery</span>
 <span class="n">djcelery</span><span class="o">.</span><span class="n">setup_loader</span><span class="p">()</span>
 </pre></div>
 </div>
+</div></blockquote>
 </li>
 <li><p class="first">Add <tt class="docutils literal"><span class="pre">djcelery</span></tt> to <tt class="docutils literal"><span class="pre">INSTALLED_APPS</span></tt>.</p>
 </li>
 <li><p class="first">Create the celery database tables.</p>
 <blockquote>
 <div><p>If you are using <a class="reference external" href="http://pypi.python.org/pypi/South/">south</a> for schema migrations, you&#8217;ll want to:</p>
-<div class="highlight-python"><pre>$ python manage.py migrate djcelery</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py migrate djcelery
+</pre></div>
 </div>
 <p>For those who are not using south, a normal <tt class="docutils literal"><span class="pre">syncdb</span></tt> will work:</p>
-<div class="highlight-python"><pre>$ python manage.py syncdb</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py syncdb
+</pre></div>
 </div>
 </div></blockquote>
 </li>
@@ -103,7 +110,7 @@
 alternatives to choose from, see <a class="reference internal" href="../getting-started/first-steps-with-celery.html#celerytut-broker"><em>Choosing a Broker</em></a>.</p>
 <p>All settings mentioned in the Celery documentation should be added
 to your Django project&#8217;s <tt class="docutils literal"><span class="pre">settings.py</span></tt> module. For example
-we can configure the <a class="reference internal" href="../configuration.html#std:setting-BROKER_URL"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_URL</span></tt></a> setting to specify
+you can configure the <a class="reference internal" href="../configuration.html#std:setting-BROKER_URL"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_URL</span></tt></a> setting to specify
 what broker to use:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;amqp://guest:guest@localhost:5672/&#39;</span>
 </pre></div>
@@ -128,7 +135,8 @@ to import these modules.</p>
 <p>For a simple demonstration create a new Django app called
 <tt class="docutils literal"><span class="pre">celerytest</span></tt>.  To create this app you need to be in the directory
 of your Django project where <tt class="docutils literal"><span class="pre">manage.py</span></tt> is located and execute:</p>
-<div class="highlight-python"><pre>$ python manage.py startapp celerytest</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py startapp celerytest
+</pre></div>
 </div>
 <p>After the new app has been created, define a task by creating
 a new file called <tt class="docutils literal"><span class="pre">celerytest/tasks.py</span></tt>:</p>
@@ -149,17 +157,19 @@ parts of the Celery documentation.</p>
 as a daemon - see <a class="reference internal" href="../tutorials/daemonizing.html#daemonizing"><em>Running the worker as a daemon</em></a> - but for testing and
 development it is useful to be able to start a worker instance by using the
 <tt class="docutils literal"><span class="pre">celery</span> <span class="pre">worker</span></tt> manage command, much as you would use Django&#8217;s runserver:</p>
-<div class="highlight-python"><pre>$ python manage.py celery worker --loglevel=info</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py celery worker --loglevel<span class="o">=</span>info
+</pre></div>
 </div>
 <p>For a complete listing of the command line options available,
 use the help command:</p>
-<div class="highlight-python"><pre>$ python manage.py celery help</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py celery <span class="nb">help</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="calling-our-task">
 <h2>Calling our task<a class="headerlink" href="#calling-our-task" title="Permalink to this headline">¶</a></h2>
 <p>Now that the worker is running, open up a new terminal to actually
-call the task we defined:</p>
+call the task you defined:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">celerytest.tasks</span> <span class="kn">import</span> <span class="n">add</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>

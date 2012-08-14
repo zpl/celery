@@ -108,12 +108,13 @@ information:</p>
 </div>
 <p>If you telnet the port specified you will be presented
 with a <cite>pdb</cite> shell:</p>
-<div class="highlight-python"><pre>$ telnet localhost 6900
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>telnet localhost 6900
 Connected to localhost.
-Escape character is '^]'.
-&gt; /opt/devel/demoapp/tasks.py(128)add()
--&gt; return result
-(Pdb)</pre>
+Escape character is <span class="s1">&#39;^]&#39;</span>.
+&gt; /opt/devel/demoapp/tasks.py<span class="o">(</span>128<span class="o">)</span>add<span class="o">()</span>
+-&gt; <span class="k">return </span>result
+<span class="o">(</span>Pdb<span class="o">)</span>
+</pre></div>
 </div>
 <p>Enter <tt class="docutils literal"><span class="pre">help</span></tt> to get a list of available commands,
 It may be a good idea to read the <a class="reference external" href="http://docs.python.org/library/pdb.html">Python Debugger Manual</a> if

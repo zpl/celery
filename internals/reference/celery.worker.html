@@ -82,54 +82,6 @@
 <p>The worker consists of several components, all managed by boot-steps
 (mod:<cite>celery.worker.bootsteps</cite>).</p>
 <dl class="class">
-<dt id="celery.worker.Beat">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">Beat</tt><big>(</big><em>w</em>, <em>beat=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.Beat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Component used to embed a celerybeat process.</p>
-<p>This will only be enabled if the <tt class="docutils literal"><span class="pre">beat</span></tt>
-argument is set.</p>
-<dl class="method">
-<dt id="celery.worker.Beat.create">
-<tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.Beat.create" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Beat.name">
-<tt class="descname">name</tt><em class="property"> = 'beat'</em><a class="headerlink" href="#celery.worker.Beat.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Beat.namespace">
-<tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.Beat.namespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.worker.EvLoop">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">EvLoop</tt><big>(</big><em>w</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.EvLoop" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="celery.worker.EvLoop.create">
-<tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.EvLoop.create" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.worker.EvLoop.include_if">
-<tt class="descname">include_if</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.EvLoop.include_if" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.EvLoop.name">
-<tt class="descname">name</tt><em class="property"> = 'ev'</em><a class="headerlink" href="#celery.worker.EvLoop.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.EvLoop.namespace">
-<tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.EvLoop.namespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="celery.worker.Namespace">
 <em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">Namespace</tt><big>(</big><em>name=None</em>, <em>app=None</em><big>)</big><a class="headerlink" href="#celery.worker.Namespace" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the boot-step namespace of the <a class="reference internal" href="#celery.worker.WorkController" title="celery.worker.WorkController"><tt class="xref py py-class docutils literal"><span class="pre">WorkController</span></tt></a>.</p>
@@ -137,7 +89,7 @@ argument is set.</p>
 own set of built-in boot-step modules.</p>
 <dl class="attribute">
 <dt id="celery.worker.Namespace.builtin_boot_steps">
-<tt class="descname">builtin_boot_steps</tt><em class="property"> = ('celery.worker.autoscale', 'celery.worker.autoreload', 'celery.worker.consumer', 'celery.worker.mediator')</em><a class="headerlink" href="#celery.worker.Namespace.builtin_boot_steps" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">builtin_boot_steps</tt><em class="property"> = ('celery.worker.components', 'celery.worker.autoscale', 'celery.worker.autoreload', 'celery.worker.consumer', 'celery.worker.mediator')</em><a class="headerlink" href="#celery.worker.Namespace.builtin_boot_steps" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -153,139 +105,8 @@ own set of built-in boot-step modules.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="celery.worker.Pool">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">Pool</tt><big>(</big><em>w</em>, <em>autoscale=None</em>, <em>no_execv=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.Pool" title="Permalink to this definition">¶</a></dt>
-<dd><p>The pool component.</p>
-<p>Describes how to initialize the worker pool, and starts and stops
-the pool during worker startup/shutdown.</p>
-<p>Adds attributes:</p>
-<blockquote>
-<div><ul class="simple">
-<li>autoscale</li>
-<li>pool</li>
-<li>max_concurrency</li>
-<li>min_concurrency</li>
-</ul>
-</div></blockquote>
-<dl class="method">
-<dt id="celery.worker.Pool.create">
-<tt class="descname">create</tt><big>(</big><em>w</em>, <em>semaphore=None</em>, <em>max_restarts=None</em><big>)</big><a class="headerlink" href="#celery.worker.Pool.create" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Pool.name">
-<tt class="descname">name</tt><em class="property"> = 'pool'</em><a class="headerlink" href="#celery.worker.Pool.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Pool.namespace">
-<tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.Pool.namespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.worker.Pool.on_poll_init">
-<tt class="descname">on_poll_init</tt><big>(</big><em>pool</em>, <em>hub</em><big>)</big><a class="headerlink" href="#celery.worker.Pool.on_poll_init" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Pool.requires">
-<tt class="descname">requires</tt><em class="property"> = ('queues',)</em><a class="headerlink" href="#celery.worker.Pool.requires" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.worker.Queues">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">Queues</tt><big>(</big><em>parent</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.Queues" title="Permalink to this definition">¶</a></dt>
-<dd><p>This component initializes the internal queues
-used by the worker.</p>
-<dl class="method">
-<dt id="celery.worker.Queues.create">
-<tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.Queues.create" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Queues.name">
-<tt class="descname">name</tt><em class="property"> = 'queues'</em><a class="headerlink" href="#celery.worker.Queues.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Queues.namespace">
-<tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.Queues.namespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Queues.requires">
-<tt class="descname">requires</tt><em class="property"> = ('ev',)</em><a class="headerlink" href="#celery.worker.Queues.requires" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.worker.StateDB">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">StateDB</tt><big>(</big><em>w</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.StateDB" title="Permalink to this definition">¶</a></dt>
-<dd><p>This component sets up the workers state db if enabled.</p>
-<dl class="method">
-<dt id="celery.worker.StateDB.create">
-<tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.StateDB.create" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.StateDB.name">
-<tt class="descname">name</tt><em class="property"> = 'state-db'</em><a class="headerlink" href="#celery.worker.StateDB.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.StateDB.namespace">
-<tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.StateDB.namespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.worker.Timers">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">Timers</tt><big>(</big><em>parent</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.Timers" title="Permalink to this definition">¶</a></dt>
-<dd><p>This component initializes the internal timers used by the worker.</p>
-<dl class="method">
-<dt id="celery.worker.Timers.create">
-<tt class="descname">create</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.Timers.create" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.worker.Timers.include_if">
-<tt class="descname">include_if</tt><big>(</big><em>w</em><big>)</big><a class="headerlink" href="#celery.worker.Timers.include_if" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Timers.name">
-<tt class="descname">name</tt><em class="property"> = 'timers'</em><a class="headerlink" href="#celery.worker.Timers.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Timers.namespace">
-<tt class="descname">namespace</tt><em class="property"> = 'worker'</em><a class="headerlink" href="#celery.worker.Timers.namespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.worker.Timers.on_timer_error">
-<tt class="descname">on_timer_error</tt><big>(</big><em>exc</em><big>)</big><a class="headerlink" href="#celery.worker.Timers.on_timer_error" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.worker.Timers.on_timer_tick">
-<tt class="descname">on_timer_tick</tt><big>(</big><em>delay</em><big>)</big><a class="headerlink" href="#celery.worker.Timers.on_timer_tick" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.Timers.requires">
-<tt class="descname">requires</tt><em class="property"> = ('pool',)</em><a class="headerlink" href="#celery.worker.Timers.requires" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="celery.worker.WorkController">
-<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">WorkController</tt><big>(</big><em>loglevel=None</em>, <em>hostname=None</em>, <em>ready_callback=&lt;function noop at 0x101a9bde8&gt;</em>, <em>queues=None</em>, <em>app=None</em>, <em>pidfile=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.worker.</tt><tt class="descname">WorkController</tt><big>(</big><em>app=None</em>, <em>hostname=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unmanaged worker instance.</p>
 <dl class="attribute">
 <dt id="celery.worker.WorkController.CLOSE">
@@ -344,7 +165,7 @@ used by the worker.</p>
 
 <dl class="attribute">
 <dt id="celery.worker.WorkController.loglevel">
-<tt class="descname">loglevel</tt><em class="property"> = 40</em><a class="headerlink" href="#celery.worker.WorkController.loglevel" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">loglevel</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.loglevel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -355,6 +176,26 @@ used by the worker.</p>
 <dl class="attribute">
 <dt id="celery.worker.WorkController.mediator_cls">
 <tt class="descname">mediator_cls</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.mediator_cls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.WorkController.on_before_init">
+<tt class="descname">on_before_init</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.on_before_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.WorkController.on_consumer_ready">
+<tt class="descname">on_consumer_ready</tt><big>(</big><em>consumer</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.on_consumer_ready" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.WorkController.on_start">
+<tt class="descname">on_start</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.WorkController.on_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="celery.worker.WorkController.pidlock">
+<tt class="descname">pidlock</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.pidlock" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -368,8 +209,18 @@ used by the worker.</p>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="celery.worker.WorkController.pool_restarts">
+<tt class="descname">pool_restarts</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.pool_restarts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="celery.worker.WorkController.prefetch_multiplier">
 <tt class="descname">prefetch_multiplier</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.prefetch_multiplier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.WorkController.prepare_args">
+<tt class="descname">prepare_args</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.prepare_args" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -388,6 +239,12 @@ used by the worker.</p>
 <tt class="descname">reload</tt><big>(</big><em>modules=None</em>, <em>reload=False</em>, <em>reloader=None</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.reload" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="celery.worker.WorkController.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.WorkController.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the workers main loop.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="celery.worker.WorkController.schedule_filename">
 <tt class="descname">schedule_filename</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.schedule_filename" title="Permalink to this definition">¶</a></dt>
@@ -401,6 +258,21 @@ used by the worker.</p>
 <dl class="attribute">
 <dt id="celery.worker.WorkController.send_events">
 <tt class="descname">send_events</tt><em class="property"> = None</em><a class="headerlink" href="#celery.worker.WorkController.send_events" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.WorkController.setup_includes">
+<tt class="descname">setup_includes</tt><big>(</big><em>includes</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.setup_includes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.WorkController.setup_instance">
+<tt class="descname">setup_instance</tt><big>(</big><em>queues=None</em>, <em>ready_callback=None</em>, <em>pidfile=None</em>, <em>include=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.setup_instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="celery.worker.WorkController.setup_queues">
+<tt class="descname">setup_queues</tt><big>(</big><em>queues</em><big>)</big><a class="headerlink" href="#celery.worker.WorkController.setup_queues" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

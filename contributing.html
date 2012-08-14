@@ -385,17 +385,24 @@ and may mean that your changes will be accepted sooner.</p>
 is in the Github Guide: <a class="reference external" href="http://help.github.com/fork-a-repo/">Fork a Repo</a>.</p>
 <p>After you have cloned the repository you should checkout your copy
 to a directory on your machine:</p>
-<div class="highlight-python"><pre>$ git clone git@github.com:username/celery.git</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git clone git@github.com:username/celery.git
+</pre></div>
 </div>
 <p>When the repository is cloned enter the directory to set up easy access
 to upstream changes:</p>
-<div class="highlight-python"><pre>$ cd celery
-$ git remote add upstream git://github.com/celery/celery.git
-$ git fetch upstream</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>celery
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git remote add upstream git://github.com/celery/celery.git
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git fetch upstream
+</pre></div>
 </div>
 <p>If you need to pull in new changes from upstream you should
 always use the <em class="xref std std-option">--rebase</em> option to <tt class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></tt>:</p>
-<div class="highlight-python"><pre>git pull --rebase upstream master</pre>
+<div class="highlight-bash"><div class="highlight"><pre>git pull --rebase upstream master
+</pre></div>
 </div>
 <p>With this option you don&#8217;t clutter the history with merging
 commit notes. See <a class="reference external" href="http://notes.envato.com/developers/rebasing-merge-commits-in-git/">Rebasing merge commits in git</a>.
@@ -413,11 +420,13 @@ fetch and checkout a remote branch like this:</p>
 A complete list of the dependencies needed are located in
 <tt class="file docutils literal"><span class="pre">requirements/test.txt</span></tt>.</p>
 <p>Installing the test requirements:</p>
-<div class="highlight-python"><pre>$ pip -E $VIRTUAL_ENV install -U -r requirements/test.txt</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip -E <span class="nv">$VIRTUAL_ENV</span> install -U -r requirements/test.txt
+</pre></div>
 </div>
 <p>When installation of dependencies is complete you can execute
 the test suite by calling <tt class="docutils literal"><span class="pre">nosetests</span></tt>:</p>
-<div class="highlight-python"><pre>$ nosetests</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>nosetests
+</pre></div>
 </div>
 <p>Some useful options to <strong class="program">nosetests</strong> are:</p>
 <ul>
@@ -444,7 +453,8 @@ the test suite by calling <tt class="docutils literal"><span class="pre">nosetes
 </ul>
 <p>If you want to run the tests for a single test file only
 you can do so like this:</p>
-<div class="highlight-python"><pre>$ nosetests celery.tests.test_worker.test_worker_job</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>nosetests celery.tests.test_worker.test_worker_job
+</pre></div>
 </div>
 </div>
 <div class="section" id="creating-pull-requests">
@@ -459,12 +469,14 @@ the steps outlined here: <a class="reference external" href="http://bit.ly/koJos
 <div class="section" id="calculating-test-coverage">
 <span id="contributing-coverage"></span><h4><a class="toc-backref" href="#id28">Calculating test coverage</a><a class="headerlink" href="#calculating-test-coverage" title="Permalink to this headline">¶</a></h4>
 <p>Code coverage in HTML:</p>
-<div class="highlight-python"><pre>$ nosetests --with-coverage3 --cover3-html</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>nosetests --with-coverage3 --cover3-html
+</pre></div>
 </div>
 <p>The coverage output will then be located at
 <tt class="file docutils literal"><span class="pre">celery/tests/cover/index.html</span></tt>.</p>
 <p>Code coverage in XML (Cobertura-style):</p>
-<div class="highlight-python"><pre>$ nosetests --with-coverage3 --cover3-xml --cover3-xml-file=coverage.xml</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>nosetests --with-coverage3 --cover3-xml --cover3-xml-file<span class="o">=</span>coverage.xml
+</pre></div>
 </div>
 <p>The coverage XML output will then be located at <tt class="file docutils literal"><span class="pre">coverage.xml</span></tt></p>
 </div>
@@ -473,11 +485,13 @@ the steps outlined here: <a class="reference external" href="http://bit.ly/koJos
 <p>There is a <tt class="docutils literal"><span class="pre">tox</span></tt> configuration file in the top directory of the
 distribution.</p>
 <p>To run the tests for all supported Python versions simply execute:</p>
-<div class="highlight-python"><pre>$ tox</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tox
+</pre></div>
 </div>
 <p>If you only want to test specific Python versions use the <em class="xref std std-option">-e</em>
 option:</p>
-<div class="highlight-python"><pre>$ tox -e py26</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tox -e py26
+</pre></div>
 </div>
 </div>
 </div>
@@ -485,13 +499,15 @@ option:</p>
 <h3><a class="toc-backref" href="#id30">Building the documentation</a><a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h3>
 <p>To build the documentation you need to install the dependencies
 listed in <tt class="file docutils literal"><span class="pre">requirements/docs.txt</span></tt>:</p>
-<div class="highlight-python"><pre>$ pip -E $VIRTUAL_ENV install -U -r requirements/docs.txt</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip -E <span class="nv">$VIRTUAL_ENV</span> install -U -r requirements/docs.txt
+</pre></div>
 </div>
 <p>After these dependencies are installed you should be able to
 build the docs by running:</p>
-<div class="highlight-python"><pre>$ cd docs
-$ rm -rf .build
-$ make html</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>docs
+<span class="nv">$ </span>rm -rf .build
+<span class="nv">$ </span>make html
+</pre></div>
 </div>
 <p>Make sure there are no errors or warnings in the build output.
 After building succeeds the documentation is available at <tt class="file docutils literal"><span class="pre">.build/html</span></tt>.</p>
@@ -501,25 +517,29 @@ After building succeeds the documentation is available at <tt class="file docuti
 <p>To use these tools you need to install a few dependencies.  These dependencies
 can be found in <tt class="file docutils literal"><span class="pre">requirements/pkgutils.txt</span></tt>.</p>
 <p>Installing the dependencies:</p>
-<div class="highlight-python"><pre>$ pip -E $VIRTUAL_ENV install -U -r requirements/pkgutils.txt</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip -E <span class="nv">$VIRTUAL_ENV</span> install -U -r requirements/pkgutils.txt
+</pre></div>
 </div>
 <div class="section" id="pyflakes-pep8">
 <h4><a class="toc-backref" href="#id32">pyflakes &amp; PEP8</a><a class="headerlink" href="#pyflakes-pep8" title="Permalink to this headline">¶</a></h4>
 <p>To ensure that your changes conform to PEP8 and to run pyflakes
 execute:</p>
-<div class="highlight-python"><pre>$ paver flake8</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>paver flake8
+</pre></div>
 </div>
 <p>To not return a negative exit code when this command fails use the
 <em class="xref std std-option">-E</em> option, this can be convenient while developing:</p>
-<div class="highlight-python"><pre>$ paver flake8 -E</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>paver flake8 -E
+</pre></div>
 </div>
 </div>
 <div class="section" id="api-reference">
 <h4><a class="toc-backref" href="#id33">API reference</a><a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h4>
 <p>To make sure that all modules have a corresponding section in the API
 reference please execute:</p>
-<div class="highlight-python"><pre>$ paver autodoc
-$ paver verifyindex</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>paver autodoc
+<span class="nv">$ </span>paver verifyindex
+</pre></div>
 </div>
 <p>If files are missing you can add them by copying an existing reference file.</p>
 <p>If the module is internal it should be part of the internal reference
@@ -527,22 +547,27 @@ located in <tt class="file docutils literal"><span class="pre">docs/internals/re
 it should be located in <tt class="file docutils literal"><span class="pre">docs/reference/</span></tt>.</p>
 <p>For example if reference is missing for the module <tt class="docutils literal"><span class="pre">celery.worker.awesome</span></tt>
 and this module is considered part of the public API, use the following steps:</p>
-<div class="highlight-python"><pre>$ cd docs/reference/
-$ cp celery.schedules.rst celery.worker.awesome.rst
-$ vim celery.worker.awesome.rst
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>docs/reference/
+<span class="nv">$ </span>cp celery.schedules.rst celery.worker.awesome.rst
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vim celery.worker.awesome.rst
 
-    # change every occurance of ``celery.schedules`` to
-    # ``celery.worker.awesome``
+    <span class="c"># change every occurance of ``celery.schedules`` to</span>
+    <span class="c"># ``celery.worker.awesome``</span>
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vim index.rst
 
-$ vim index.rst
-
-    # Add ``celery.worker.awesome`` to the index.
-
-# Add the file to git
-$ git add celery.worker.awesome.rst
-$ git add index.rst
-$ git commit celery.worker.awesome.rst index.rst \
-    -m "Adds reference for celery.worker.awesome"</pre>
+    <span class="c"># Add ``celery.worker.awesome`` to the index.</span>
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Add the file to git</span>
+<span class="nv">$ </span>git add celery.worker.awesome.rst
+<span class="nv">$ </span>git add index.rst
+<span class="nv">$ </span>git commit celery.worker.awesome.rst index.rst <span class="se">\</span>
+    -m <span class="s2">&quot;Adds reference for celery.worker.awesome&quot;</span>
+</pre></div>
 </div>
 </div>
 </div>
@@ -973,14 +998,17 @@ that will eventually be merged into the Python stdlib.</p>
 the <tt class="file docutils literal"><span class="pre">README</span></tt> files.  There is a script to convert sphinx syntax
 to generic reStructured Text syntax, and the paver task <cite>readme</cite>
 does this for you:</p>
-<div class="highlight-python"><pre>$ paver readme</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>paver readme
+</pre></div>
 </div>
 <p>Now commit the changes:</p>
-<div class="highlight-python"><pre>$ git commit -a -m "Bumps version to X.Y.Z"</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git commit -a -m <span class="s2">&quot;Bumps version to X.Y.Z&quot;</span>
+</pre></div>
 </div>
 <p>and make a new version tag:</p>
-<div class="highlight-python"><pre>$ git tag vX.Y.Z
-$ git push --tags</pre>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git tag vX.Y.Z
+<span class="nv">$ </span>git push --tags
+</pre></div>
 </div>
 </div>
 <div class="section" id="releasing">

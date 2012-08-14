@@ -81,15 +81,13 @@
 <p>Result backend base classes.</p>
 <ul class="simple">
 <li><a class="reference internal" href="#celery.backends.base.BaseBackend" title="celery.backends.base.BaseBackend"><tt class="xref py py-class docutils literal"><span class="pre">BaseBackend</span></tt></a> defines the interface.</li>
-<li><a class="reference internal" href="#celery.backends.base.BaseDictBackend" title="celery.backends.base.BaseDictBackend"><tt class="xref py py-class docutils literal"><span class="pre">BaseDictBackend</span></tt></a> assumes the fields are stored in a dict.</li>
 <li><a class="reference internal" href="#celery.backends.base.KeyValueStoreBackend" title="celery.backends.base.KeyValueStoreBackend"><tt class="xref py py-class docutils literal"><span class="pre">KeyValueStoreBackend</span></tt></a> is a common base class
 using K/V semantics like _get and _put.</li>
 </ul>
 <dl class="class">
 <dt id="celery.backends.base.BaseBackend">
-<em class="property">class </em><tt class="descclassname">celery.backends.base.</tt><tt class="descname">BaseBackend</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base backend class.</p>
-<dl class="attribute">
+<em class="property">class </em><tt class="descclassname">celery.backends.base.</tt><tt class="descname">BaseBackend</tt><big>(</big><em>app=None</em>, <em>serializer=None</em>, <em>max_cached_results=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
 <dt id="celery.backends.base.BaseBackend.EXCEPTION_STATES">
 <tt class="descname">EXCEPTION_STATES</tt><em class="property"> = frozenset(['FAILURE', 'RETRY', 'REVOKED'])</em><a class="headerlink" href="#celery.backends.base.BaseBackend.EXCEPTION_STATES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -161,6 +159,12 @@ using K/V semantics like _get and _put.</li>
 <dl class="method">
 <dt id="celery.backends.base.BaseBackend.get_children">
 <tt class="descclassname">BaseBackend.</tt><tt class="descname">get_children</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of subtasks sent by a task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="celery.backends.base.BaseBackend.get_group_meta">
+<tt class="descclassname">BaseBackend.</tt><tt class="descname">get_group_meta</tt><big>(</big><em>group_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.get_group_meta" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -174,6 +178,11 @@ using K/V semantics like _get and _put.</li>
 <tt class="descclassname">BaseBackend.</tt><tt class="descname">get_status</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.get_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the status of a task.</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="celery.backends.base.BaseBackend.get_task_meta">
+<tt class="descclassname">BaseBackend.</tt><tt class="descname">get_task_meta</tt><big>(</big><em>task_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.get_task_meta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="celery.backends.base.BaseBackend.get_traceback">
@@ -202,7 +211,7 @@ exception (if any).</p>
 
 <dl class="method">
 <dt id="celery.backends.base.BaseBackend.mark_as_revoked">
-<tt class="descclassname">BaseBackend.</tt><tt class="descname">mark_as_revoked</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.mark_as_revoked" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseBackend.</tt><tt class="descname">mark_as_revoked</tt><big>(</big><em>task_id</em>, <em>reason=''</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.mark_as_revoked" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -246,7 +255,7 @@ exception (if any).</p>
 
 <dl class="method">
 <dt id="celery.backends.base.BaseBackend.reload_group_result">
-<tt class="descclassname">BaseBackend.</tt><tt class="descname">reload_group_result</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.reload_group_result" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">BaseBackend.</tt><tt class="descname">reload_group_result</tt><big>(</big><em>group_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.reload_group_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reload group result, even if it has been previously fetched.</p>
 </dd></dl>
 
@@ -259,19 +268,19 @@ exception (if any).</p>
 <dl class="method">
 <dt id="celery.backends.base.BaseBackend.restore_group">
 <tt class="descclassname">BaseBackend.</tt><tt class="descname">restore_group</tt><big>(</big><em>group_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.restore_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the result of a group.</p>
+<dd><p>Get the result for a group.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="celery.backends.base.BaseBackend.save_group">
 <tt class="descclassname">BaseBackend.</tt><tt class="descname">save_group</tt><big>(</big><em>group_id</em>, <em>result</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.save_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store the result and status of a task.</p>
+<dd><p>Store the result of an executed group.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="celery.backends.base.BaseBackend.store_result">
-<tt class="descclassname">BaseBackend.</tt><tt class="descname">store_result</tt><big>(</big><em>task_id</em>, <em>result</em>, <em>status</em>, <em>traceback=None</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.store_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store the result and status of a task.</p>
+<tt class="descclassname">BaseBackend.</tt><tt class="descname">store_result</tt><big>(</big><em>task_id</em>, <em>result</em>, <em>status</em>, <em>traceback=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseBackend.store_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update task state and result.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -301,86 +310,15 @@ takes longer than <cite>timeout</cite> seconds.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="attribute">
 <dt id="celery.backends.base.BaseDictBackend">
-<em class="property">class </em><tt class="descclassname">celery.backends.base.</tt><tt class="descname">BaseDictBackend</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.delete_group">
-<tt class="descname">delete_group</tt><big>(</big><em>group_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.delete_group" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.forget">
-<tt class="descname">forget</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.forget" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.get_children">
-<tt class="descname">get_children</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.get_children" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the list of subtasks sent by a task.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.get_group_meta">
-<tt class="descname">get_group_meta</tt><big>(</big><em>group_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.get_group_meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.get_result">
-<tt class="descname">get_result</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.get_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the result of a task.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.get_status">
-<tt class="descname">get_status</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.get_status" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the status of a task.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.get_task_meta">
-<tt class="descname">get_task_meta</tt><big>(</big><em>task_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.get_task_meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.get_traceback">
-<tt class="descname">get_traceback</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.get_traceback" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the traceback for a failed task.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.reload_group_result">
-<tt class="descname">reload_group_result</tt><big>(</big><em>group_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.reload_group_result" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.reload_task_result">
-<tt class="descname">reload_task_result</tt><big>(</big><em>task_id</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.reload_task_result" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.restore_group">
-<tt class="descname">restore_group</tt><big>(</big><em>group_id</em>, <em>cache=True</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.restore_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the result for a group.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.save_group">
-<tt class="descname">save_group</tt><big>(</big><em>group_id</em>, <em>result</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.save_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store the result of an executed group.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.base.BaseDictBackend.store_result">
-<tt class="descname">store_result</tt><big>(</big><em>task_id</em>, <em>result</em>, <em>status</em>, <em>traceback=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.BaseDictBackend.store_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store task result and status.</p>
-</dd></dl>
-
+<tt class="descclassname">celery.backends.base.</tt><tt class="descname">BaseDictBackend</tt><a class="headerlink" href="#celery.backends.base.BaseDictBackend" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#celery.backends.base.BaseBackend" title="celery.backends.base.BaseBackend"><tt class="xref py py-class docutils literal"><span class="pre">BaseBackend</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="celery.backends.base.DisabledBackend">
-<em class="property">class </em><tt class="descclassname">celery.backends.base.</tt><tt class="descname">DisabledBackend</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.DisabledBackend" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.backends.base.</tt><tt class="descname">DisabledBackend</tt><big>(</big><em>app=None</em>, <em>serializer=None</em>, <em>max_cached_results=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.DisabledBackend" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="celery.backends.base.DisabledBackend.get_result">
 <tt class="descname">get_result</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.DisabledBackend.get_result" title="Permalink to this definition">¶</a></dt>
@@ -410,7 +348,7 @@ takes longer than <cite>timeout</cite> seconds.</p>
 
 <dl class="class">
 <dt id="celery.backends.base.KeyValueStoreBackend">
-<em class="property">class </em><tt class="descclassname">celery.backends.base.</tt><tt class="descname">KeyValueStoreBackend</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">celery.backends.base.</tt><tt class="descname">KeyValueStoreBackend</tt><big>(</big><em>app=None</em>, <em>serializer=None</em>, <em>max_cached_results=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="celery.backends.base.KeyValueStoreBackend.chord_keyprefix">
 <tt class="descname">chord_keyprefix</tt><em class="property"> = 'chord-unlock-'</em><a class="headerlink" href="#celery.backends.base.KeyValueStoreBackend.chord_keyprefix" title="Permalink to this definition">¶</a></dt>

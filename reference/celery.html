@@ -250,7 +250,7 @@ when pickle restores the object on the other side.</p>
 <tt class="descname">task</tt><big>(</big><em>fun</em>, <em>...</em><big>)</big><a class="headerlink" href="#celery.Celery.task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to create a task class out of any callable.</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@celery.task</span>
 <span class="k">def</span> <span class="nf">refresh_feed</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">...</span>
 </pre></div>
@@ -356,7 +356,7 @@ setting.</li>
 </tr>
 </tbody>
 </table>
-<p>:returns <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.connection.html#kombu.connection.Connection" title="(in Kombu v2.2)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.connection.Connection</span></tt></a>:</p>
+<p>:returns <a class="reference external" href="http://kombu.readthedocs.org/en/latest/reference/kombu.connection.html#kombu.connection.Connection" title="(in Kombu v2.3)"><tt class="xref py py-class docutils literal"><span class="pre">kombu.connection.Connection</span></tt></a>:</p>
 </dd></dl>
 
 <dl class="method">
