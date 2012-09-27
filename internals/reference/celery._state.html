@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery._state &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery._state &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="History" href="../../history/index.html" />
     <link rel="prev" title="celery.platforms" href="celery.platforms.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.platforms.html" title="celery.platforms"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,73 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery._state.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-state">
-<h1>celery._state<a class="headerlink" href="#celery-state" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#id1" id="id2">celery._state</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery._state"></span><div class="section" id="id1">
-<h2><a class="toc-backref" href="#id2">celery._state</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>This is an internal module containing thread state
-like the <tt class="docutils literal"><span class="pre">current_app</span></tt>, and <tt class="docutils literal"><span class="pre">current_task</span></tt>.</p>
-<p>This module shouldn&#8217;t be used directly.</p>
-<dl class="data">
-<dt id="celery._state.current_app">
-<tt class="descclassname">celery._state.</tt><tt class="descname">current_app</tt><em class="property"> = &lt;Celery __main__:0x101abe710&gt;</em><a class="headerlink" href="#celery._state.current_app" title="Permalink to this definition">¶</a></dt>
-<dd><p>Proxy to current app.</p>
-</dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery._state.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery._state.html</a>.
+    </p>
 
-<dl class="data">
-<dt id="celery._state.current_task">
-<tt class="descclassname">celery._state.</tt><tt class="descname">current_task</tt><em class="property"> = None</em><a class="headerlink" href="#celery._state.current_task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Proxy to current task.</p>
-</dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="data">
-<dt id="celery._state.default_app">
-<tt class="descclassname">celery._state.</tt><tt class="descname">default_app</tt><em class="property"> = &lt;Celery default:0x101abe690&gt;</em><a class="headerlink" href="#celery._state.default_app" title="Permalink to this definition">¶</a></dt>
-<dd><p>Global default app used when no current app.</p>
-</dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery._state.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery._state.html</a>.
+    </p>
 
-<dl class="function">
-<dt id="celery._state.get_current_app">
-<tt class="descclassname">celery._state.</tt><tt class="descname">get_current_app</tt><big>(</big><big>)</big><a class="headerlink" href="#celery._state.get_current_app" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery._state.get_current_task">
-<tt class="descclassname">celery._state.</tt><tt class="descname">get_current_task</tt><big>(</big><big>)</big><a class="headerlink" href="#celery._state.get_current_task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Currently executing task.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery._state.get_current_worker_task">
-<tt class="descclassname">celery._state.</tt><tt class="descname">get_current_worker_task</tt><big>(</big><big>)</big><a class="headerlink" href="#celery._state.get_current_worker_task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Currently executing task, that was applied by the worker.</p>
-<p>This is used to differentiate between the actual task
-executed by the worker and any task that was called within
-a task (using <tt class="docutils literal"><span class="pre">task.__call__</span></tt> or <tt class="docutils literal"><span class="pre">task.apply</span></tt>)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery._state.set_default_app">
-<tt class="descclassname">celery._state.</tt><tt class="descname">set_default_app</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery._state.set_default_app" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -178,7 +139,7 @@ a task (using <tt class="docutils literal"><span class="pre">task.__call__</span
         <li class="right" >
           <a href="celery.platforms.html" title="celery.platforms"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

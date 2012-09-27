@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using Redis &mdash; Celery 3.1.0a1 documentation</title>
+    <title>Using Redis &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Brokers" href="index.html" />
     <link rel="next" title="Using SQLAlchemy" href="sqlalchemy.html" />
     <link rel="prev" title="Using RabbitMQ" href="rabbitmq.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="rabbitmq.html" title="Using RabbitMQ"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Getting Started</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Brokers</a> &raquo;</li> 
       </ul>
@@ -59,51 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="using-redis">
-<span id="broker-redis"></span><h1>Using Redis<a class="headerlink" href="#using-redis" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="installation">
-<span id="broker-redis-installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>For the Redis support you have to install additional dependencies.
-You can install both Celery and these dependencies in one go using
-either the <a class="reference external" href="http://pypi.python.org/pypi/celery-with-redis">celery-with-redis</a>, or the <cite>django-celery-with-redis</cite> bundles:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install -U celery-with-redis
-</pre></div>
-</div>
-</div>
-<div class="section" id="configuration">
-<span id="broker-redis-configuration"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
-<p>Configuration is easy, just configure the location of
-your Redis database:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;redis://localhost:6379/0&#39;</span>
-</pre></div>
-</div>
-<p>Where the URL is in the format of:</p>
-<div class="highlight-python"><pre>redis://:password@hostname:port/db_number</pre>
-</div>
-<p>all fields after the scheme are optional, and will default to localhost on port 6379,
-using database 0.</p>
-<div class="section" id="results">
-<span id="redis-results-configuration"></span><h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
-<p>If you also want to store the state and return values of tasks in Redis,
-you should configure these settings:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&#39;redis://localhost:6379/0&#39;</span>
-</pre></div>
-</div>
-<p>For a complete list of options supported by the Redis result backend, see
-<a class="reference internal" href="../../configuration.html#conf-redis-result-backend"><em>Redis backend settings</em></a></p>
-</div>
-</div>
-</div>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/getting-started/brokers/redis.html"
+        >http://docs.celeryproject.org/en/master/getting-started/brokers/redis.html</a>.
+    </p>
+
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
+
+    <a href="http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html"
+        >http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html</a>.
+    </p>
+
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -156,7 +139,7 @@ you should configure these settings:</p>
         <li class="right" >
           <a href="rabbitmq.html" title="Using RabbitMQ"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Getting Started</a> &raquo;</li>
           <li><a href="index.html" >Brokers</a> &raquo;</li> 
       </ul>

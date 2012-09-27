@@ -38,22 +38,9 @@ host name with the :option:`--hostname|-n` argument:
 
 .. code-block:: bash
 
-    $ celery worker --loglevel=INFO --concurrency=10 -n worker1.%h
-    $ celery worker --loglevel=INFO --concurrency=10 -n worker2.%h
-    $ celery worker --loglevel=INFO --concurrency=10 -n worker3.%h
-
-The hostname argument can expand the following variables:
-
-    - ``%h``:  Hostname including domain name.
-    - ``%n``:  Hostname only.
-    - ``%d``:  Domain name only.
-
-E.g. if the current hostname is ``george.example.com`` then
-these will expand to:
-
-    - ``worker1.%h`` -> ``worker1.george.example.com``
-    - ``worker1.%n`` -> ``worker1.george``
-    - ``worker1.%d`` -> ``worker1.example.com``
+    $ celery worker --loglevel=INFO --concurrency=10 -n worker1.example.com
+    $ celery worker --loglevel=INFO --concurrency=10 -n worker2.example.com
+    $ celery worker --loglevel=INFO --concurrency=10 -n worker3.example.com
 
 .. _worker-stopping:
 
@@ -314,7 +301,7 @@ time limit kills it:
             clean_up_in_a_hurry()
 
 Time limits can also be set using the :setting:`CELERYD_TASK_TIME_LIMIT` /
-:setting:`CELERYD_SOFT_TASK_TIME_LIMIT` settings.
+:setting:`CELERYD_TASK_SOFT_TIME_LIMIT` settings.
 
 .. note::
 

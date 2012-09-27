@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.utils.threads &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.utils.threads &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.utils.timer2" href="celery.utils.timer2.html" />
     <link rel="prev" title="celery.utils.serialization" href="celery.utils.serialization.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.utils.serialization.html" title="celery.utils.serialization"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,115 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.threads.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-utils-threads">
-<h1>celery.utils.threads<a class="headerlink" href="#celery-utils-threads" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#id1" id="id2">celery.utils.threads</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery.utils.threads"></span><div class="section" id="id1">
-<h2><a class="toc-backref" href="#id2">celery.utils.threads</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Threading utilities.</p>
-<dl class="class">
-<dt id="celery.utils.threads.Local">
-<em class="property">class </em><tt class="descclassname">celery.utils.threads.</tt><tt class="descname">Local</tt><a class="headerlink" href="#celery.utils.threads.Local" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery.utils.threads.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery.utils.threads.html</a>.
+    </p>
 
-<dl class="class">
-<dt id="celery.utils.threads.LocalManager">
-<em class="property">class </em><tt class="descclassname">celery.utils.threads.</tt><tt class="descname">LocalManager</tt><big>(</big><em>locals=None</em>, <em>ident_func=None</em><big>)</big><a class="headerlink" href="#celery.utils.threads.LocalManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Local objects cannot manage themselves. For that you need a local
-manager.  You can pass a local manager multiple locals or add them
-later by appending them to <cite>manager.locals</cite>.  Everytime the manager
-cleans up it, will clean up all the data left in the locals for this
-context.</p>
-<p>The <cite>ident_func</cite> parameter can be added to override the default ident
-function for the wrapped locals.</p>
-<dl class="method">
-<dt id="celery.utils.threads.LocalManager.cleanup">
-<tt class="descname">cleanup</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.threads.LocalManager.cleanup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Manually clean up the data in the locals for this context.</p>
-<p>Call this at the end of the request or use <cite>make_middleware()</cite>.</p>
-</dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="method">
-<dt id="celery.utils.threads.LocalManager.get_ident">
-<tt class="descname">get_ident</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.threads.LocalManager.get_ident" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the context identifier the local objects use internally
-for this context.  You cannot override this method to change the
-behavior but use it to link other context local objects (such as
-SQLAlchemy&#8217;s scoped sessions) to the Werkzeug locals.</p>
-</dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.threads.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.threads.html</a>.
+    </p>
 
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.utils.threads.LocalStack">
-<tt class="descclassname">celery.utils.threads.</tt><tt class="descname">LocalStack</tt><a class="headerlink" href="#celery.utils.threads.LocalStack" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_FastLocalStack</span></tt></p>
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.utils.threads.bgThread">
-<em class="property">class </em><tt class="descclassname">celery.utils.threads.</tt><tt class="descname">bgThread</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.utils.threads.bgThread" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="celery.utils.threads.bgThread.body">
-<tt class="descname">body</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.threads.bgThread.body" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.threads.bgThread.on_crash">
-<tt class="descname">on_crash</tt><big>(</big><em>msg</em>, <em>*fmt</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.utils.threads.bgThread.on_crash" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.threads.bgThread.run">
-<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.threads.bgThread.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.threads.bgThread.stop">
-<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.threads.bgThread.stop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Graceful shutdown.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.threads.release_local">
-<tt class="descclassname">celery.utils.threads.</tt><tt class="descname">release_local</tt><big>(</big><em>local</em><big>)</big><a class="headerlink" href="#celery.utils.threads.release_local" title="Permalink to this definition">¶</a></dt>
-<dd><p>Releases the contents of the local for the current context.
-This makes it possible to use locals without a manager.</p>
-<p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">loc</span> <span class="o">=</span> <span class="n">Local</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">loc</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">42</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">release_local</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="s">&#39;foo&#39;</span><span class="p">)</span>
-<span class="go">False</span>
-</pre></div>
-</div>
-<p>With this function one can release <a class="reference internal" href="#celery.utils.threads.Local" title="celery.utils.threads.Local"><tt class="xref py py-class docutils literal"><span class="pre">Local</span></tt></a> objects as well
-as <tt class="xref py py-class docutils literal"><span class="pre">StackLocal</span></tt> objects.  However it is not possible to
-release data held by proxies that way, one always has to retain
-a reference to the underlying local object in order to be able
-to release it.</p>
-<p class="versionadded">
-<span class="versionmodified">New in version 0.6.1.</span></p>
-</dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -220,7 +139,7 @@ to release it.</p>
         <li class="right" >
           <a href="celery.utils.serialization.html" title="celery.utils.serialization"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.bin.celerybeat &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.bin.celerybeat &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.bin.celeryev" href="celery.bin.celeryev.html" />
     <link rel="prev" title="celery.bin.celeryd" href="celery.bin.celeryd.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.bin.celeryd.html" title="celery.bin.celeryd"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,104 +58,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/reference/celery.bin.celerybeat.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-bin-celerybeat">
-<h1>celery.bin.celerybeat<a class="headerlink" href="#celery-bin-celerybeat" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-celery.bin.celerybeat"></span><p>The <strong class="program">celery beat</strong> command.</p>
-<div class="admonition-see-also admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">See <a class="reference internal" href="celery.bin.base.html#preload-options"><em>Preload Options</em></a> and <a class="reference internal" href="celery.bin.base.html#daemon-options"><em>Daemon Options</em></a>.</p>
-</div>
-<dl class="cmdoption">
-<dt id="cmdoption-celery-beat--detach">
-<tt class="descname">--detach</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat--detach" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detach and run in the background as a daemon.</p>
-</dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/reference/celery.bin.celerybeat.html"
+        >http://docs.celeryproject.org/en/master/reference/celery.bin.celerybeat.html</a>.
+    </p>
 
-<dl class="cmdoption">
-<dt id="cmdoption-celery-beat-s">
-<tt class="descname">-s</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--schedule</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-s" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path to the schedule database. Defaults to <cite>celerybeat-schedule</cite>.
-The extension &#8216;.db&#8217; may be appended to the filename.
-Default is {default}.</p>
-</dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="cmdoption">
-<dt id="cmdoption-celery-beat-S">
-<tt class="descname">-S</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--scheduler</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-S" title="Permalink to this definition">¶</a></dt>
-<dd><p>Scheduler class to use.
-Default is <a class="reference internal" href="../internals/reference/celery.beat.html#celery.beat.PersistentScheduler" title="celery.beat.PersistentScheduler"><tt class="xref py py-class docutils literal"><span class="pre">celery.beat.PersistentScheduler</span></tt></a>.</p>
-</dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/reference/celery.bin.celerybeat.html"
+        >http://docs.celeryproject.org/en/latest/reference/celery.bin.celerybeat.html</a>.
+    </p>
 
-<dl class="cmdoption">
-<dt id="cmdoption-celery-beat-interval">
-<tt class="descname">-interval</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-interval" title="Permalink to this definition">¶</a></dt>
-<dd><p>Max seconds to sleep between schedule iterations.</p>
-</dd></dl>
-
-<dl class="cmdoption">
-<dt id="cmdoption-celery-beat-f">
-<tt class="descname">-f</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--logfile</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-f" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path to log file. If no logfile is specified, <cite>stderr</cite> is used.</p>
-</dd></dl>
-
-<dl class="cmdoption">
-<dt id="cmdoption-celery-beat-l">
-<tt class="descname">-l</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--loglevel</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-celery-beat-l" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logging level, choose between <cite>DEBUG</cite>, <cite>INFO</cite>, <cite>WARNING</cite>,
-<cite>ERROR</cite>, <cite>CRITICAL</cite>, or <cite>FATAL</cite>.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.bin.celerybeat.BeatCommand">
-<em class="property">class </em><tt class="descclassname">celery.bin.celerybeat.</tt><tt class="descname">BeatCommand</tt><big>(</big><em>app=None</em>, <em>get_app=None</em><big>)</big><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="celery.bin.celerybeat.BeatCommand.doc">
-<tt class="descname">doc</tt><em class="property"> = &quot;\n\nThe :program:`celery beat` command.\n\n.. program:: celery beat\n\n.. seealso::\n\n    See :ref:`preload-options` and :ref:`daemon-options`.\n\n.. cmdoption:: --detach\n\n    Detach and run in the background as a daemon.\n\n.. cmdoption:: -s, --schedule\n\n    Path to the schedule database. Defaults to `celerybeat-schedule`.\n    The extension '.db' may be appended to the filename.\n    Default is {default}.\n\n.. cmdoption:: -S, --scheduler\n\n    Scheduler class to use.\n    Default is :class:`celery.beat.PersistentScheduler`.\n\n.. cmdoption:: max-interval\n\n    Max seconds to sleep between schedule iterations.\n\n.. cmdoption:: -f, --logfile\n\n    Path to log file. If no logfile is specified, `stderr` is used.\n\n.. cmdoption:: -l, --loglevel\n\n    Logging level, choose between `DEBUG`, `INFO`, `WARNING`,\n    `ERROR`, `CRITICAL`, or `FATAL`.\n\n&quot;</em><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand.doc" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.bin.celerybeat.BeatCommand.enable_config_from_cmdline">
-<tt class="descname">enable_config_from_cmdline</tt><em class="property"> = True</em><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand.enable_config_from_cmdline" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.bin.celerybeat.BeatCommand.get_options">
-<tt class="descname">get_options</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand.get_options" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.bin.celerybeat.BeatCommand.prepare_preload_options">
-<tt class="descname">prepare_preload_options</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand.prepare_preload_options" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.bin.celerybeat.BeatCommand.run">
-<tt class="descname">run</tt><big>(</big><em>detach=False</em>, <em>logfile=None</em>, <em>pidfile=None</em>, <em>uid=None</em>, <em>gid=None</em>, <em>umask=None</em>, <em>working_directory=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.bin.celerybeat.BeatCommand.supports_args">
-<tt class="descname">supports_args</tt><em class="property"> = False</em><a class="headerlink" href="#celery.bin.celerybeat.BeatCommand.supports_args" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.bin.celerybeat.main">
-<tt class="descclassname">celery.bin.celerybeat.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.bin.celerybeat.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -208,7 +138,7 @@ Default is <a class="reference internal" href="../internals/reference/celery.bea
         <li class="right" >
           <a href="celery.bin.celeryd.html" title="celery.bin.celeryd"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

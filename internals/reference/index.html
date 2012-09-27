@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Internal Module Reference &mdash; Celery 3.1.0a1 documentation</title>
+    <title>Internal Module Reference &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internals" href="../index.html" />
     <link rel="next" title="celery.worker" href="celery.worker.html" />
     <link rel="prev" title="“The Big Instance” Refactor" href="../app-overview.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="../app-overview.html" title="“The Big Instance” Refactor"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Internals</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,92 +58,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/index.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="internal-module-reference">
-<h1>Internal Module Reference<a class="headerlink" href="#internal-module-reference" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">3.1</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">August 14, 2012</td>
-</tr>
-</tbody>
-</table>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.html">celery.worker</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.consumer.html">celery.worker.consumer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.job.html">celery.worker.job</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.mediator.html">celery.worker.mediator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.buckets.html">celery.worker.buckets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.heartbeat.html">celery.worker.heartbeat</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.hub.html">celery.worker.hub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.control.html">celery.worker.control</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.state.html">celery.worker.state</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.strategy.html">celery.worker.strategy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.autoreload.html">celery.worker.autoreload</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.autoscale.html">celery.worker.autoscale</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.worker.bootsteps.html">celery.worker.bootsteps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.concurrency.html">celery.concurrency</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.concurrency.solo.html">celery.concurrency.solo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.concurrency.processes.html">celery.concurrency.processes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.concurrency.eventlet.html">celery.concurrency.eventlet† (<em>experimental</em>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.concurrency.gevent.html">celery.concurrency.gevent† (<em>experimental</em>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.concurrency.base.html">celery.concurrency.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.concurrency.threads.html">celery.concurrency.threads‡ (<strong>minefield</strong>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.beat.html">celery.beat</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.html">celery.backends</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.base.html">celery.backends.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.database.html">celery.backends.database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.cache.html">celery.backends.cache</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.amqp.html">celery.backends.amqp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.mongodb.html">celery.backends.mongodb</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.redis.html">celery.backends.redis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.cassandra.html">celery.backends.cassandra</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.task.trace.html">celery.task.trace</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.app.abstract.html">celery.app.abstract</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.app.annotations.html">celery.app.annotations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.app.routes.html">celery.app.routes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.security.certificate.html">celery.security.certificate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.security.key.html">celery.security.key</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.security.serialization.html">celery.security.serialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.security.utils.html">celery.security.utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.datastructures.html">celery.datastructures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.events.snapshot.html">celery.events.snapshot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.events.cursesmon.html">celery.events.cursesmon</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.events.dumper.html">celery.events.dumper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.database.models.html">celery.backends.database.models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.backends.database.session.html">celery.backends.database.session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.html">celery.utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.functional.html">celery.utils.functional</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.term.html">celery.utils.term</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.timeutils.html">celery.utils.timeutils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.compat.html">celery.utils.compat</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.serialization.html">celery.utils.serialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.threads.html">celery.utils.threads</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.timer2.html">celery.utils.timer2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.imports.html">celery.utils.imports</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.log.html">celery.utils.log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.text.html">celery.utils.text</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.dispatch.html">celery.utils.dispatch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.dispatch.signal.html">celery.utils.dispatch.signal</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.utils.dispatch.saferef.html">celery.utils.dispatch.saferef</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery.platforms.html">celery.platforms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="celery._state.html">celery._state</a></li>
-</ul>
-</div>
-</div>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/index.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/index.html</a>.
+    </p>
+
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
+
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/index.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/index.html</a>.
+    </p>
+
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -196,7 +138,7 @@
         <li class="right" >
           <a href="../app-overview.html" title="“The Big Instance” Refactor"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li> 
       </ul>
     </div>

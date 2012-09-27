@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Glossary &mdash; Celery 3.1.0a1 documentation</title>
+    <title>Glossary &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="index.html" />
     <link rel="prev" title="Change history for Celery 1.0" href="history/changelog-1.0.html" /> 
   </head>
   <body>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="history/changelog-1.0.html" title="Change history for Celery 1.0"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Celery 3.1.0a1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 3.0.11 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,38 +52,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/glossary.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="glossary">
-<span id="id1"></span><h1>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h1>
-<dl class="glossary docutils">
-<dt id="term-apply">apply</dt>
-<dd>Originally a synonym to <a class="reference internal" href="#term-calling"><em class="xref std std-term">call</em></a> but used to signify
-that a function is executed by the current process.</dd>
-<dt id="term-calling">calling</dt>
-<dd>Sends a task message so that the task function is
-<a class="reference internal" href="#term-executing"><em class="xref std std-term">executed</em></a> by a worker.</dd>
-<dt id="term-context">context</dt>
-<dd>The context of a task contains information like the id of the task,
-it&#8217;s arguments and what queue it was delivered to.
-It can be accessed as the tasks <tt class="docutils literal"><span class="pre">request</span></tt> attribute.
-See <a class="reference internal" href="userguide/tasks.html#task-request-info"><em>Context</em></a></dd>
-<dt id="term-executing">executing</dt>
-<dd>Workers <em>execute</em> task <a class="reference internal" href="#term-request"><em class="xref std std-term">requests</em></a>.</dd>
-<dt id="term-request">request</dt>
-<dd>Task messages are converted to <em>requests</em> within the worker.
-The request information is also available as the task&#8217;s
-<a class="reference internal" href="#term-context"><em class="xref std std-term">context</em></a> (the <tt class="docutils literal"><span class="pre">task.request</span></tt> attribute).</dd>
-</dl>
-</div>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/glossary.html"
+        >http://docs.celeryproject.org/en/master/glossary.html</a>.
+    </p>
+
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
+
+    <a href="http://docs.celeryproject.org/en/latest/glossary.html"
+        >http://docs.celeryproject.org/en/latest/glossary.html</a>.
+    </p>
+
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -130,7 +126,7 @@ The request information is also available as the task&#8217;s
         <li class="right" >
           <a href="history/changelog-1.0.html" title="Change history for Celery 1.0"
              >previous</a> |</li>
-        <li><a href="index.html">Celery 3.1.0a1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 3.0.11 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

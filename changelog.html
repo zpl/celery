@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Change history &mdash; Celery 3.1.0a1 documentation</title>
+    <title>Change history &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="index.html" />
     <link rel="next" title="API Reference" href="reference/index.html" />
     <link rel="prev" title="What’s new in Celery 2.5" href="whatsnew-2.5.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="whatsnew-2.5.html" title="What’s new in Celery 2.5"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Celery 3.1.0a1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 3.0.11 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,417 +56,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/changelog.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="change-history">
-<span id="changelog"></span><h1>Change history<a class="headerlink" href="#change-history" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#version-3-1-0" id="id7">3.1.0</a></li>
-<li><a class="reference internal" href="#version-3-0-5" id="id8">3.0.5</a></li>
-<li><a class="reference internal" href="#version-3-0-4" id="id9">3.0.4</a></li>
-<li><a class="reference internal" href="#version-3-0-3" id="id10">3.0.3</a></li>
-<li><a class="reference internal" href="#version-3-0-2" id="id11">3.0.2</a></li>
-<li><a class="reference internal" href="#version-3-0-1" id="id12">3.0.1</a></li>
-<li><a class="reference internal" href="#chiastic-slide" id="id13">3.0.0 (Chiastic Slide)</a></li>
-</ul>
-</div>
-<p>If you&#8217;re looking for versions prior to 3.x you should see <a class="reference internal" href="history/index.html#history"><em>History</em></a>.</p>
-<div class="section" id="version-3-1-0">
-<span id="id1"></span><h2><a class="toc-backref" href="#id7">3.1.0</a><a class="headerlink" href="#version-3-1-0" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">state:</th><td class="field-body">DEVEL</td>
-</tr>
-<tr class="field-even field"><th class="field-name">branch:</th><td class="field-body">master</td>
-</tr>
-</tbody>
-</table>
-<ul class="simple">
-<li><cite>celery inspect stats</cite> now contains worker pid</li>
-<li><cite>Task.apply_async</cite> now supports timeout and soft_timeout arguments (Issue <span class="xref issue">#802</span>)</li>
-<li><cite>App.control.Inspect.conf</cite> can be used for inspecting worker configuration</li>
-</ul>
-</div>
-<div class="section" id="version-3-0-5">
-<span id="id2"></span><h2><a class="toc-backref" href="#id8">3.0.5</a><a class="headerlink" href="#version-3-0-5" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">release-date:</th><td class="field-body">2012-08-01 04:00 P.M BST</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><p class="first">Now depends on kombu 2.3.1 + billiard 2.7.3.11</p>
-</li>
-<li><p class="first">Fixed a bug with the -B option (<tt class="docutils literal"><span class="pre">cannot</span> <span class="pre">pickle</span> <span class="pre">thread.lock</span> <span class="pre">objects</span></tt>)
-(Issue <span class="xref issue">#894</span> + Issue <span class="xref issue">#892</span>, + django-celery <span class="xref issue">#154</span>).</p>
-</li>
-<li><p class="first">The <tt class="xref std std-control docutils literal"><span class="pre">restart_pool</span></tt> control command now requires the
-<a class="reference internal" href="configuration.html#std:setting-CELERYD_POOL_RESTARTS"><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_POOL_RESTARTS</span></tt></a> setting to be enabled</p>
-<blockquote>
-<div><p>This change was necessary as the multiprocessing event that the restart
-command depends on is responsible for creating many semaphores/file
-descriptors, resulting in problems in some environments.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">chain.apply</span></tt> now passes args to the first task (Issue <span class="xref issue">#889</span>).</p>
-</li>
-<li><p class="first">Documented previously secret options to the Django-Celery monitor
-in the monitoring userguide (Issue <span class="xref issue">#396</span>).</p>
-</li>
-<li><p class="first">Old changelog are now organized in separate documents for each series,
-see <a class="reference internal" href="history/index.html#history"><em>History</em></a>.</p>
-</li>
-</ul>
-</div>
-<div class="section" id="version-3-0-4">
-<span id="id3"></span><h2><a class="toc-backref" href="#id9">3.0.4</a><a class="headerlink" href="#version-3-0-4" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">release-date:</th><td class="field-body">2012-07-26 07:00 P.M BST</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><p class="first">Now depends on Kombu 2.3</p>
-</li>
-<li><p class="first">New experimental standalone Celery monitor: Flower</p>
-<blockquote>
-<div><p>See <a class="reference internal" href="userguide/monitoring.html#monitoring-flower"><em>Celery Flower: Web interface</em></a> to read more about it!</p>
-<p>Contributed by Mher Movsisyan.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Now supports AMQP heartbeats if using the new <tt class="docutils literal"><span class="pre">pyamqp://</span></tt> transport.</p>
-<blockquote>
-<div><ul>
-<li><p class="first">The py-amqp transport requires the <tt class="xref py py-mod docutils literal"><span class="pre">amqp</span></tt> library to be installed:</p>
-<div class="highlight-python"><pre>$ pip install amqp</pre>
-</div>
-</li>
-<li><p class="first">Then you need to set the transport URL prefix to <tt class="docutils literal"><span class="pre">pyamqp://</span></tt>.</p>
-</li>
-<li><p class="first">The default heartbeat value is 10 seconds, but this can be changed using
-the <a class="reference internal" href="configuration.html#std:setting-BROKER_HEARTBEAT"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_HEARTBEAT</span></tt></a> setting:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_HEARTBEAT</span> <span class="o">=</span> <span class="mf">5.0</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">If the broker heartbeat is set to 10 seconds, the heartbeats will be
-monitored every 5 seconds (double the hertbeat rate).</p>
-</li>
-</ul>
-<p>See the <a class="reference external" href="http://kombu.readthedocs.org/en/latest/changelog.html#version-2-3-0">Kombu 2.3 changelog</a> for more information.</p>
-</div></blockquote>
-</li>
-</ul>
-<ul>
-<li><p class="first">Now supports RabbitMQ Consumer Cancel Notifications, using the <tt class="docutils literal"><span class="pre">pyamqp://</span></tt>
-transport.</p>
-<blockquote>
-<div><p>This is essential when running RabbitMQ in a cluster.</p>
-<p>See the <a class="reference external" href="http://kombu.readthedocs.org/en/latest/changelog.html#version-2-3-0">Kombu 2.3 changelog</a> for more information.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Delivery info is no longer passed directly through.</p>
-<blockquote>
-<div><p>It was discovered that the SQS transport adds objects that can&#8217;t
-be pickled to the delivery info mapping, so we had to go back
-to using the whitelist again.</p>
-<p>Fixing this bug also means that the SQS transport is now working again.</p>
-</div></blockquote>
-</li>
-<li><p class="first">The semaphore was not properly released when a task was revoked (Issue <span class="xref issue">#877</span>).</p>
-<blockquote>
-<div><p>This could lead to tasks being swallowed and not released until a worker
-restart.</p>
-<p>Thanks to Hynek Schlawack for debugging the issue.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Retrying a task now also forwards any linked tasks.</p>
-<blockquote>
-<div><p>This means that if a task is part of a chain (or linked in some other
-way) and that even if the task is retried, then the next task in the chain
-will be executed when the retry succeeds.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Chords: Now supports setting the interval and other keyword arguments
-to the chord unlock task.</p>
-<blockquote>
-<div><ul>
-<li><p class="first">The interval can now be set as part of the chord subtasks kwargs:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">chord</span><span class="p">(</span><span class="n">header</span><span class="p">)(</span><span class="n">body</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">In addition the chord unlock task now honors the Task.default_retry_delay
-option, used when none is specified, which also means that the default
-interval can also be changed using annotations:</p>
-<blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="n">CELERY_ANNOTATIONS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;celery.chord_unlock&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&#39;default_retry_delay&#39;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-</ul>
-</div></blockquote>
-</li>
-<li><p class="first">New <a class="reference internal" href="reference/celery.html#celery.Celery.add_defaults" title="celery.Celery.add_defaults"><tt class="xref py py-meth docutils literal"><span class="pre">Celery.add_defaults()</span></tt></a> method can add new default configuration
-dicts to the applications configuration.</p>
-<blockquote>
-<div><p>For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;FOO&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/changelog.html"
+        >http://docs.celeryproject.org/en/master/changelog.html</a>.
+    </p>
 
-<span class="n">celery</span><span class="o">.</span><span class="n">add_defaults</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>is the same as <tt class="docutils literal"><span class="pre">celery.conf.update(config)</span></tt> except that data will not be
-copied, and that it will not be pickled when the worker spawns child
-processes.</p>
-<p>In addition the method accepts a callable:</p>
-<div class="highlight-python"><pre>def initialize_config():
-    # insert heavy stuff that can't be done at import time here.
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-celery.add_defaults(initialize_config)</pre>
-</div>
-<p>which means the same as the above except that it will not happen
-until the celery configuration is actually used.</p>
-<p>As an example, Celery can lazily use the configuration of a Flask app:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">flask_app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">()</span>
-<span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">()</span>
-<span class="n">celery</span><span class="o">.</span><span class="n">add_defaults</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flask_app</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p class="first">Revoked tasks were not marked as revoked in the result backend (Issue <span class="xref issue">#871</span>).</p>
-<blockquote>
-<div><p>Fix contributed by Hynek Schlawack.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Eventloop now properly handles the case when the epoll poller object
-has been closed (Issue <span class="xref issue">#882</span>).</p>
-</li>
-<li><p class="first">Fixed syntax error in <tt class="docutils literal"><span class="pre">funtests/test_leak.py</span></tt></p>
-<blockquote>
-<div><p>Fix contributed by Catalin Iacob.</p>
-</div></blockquote>
-</li>
-<li><p class="first">group/chunks: Now accepts empty task list (Issue <span class="xref issue">#873</span>).</p>
-</li>
-<li><p class="first">New method names:</p>
-<blockquote>
-<div><ul class="simple">
-<li><tt class="docutils literal"><span class="pre">Celery.default_connection()</span></tt> ➠  <a class="reference internal" href="reference/celery.html#celery.Celery.connection_or_acquire" title="celery.Celery.connection_or_acquire"><tt class="xref py py-meth docutils literal"><span class="pre">connection_or_acquire()</span></tt></a>.</li>
-<li><tt class="docutils literal"><span class="pre">Celery.default_producer()</span></tt>   ➠  <a class="reference internal" href="reference/celery.html#celery.Celery.producer_or_acquire" title="celery.Celery.producer_or_acquire"><tt class="xref py py-meth docutils literal"><span class="pre">producer_or_acquire()</span></tt></a>.</li>
-</ul>
-<p>The old names still work for backward compatibility.</p>
-</div></blockquote>
-</li>
-</ul>
-</div>
-<div class="section" id="version-3-0-3">
-<span id="id4"></span><h2><a class="toc-backref" href="#id10">3.0.3</a><a class="headerlink" href="#version-3-0-3" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">release-date:</th><td class="field-body">2012-07-20 09:17 P.M BST</td>
-</tr>
-<tr class="field-even field"><th class="field-name">by:</th><td class="field-body">Ask Solem</td>
-</tr>
-</tbody>
-</table>
-<ul class="simple">
-<li>amqplib passes the channel object as part of the delivery_info
-and it&#8217;s not pickleable, so we now remove it.</li>
-</ul>
-</div>
-<div class="section" id="version-3-0-2">
-<span id="id5"></span><h2><a class="toc-backref" href="#id11">3.0.2</a><a class="headerlink" href="#version-3-0-2" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">release-date:</th><td class="field-body">2012-07-20 04:00 P.M BST</td>
-</tr>
-<tr class="field-even field"><th class="field-name">by:</th><td class="field-body">Ask Solem</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><dl class="first docutils">
-<dt>A bug caused the following task options to not take defaults from the</dt>
-<dd><p class="first">configuration (Issue <span class="xref issue">#867</span> + Issue <span class="xref issue">#858</span>)</p>
-<blockquote class="last">
-<div><p>The following settings were affected:</p>
-<ul class="simple">
-<li><a class="reference internal" href="configuration.html#std:setting-CELERY_IGNORE_RESULT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_IGNORE_RESULT</span></tt></a></li>
-<li><tt class="xref std std-setting docutils literal"><span class="pre">CELERYD_SEND_TASK_ERROR_EMAILS</span></tt></li>
-<li><a class="reference internal" href="configuration.html#std:setting-CELERY_TRACK_STARTED"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_TRACK_STARTED</span></tt></a></li>
-<li><tt class="xref std std-setting docutils literal"><span class="pre">CElERY_STORE_ERRORS_EVEN_IF_IGNORED</span></tt></li>
-</ul>
-<p>Fix contributed by John Watson.</p>
-</div></blockquote>
-</dd>
-</dl>
-</li>
-<li><p class="first">Task Request: <tt class="docutils literal"><span class="pre">delivery_info</span></tt> is now passed through as-is (Issue <span class="xref issue">#807</span>).</p>
-</li>
-<li><p class="first">The eta argument now supports datetime&#8217;s with a timezone set (Issue <span class="xref issue">#855</span>).</p>
-</li>
-<li><p class="first">The worker&#8217;s banner displayed the autoscale settings in the wrong order
-(Issue <span class="xref issue">#859</span>).</p>
-</li>
-<li><p class="first">Extension commands are now loaded after concurrency is set up
-so that they don&#8217;t interfere with e.g. eventlet patching.</p>
-</li>
-<li><p class="first">Fixed bug in the threaded pool (Issue <span class="xref issue">#863</span>)</p>
-</li>
-<li><p class="first">The task failure handler mixed up the fields in <a class="reference external" href="http://docs.python.org/dev/library/sys.html#sys.exc_info" title="(in Python v3.3)"><tt class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></tt></a>.</p>
-<blockquote>
-<div><p>Fix contributed by Rinat Shigapov.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Fixed typos and wording in the docs.</p>
-<blockquote>
-<div><p>Fix contributed by Paul McMillan</p>
-</div></blockquote>
-</li>
-<li><p class="first">New setting: <a class="reference internal" href="configuration.html#std:setting-CELERY_WORKER_DIRECT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_WORKER_DIRECT</span></tt></a></p>
-<blockquote>
-<div><p>If enabled each worker will consume from their own dedicated queue
-which can be used to route tasks to specific workers.</p>
-</div></blockquote>
-</li>
-<li><p class="first">Fixed several edge case bugs in the add consumer remote control command.</p>
-</li>
-<li><p class="first"><a class="reference internal" href="reference/celery.contrib.migrate.html#module-celery.contrib.migrate" title="celery.contrib.migrate"><tt class="xref py py-mod docutils literal"><span class="pre">migrate</span></tt></a>: Can now filter and move tasks to specific
-workers if <a class="reference internal" href="configuration.html#std:setting-CELERY_WORKER_DIRECT"><tt class="xref std std-setting docutils literal"><span class="pre">CELERY_WORKER_DIRECT</span></tt></a> is enabled.</p>
-<blockquote>
-<div><p>Among other improvements, the following functions have been added:</p>
-<blockquote>
-<div><ul class="simple">
-<li><tt class="docutils literal"><span class="pre">move_direct(filterfun,</span> <span class="pre">**opts)</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">move_direct_by_id(task_id,</span> <span class="pre">worker_hostname,</span> <span class="pre">**opts)</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">move_direct_by_idmap({task_id:</span> <span class="pre">worker_hostname,</span> <span class="pre">...},</span> <span class="pre">**opts)</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">move_direct_by_taskmap({task_name:</span> <span class="pre">worker_hostname,</span> <span class="pre">...},</span> <span class="pre">**opts)</span></tt></li>
-</ul>
-</div></blockquote>
-</div></blockquote>
-</li>
-<li><p class="first"><tt class="xref py py-meth docutils literal"><span class="pre">default_connection()</span></tt> now accepts a pool argument that
-if set to false causes a new connection to be created instead of acquiring
-one from the pool.</p>
-</li>
-<li><p class="first">New signal: <a class="reference internal" href="userguide/signals.html#std:signal-celeryd_after_setup"><tt class="xref std std-signal docutils literal"><span class="pre">celeryd_after_setup</span></tt></a>.</p>
-</li>
-<li><p class="first">Default loader now keeps lowercase attributes from the configuration module.</p>
-</li>
-</ul>
-</div>
-<div class="section" id="version-3-0-1">
-<span id="id6"></span><h2><a class="toc-backref" href="#id12">3.0.1</a><a class="headerlink" href="#version-3-0-1" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">release-date:</th><td class="field-body">2012-07-10 06:00 P.M BST</td>
-</tr>
-<tr class="field-even field"><th class="field-name">by:</th><td class="field-body">Ask Solem</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><p class="first">Now depends on kombu 2.2.5</p>
-</li>
-<li><p class="first">inspect now supports limit argument:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">myapp</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Beat: now works with timezone aware datetime&#8217;s.</p>
-</li>
-<li><p class="first">Task classes inheriting <tt class="docutils literal"><span class="pre">from</span> <span class="pre">celery</span> <span class="pre">import</span> <span class="pre">Task</span></tt>
-mistakingly enabled <tt class="docutils literal"><span class="pre">accept_magic_kwargs</span></tt>.</p>
-</li>
-<li><p class="first">Fixed bug in <tt class="docutils literal"><span class="pre">inspect</span> <span class="pre">scheduled</span></tt> (Issue <span class="xref issue">#829</span>).</p>
-</li>
-<li><p class="first">Beat: Now resets the schedule to upgrade to UTC.</p>
-</li>
-<li><p class="first">The <strong class="program">celery worker</strong> command now works with eventlet/gevent.</p>
-<blockquote>
-<div><p>Previously it would not patch the environment early enough.</p>
-</div></blockquote>
-</li>
-<li><p class="first">The <strong class="program">celery</strong> command now supports extension commands
-using setuptools entry-points.</p>
-<blockquote>
-<div><p>Libraries can add additional commands to the <strong class="program">celery</strong>
-command by adding an entry-point like:</p>
-<div class="highlight-python"><pre>setup(
-    entry_points=[
-        'celery.commands': [
-            'foo = my.module:Command',
-    ],
-],
-...)</pre>
-</div>
-<p>The command must then support the interface of
-<a class="reference internal" href="reference/celery.bin.base.html#celery.bin.base.Command" title="celery.bin.base.Command"><tt class="xref py py-class docutils literal"><span class="pre">celery.bin.base.Command</span></tt></a>.</p>
-</div></blockquote>
-</li>
-<li><p class="first">contrib.migrate: New utilities to move tasks from one queue to another.</p>
-<blockquote>
-<div><ul class="simple">
-<li><tt class="xref py py-func docutils literal"><span class="pre">move_tasks()</span></tt></li>
-<li><a class="reference internal" href="reference/celery.contrib.migrate.html#celery.contrib.migrate.move_task_by_id" title="celery.contrib.migrate.move_task_by_id"><tt class="xref py py-func docutils literal"><span class="pre">move_task_by_id()</span></tt></a></li>
-</ul>
-</div></blockquote>
-</li>
-<li><p class="first">The task-sent event now contains <tt class="docutils literal"><span class="pre">exchange</span></tt> and <tt class="docutils literal"><span class="pre">routing_key</span></tt>
-fields.</p>
-</li>
-<li><p class="first">Fixes bug with installing on Python 3.</p>
-<blockquote>
-<div><p>Fix contributed by Jed Smith.</p>
-</div></blockquote>
-</li>
-</ul>
-</div>
-<div class="section" id="chiastic-slide">
-<span id="version-3-0-0"></span><h2><a class="toc-backref" href="#id13">3.0.0 (Chiastic Slide)</a><a class="headerlink" href="#chiastic-slide" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">release-date:</th><td class="field-body">2012-07-07 01:30 P.M BST</td>
-</tr>
-<tr class="field-even field"><th class="field-name">by:</th><td class="field-body">Ask Solem</td>
-</tr>
-</tbody>
-</table>
-<p>See <a class="reference internal" href="whatsnew-3.0.html#whatsnew-3-0"><em>What&#8217;s new in Celery 3.0 (Chiastic Slide)</em></a>.</p>
-</div>
-</div>
+    <a href="http://docs.celeryproject.org/en/latest/changelog.html"
+        >http://docs.celeryproject.org/en/latest/changelog.html</a>.
+    </p>
+
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -519,7 +136,7 @@ fields.</p>
         <li class="right" >
           <a href="whatsnew-2.5.html" title="What’s new in Celery 2.5"
              >previous</a> |</li>
-        <li><a href="index.html">Celery 3.1.0a1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Celery 3.0.11 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

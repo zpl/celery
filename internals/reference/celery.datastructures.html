@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.datastructures &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.datastructures &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.events.snapshot" href="celery.events.snapshot.html" />
     <link rel="prev" title="celery.security.utils" href="celery.security.utils.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.security.utils.html" title="celery.security.utils"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,346 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.datastructures.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <span class="target" id="module-celery.datastructures"></span><div class="section" id="celery-datastructures">
-<h1>celery.datastructures<a class="headerlink" href="#celery-datastructures" title="Permalink to this headline">¶</a></h1>
-<p>Custom types and data structures.</p>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#attributedict" id="id1">AttributeDict</a></li>
-<li><a class="reference internal" href="#dictattribute" id="id2">DictAttribute</a></li>
-<li><a class="reference internal" href="#configurationview" id="id3">ConfigurationView</a></li>
-<li><a class="reference internal" href="#exceptioninfo" id="id4">ExceptionInfo</a></li>
-<li><a class="reference internal" href="#limitedset" id="id5">LimitedSet</a></li>
-<li><a class="reference internal" href="#lrucache" id="id6">LRUCache</a></li>
-</ul>
-</div>
-<div class="section" id="attributedict">
-<h2><a class="toc-backref" href="#id1">AttributeDict</a><a class="headerlink" href="#attributedict" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="celery.datastructures.AttributeDict">
-<em class="property">class </em><tt class="descclassname">celery.datastructures.</tt><tt class="descname">AttributeDict</tt><a class="headerlink" href="#celery.datastructures.AttributeDict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dict subclass with attribute access.</p>
-</dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery.datastructures.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery.datastructures.html</a>.
+    </p>
 
-<dl class="class">
-<dt id="celery.datastructures.AttributeDictMixin">
-<em class="property">class </em><tt class="descclassname">celery.datastructures.</tt><tt class="descname">AttributeDictMixin</tt><a class="headerlink" href="#celery.datastructures.AttributeDictMixin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds attribute access to mappings.</p>
-<p><cite>d.key -&gt; d[key]</cite></p>
-</dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-</div>
-<div class="section" id="dictattribute">
-<h2><a class="toc-backref" href="#id2">DictAttribute</a><a class="headerlink" href="#dictattribute" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="celery.datastructures.DictAttribute">
-<em class="property">class </em><tt class="descclassname">celery.datastructures.</tt><tt class="descname">DictAttribute</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#celery.datastructures.DictAttribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dict interface to attributes.</p>
-<p><cite>obj[k] -&gt; obj.k</cite></p>
-<dl class="method">
-<dt id="celery.datastructures.DictAttribute.get">
-<tt class="descname">get</tt><big>(</big><em>key</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#celery.datastructures.DictAttribute.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.datastructures.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery.datastructures.html</a>.
+    </p>
 
-<dl class="method">
-<dt id="celery.datastructures.DictAttribute.items">
-<tt class="descname">items</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.DictAttribute.items" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.DictAttribute.iteritems">
-<tt class="descname">iteritems</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.DictAttribute.iteritems" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.DictAttribute.iterkeys">
-<tt class="descname">iterkeys</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.DictAttribute.iterkeys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.DictAttribute.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.DictAttribute.keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.DictAttribute.setdefault">
-<tt class="descname">setdefault</tt><big>(</big><em>key</em>, <em>default</em><big>)</big><a class="headerlink" href="#celery.datastructures.DictAttribute.setdefault" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="configurationview">
-<h2><a class="toc-backref" href="#id3">ConfigurationView</a><a class="headerlink" href="#configurationview" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="celery.datastructures.ConfigurationView">
-<em class="property">class </em><tt class="descclassname">celery.datastructures.</tt><tt class="descname">ConfigurationView</tt><big>(</big><em>changes</em>, <em>defaults</em><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView" title="Permalink to this definition">¶</a></dt>
-<dd><p>A view over an applications configuration dicts.</p>
-<p>If the key does not exist in <tt class="docutils literal"><span class="pre">changes</span></tt>, the <tt class="docutils literal"><span class="pre">defaults</span></tt> dict
-is consulted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>changes</strong> &#8211; Dict containing changes to the configuration.</li>
-<li><strong>defaults</strong> &#8211; Dict containing the default configuration.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.add_defaults">
-<tt class="descname">add_defaults</tt><big>(</big><em>d</em><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.add_defaults" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.ConfigurationView.changes">
-<tt class="descname">changes</tt><em class="property"> = None</em><a class="headerlink" href="#celery.datastructures.ConfigurationView.changes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.ConfigurationView.defaults">
-<tt class="descname">defaults</tt><em class="property"> = None</em><a class="headerlink" href="#celery.datastructures.ConfigurationView.defaults" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.first">
-<tt class="descname">first</tt><big>(</big><em>*keys</em><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.first" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.get">
-<tt class="descname">get</tt><big>(</big><em>key</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.items">
-<tt class="descname">items</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.items" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.iteritems">
-<tt class="descname">iteritems</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.iteritems" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.iterkeys">
-<tt class="descname">iterkeys</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.iterkeys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.itervalues">
-<tt class="descname">itervalues</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.itervalues" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.setdefault">
-<tt class="descname">setdefault</tt><big>(</big><em>key</em>, <em>default</em><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.setdefault" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.update">
-<tt class="descname">update</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.ConfigurationView.values">
-<tt class="descname">values</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.ConfigurationView.values" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="exceptioninfo">
-<h2><a class="toc-backref" href="#id4">ExceptionInfo</a><a class="headerlink" href="#exceptioninfo" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="celery.datastructures.ExceptionInfo">
-<em class="property">class </em><tt class="descclassname">celery.datastructures.</tt><tt class="descname">ExceptionInfo</tt><big>(</big><em>exc_info=None</em>, <em>internal=False</em><big>)</big><a class="headerlink" href="#celery.datastructures.ExceptionInfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exception wrapping an exception and its traceback.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exc_info</strong> &#8211; The exception info tuple as returned by
-<a class="reference external" href="http://docs.python.org/dev/library/sys.html#sys.exc_info" title="(in Python v3.3)"><tt class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></tt></a>.</td>
-</tr>
-</tbody>
-</table>
-<dl class="attribute">
-<dt id="celery.datastructures.ExceptionInfo.exception">
-<tt class="descname">exception</tt><em class="property"> = None</em><a class="headerlink" href="#celery.datastructures.ExceptionInfo.exception" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exception instance.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.ExceptionInfo.internal">
-<tt class="descname">internal</tt><em class="property"> = False</em><a class="headerlink" href="#celery.datastructures.ExceptionInfo.internal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set to true if this is an internal error.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.ExceptionInfo.tb">
-<tt class="descname">tb</tt><em class="property"> = None</em><a class="headerlink" href="#celery.datastructures.ExceptionInfo.tb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pickleable traceback instance for use with <a class="reference external" href="http://docs.python.org/dev/library/traceback.html#traceback" title="(in Python v3.3)"><tt class="xref py py-mod docutils literal"><span class="pre">traceback</span></tt></a></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.ExceptionInfo.traceback">
-<tt class="descname">traceback</tt><em class="property"> = None</em><a class="headerlink" href="#celery.datastructures.ExceptionInfo.traceback" title="Permalink to this definition">¶</a></dt>
-<dd><p>String representation of the traceback.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.ExceptionInfo.type">
-<tt class="descname">type</tt><em class="property"> = None</em><a class="headerlink" href="#celery.datastructures.ExceptionInfo.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exception type.</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="limitedset">
-<h2><a class="toc-backref" href="#id5">LimitedSet</a><a class="headerlink" href="#limitedset" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="celery.datastructures.LimitedSet">
-<em class="property">class </em><tt class="descclassname">celery.datastructures.</tt><tt class="descname">LimitedSet</tt><big>(</big><em>maxlen=None</em>, <em>expires=None</em><big>)</big><a class="headerlink" href="#celery.datastructures.LimitedSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Kind-of Set with limitations.</p>
-<p>Good for when you need to test for membership (<cite>a in set</cite>),
-but the list might become to big, so you want to limit it so it doesn&#8217;t
-consume too much resources.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>maxlen</strong> &#8211; Maximum number of members before we start
-evicting expired members.</li>
-<li><strong>expires</strong> &#8211; Time in seconds, before a membership expires.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="celery.datastructures.LimitedSet.add">
-<tt class="descname">add</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#celery.datastructures.LimitedSet.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a new member.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LimitedSet.as_dict">
-<tt class="descname">as_dict</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.LimitedSet.as_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.LimitedSet.chronologically">
-<tt class="descname">chronologically</tt><a class="headerlink" href="#celery.datastructures.LimitedSet.chronologically" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LimitedSet.clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.LimitedSet.clear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove all members</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.LimitedSet.expires">
-<tt class="descname">expires</tt><a class="headerlink" href="#celery.datastructures.LimitedSet.expires" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.LimitedSet.first">
-<tt class="descname">first</tt><a class="headerlink" href="#celery.datastructures.LimitedSet.first" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the oldest member.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.datastructures.LimitedSet.maxlen">
-<tt class="descname">maxlen</tt><a class="headerlink" href="#celery.datastructures.LimitedSet.maxlen" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LimitedSet.pop_value">
-<tt class="descname">pop_value</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#celery.datastructures.LimitedSet.pop_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove membership by finding value.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LimitedSet.update">
-<tt class="descname">update</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#celery.datastructures.LimitedSet.update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="lrucache">
-<h2><a class="toc-backref" href="#id6">LRUCache</a><a class="headerlink" href="#lrucache" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="celery.datastructures.LRUCache">
-<em class="property">class </em><tt class="descclassname">celery.datastructures.</tt><tt class="descname">LRUCache</tt><big>(</big><em>limit=None</em><big>)</big><a class="headerlink" href="#celery.datastructures.LRUCache" title="Permalink to this definition">¶</a></dt>
-<dd><p>LRU Cache implementation using a doubly linked list to track access.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>limit</strong> &#8211; The maximum number of keys to keep in the cache.
-When a new key is inserted and the limit has been exceeded,
-the <em>Least Recently Used</em> key will be discarded from the
-cache.</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="celery.datastructures.LRUCache.incr">
-<tt class="descname">incr</tt><big>(</big><em>key</em>, <em>delta=1</em><big>)</big><a class="headerlink" href="#celery.datastructures.LRUCache.incr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LRUCache.items">
-<tt class="descname">items</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.LRUCache.items" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LRUCache.iteritems">
-<tt class="descname">iteritems</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.LRUCache.iteritems" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LRUCache.itervalues">
-<tt class="descname">itervalues</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.LRUCache.itervalues" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LRUCache.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.LRUCache.keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.datastructures.LRUCache.values">
-<tt class="descname">values</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.datastructures.LRUCache.values" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -451,7 +139,7 @@ cache.</td>
         <li class="right" >
           <a href="celery.security.utils.html" title="celery.security.utils"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.worker.state &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.worker.state &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.worker.strategy" href="celery.worker.strategy.html" />
     <link rel="prev" title="celery.worker.control" href="celery.worker.control.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.worker.control.html" title="celery.worker.control"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,134 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.worker.state.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-worker-state">
-<h1>celery.worker.state<a class="headerlink" href="#celery-worker-state" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#id1" id="id2">celery.worker.state</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery.worker.state"></span><div class="section" id="id1">
-<h2><a class="toc-backref" href="#id2">celery.worker.state</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Internal worker state (global)</p>
-<p>This includes the currently active and reserved tasks,
-statistics, and revoked tasks.</p>
-<dl class="class">
-<dt id="celery.worker.state.Persistent">
-<em class="property">class </em><tt class="descclassname">celery.worker.state.</tt><tt class="descname">Persistent</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#celery.worker.state.Persistent" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the persistent data stored by the worker when
-<em class="xref std std-option">--statedb</em> is enabled.</p>
-<p>It currently only stores revoked task id&#8217;s.</p>
-<dl class="method">
-<dt id="celery.worker.state.Persistent.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.state.Persistent.close" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery.worker.state.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery.worker.state.html</a>.
+    </p>
 
-<dl class="attribute">
-<dt id="celery.worker.state.Persistent.db">
-<tt class="descname">db</tt><a class="headerlink" href="#celery.worker.state.Persistent.db" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="method">
-<dt id="celery.worker.state.Persistent.merge">
-<tt class="descname">merge</tt><big>(</big><em>d</em><big>)</big><a class="headerlink" href="#celery.worker.state.Persistent.merge" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.worker.state.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery.worker.state.html</a>.
+    </p>
 
-<dl class="method">
-<dt id="celery.worker.state.Persistent.open">
-<tt class="descname">open</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.state.Persistent.open" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.worker.state.Persistent.save">
-<tt class="descname">save</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.state.Persistent.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.worker.state.Persistent.storage">
-<tt class="descname">storage</tt><em class="property"> = &lt;module 'shelve' from '/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/shelve.pyc'&gt;</em><a class="headerlink" href="#celery.worker.state.Persistent.storage" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.worker.state.Persistent.sync">
-<tt class="descname">sync</tt><big>(</big><em>d</em><big>)</big><a class="headerlink" href="#celery.worker.state.Persistent.sync" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.worker.state.REVOKES_MAX">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">REVOKES_MAX</tt><em class="property"> = 10000</em><a class="headerlink" href="#celery.worker.state.REVOKES_MAX" title="Permalink to this definition">¶</a></dt>
-<dd><p>maximum number of revokes to keep in memory.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.worker.state.REVOKE_EXPIRES">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">REVOKE_EXPIRES</tt><em class="property"> = 3600</em><a class="headerlink" href="#celery.worker.state.REVOKE_EXPIRES" title="Permalink to this definition">¶</a></dt>
-<dd><p>how many seconds a revoke will be active before
-being expired when the max limit has been exceeded.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.worker.state.SOFTWARE_INFO">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">SOFTWARE_INFO</tt><em class="property"> = {'sw_sys': 'Darwin', 'sw_ident': 'py-celery', 'sw_ver': '3.1.0a1'}</em><a class="headerlink" href="#celery.worker.state.SOFTWARE_INFO" title="Permalink to this definition">¶</a></dt>
-<dd><p>Worker software/platform information.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.worker.state.active_requests">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">active_requests</tt><em class="property"> = set([])</em><a class="headerlink" href="#celery.worker.state.active_requests" title="Permalink to this definition">¶</a></dt>
-<dd><p>set of currently active <a class="reference internal" href="celery.worker.job.html#celery.worker.job.Request" title="celery.worker.job.Request"><tt class="xref py py-class docutils literal"><span class="pre">Request</span></tt></a>&#8216;s.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.worker.state.reserved_requests">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">reserved_requests</tt><em class="property"> = set([])</em><a class="headerlink" href="#celery.worker.state.reserved_requests" title="Permalink to this definition">¶</a></dt>
-<dd><p>set of all reserved <a class="reference internal" href="celery.worker.job.html#celery.worker.job.Request" title="celery.worker.job.Request"><tt class="xref py py-class docutils literal"><span class="pre">Request</span></tt></a>&#8216;s.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.worker.state.revoked">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">revoked</tt><em class="property"> = LimitedSet([])</em><a class="headerlink" href="#celery.worker.state.revoked" title="Permalink to this definition">¶</a></dt>
-<dd><p>the list of currently revoked tasks.  Persistent if statedb set.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.state.task_accepted">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">task_accepted</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#celery.worker.state.task_accepted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates global state when a task has been accepted.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.state.task_ready">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">task_ready</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#celery.worker.state.task_ready" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates global state when a task is ready.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.state.task_reserved">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">task_reserved</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.worker.state.task_reserved" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates global state when a task has been reserved.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="celery.worker.state.total_count">
-<tt class="descclassname">celery.worker.state.</tt><tt class="descname">total_count</tt><em class="property"> = defaultdict(&lt;function &lt;lambda&gt; at 0x1064d6848&gt;, {})</em><a class="headerlink" href="#celery.worker.state.total_count" title="Permalink to this definition">¶</a></dt>
-<dd><p>count of tasks executed by the worker, sorted by type.</p>
-</dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -239,7 +139,7 @@ being expired when the max limit has been exceeded.</p>
         <li class="right" >
           <a href="celery.worker.control.html" title="celery.worker.control"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

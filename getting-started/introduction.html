@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction to Celery &mdash; Celery 3.1.0a1 documentation</title>
+    <title>Introduction to Celery &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../index.html" />
     <link rel="up" title="Getting Started" href="index.html" />
     <link rel="next" title="Brokers" href="brokers/index.html" />
     <link rel="prev" title="Getting Started" href="index.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="index.html" title="Getting Started"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Getting Started</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,413 +58,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/getting-started/introduction.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="introduction-to-celery">
-<span id="intro"></span><h1>Introduction to Celery<a class="headerlink" href="#introduction-to-celery" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#what-is-a-task-queue" id="id2">What is a Task Queue?</a></li>
-<li><a class="reference internal" href="#what-do-i-need" id="id3">What do I need?</a></li>
-<li><a class="reference internal" href="#get-started" id="id4">Get Started</a></li>
-<li><a class="reference internal" href="#celery-is" id="id5">Celery is…</a></li>
-<li><a class="reference internal" href="#features" id="id6">Features</a></li>
-<li><a class="reference internal" href="#framework-integration" id="id7">Framework Integration</a></li>
-<li><a class="reference internal" href="#quickjump" id="id8">Quickjump</a></li>
-<li><a class="reference internal" href="#installation" id="id9">Installation</a></li>
-</ul>
-</div>
-<div class="section" id="what-is-a-task-queue">
-<h2><a class="toc-backref" href="#id2">What is a Task Queue?</a><a class="headerlink" href="#what-is-a-task-queue" title="Permalink to this headline">¶</a></h2>
-<p>Task queues are used as a mechanism to distribute work across threads or
-machines.</p>
-<p>A task queue&#8217;s input is a unit of work, called a task, dedicated worker
-processes then constantly monitor the queue for new work to perform.</p>
-<p>Celery communicates via messages using a broker
-to mediate between clients and workers.  To initiate a task a client puts a
-message on the queue, the broker then delivers the message to a worker.</p>
-<p>A Celery system can consist of multiple workers and brokers, giving way
-to high availability and horizontal scaling.</p>
-<p>Celery is written in Python, but the protocol can be implemented in any
-language.  So far there&#8217;s <a class="reference external" href="http://leapfrogdevelopment.github.com/rcelery/">RCelery</a> for the Ruby programming language, and a
-<cite>PHP client</cite>, but language interoperability can also be achieved
-by <a class="reference internal" href="../userguide/remote-tasks.html#guide-webhooks"><em>using webhooks</em></a>.</p>
-</div>
-<div class="section" id="what-do-i-need">
-<h2><a class="toc-backref" href="#id3">What do I need?</a><a class="headerlink" href="#what-do-i-need" title="Permalink to this headline">¶</a></h2>
-<div class="sidebar">
-<p class="first sidebar-title">Version Requirements</p>
-<p class="sidebar-subtitle">Celery version 3.0 runs on</p>
-<ul class="simple">
-<li>Python ❨2.5, 2.6, 2.7, 3.2, 3.3❩</li>
-<li>PyPy ❨1.8, 1.9❩</li>
-<li>Jython ❨2.5, 2.7❩.</li>
-</ul>
-<p class="last">This is the last version to support Python 2.5,
-and from the next version Python 2.6 or newer is required.
-The last version to support Python 2.4 was Celery series 2.2.</p>
-</div>
-<p><em>Celery</em> requires a message broker to send and receive messages.
-The RabbitMQ, Redis and MongoDB broker transports are feature complete,
-but there&#8217;s also support for a myriad of other solutions, including
-using SQLite for local development.</p>
-<p><em>Celery</em> can run on a single machine, on multiple machines, or even
-across data centers.</p>
-</div>
-<div class="section" id="get-started">
-<h2><a class="toc-backref" href="#id4">Get Started</a><a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h2>
-<p>If this is the first time you&#8217;re trying to use Celery, or you are
-new to Celery 3.0 coming from previous versions then you should read our
-getting started tutorials:</p>
-<ul class="simple">
-<li><a class="reference internal" href="first-steps-with-celery.html#first-steps"><em>First Steps with Celery</em></a></li>
-<li><a class="reference internal" href="next-steps.html#next-steps"><em>Next Steps</em></a></li>
-</ul>
-</div>
-<div class="section" id="celery-is">
-<h2><a class="toc-backref" href="#id5">Celery is…</a><a class="headerlink" href="#celery-is" title="Permalink to this headline">¶</a></h2>
-<div class="topic">
-<p class="topic-title first"></p>
-<ul>
-<li><p class="first"><strong>Simple</strong></p>
-<blockquote>
-<div><p>Celery is easy to use and maintain, and it <em>doesn&#8217;t need configuration files</em>.</p>
-<p>It has an active, friendly community you can talk to for support,
-including a <a class="reference external" href="http://groups.google.com/group/celery-users">mailing-list</a> and an <a class="reference internal" href="resources.html#irc-channel"><em>IRC channel</em></a>.</p>
-<p>Here&#8217;s one of the simplest applications you can make:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/getting-started/introduction.html"
+        >http://docs.celeryproject.org/en/master/getting-started/introduction.html</a>.
+    </p>
 
-<span class="n">celery</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s">&#39;amqp://guest@localhost//&#39;</span><span class="p">)</span>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<span class="nd">@celery.task</span>
-<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s">&#39;hello world&#39;</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Highly Available</strong></p>
-<blockquote>
-<div><p>Workers and clients will automatically retry in the event
-of connection loss or failure, and some brokers support
-HA in way of <em>Master/Master</em> or <em>Master/Slave</em> replication.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Fast</strong></p>
-<blockquote>
-<div><p>A single Celery process can process millions of tasks a minute,
-with sub-millisecond round-trip latency (using RabbitMQ,
-py-librabbitmq, and optimized settings).</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Flexible</strong></p>
-<blockquote>
-<div><p>Almost every part of <em>Celery</em> can be extended or used on its own,
-Custom pool implementations, serializers, compression schemes, logging,
-schedulers, consumers, producers, autoscalers, broker transports and much more.</p>
-</div></blockquote>
-</li>
-</ul>
-</div>
-<div class="topic">
-<p class="topic-title first">It supports</p>
-<table class="hlist"><tr><td><ul>
-<li><p class="first"><strong>Brokers</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><a class="reference internal" href="brokers/rabbitmq.html#broker-rabbitmq"><em>RabbitMQ</em></a>, <a class="reference internal" href="brokers/redis.html#broker-redis"><em>Redis</em></a>,</li>
-<li><a class="reference internal" href="brokers/mongodb.html#broker-mongodb"><em>MongoDB</em></a>, <a class="reference internal" href="brokers/beanstalk.html#broker-beanstalk"><em>Beanstalk</em></a></li>
-<li><a class="reference internal" href="brokers/couchdb.html#broker-couchdb"><em>CouchDB</em></a>, <a class="reference internal" href="brokers/sqlalchemy.html#broker-sqlalchemy"><em>SQLAlchemy</em></a></li>
-<li><a class="reference internal" href="brokers/django.html#broker-django"><em>Django ORM</em></a>, <a class="reference internal" href="brokers/sqs.html#broker-sqs"><em>Amazon SQS</em></a>,</li>
-<li>and more…</li>
-</ul>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Concurrency</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li>multiprocessing,</li>
-<li><a class="reference external" href="http://eventlet.net/">Eventlet</a>, <a class="reference external" href="http://gevent.org/">gevent</a></li>
-<li>threads/single threaded</li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</td><td><ul>
-<li><p class="first"><strong>Result Stores</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li>AMQP, Redis</li>
-<li>memcached, MongoDB</li>
-<li>SQLAlchemy, Django ORM</li>
-<li>Apache Cassandra</li>
-</ul>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Serialization</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><em>pickle</em>, <em>json</em>, <em>yaml</em>, <em>msgpack</em>.</li>
-<li><em>zlib</em>, <em>bzip2</em> compression.</li>
-<li>Cryptographic message signing.</li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</td></tr></table>
-</div>
-</div>
-<div class="section" id="features">
-<h2><a class="toc-backref" href="#id6">Features</a><a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
-<div class="topic">
-<p class="topic-title first"></p>
-<table class="hlist"><tr><td><ul>
-<li><p class="first"><strong>Monitoring</strong></p>
-<blockquote>
-<div><p>A stream of monitoring events is emitted by workers and
-is used by built-in and external tools to tell you what
-your cluster is doing &#8211; in real-time.</p>
-<p><a class="reference internal" href="../userguide/monitoring.html#guide-monitoring"><em>Read more…</em></a>.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Workflows</strong></p>
-<blockquote>
-<div><p>Simple and complex workflows can be composed using
-a set of powerful primitives we call the &#8220;canvas&#8221;,
-including grouping, chaining, chunking and more.</p>
-<p><a class="reference internal" href="../userguide/canvas.html#guide-canvas"><em>Read more…</em></a>.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Time &amp; Rate Limits</strong></p>
-<blockquote>
-<div><p>You can control how many tasks can be executed per second/minute/hour,
-or how long a task can be allowed to run, and this can be set as
-a default, for a specific worker or individually for each task type.</p>
-<p><a class="reference internal" href="../userguide/workers.html#worker-time-limits"><em>Read more…</em></a>.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Scheduling</strong></p>
-<blockquote>
-<div><p>You can specify the time to run a task in seconds or a
-<a class="reference external" href="http://docs.python.org/dev/library/datetime.html#datetime.datetime" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">datetime</span></tt></a>, or or you can use
-periodic tasks for recurring events based on a
-simple interval, or crontab expressions
-supporting minute, hour, day of week, day of month, and
-month of year.</p>
-<p><a class="reference internal" href="../userguide/periodic-tasks.html#guide-beat"><em>Read more…</em></a>.</p>
-</div></blockquote>
-</li>
-</ul>
-</td><td><ul>
-<li><p class="first"><strong>Autoreloading</strong></p>
-<blockquote>
-<div><p>In development workers can be configured to automatically reload source
-code as it changes, including <em class="manpage">inotify(7)</em> support on Linux.</p>
-<p><a class="reference internal" href="../userguide/workers.html#worker-autoreloading"><em>Read more…</em></a>.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Autoscaling</strong></p>
-<blockquote>
-<div><p>Dynamically resizing the worker pool depending on load,
-or custom metrics specified by the user, used to limit
-memory usage in shared hosting/cloud environments or to
-enforce a given quality of service.</p>
-<p><a class="reference internal" href="../userguide/workers.html#worker-autoscaling"><em>Read more…</em></a>.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Resource Leak Protection</strong></p>
-<blockquote>
-<div><p>The <em class="xref std std-option">--maxtasksperchild</em> option is used for user tasks
-leaking resources, like memory or file descriptors, that
-are simply out of your control.</p>
-<p><a class="reference internal" href="../userguide/workers.html#worker-maxtasksperchild"><em>Read more…</em></a>.</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>User Components</strong></p>
-<blockquote>
-<div><p>Each worker component can be customized, and additional components
-can be defined by the user.  The worker is built up using &#8220;boot steps&#8221; — a
-dependency graph enabling fine grained control of the worker&#8217;s
-internals.</p>
-</div></blockquote>
-</li>
-</ul>
-</td></tr></table>
-</div>
-</div>
-<div class="section" id="framework-integration">
-<h2><a class="toc-backref" href="#id7">Framework Integration</a><a class="headerlink" href="#framework-integration" title="Permalink to this headline">¶</a></h2>
-<p>Celery is easy to integrate with web frameworks, some of which even have
-integration packages:</p>
-<blockquote>
-<div><table border="1" class="docutils">
-<colgroup>
-<col width="45%" />
-<col width="55%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference external" href="http://djangoproject.com/">Django</a></td>
-<td><a class="reference external" href="http://pypi.python.org/pypi/django-celery">django-celery</a></td>
-</tr>
-<tr class="row-even"><td><a class="reference external" href="http://docs.pylonsproject.org/en/latest/docs/pyramid.html">Pyramid</a></td>
-<td><a class="reference external" href="http://pypi.python.org/pypi/pyramid_celery/">pyramid_celery</a></td>
-</tr>
-<tr class="row-odd"><td><a class="reference external" href="http://pylonshq.com/">Pylons</a></td>
-<td><a class="reference external" href="http://pypi.python.org/pypi/celery-pylons">celery-pylons</a></td>
-</tr>
-<tr class="row-even"><td><a class="reference external" href="http://flask.pocoo.org/">Flask</a></td>
-<td>not needed</td>
-</tr>
-<tr class="row-odd"><td><a class="reference external" href="http://web2py.com/">web2py</a></td>
-<td><a class="reference external" href="http://code.google.com/p/web2py-celery/">web2py-celery</a></td>
-</tr>
-<tr class="row-even"><td><a class="reference external" href="http://www.tornadoweb.org/">Tornado</a></td>
-<td><a class="reference external" href="http://github.com/mher/tornado-celery/">tornado-celery</a></td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-<p>The integration packages are not strictly necessary, but they can make
-development easier, and sometimes they add important hooks like closing
-database connections at <em class="manpage">fork(2)</em>.</p>
-</div>
-<div class="section" id="quickjump">
-<h2><a class="toc-backref" href="#id8">Quickjump</a><a class="headerlink" href="#quickjump" title="Permalink to this headline">¶</a></h2>
-<div class="topic">
-<p class="topic-title first">I want to ⟶</p>
-<table class="hlist"><tr><td><ul class="simple">
-<li><a class="reference internal" href="../userguide/tasks.html#task-states"><em>get the return value of a task</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#task-logging"><em>use logging from my task</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#task-best-practices"><em>learn about best practices</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#task-custom-classes"><em>create a custom task base class</em></a></li>
-<li><a class="reference internal" href="../userguide/canvas.html#canvas-chord"><em>add a callback to a group of tasks</em></a></li>
-<li><a class="reference internal" href="../userguide/canvas.html#canvas-chunks"><em>split a task into several chunks</em></a></li>
-<li><a class="reference internal" href="../userguide/optimizing.html#guide-optimizing"><em>optimize the worker</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#task-builtin-states"><em>see a list of built-in task states</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#custom-states"><em>create custom task states</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#task-names"><em>set a custom task name</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#task-track-started"><em>track when a task starts</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#task-retry"><em>retry a task when it fails</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#task-request-info"><em>get the id of the current task</em></a></li>
-</ul>
-</td><td><ul class="simple">
-<li><a class="reference internal" href="../userguide/tasks.html#task-request-info"><em>know what queue a task was delivered to</em></a></li>
-<li><a class="reference internal" href="../userguide/monitoring.html#monitoring-celeryctl"><em>see a list of running workers</em></a></li>
-<li><a class="reference internal" href="../userguide/monitoring.html#monitoring-celeryctl"><em>purge all messages</em></a></li>
-<li><a class="reference internal" href="../userguide/monitoring.html#monitoring-celeryctl"><em>inspect what the workers are doing</em></a></li>
-<li><a class="reference internal" href="../userguide/monitoring.html#monitoring-celeryctl"><em>see what tasks a worker has registerd</em></a></li>
-<li><a class="reference internal" href="../userguide/monitoring.html#monitoring-celeryctl"><em>migrate tasks to a new broker</em></a></li>
-<li><a class="reference internal" href="../userguide/monitoring.html#event-reference"><em>see a list of event message types</em></a></li>
-<li><a class="reference internal" href="../contributing.html#contributing"><em>contribute to Celery</em></a></li>
-<li><a class="reference internal" href="../configuration.html#configuration"><em>learn about available configuration settings</em></a></li>
-<li><a class="reference internal" href="../configuration.html#conf-error-mails"><em>receive email when a task fails</em></a></li>
-<li><a class="reference internal" href="../community.html#res-using-celery"><em>get a list of people and companies using Celery</em></a></li>
-<li><a class="reference internal" href="../userguide/workers.html#worker-custom-control-commands"><em>write my own remote control command</em></a></li>
-<li><a class="reference internal" href="../userguide/workers.html#worker-queues"><em>change worker queues at runtime</em></a></li>
-</ul>
-</td></tr></table>
-</div>
-<div class="topic">
-<p class="topic-title first">Jump to ⟶</p>
-<table class="hlist"><tr><td><ul class="simple">
-<li><a class="reference internal" href="brokers/index.html#brokers"><em>Brokers</em></a></li>
-<li><a class="reference internal" href="../userguide/application.html#guide-app"><em>Applications</em></a></li>
-<li><a class="reference internal" href="../userguide/tasks.html#guide-tasks"><em>Tasks</em></a></li>
-<li><a class="reference internal" href="../userguide/calling.html#guide-calling"><em>Calling</em></a></li>
-</ul>
-</td><td><ul class="simple">
-<li><a class="reference internal" href="../userguide/workers.html#guide-workers"><em>Workers</em></a></li>
-<li><a class="reference internal" href="../tutorials/daemonizing.html#daemonizing"><em>Daemonizing</em></a></li>
-<li><a class="reference internal" href="../userguide/monitoring.html#guide-monitoring"><em>Monitoring</em></a></li>
-<li><a class="reference internal" href="../userguide/optimizing.html#guide-optimizing"><em>Optimizing</em></a></li>
-</ul>
-</td><td><ul class="simple">
-<li><a class="reference internal" href="../userguide/security.html#guide-security"><em>Security</em></a></li>
-<li><a class="reference internal" href="../userguide/routing.html#guide-routing"><em>Routing</em></a></li>
-<li><a class="reference internal" href="../configuration.html#configuration"><em>Configuration</em></a></li>
-<li><a class="reference internal" href="../django/index.html#django"><em>Django</em></a></li>
-</ul>
-</td><td><ul class="simple">
-<li><a class="reference internal" href="../contributing.html#contributing"><em>Contributing</em></a></li>
-<li><a class="reference internal" href="../userguide/signals.html#signals"><em>Signals</em></a></li>
-<li><a class="reference internal" href="../faq.html#faq"><em>FAQ</em></a></li>
-<li><a class="reference internal" href="../reference/index.html#apiref"><em>API Reference</em></a></li>
-</ul>
-</td></tr></table>
-</div>
-</div>
-<div class="section" id="installation">
-<span id="celery-installation"></span><h2><a class="toc-backref" href="#id9">Installation</a><a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>You can install Celery either via the Python Package Index (PyPI)
-or from source.</p>
-<p>To install using <cite>pip</cite>,:</p>
-<div class="highlight-python"><pre>$ pip install -U Celery</pre>
-</div>
-<p>To install using <cite>easy_install</cite>,:</p>
-<div class="highlight-python"><pre>$ easy_install -U Celery</pre>
-</div>
-<div class="section" id="bundles">
-<span id="id1"></span><h3>Bundles<a class="headerlink" href="#bundles" title="Permalink to this headline">¶</a></h3>
-<p>Celery also defines a group of bundles that can be used
-to install Celery and the dependencies for a given feature.</p>
-<p>The following bundles are available:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2"><a class="reference external" href="http://pypi.python.org/pypi/celery-with-redis/">celery-with-redis</a>:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">for using Redis as a broker.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2"><a class="reference external" href="http://pypi.python.org/pypi/celery-with-mongdb/">celery-with-mongodb</a>:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">for using MongoDB as a broker.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2"><a class="reference external" href="http://pypi.python.org/pypi/django-celery-with-redis/">django-celery-with-redis</a>:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">for Django, and using Redis as a broker.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2"><a class="reference external" href="http://pypi.python.org/pypi/django-celery-with-mongdb/">django-celery-with-mongodb</a>:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">for Django, and using MongoDB as a broker.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="downloading-and-installing-from-source">
-<span id="celery-installing-from-source"></span><h3>Downloading and installing from source<a class="headerlink" href="#downloading-and-installing-from-source" title="Permalink to this headline">¶</a></h3>
-<p>Download the latest version of Celery from
-<a class="reference external" href="http://pypi.python.org/pypi/celery/">http://pypi.python.org/pypi/celery/</a></p>
-<p>You can install it by doing the following,:</p>
-<div class="highlight-python"><pre>$ tar xvfz celery-0.0.0.tar.gz
-$ cd celery-0.0.0
-$ python setup.py build
-# python setup.py install</pre>
-</div>
-<p>The last command must be executed as a privileged user if
-you are not currently using a virtualenv.</p>
-</div>
-<div class="section" id="using-the-development-version">
-<span id="celery-installing-from-git"></span><h3>Using the development version<a class="headerlink" href="#using-the-development-version" title="Permalink to this headline">¶</a></h3>
-<p>You can clone the repository by doing the following:</p>
-<div class="highlight-python"><pre>$ git clone https://github.com/celery/celery
-$ cd celery
-$ python setup.py develop</pre>
-</div>
-<p>The development version will usually also depend on the development
-version of <a class="reference external" href="http://kombu.readthedocs.org/en/latest/">kombu</a>, the messaging framework Celery uses
-to send and receive messages, so you should also install that from git:</p>
-<div class="highlight-python"><pre>$ git clone https://github.com/celery/kombu
-$ cd kombu
-$ python setup.py develop</pre>
-</div>
-</div>
-</div>
-</div>
+    <a href="http://docs.celeryproject.org/en/latest/getting-started/introduction.html"
+        >http://docs.celeryproject.org/en/latest/getting-started/introduction.html</a>.
+    </p>
+
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -517,7 +138,7 @@ $ python setup.py develop</pre>
         <li class="right" >
           <a href="index.html" title="Getting Started"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="index.html" >Getting Started</a> &raquo;</li> 
       </ul>
     </div>

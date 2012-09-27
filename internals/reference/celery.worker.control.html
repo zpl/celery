@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.worker.control &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.worker.control &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.worker.state" href="celery.worker.state.html" />
     <link rel="prev" title="celery.worker.hub" href="celery.worker.hub.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.worker.hub.html" title="celery.worker.hub"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,174 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.worker.control.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-worker-control">
-<h1>celery.worker.control<a class="headerlink" href="#celery-worker-control" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#id1" id="id2">celery.worker.control</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery.worker.control"></span><div class="section" id="id1">
-<h2><a class="toc-backref" href="#id2">celery.worker.control</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Remote control commands.</p>
-<dl class="class">
-<dt id="celery.worker.control.Panel">
-<em class="property">class </em><tt class="descclassname">celery.worker.control.</tt><tt class="descname">Panel</tt><big>(</big><em>dict=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.Panel" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="celery.worker.control.Panel.data">
-<tt class="descname">data</tt><em class="property"> = {'time_limit': &lt;function time_limit at 0x10789b848&gt;, 'revoke': &lt;function revoke at 0x10789b488&gt;, 'dump_active': &lt;function dump_active at 0x10789b9b0&gt;, 'report': &lt;function report at 0x10789b5f0&gt;, 'cancel_consumer': &lt;function cancel_consumer at 0x10789bed8&gt;, 'dump_reserved': &lt;function dump_reserved at 0x10789b938&gt;, 'shutdown': &lt;function shutdown at 0x10789bde8&gt;, 'autoscale': &lt;function autoscale at 0x10789bd70&gt;, 'ping': &lt;function ping at 0x10789bb90&gt;, 'disable_events': &lt;function disable_events at 0x10789b6e0&gt;, 'pool_shrink': &lt;function pool_shrink at 0x10789bc80&gt;, 'pool_restart': &lt;function pool_restart at 0x10789bcf8&gt;, 'dump_schedule': &lt;function dump_schedule at 0x10789b8c0&gt;, 'active_queues': &lt;function active_queues at 0x10789bf50&gt;, 'stats': &lt;function stats at 0x10789ba28&gt;, 'dump_tasks': &lt;function dump_tasks at 0x10789bb18&gt;, 'add_consumer': &lt;function add_consumer at 0x10789be60&gt;, 'enable_events': &lt;function enable_events at 0x10789b668&gt;, 'dump_revoked': &lt;function dump_revoked at 0x10789baa0&gt;, 'rate_limit': &lt;function rate_limit at 0x10789b7d0&gt;, 'dump_conf': &lt;function dump_conf at 0x1078e1050&gt;, 'pool_grow': &lt;function pool_grow at 0x10789bc08&gt;, 'heartbeat': &lt;function heartbeat at 0x10789b758&gt;}</em><a class="headerlink" href="#celery.worker.control.Panel.data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery.worker.control.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery.worker.control.html</a>.
+    </p>
 
-<dl class="classmethod">
-<dt id="celery.worker.control.Panel.register">
-<em class="property">classmethod </em><tt class="descname">register</tt><big>(</big><em>method</em>, <em>name=None</em><big>)</big><a class="headerlink" href="#celery.worker.control.Panel.register" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-</dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.worker.control.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery.worker.control.html</a>.
+    </p>
 
-<dl class="function">
-<dt id="celery.worker.control.active_queues">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">active_queues</tt><big>(</big><em>panel</em><big>)</big><a class="headerlink" href="#celery.worker.control.active_queues" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the queues associated with each worker.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.add_consumer">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">add_consumer</tt><big>(</big><em>panel</em>, <em>queue</em>, <em>exchange=None</em>, <em>exchange_type=None</em>, <em>routing_key=None</em>, <em>**options</em><big>)</big><a class="headerlink" href="#celery.worker.control.add_consumer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.autoscale">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">autoscale</tt><big>(</big><em>panel</em>, <em>max=None</em>, <em>min=None</em><big>)</big><a class="headerlink" href="#celery.worker.control.autoscale" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.cancel_consumer">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">cancel_consumer</tt><big>(</big><em>panel</em>, <em>queue=None</em>, <em>**_</em><big>)</big><a class="headerlink" href="#celery.worker.control.cancel_consumer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.disable_events">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">disable_events</tt><big>(</big><em>panel</em><big>)</big><a class="headerlink" href="#celery.worker.control.disable_events" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.dump_active">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_active</tt><big>(</big><em>panel</em>, <em>safe=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_active" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.dump_conf">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_conf</tt><big>(</big><em>panel</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_conf" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.dump_reserved">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_reserved</tt><big>(</big><em>panel</em>, <em>safe=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_reserved" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.dump_revoked">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_revoked</tt><big>(</big><em>panel</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_revoked" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.dump_schedule">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_schedule</tt><big>(</big><em>panel</em>, <em>safe=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_schedule" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.dump_tasks">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">dump_tasks</tt><big>(</big><em>panel</em>, <em>taskinfoitems=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.dump_tasks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.enable_events">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">enable_events</tt><big>(</big><em>panel</em><big>)</big><a class="headerlink" href="#celery.worker.control.enable_events" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.heartbeat">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">heartbeat</tt><big>(</big><em>panel</em><big>)</big><a class="headerlink" href="#celery.worker.control.heartbeat" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.ping">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">ping</tt><big>(</big><em>panel</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.ping" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.pool_grow">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">pool_grow</tt><big>(</big><em>panel</em>, <em>n=1</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.pool_grow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.pool_restart">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">pool_restart</tt><big>(</big><em>panel</em>, <em>modules=None</em>, <em>reload=False</em>, <em>reloader=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.pool_restart" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.pool_shrink">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">pool_shrink</tt><big>(</big><em>panel</em>, <em>n=1</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.pool_shrink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.rate_limit">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">rate_limit</tt><big>(</big><em>panel</em>, <em>task_name</em>, <em>rate_limit</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.rate_limit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set new rate limit for a task type.</p>
-<p>See <tt class="xref py py-attr docutils literal"><span class="pre">celery.task.base.Task.rate_limit</span></tt>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>task_name</strong> &#8211; Type of task.</li>
-<li><strong>rate_limit</strong> &#8211; New rate limit.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.report">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">report</tt><big>(</big><em>panel</em><big>)</big><a class="headerlink" href="#celery.worker.control.report" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.revoke">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">revoke</tt><big>(</big><em>panel</em>, <em>task_id</em>, <em>terminate=False</em>, <em>signal=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.revoke" title="Permalink to this definition">¶</a></dt>
-<dd><p>Revoke task by task id.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.shutdown">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">shutdown</tt><big>(</big><em>panel</em>, <em>msg='Got shutdown from remote'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.shutdown" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.stats">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">stats</tt><big>(</big><em>panel</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.stats" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.worker.control.time_limit">
-<tt class="descclassname">celery.worker.control.</tt><tt class="descname">time_limit</tt><big>(</big><em>panel</em>, <em>task_name=None</em>, <em>hard=None</em>, <em>soft=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.worker.control.time_limit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -279,7 +139,7 @@
         <li class="right" >
           <a href="celery.worker.hub.html" title="celery.worker.hub"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

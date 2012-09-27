@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.utils.log &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.utils.log &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.utils.text" href="celery.utils.text.html" />
     <link rel="prev" title="celery.utils.imports" href="celery.utils.imports.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.utils.imports.html" title="celery.utils.imports"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,167 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.log.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-utils-log">
-<h1>celery.utils.log<a class="headerlink" href="#celery-utils-log" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#id1" id="id2">celery.utils.log</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery.utils.log"></span><div class="section" id="id1">
-<h2><a class="toc-backref" href="#id2">celery.utils.log</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Logging utilities.</p>
-<dl class="class">
-<dt id="celery.utils.log.ColorFormatter">
-<em class="property">class </em><tt class="descclassname">celery.utils.log.</tt><tt class="descname">ColorFormatter</tt><big>(</big><em>fmt=None</em>, <em>use_color=True</em><big>)</big><a class="headerlink" href="#celery.utils.log.ColorFormatter" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="celery.utils.log.ColorFormatter.COLORS">
-<tt class="descname">COLORS</tt><em class="property"> = {'blue': &lt;bound method colored.blue of ''&gt;, 'black': &lt;bound method colored.black of ''&gt;, 'yellow': &lt;bound method colored.yellow of ''&gt;, 'cyan': &lt;bound method colored.cyan of ''&gt;, 'green': &lt;bound method colored.green of ''&gt;, 'magenta': &lt;bound method colored.magenta of ''&gt;, 'white': &lt;bound method colored.white of ''&gt;, 'red': &lt;bound method colored.red of ''&gt;}</em><a class="headerlink" href="#celery.utils.log.ColorFormatter.COLORS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery.utils.log.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery.utils.log.html</a>.
+    </p>
 
-<dl class="attribute">
-<dt id="celery.utils.log.ColorFormatter.colors">
-<tt class="descname">colors</tt><em class="property"> = {'DEBUG': &lt;bound method colored.blue of ''&gt;, 'CRITICAL': &lt;bound method colored.magenta of ''&gt;, 'WARNING': &lt;bound method colored.yellow of ''&gt;, 'ERROR': &lt;bound method colored.red of ''&gt;}</em><a class="headerlink" href="#celery.utils.log.ColorFormatter.colors" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="method">
-<dt id="celery.utils.log.ColorFormatter.format">
-<tt class="descname">format</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#celery.utils.log.ColorFormatter.format" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.log.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.log.html</a>.
+    </p>
 
-<dl class="method">
-<dt id="celery.utils.log.ColorFormatter.formatException">
-<tt class="descname">formatException</tt><big>(</big><em>ei</em><big>)</big><a class="headerlink" href="#celery.utils.log.ColorFormatter.formatException" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.utils.log.LoggingProxy">
-<em class="property">class </em><tt class="descclassname">celery.utils.log.</tt><tt class="descname">LoggingProxy</tt><big>(</big><em>logger</em>, <em>loglevel=None</em><big>)</big><a class="headerlink" href="#celery.utils.log.LoggingProxy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Forward file object to <a class="reference external" href="http://docs.python.org/dev/library/logging.html#logging.Logger" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">logging.Logger</span></tt></a> instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>logger</strong> &#8211; The <a class="reference external" href="http://docs.python.org/dev/library/logging.html#logging.Logger" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">logging.Logger</span></tt></a> instance to forward to.</li>
-<li><strong>loglevel</strong> &#8211; Loglevel to use when writing messages.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="celery.utils.log.LoggingProxy.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.log.LoggingProxy.close" title="Permalink to this definition">¶</a></dt>
-<dd><p>When the object is closed, no write requests are forwarded to
-the logging object anymore.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.utils.log.LoggingProxy.closed">
-<tt class="descname">closed</tt><em class="property"> = False</em><a class="headerlink" href="#celery.utils.log.LoggingProxy.closed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.log.LoggingProxy.fileno">
-<tt class="descname">fileno</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.log.LoggingProxy.fileno" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.log.LoggingProxy.flush">
-<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.log.LoggingProxy.flush" title="Permalink to this definition">¶</a></dt>
-<dd><p>This object is not buffered so any <a class="reference internal" href="#celery.utils.log.LoggingProxy.flush" title="celery.utils.log.LoggingProxy.flush"><tt class="xref py py-meth docutils literal"><span class="pre">flush()</span></tt></a> requests
-are ignored.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.log.LoggingProxy.isatty">
-<tt class="descname">isatty</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.log.LoggingProxy.isatty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Always returns <tt class="xref py py-const docutils literal"><span class="pre">False</span></tt>. Just here for file support.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="celery.utils.log.LoggingProxy.loglevel">
-<tt class="descname">loglevel</tt><em class="property"> = 40</em><a class="headerlink" href="#celery.utils.log.LoggingProxy.loglevel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.utils.log.LoggingProxy.mode">
-<tt class="descname">mode</tt><em class="property"> = 'w'</em><a class="headerlink" href="#celery.utils.log.LoggingProxy.mode" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.utils.log.LoggingProxy.name">
-<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#celery.utils.log.LoggingProxy.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.log.LoggingProxy.write">
-<tt class="descname">write</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#celery.utils.log.LoggingProxy.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write message to logging object.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.log.LoggingProxy.writelines">
-<tt class="descname">writelines</tt><big>(</big><em>sequence</em><big>)</big><a class="headerlink" href="#celery.utils.log.LoggingProxy.writelines" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>writelines(sequence_of_strings) -&gt; None</cite>.</p>
-<p>Write the strings to the file.</p>
-<p>The sequence can be any iterable object producing strings.
-This is equivalent to calling <a class="reference internal" href="#celery.utils.log.LoggingProxy.write" title="celery.utils.log.LoggingProxy.write"><tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt></a> for each string.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.log.ensure_process_aware_logger">
-<tt class="descclassname">celery.utils.log.</tt><tt class="descname">ensure_process_aware_logger</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.log.ensure_process_aware_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make sure process name is recorded when loggers are used.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.log.get_logger">
-<tt class="descclassname">celery.utils.log.</tt><tt class="descname">get_logger</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#celery.utils.log.get_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.log.get_multiprocessing_logger">
-<tt class="descclassname">celery.utils.log.</tt><tt class="descname">get_multiprocessing_logger</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.log.get_multiprocessing_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.log.get_task_logger">
-<tt class="descclassname">celery.utils.log.</tt><tt class="descname">get_task_logger</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#celery.utils.log.get_task_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.log.mlevel">
-<tt class="descclassname">celery.utils.log.</tt><tt class="descname">mlevel</tt><big>(</big><em>level</em><big>)</big><a class="headerlink" href="#celery.utils.log.mlevel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.log.reset_multiprocessing_logger">
-<tt class="descclassname">celery.utils.log.</tt><tt class="descname">reset_multiprocessing_logger</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.log.reset_multiprocessing_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.log.set_in_sighandler">
-<tt class="descclassname">celery.utils.log.</tt><tt class="descname">set_in_sighandler</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#celery.utils.log.set_in_sighandler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -272,7 +139,7 @@ This is equivalent to calling <a class="reference internal" href="#celery.utils.
         <li class="right" >
           <a href="celery.utils.imports.html" title="celery.utils.imports"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

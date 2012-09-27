@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using SQLAlchemy &mdash; Celery 3.1.0a1 documentation</title>
+    <title>Using SQLAlchemy &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Brokers" href="index.html" />
     <link rel="next" title="Using the Django Database" href="django.html" />
     <link rel="prev" title="Using Redis" href="redis.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="redis.html" title="Using Redis"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Getting Started</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Brokers</a> &raquo;</li> 
       </ul>
@@ -59,64 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/getting-started/brokers/sqlalchemy.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="using-sqlalchemy">
-<span id="broker-sqlalchemy"></span><h1>Using SQLAlchemy<a class="headerlink" href="#using-sqlalchemy" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="installation">
-<span id="broker-sqlalchemy-installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="configuration">
-<span id="broker-sqlalchemy-configuration"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
-<p>Celery needs to know the location of your database, which should be the usual
-SQLAlchemy connection string, but with &#8216;sqla+&#8217; prepended to it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+sqlite:///celerydb.sqlite&#39;</span>
-</pre></div>
-</div>
-<p>This transport uses only the <a class="reference internal" href="../../configuration.html#std:setting-BROKER_URL"><tt class="xref std std-setting docutils literal"><span class="pre">BROKER_URL</span></tt></a> setting, which have to be
-an SQLAlchemy database URI.</p>
-<p>Please see <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#supported-databases">SQLAlchemy: Supported Databases</a> for a table of supported databases.</p>
-<p>Here&#8217;s a list of examples using a selection of other <a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html#database-urls">SQLAlchemy Connection String</a>&#8216;s:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># sqlite (filename)</span>
-<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+sqlite:///celerydb.sqlite&#39;</span>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/getting-started/brokers/sqlalchemy.html"
+        >http://docs.celeryproject.org/en/master/getting-started/brokers/sqlalchemy.html</a>.
+    </p>
 
-<span class="c"># mysql</span>
-<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+mysql://scott:tiger@localhost/foo&#39;</span>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<span class="c"># postgresql</span>
-<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+postgresql://scott:tiger@localhost/mydatabase&#39;</span>
+    <a href="http://docs.celeryproject.org/en/latest/getting-started/brokers/sqlalchemy.html"
+        >http://docs.celeryproject.org/en/latest/getting-started/brokers/sqlalchemy.html</a>.
+    </p>
 
-<span class="c"># oracle</span>
-<span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;sqla+oracle://scott:tiger@127.0.0.1:1521/sidname&#39;</span>
-</pre></div>
-</div>
-<div class="section" id="results">
-<span id="sqlalchemy-results-configuration"></span><h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
-<p>To store results in the database as well, you should configure the result
-backend.  See <a class="reference internal" href="../../configuration.html#conf-database-result-backend"><em>Database backend settings</em></a>.</p>
-</div>
-</div>
-<div class="section" id="limitations">
-<span id="broker-sqlalchemy-limitations"></span><h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
-<p>The SQLAlchemy database transport does not currently support:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Remote control commands (celeryev, broadcast)</li>
-<li>Events, including the Django Admin monitor.</li>
-<li>Using more than a few workers (can lead to messages being executed
-multiple times).</li>
-</ul>
-</div></blockquote>
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -169,7 +139,7 @@ multiple times).</li>
         <li class="right" >
           <a href="redis.html" title="Using Redis"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Getting Started</a> &raquo;</li>
           <li><a href="index.html" >Brokers</a> &raquo;</li> 
       </ul>

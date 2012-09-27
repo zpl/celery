@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.utils.imports &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.utils.imports &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.utils.log" href="celery.utils.log.html" />
     <link rel="prev" title="celery.utils.timer2" href="celery.utils.timer2.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.utils.timer2.html" title="celery.utils.timer2"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,75 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.imports.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-utils-imports">
-<h1>celery.utils.imports<a class="headerlink" href="#celery-utils-imports" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#celery-utils-import" id="id1">celery.utils.import</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery.utils.imports"></span><div class="section" id="celery-utils-import">
-<h2><a class="toc-backref" href="#id1">celery.utils.import</a><a class="headerlink" href="#celery-utils-import" title="Permalink to this headline">¶</a></h2>
-<p>Utilities related to importing modules and symbols by name.</p>
-<dl class="exception">
-<dt id="celery.utils.imports.NotAPackage">
-<em class="property">exception </em><tt class="descclassname">celery.utils.imports.</tt><tt class="descname">NotAPackage</tt><a class="headerlink" href="#celery.utils.imports.NotAPackage" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery.utils.imports.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery.utils.imports.html</a>.
+    </p>
 
-<dl class="function">
-<dt id="celery.utils.imports.cwd_in_path">
-<tt class="descclassname">celery.utils.imports.</tt><tt class="descname">cwd_in_path</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#celery.utils.imports.cwd_in_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="function">
-<dt id="celery.utils.imports.find_module">
-<tt class="descclassname">celery.utils.imports.</tt><tt class="descname">find_module</tt><big>(</big><em>module</em>, <em>path=None</em>, <em>imp=None</em><big>)</big><a class="headerlink" href="#celery.utils.imports.find_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Version of <a class="reference external" href="http://docs.python.org/dev/library/imp.html#imp.find_module" title="(in Python v3.3)"><tt class="xref py py-func docutils literal"><span class="pre">imp.find_module()</span></tt></a> supporting dots.</p>
-</dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.imports.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.imports.html</a>.
+    </p>
 
-<dl class="function">
-<dt id="celery.utils.imports.import_from_cwd">
-<tt class="descclassname">celery.utils.imports.</tt><tt class="descname">import_from_cwd</tt><big>(</big><em>module</em>, <em>imp=None</em>, <em>package=None</em><big>)</big><a class="headerlink" href="#celery.utils.imports.import_from_cwd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Import module, but make sure it finds modules
-located in the current directory.</p>
-<p>Modules located in the current directory has
-precedence over modules located in <cite>sys.path</cite>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.imports.instantiate">
-<tt class="descclassname">celery.utils.imports.</tt><tt class="descname">instantiate</tt><big>(</big><em>name</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.utils.imports.instantiate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instantiate class by name.</p>
-<p>See <tt class="xref py py-func docutils literal"><span class="pre">symbol_by_name()</span></tt>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.imports.module_file">
-<tt class="descclassname">celery.utils.imports.</tt><tt class="descname">module_file</tt><big>(</big><em>module</em><big>)</big><a class="headerlink" href="#celery.utils.imports.module_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.imports.qualname">
-<tt class="descclassname">celery.utils.imports.</tt><tt class="descname">qualname</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#celery.utils.imports.qualname" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.imports.reload_from_cwd">
-<tt class="descclassname">celery.utils.imports.</tt><tt class="descname">reload_from_cwd</tt><big>(</big><em>module</em>, <em>reloader=None</em><big>)</big><a class="headerlink" href="#celery.utils.imports.reload_from_cwd" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -180,7 +139,7 @@ precedence over modules located in <cite>sys.path</cite>.</p>
         <li class="right" >
           <a href="celery.utils.timer2.html" title="celery.utils.timer2"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

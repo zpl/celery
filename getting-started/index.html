@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started &mdash; Celery 3.1.0a1 documentation</title>
+    <title>Getting Started &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../index.html" />
     <link rel="next" title="Introduction to Celery" href="introduction.html" />
     <link rel="prev" title="Copyright" href="../copyright.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="../copyright.html" title="Copyright"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,85 +56,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/getting-started/index.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">3.1</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">August 14, 2012</td>
-</tr>
-</tbody>
-</table>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to Celery</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-is-a-task-queue">What is a Task Queue?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-do-i-need">What do I need?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#get-started">Get Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#celery-is">Celery is…</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#features">Features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#framework-integration">Framework Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#quickjump">Quickjump</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="brokers/index.html">Brokers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brokers/rabbitmq.html">Using RabbitMQ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brokers/redis.html">Using Redis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brokers/sqlalchemy.html">Using SQLAlchemy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brokers/django.html">Using the Django Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brokers/mongodb.html">Using MongoDB</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brokers/sqs.html">Using Amazon SQS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brokers/couchdb.html">Using CouchDB</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brokers/beanstalk.html">Using Beanstalk</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="first-steps-with-celery.html">First Steps with Celery</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="first-steps-with-celery.html#choosing-a-broker">Choosing a Broker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first-steps-with-celery.html#installing-celery">Installing Celery</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first-steps-with-celery.html#application">Application</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first-steps-with-celery.html#running-the-celery-worker-server">Running the celery worker server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first-steps-with-celery.html#calling-the-task">Calling the task</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first-steps-with-celery.html#keeping-results">Keeping Results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first-steps-with-celery.html#configuration">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first-steps-with-celery.html#where-to-go-from-here">Where to go from here</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="next-steps.html">Next Steps</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="next-steps.html#using-celery-in-your-application">Using Celery in your Application</a></li>
-<li class="toctree-l2"><a class="reference internal" href="next-steps.html#calling-tasks">Calling Tasks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="next-steps.html#canvas-designing-workflows"><em>Canvas</em>: Designing Workflows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="next-steps.html#routing">Routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="next-steps.html#remote-control">Remote Control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="next-steps.html#timezone">Timezone</a></li>
-<li class="toctree-l2"><a class="reference internal" href="next-steps.html#optimization">Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="next-steps.html#what-to-do-now">What to do now?</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="resources.html">Resources</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="resources.html#getting-help">Getting Help</a></li>
-<li class="toctree-l2"><a class="reference internal" href="resources.html#bug-tracker">Bug tracker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="resources.html#wiki">Wiki</a></li>
-<li class="toctree-l2"><a class="reference internal" href="resources.html#contributing">Contributing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="resources.html#license">License</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/getting-started/index.html"
+        >http://docs.celeryproject.org/en/master/getting-started/index.html</a>.
+    </p>
+
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
+
+    <a href="http://docs.celeryproject.org/en/latest/getting-started/index.html"
+        >http://docs.celeryproject.org/en/latest/getting-started/index.html</a>.
+    </p>
+
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -187,7 +136,7 @@
         <li class="right" >
           <a href="../copyright.html" title="Copyright"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

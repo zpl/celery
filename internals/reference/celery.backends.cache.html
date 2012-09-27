@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.backends.cache &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.backends.cache &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.backends.amqp" href="celery.backends.amqp.html" />
     <link rel="prev" title="celery.backends.database" href="celery.backends.database.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.backends.database.html" title="celery.backends.database"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,123 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.backends.cache.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-backends-cache">
-<h1>celery.backends.cache<a class="headerlink" href="#celery-backends-cache" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#id1" id="id2">celery.backends.cache</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery.backends.cache"></span><div class="section" id="id1">
-<h2><a class="toc-backref" href="#id2">celery.backends.cache</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Memcache and in-memory cache result backend.</p>
-<dl class="class">
-<dt id="celery.backends.cache.CacheBackend">
-<em class="property">class </em><tt class="descclassname">celery.backends.cache.</tt><tt class="descname">CacheBackend</tt><big>(</big><em>expires=None</em>, <em>backend=None</em>, <em>options={}</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.cache.CacheBackend" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="celery.backends.cache.CacheBackend.client">
-<tt class="descname">client</tt><a class="headerlink" href="#celery.backends.cache.CacheBackend.client" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery.backends.cache.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery.backends.cache.html</a>.
+    </p>
 
-<dl class="method">
-<dt id="celery.backends.cache.CacheBackend.delete">
-<tt class="descname">delete</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#celery.backends.cache.CacheBackend.delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="method">
-<dt id="celery.backends.cache.CacheBackend.get">
-<tt class="descname">get</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#celery.backends.cache.CacheBackend.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.backends.cache.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery.backends.cache.html</a>.
+    </p>
 
-<dl class="attribute">
-<dt id="celery.backends.cache.CacheBackend.implements_incr">
-<tt class="descname">implements_incr</tt><em class="property"> = True</em><a class="headerlink" href="#celery.backends.cache.CacheBackend.implements_incr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.cache.CacheBackend.incr">
-<tt class="descname">incr</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#celery.backends.cache.CacheBackend.incr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.cache.CacheBackend.mget">
-<tt class="descname">mget</tt><big>(</big><em>keys</em><big>)</big><a class="headerlink" href="#celery.backends.cache.CacheBackend.mget" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.cache.CacheBackend.on_chord_apply">
-<tt class="descname">on_chord_apply</tt><big>(</big><em>group_id</em>, <em>body</em>, <em>result=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.cache.CacheBackend.on_chord_apply" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.backends.cache.CacheBackend.servers">
-<tt class="descname">servers</tt><em class="property"> = None</em><a class="headerlink" href="#celery.backends.cache.CacheBackend.servers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.cache.CacheBackend.set">
-<tt class="descname">set</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#celery.backends.cache.CacheBackend.set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="celery.backends.cache.CacheBackend.supports_native_join">
-<tt class="descname">supports_native_join</tt><em class="property"> = True</em><a class="headerlink" href="#celery.backends.cache.CacheBackend.supports_native_join" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.backends.cache.DummyClient">
-<em class="property">class </em><tt class="descclassname">celery.backends.cache.</tt><tt class="descname">DummyClient</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.cache.DummyClient" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="celery.backends.cache.DummyClient.delete">
-<tt class="descname">delete</tt><big>(</big><em>key</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.cache.DummyClient.delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.cache.DummyClient.get">
-<tt class="descname">get</tt><big>(</big><em>key</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.cache.DummyClient.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.cache.DummyClient.get_multi">
-<tt class="descname">get_multi</tt><big>(</big><em>keys</em><big>)</big><a class="headerlink" href="#celery.backends.cache.DummyClient.get_multi" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.cache.DummyClient.incr">
-<tt class="descname">incr</tt><big>(</big><em>key</em>, <em>delta=1</em><big>)</big><a class="headerlink" href="#celery.backends.cache.DummyClient.incr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.backends.cache.DummyClient.set">
-<tt class="descname">set</tt><big>(</big><em>key</em>, <em>value</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.cache.DummyClient.set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.backends.cache.get_best_memcache">
-<tt class="descclassname">celery.backends.cache.</tt><tt class="descname">get_best_memcache</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.backends.cache.get_best_memcache" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="celery.backends.cache.import_best_memcache">
-<tt class="descclassname">celery.backends.cache.</tt><tt class="descname">import_best_memcache</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.backends.cache.import_best_memcache" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -228,7 +139,7 @@
         <li class="right" >
           <a href="celery.backends.database.html" title="celery.backends.database"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

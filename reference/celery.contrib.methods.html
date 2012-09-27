@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.contrib.methods &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.contrib.methods &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.events" href="celery.events.html" />
     <link rel="prev" title="celery.contrib.rdb" href="celery.contrib.rdb.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.contrib.rdb.html" title="celery.contrib.rdb"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,84 +58,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/reference/celery.contrib.methods.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <span class="target" id="module-celery.contrib.methods"></span><div class="section" id="celery-contrib-methods">
-<h1>celery.contrib.methods<a class="headerlink" href="#celery-contrib-methods" title="Permalink to this headline">¶</a></h1>
-<p>Task decorator that supports creating tasks out of methods.</p>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.contrib.methods</span> <span class="kn">import</span> <span class="n">task</span>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/reference/celery.contrib.methods.html"
+        >http://docs.celeryproject.org/en/master/reference/celery.contrib.methods.html</a>.
+    </p>
 
-<span class="k">class</span> <span class="nc">X</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-    <span class="nd">@task</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-</pre></div>
-</div>
-<p>or with any task decorator:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.contrib.methods</span> <span class="kn">import</span> <span class="n">task_method</span>
+    <a href="http://docs.celeryproject.org/en/latest/reference/celery.contrib.methods.html"
+        >http://docs.celeryproject.org/en/latest/reference/celery.contrib.methods.html</a>.
+    </p>
 
-<span class="k">class</span> <span class="nc">X</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="nd">@celery.task</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">task_method</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="caveats">
-<h2>Caveats<a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
-<ul>
-<li><p class="first">Automatic naming won&#8217;t be able to know what the class name is.</p>
-<blockquote>
-<div><p>The name will still be module_name + task_name,
-so two methods with the same name in the same module will collide
-so that only one task can run:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="nd">@task</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-
-<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="nd">@task</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-</pre></div>
-</div>
-<p>would have to be written as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;A.add&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-
-<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="nd">@task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;B.add&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-</ul>
-<dl class="attribute">
-<dt id="celery.contrib.methods.task_method">
-<tt class="descclassname">celery.contrib.methods.</tt><tt class="descname">task_method</tt><a class="headerlink" href="#celery.contrib.methods.task_method" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -188,7 +138,7 @@ so that only one task can run:</p>
         <li class="right" >
           <a href="celery.contrib.rdb.html" title="celery.contrib.rdb"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>

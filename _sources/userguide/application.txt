@@ -274,7 +274,7 @@ you use the task, or access an attribute (in this case :meth:`repr`):
     >>> add.__evaluated__()
     True
 
-*Finalization* of the appq happens either explicitly by calling
+*Finalization* of the app happens either explicitly by calling
 :meth:`@Celery.finalize` -- or implicitly by accessing the :attr:`~@Celery.tasks`
 attribute.
 
@@ -383,7 +383,7 @@ chain breaks:
     .. code-block:: python
 
         def hello(to):
-            return 'hello {0}'.format(to)
+            return 'hello %s' % to
 
         >>> from celery.execute import apply_async
 
@@ -401,7 +401,7 @@ chain breaks:
             send_error_emails = True
 
             def run(self, to):
-                return 'hello {0}'.format(to)
+                return 'hello %s' % to
         tasks.register(Hello)
 
         >>> Hello.delay('world!')
@@ -417,7 +417,7 @@ chain breaks:
 
         @task(send_error_emails=True)
         def hello(x):
-            return 'hello {0}'.format(to)
+            return 'hello %s' % to
 
 Abstract Tasks
 ==============
@@ -444,7 +444,7 @@ class: :class:`celery.Task`.
         abstract = True
 
         def __call__(self, *args, **kwargs):
-            print('TASK STARTING: {0.name}[{0.request.id}].format(self))
+            print('TASK STARTING: %s[%s]' % (self.name, self.request.id))
             return self.run(*args, **kwargs)
 
 

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.utils.term &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.utils.term &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../../index.html" />
     <link rel="up" title="Internal Module Reference" href="index.html" />
     <link rel="next" title="celery.utils.timeutils" href="celery.utils.timeutils.html" />
     <link rel="prev" title="celery.utils.functional" href="celery.utils.functional.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.utils.functional.html" title="celery.utils.functional"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Internal Module Reference</a> &raquo;</li> 
       </ul>
@@ -59,170 +59,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.term.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-utils-term">
-<h1>celery.utils.term<a class="headerlink" href="#celery-utils-term" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#id1" id="id2">celery.utils.term</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery.utils.term"></span><div class="section" id="id1">
-<h2><a class="toc-backref" href="#id2">celery.utils.term</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Terminals and colors.</p>
-<dl class="class">
-<dt id="celery.utils.term.colored">
-<em class="property">class </em><tt class="descclassname">celery.utils.term.</tt><tt class="descname">colored</tt><big>(</big><em>*s</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored" title="Permalink to this definition">¶</a></dt>
-<dd><p>Terminal colored text.</p>
-<dl class="docutils">
-<dt>Example::</dt>
-<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">colored</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">red</span><span class="p">(</span><span class="s">&#39;the quick &#39;</span><span class="p">),</span> <span class="n">c</span><span class="o">.</span><span class="n">blue</span><span class="p">(</span><span class="s">&#39;brown &#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">bold</span><span class="p">(</span><span class="s">&#39;fox &#39;</span><span class="p">)),</span>
-<span class="gp">... </span>      <span class="n">c</span><span class="o">.</span><span class="n">magenta</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">underline</span><span class="p">(</span><span class="s">&#39;jumps over&#39;</span><span class="p">)),</span>
-<span class="gp">... </span>      <span class="n">c</span><span class="o">.</span><span class="n">yellow</span><span class="p">(</span><span class="s">&#39; the lazy &#39;</span><span class="p">),</span>
-<span class="gp">... </span>      <span class="n">c</span><span class="o">.</span><span class="n">green</span><span class="p">(</span><span class="s">&#39;dog &#39;</span><span class="p">)))</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-<dl class="method">
-<dt id="celery.utils.term.colored.black">
-<tt class="descname">black</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.black" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/internals/reference/celery.utils.term.html"
+        >http://docs.celeryproject.org/en/master/internals/reference/celery.utils.term.html</a>.
+    </p>
 
-<dl class="method">
-<dt id="celery.utils.term.colored.blink">
-<tt class="descname">blink</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.blink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="method">
-<dt id="celery.utils.term.colored.blue">
-<tt class="descname">blue</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.blue" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.term.html"
+        >http://docs.celeryproject.org/en/latest/internals/reference/celery.utils.term.html</a>.
+    </p>
 
-<dl class="method">
-<dt id="celery.utils.term.colored.bold">
-<tt class="descname">bold</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.bold" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.bright">
-<tt class="descname">bright</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.bright" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.cyan">
-<tt class="descname">cyan</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.cyan" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.embed">
-<tt class="descname">embed</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.term.colored.embed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.green">
-<tt class="descname">green</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.green" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.iblue">
-<tt class="descname">iblue</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.iblue" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.icyan">
-<tt class="descname">icyan</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.icyan" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.igreen">
-<tt class="descname">igreen</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.igreen" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.imagenta">
-<tt class="descname">imagenta</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.imagenta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.ired">
-<tt class="descname">ired</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.ired" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.iwhite">
-<tt class="descname">iwhite</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.iwhite" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.iyellow">
-<tt class="descname">iyellow</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.iyellow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.magenta">
-<tt class="descname">magenta</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.magenta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.no_color">
-<tt class="descname">no_color</tt><big>(</big><big>)</big><a class="headerlink" href="#celery.utils.term.colored.no_color" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.node">
-<tt class="descname">node</tt><big>(</big><em>s</em>, <em>op</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.node" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.red">
-<tt class="descname">red</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.red" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.reset">
-<tt class="descname">reset</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.reset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.reverse">
-<tt class="descname">reverse</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.reverse" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.underline">
-<tt class="descname">underline</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.underline" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.white">
-<tt class="descname">white</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.white" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.utils.term.colored.yellow">
-<tt class="descname">yellow</tt><big>(</big><em>*s</em><big>)</big><a class="headerlink" href="#celery.utils.term.colored.yellow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="celery.utils.term.fg">
-<tt class="descclassname">celery.utils.term.</tt><tt class="descname">fg</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#celery.utils.term.fg" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -275,7 +139,7 @@
         <li class="right" >
           <a href="celery.utils.functional.html" title="celery.utils.functional"
              >previous</a> |</li>
-        <li><a href="../../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Internals</a> &raquo;</li>
           <li><a href="index.html" >Internal Module Reference</a> &raquo;</li> 
       </ul>

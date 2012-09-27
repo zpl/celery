@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>celery.app.log &mdash; Celery 3.1.0a1 documentation</title>
+    <title>celery.app.log &mdash; Celery 3.0.11 documentation</title>
     
     <link rel="stylesheet" href="../_static/celery.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.1.0a1',
+        VERSION:     '3.0.11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Celery 3.1.0a1 documentation" href="../index.html" />
+    <link rel="top" title="Celery 3.0.11 documentation" href="../index.html" />
     <link rel="up" title="API Reference" href="index.html" />
     <link rel="next" title="celery.app.utils" href="celery.app.utils.html" />
     <link rel="prev" title="celery.app.builtins" href="celery.app.builtins.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="celery.app.builtins.html" title="celery.app.builtins"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">API Reference</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,109 +58,34 @@
             
 <div class="deck">
 
-    
-        <p class="developmentversion">
-        This document is for Celery's development version, which can be
-        significantly different from previous releases. Get old docs here:
+    <h1>Documentation has moved</h2>
 
-        <a href="http://docs.celeryproject.org/en/latest/reference/celery.app.log.html">3.0</a>.
-        </p>
-        
+    <p>
+    Celery is now using <a href="http://readthedocs.org">Read the Docs</a> to host
+    the documentation for the development version, where the pages are
+    automatically updates as new changes are made (YAY!)
+    </p>
 
-</div>
-    <div class="section" id="celery-app-log">
-<h1>celery.app.log<a class="headerlink" href="#celery-app-log" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#id1" id="id2">celery.app.log</a></li>
-</ul>
-</div>
-<span class="target" id="module-celery.app.log"></span><div class="section" id="id1">
-<h2><a class="toc-backref" href="#id2">celery.app.log</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>The Celery instances logging section: <tt class="docutils literal"><span class="pre">Celery.log</span></tt>.</p>
-<p>Sets up logging for the worker and other programs,
-redirects stdouts, colors log output, patches logging
-related compatibility fixes, and so on.</p>
-<dl class="class">
-<dt id="celery.app.log.Logging">
-<em class="property">class </em><tt class="descclassname">celery.app.log.</tt><tt class="descname">Logging</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="celery.app.log.Logging.colored">
-<tt class="descname">colored</tt><big>(</big><em>logfile=None</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.colored" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>The new location for this page is:</strong>
+    <br />
+    <a href="http://docs.celeryproject.org/en/master/reference/celery.app.log.html"
+        >http://docs.celeryproject.org/en/master/reference/celery.app.log.html</a>.
+    </p>
 
-<dl class="method">
-<dt id="celery.app.log.Logging.get_default_logger">
-<tt class="descname">get_default_logger</tt><big>(</big><em>name='celery'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.get_default_logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+    <p>
+    <strong>If you wanted documentation for the latest stable version instead, please go to:
+    </strong>
+    <br />
 
-<dl class="method">
-<dt id="celery.app.log.Logging.redirect_stdouts_to_logger">
-<tt class="descname">redirect_stdouts_to_logger</tt><big>(</big><em>logger</em>, <em>loglevel=None</em>, <em>stdout=True</em>, <em>stderr=True</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.redirect_stdouts_to_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Redirect <tt class="xref py py-class docutils literal"><span class="pre">sys.stdout</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">sys.stderr</span></tt> to a
-logging instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>logger</strong> &#8211; The <a class="reference external" href="http://docs.python.org/dev/library/logging.html#logging.Logger" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">logging.Logger</span></tt></a> instance to redirect to.</li>
-<li><strong>loglevel</strong> &#8211; The loglevel redirected messages will be logged as.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+    <a href="http://docs.celeryproject.org/en/latest/reference/celery.app.log.html"
+        >http://docs.celeryproject.org/en/latest/reference/celery.app.log.html</a>.
+    </p>
 
-<dl class="method">
-<dt id="celery.app.log.Logging.setup">
-<tt class="descname">setup</tt><big>(</big><em>loglevel=None</em>, <em>logfile=None</em>, <em>redirect_stdouts=False</em>, <em>redirect_level='WARNING'</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.app.log.Logging.setup_handlers">
-<tt class="descname">setup_handlers</tt><big>(</big><em>logger</em>, <em>logfile</em>, <em>format</em>, <em>colorize</em>, <em>formatter=&lt;class 'celery.utils.log.ColorFormatter'&gt;</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_handlers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.app.log.Logging.setup_logger">
-<tt class="descname">setup_logger</tt><big>(</big><em>name='celery'</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_logger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deprecated: No longer used.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.app.log.Logging.setup_logging_subsystem">
-<tt class="descname">setup_logging_subsystem</tt><big>(</big><em>loglevel=None</em>, <em>logfile=None</em>, <em>format=None</em>, <em>colorize=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_logging_subsystem" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="celery.app.log.Logging.setup_task_loggers">
-<tt class="descname">setup_task_loggers</tt><big>(</big><em>loglevel=None</em>, <em>logfile=None</em>, <em>format=None</em>, <em>colorize=None</em>, <em>propagate=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.setup_task_loggers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup the task logger.</p>
-<p>If <cite>logfile</cite> is not specified, then <cite>sys.stderr</cite> is used.</p>
-<p>Returns logger object.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="celery.app.log.Logging.supports_color">
-<tt class="descname">supports_color</tt><big>(</big><em>logfile=None</em><big>)</big><a class="headerlink" href="#celery.app.log.Logging.supports_color" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="celery.app.log.TaskFormatter">
-<em class="property">class </em><tt class="descclassname">celery.app.log.</tt><tt class="descname">TaskFormatter</tt><big>(</big><em>fmt=None</em>, <em>use_color=True</em><big>)</big><a class="headerlink" href="#celery.app.log.TaskFormatter" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="celery.app.log.TaskFormatter.format">
-<tt class="descname">format</tt><big>(</big><em>record</em><big>)</big><a class="headerlink" href="#celery.app.log.TaskFormatter.format" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-</div>
+    <strong>PDF, Epub, and HTMLZip documents for every Celery version, including
+        development -- is located here:</strong>
+    <a href="https://readthedocs.org/projects/celery/downloads/"
+        >https://readthedocs.org/projects/celery/downloads/</a>
 
 
           </div>
@@ -213,7 +138,7 @@ logging instance.</p>
         <li class="right" >
           <a href="celery.app.builtins.html" title="celery.app.builtins"
              >previous</a> |</li>
-        <li><a href="../index.html">Celery 3.1.0a1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">Celery 3.0.11 documentation</a> &raquo;</li>
           <li><a href="index.html" >API Reference</a> &raquo;</li> 
       </ul>
     </div>
