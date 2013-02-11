@@ -266,7 +266,9 @@ class Request(object):
         self.send_event('task-revoked',
                         terminated=terminated, signum=signum, expired=expired)
         if self.store_errors:
-            self.task.backend.mark_as_revoked(self.id, reason)
+            self.task.backend.mark_as_revoked(
+                self.id, reason, group_id=self.request_dict.get('group')
+            )
         self.acknowledge()
         self._already_revoked = True
         send_revoked(self.task, terminated=terminated,
@@ -317,7 +319,12 @@ class Request(object):
             exc = exceptions.TimeLimitExceeded(timeout)
 
         if self.store_errors:
-            self.task.backend.mark_as_failure(self.id, exc)
+            self.mark_as_failure(exc)
+
+    def mark_as_failure(self, exc, **kw):
+        self.task.backend.mark_as_failure(
+            self.id, exc, group_id=self.request_dict.get('group'), **kw
+        )
 
     def on_success(self, ret_value, now=None):
         """Handler called if the task was successfully processed."""
@@ -373,7 +380,7 @@ class Request(object):
             # time to write the result.
             if self.store_errors:
                 if isinstance(exc, exceptions.WorkerLostError):
-                    self.task.backend.mark_as_failure(self.id, exc)
+                    self.mark_as_failure(exc)
                 elif isinstance(exc, exceptions.Terminated):
                     self._announce_revoked('terminated', True, str(exc), False)
             # (acks_late) acknowledge after result stored.

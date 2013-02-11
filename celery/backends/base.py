@@ -72,18 +72,20 @@ class BaseBackend(object):
             limit=max_cached_results or conf.CELERY_MAX_CACHED_RESULTS,
         )
 
-    def mark_as_started(self, task_id, **meta):
+    def mark_as_started(self, task_id, group_id=None, **meta):
         """Mark a task as started"""
-        return self.store_result(task_id, meta, status=states.STARTED)
+        return self.store_result(task_id, meta, states.STARTED,
+                                 group_id=group_id)
 
-    def mark_as_done(self, task_id, result):
+    def mark_as_done(self, task_id, result, group_id=None):
         """Mark task as successfully executed."""
-        return self.store_result(task_id, result, status=states.SUCCESS)
+        return self.store_result(task_id, result, states.SUCCESS,
+                                 group_id=group_id)
 
-    def mark_as_failure(self, task_id, exc, traceback=None):
+    def mark_as_failure(self, task_id, exc, traceback=None, group_id=None):
         """Mark task as executed with failure. Stores the execption."""
-        return self.store_result(task_id, exc, status=states.FAILURE,
-                                 traceback=traceback)
+        return self.store_result(task_id, exc, states.FAILURE, traceback,
+                                 group_id=group_id)
 
     def fail_from_current_stack(self, task_id, exc=None):
         type_, real_exc, tb = sys.exc_info()
@@ -181,11 +183,20 @@ class BaseBackend(object):
     def is_cached(self, task_id):
         return task_id in self._cache
 
-    def store_result(self, task_id, result, status, traceback=None, **kwargs):
+    def store_result(self, task_id, result, status,
+                     traceback=None, group_id=None, **kwargs):
         """Update task state and result."""
         result = self.encode_result(result, status)
-        self._store_result(task_id, result, status, traceback, **kwargs)
-        return result
+        print('GROUP_ID: %r' % (group_id, ))
+        if group_id is not None:
+            return self._update_group(
+                group_id, task_id, self.encode_result(result, status),
+                status, traceback, **kwargs
+            )
+        return self._store_result(
+            task_id, self.encode_result(result, status),
+            status, traceback, **kwargs
+        )
 
     def forget(self, task_id):
         self._cache.pop(task_id, None)
@@ -383,10 +394,18 @@ class KeyValueStoreBackend(BaseBackend):
     def _forget(self, task_id):
         self.delete(self.get_key_for_task(task_id))
 
-    def _store_result(self, task_id, result, status, traceback=None):
-        meta = {'status': status, 'result': result, 'traceback': traceback,
-                'children': self.current_task_children()}
-        self.set(self.get_key_for_task(task_id), self.encode(meta))
+    def Payload(self, **keys):
+        return self.encode(dict(keys, children=self.current_task_children()))
+
+    def _update_group(self, group_id, *args, **kwargs):
+        return self._store_result(*args, **kwargs)
+
+    def _store_result(self, task_id, result, status,
+                      traceback=None, group_id=None, **kwargs):
+        self.set(
+            self.get_key_for_task(task_id),
+            self.Payload(status=status, result=result, traceback=traceback),
+        )
         return result
 
     def _save_group(self, group_id, result):

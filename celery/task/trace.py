@@ -86,7 +86,9 @@ class TraceInfo(object):
             reason = self.retval
             einfo = ExceptionInfo((type_, reason, tb))
             if store_errors:
-                task.backend.mark_as_retry(req.id, reason.exc, einfo.traceback)
+                task.backend.mark_as_retry(
+                    req.id, reason.exc, einfo.traceback, group_id=req.group,
+                )
             task.on_retry(reason.exc, req.id, req.args, req.kwargs, einfo)
             signals.task_retry.send(sender=task, request=req,
                                     reason=reason, einfo=einfo)
@@ -102,7 +104,9 @@ class TraceInfo(object):
             exc = self.retval
             einfo = ExceptionInfo((type_, get_pickleable_exception(exc), tb))
             if store_errors:
-                task.backend.mark_as_failure(req.id, exc, einfo.traceback)
+                task.backend.mark_as_failure(
+                    req.id, exc, einfo.traceback, group_id=req.group,
+                )
             task.on_failure(exc, req.id, req.args, req.kwargs, einfo)
             signals.task_failure.send(sender=task, task_id=req.id,
                                       exception=exc, args=req.args,
@@ -197,7 +201,8 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
                 loader_task_init(uuid, task)
                 if track_started:
                     store_result(uuid, {'pid': pid,
-                                        'hostname': hostname}, STARTED)
+                                        'hostname': hostname}, STARTED,
+                                 group_id=task_request.group)
 
                 # -*- TRACE -*-
                 try:
@@ -226,7 +231,8 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
                     [subtask(callback).apply_async((retval, ))
                         for callback in task_request.callbacks or []]
                     if publish_result:
-                        store_result(uuid, retval, SUCCESS)
+                        store_result(uuid, retval, SUCCESS,
+                                     group_id=task_request.group)
                     if task_on_success:
                         task_on_success(retval, uuid, args, kwargs)
                     if success_receivers:
