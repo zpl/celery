@@ -75,11 +75,6 @@ class Request(object):
                  'time_start', 'worker_pid', '_already_revoked',
                  '_terminate_on_ack', '_tzlocal')
 
-    #: Format string used to log task success.
-    success_msg = """\
-        Task %(name)s[%(id)s] succeeded in %(runtime)ss: %(return_value)s
-    """
-
     #: Format string used to log task failure.
     error_msg = """\
         Task %(name)s[%(id)s] raised exception: %(exc)s
@@ -331,19 +326,12 @@ class Request(object):
         if self.task.acks_late:
             self.acknowledge()
 
-        if self.eventer and self.eventer.enabled:
-            now = time.time()
-            runtime = self.time_start and (time.time() - self.time_start) or 0
-            self.send_event('task-succeeded',
-                            result=safe_repr(ret_value), runtime=runtime)
+        #if self.eventer and self.eventer.enabled:
+        #    now = time.time()
+        #    runtime = self.time_start and (time.time() - self.time_start) or 0
+        #    self.send_event('task-succeeded',
+        #                    result=safe_repr(ret_value), runtime=runtime)
 
-        if _does_info:
-            now = now or time.time()
-            runtime = self.time_start and (time.time() - self.time_start) or 0
-            info(self.success_msg.strip(), {
-                'id': self.id, 'name': self.name,
-                'return_value': self.repr_result(ret_value),
-                'runtime': runtime})
 
     def on_retry(self, exc_info):
         """Handler called if the task should be retried."""

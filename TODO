@@ -1,10 +1,33 @@
 Please see our Issue Tracker at GitHub:
     http://github.com/celery/celery/issues
 
-Celerymon
-=========
 
-Create a UI for celerymon using js, with statistics and so on.
-Needs a graphing library, maybe highcharts
-(http://www.highcharts.com/: awesome but weird license) or InfoVis
-(http://thejit.org/; BSD licensed).
+- Widelane
+
+    - Task logs errors + sends_events in the child processes
+
+    - Move non-complex object message fields from the body
+      to properties/application headers (task-message-format-v2)
+
+        - this means that the worker will not have to deserialize
+          payload to inspect these fields, and as such we may
+          avoid the double depickling happening in the Main- and child
+          processes.
+
+    - Change worker internals to support applying a list
+      of tasks instead of going task-by-task.
+
+    - Buffering and calling map on tasks of the same type
+      received in a short timeframe.
+
+    - Also buffer acks(?)
+
+    - This may also enable automatic batching alá celery.contrib.batches(?)
+
+    - job.TaskRequest may be changed to a namedtuple instead, minimizing
+      memory overhead, and will probably be faster too.
+
+        - though this begs the question how and where the Request's methods will
+          be implemented(?), some are easy to move to functions but others
+          are not so fortunate.
+

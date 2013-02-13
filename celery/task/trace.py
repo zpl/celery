@@ -15,13 +15,16 @@ from __future__ import absolute_import
 # but in the end it only resulted in bad performance and horrible tracebacks,
 # so instead we now use one closure per task class.
 
+import logging
 import os
 import socket
 import sys
+import time as _time
 
 from warnings import warn
 
 from kombu.utils import kwdict
+from kombu.utils.encoding import safe_repr
 
 from celery import current_app
 from celery import states, signals
@@ -33,6 +36,11 @@ from celery.exceptions import Ignore, RetryTaskError
 from celery.utils.log import get_logger
 from celery.utils.objects import mro_lookup
 from celery.utils.serialization import get_pickleable_exception
+from celery.utils.text import truncate
+
+SUCCESS_MSG = """\
+Task %(name)s[%(id)s] succeeded in %(runtime)ss: %(return_value)s\
+"""
 
 _logger = get_logger(__name__)
 
@@ -50,6 +58,12 @@ IGNORE_STATES = frozenset([IGNORED, RETRY])
 #: set by :func:`setup_worker_optimizations`
 _tasks = None
 _patched = {}
+
+
+def repr_result(result, maxlen=46):
+    # 46 is the length needed to fit
+    #     'the quick brown fox jumps over the lazy dog' :)
+    return truncate(safe_repr(result), maxlen)
 
 
 def task_has_custom(task, attr):
@@ -144,6 +158,7 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
     # saving the extra method call and a line less in the stack trace.
     fun = task if task_has_custom(task, '__call__') else task.run
 
+    name = task.name
     loader = loader or current_app.loader
     backend = task.backend
     ignore_result = task.ignore_result
@@ -178,11 +193,17 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
     postrun_receivers = signals.task_postrun.receivers
     success_receivers = signals.task_success.receivers
 
+    info = _logger.info
+    _does_info = _logger.isEnabledFor(logging.INFO)
+    _does_debug = _logger.isEnabledFor(logging.DEBUG)
+
+    time = _time.time
+
     from celery import canvas
     subtask = canvas.subtask
 
     def trace_task(uuid, args, kwargs, request=None):
-        R = I = None
+        R = I = T = None
         kwargs = kwdict(kwargs)
         try:
             push_task(task)
@@ -200,6 +221,7 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
                                         'hostname': hostname}, STARTED)
 
                 # -*- TRACE -*-
+                T = time()
                 try:
                     R = retval = fun(*args, **kwargs)
                     state = SUCCESS
@@ -260,6 +282,16 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
             if eager:
                 raise
             R = report_internal_error(task, exc)
+
+        now = None
+        if _does_info:
+            now = now or time()
+            runtime = now - T
+            info(SUCCESS_MSG, {
+                'id': uuid, 'name': name,
+                'return_value': repr_result(R),
+                'runtime': runtime})
+
         return R, I
 
     return trace_task
