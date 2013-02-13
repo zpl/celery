@@ -202,7 +202,7 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
                 if track_started:
                     store_result(uuid, {'pid': pid,
                                         'hostname': hostname}, STARTED,
-                                 group_id=task_request.group)
+                                 group_id=task_request.group.id)
 
                 # -*- TRACE -*-
                 try:
@@ -232,7 +232,7 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
                         for callback in task_request.callbacks or []]
                     if publish_result:
                         store_result(uuid, retval, SUCCESS,
-                                     group_id=task_request.group)
+                                     group_id=task_request.group.id)
                     if task_on_success:
                         task_on_success(retval, uuid, args, kwargs)
                     if success_receivers:

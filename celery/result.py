@@ -301,6 +301,7 @@ class ResultSet(ResultBase):
     :param results: List of result instances.
 
     """
+    id = None
     app = None
 
     #: List of results in in the set.
@@ -514,7 +515,9 @@ class ResultSet(ResultBase):
         """
         backend = self.results[0].backend
         ids = [result.id for result in self.results]
-        return backend.get_many(ids, timeout=timeout, interval=interval)
+        return backend.get_many(
+            ids, timeout=timeout, interval=interval, group_id=self.id,
+        )
 
     def join_native(self, timeout=None, propagate=True, interval=0.5):
         """Backend optimized version of :meth:`join`.

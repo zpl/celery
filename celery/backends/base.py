@@ -59,6 +59,8 @@ class BaseBackend(object):
     #: If true the backend must implement :meth:`get_many`.
     supports_native_join = False
 
+    reduce_group = None
+
     def __init__(self, app=None, serializer=None,
                  max_cached_results=None, **kwargs):
         from celery.app import app_or_default
@@ -186,17 +188,10 @@ class BaseBackend(object):
     def store_result(self, task_id, result, status,
                      traceback=None, group_id=None, **kwargs):
         """Update task state and result."""
-        result = self.encode_result(result, status)
-        print('GROUP_ID: %r' % (group_id, ))
-        if group_id is not None:
-            return self._update_group(
-                group_id, task_id, self.encode_result(result, status),
-                status, traceback, **kwargs
-            )
-        return self._store_result(
-            task_id, self.encode_result(result, status),
-            status, traceback, **kwargs
-        )
+        handler = (self._update_group if group_id is not None
+                   else self._store_result)
+        return handler(task_id, self.encode_result(result, status),
+                       status, traceback, group_id=group_id, **kwargs)
 
     def forget(self, task_id):
         self._cache.pop(task_id, None)
@@ -363,7 +358,25 @@ class KeyValueStoreBackend(BaseBackend):
                         for i, value in enumerate(values)
                         if value is not None)
 
-    def get_many(self, task_ids, timeout=None, interval=0.5):
+    def get_many(self, task_ids, timeout=None, interval=0.5, group_id=None):
+        mget, prepare = self.mget, self._mget_to_results
+        to_key = self.get_key_for_task
+
+        print('GET_MANY: %r' % (group_id, ))
+
+        def reducefun(keys, group_id,
+                      mget=self.mget,
+                      prepare=self._mget_to_results,
+                      to_key=self.get_key_for_task):
+            return prepare(mget([get_key(k) for k in keys]), keys)
+
+        return self._get_many(
+            task_ids, self.reduce_group or reducefun,
+            timeout, interval, group_id,
+        )
+
+    def _get_many(self, task_ids, reducefun,
+                  timeout=None, interval=0.5, group_id=None):
         ids = set(task_ids)
         cached_ids = set()
         for task_id in ids:
@@ -380,8 +393,7 @@ class KeyValueStoreBackend(BaseBackend):
         iterations = 0
         while ids:
             keys = list(ids)
-            r = self._mget_to_results(self.mget([self.get_key_for_task(k)
-                                                 for k in keys]), keys)
+            r = reducefun(keys, group_id)
             self._cache.update(r)
             ids.difference_update(set(map(bytes_to_str, r)))
             for key, value in items(r):
@@ -397,7 +409,7 @@ class KeyValueStoreBackend(BaseBackend):
     def Payload(self, **keys):
         return self.encode(dict(keys, children=self.current_task_children()))
 
-    def _update_group(self, group_id, *args, **kwargs):
+    def _update_group(self, *args, **kwargs):
         return self._store_result(*args, **kwargs)
 
     def _store_result(self, task_id, result, status,

@@ -311,7 +311,7 @@ def add_chord_task(app):
             if eager:
                 return header.apply(args=partial_args, task_id=group_id)
 
-            results = [AsyncResult(prepare_member(task, body, group_id))
+            results = [AsyncResult(prepare_member(task, body, header))
                        for task in header.tasks]
 
             # - fallback implementations schedules the chord_unlock task here
@@ -324,14 +324,14 @@ def add_chord_task(app):
             # - call the header group, returning the GroupResult.
             return header(*partial_args, task_id=group_id)
 
-        def _prepare_member(self, task, body, group_id):
+        def _prepare_member(self, task, body, header):
             opts = task.options
             # d.setdefault would work but generating uuid's are expensive
             try:
                 task_id = opts['task_id']
             except KeyError:
                 task_id = opts['task_id'] = uuid()
-            opts.update(chord=body, group_id=group_id)
+            opts.update(chord=body, group_id=header)
             return task_id
 
         def apply_async(self, args=(), kwargs={}, task_id=None, **options):

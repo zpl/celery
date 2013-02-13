@@ -30,6 +30,7 @@ from celery.task.trace import (
     trace_task,
     trace_task_ret,
 )
+from celery.result import from_serializable
 from celery.utils import fun_takes_kwargs
 from celery.utils.functional import noop
 from celery.utils.log import get_logger
@@ -146,6 +147,10 @@ class Request(object):
             'routing_key': delivery_info.get('routing_key'),
             'priority': delivery_info.get('priority'),
         }
+        try:
+            body['group'] = from_serializable(body['group'])
+        except KeyError:
+            pass
         self.request_dict = body
 
     @classmethod

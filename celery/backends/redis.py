@@ -10,6 +10,7 @@ from __future__ import absolute_import
 
 from kombu.utils import cached_property
 from kombu.utils.url import _parse_url
+from kombu.utils.encoding import ensure_bytes
 
 from celery.exceptions import ImproperlyConfigured
 
@@ -48,8 +49,13 @@ class RedisBackend(KeyValueStoreBackend):
     #: Maximium number of connections in the pool.
     max_connections = None
 
+    groupm_keyprefix = ensure_bytes('celery-group-')
+
     supports_native_join = True
     implements_incr = True
+
+    def get_key_for_groupmember(self, group):
+        return self.groupm_keyprefix + ensure_bytes(group)
 
     def __init__(self, host=None, port=None, db=None, password=None,
                  expires=None, max_connections=None, url=None, **kwargs):
@@ -80,6 +86,24 @@ class RedisBackend(KeyValueStoreBackend):
         self.max_connections = (max_connections
                                 or _get('MAX_CONNECTIONS')
                                 or self.max_connections)
+
+    def _update_group(self, task_id, result, status,
+                     traceback=None, group_id=None, **kwargs):
+        print('UPDATE GROUP: %r' % (group_id, ))
+        self.client.rpush(self.groupm_keyprefix + ensure_bytes(group_id),
+                          self.Payload(status=status, result=result,
+                                       traceback=traceback, task_id=task_id))
+
+    def _decode_group_results(self, group_id):
+        return (self.decode(m) for m in self.client.lrange(
+            self.groupm_keyprefix + ensure_bytes(group_id),
+            0, -1,
+        ))
+
+    def reduce_group(self, keys, group_id):
+        print('REDUCE GROUP: %r %r' % (keys, group_id, ))
+        return dict((m['task_id'], m)
+                     for m in self._decode_group_results(group_id))
 
     def get(self, key):
         return self.client.get(key)
