@@ -4,6 +4,15 @@ python:
   - 2.7
   - 3.3
   - pypy
+env:
+  global:
+    PYTHONUNBUFFERED=yes
+  matrix:
+    - RUN=01
+    - RUN=02
+    - RUN=03
+    - RUN=04
+    - RUN=05
 before_install:
   - |
     deactivate
@@ -17,6 +26,7 @@ before_install:
     uname -a
     lsb_release -a
     sudo pip install tox
-script: tox -v -e $TRAVIS_PYTHON_VERSION -- -v
+script:
+    tox -v -e $TRAVIS_PYTHON_VERSION -- -v
 after_success:
   - .tox/$TRAVIS_PYTHON_VERSION/bin/coveralls
