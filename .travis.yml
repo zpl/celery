@@ -26,7 +26,12 @@ before_install:
     uname -a
     lsb_release -a
     sudo pip install tox
+    sudo apt-get install strace
 script:
-    tox -v -e $TRAVIS_PYTHON_VERSION -- -v
+  - export LOG_NAME="$TRAVIS_PYTHON_VERSION-$TRAVIS_JOB_NUMBER-$TRAVIS_BUILD_ID.log"
+  - tox -v -e $TRAVIS_PYTHON_VERSION --notest
+  - strace -f -s 8000 -o "$LOG_NAME" .tox/$TRAVIS_PYTHON_VERSION/bin/nosetests -v
 after_success:
   - .tox/$TRAVIS_PYTHON_VERSION/bin/coveralls
+after_failure:
+  - curl -i -F "upfile=@$LOG_NAME" http://home.ionelmc.ro/ 
