@@ -10,6 +10,7 @@ this = os.path.dirname(os.path.abspath(__file__))
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.
+sys.path.insert(0, os.pardir)
 sys.path.append(os.path.join(os.pardir, "tests"))
 sys.path.append(os.path.join(this, "_ext"))
 import celery
@@ -80,7 +81,7 @@ html_sidebars = {
 
 ### Issuetracker
 
-issuetracker = "github"
-issuetracker_user = "ask"
-issuetracker_project = "celery"
-issuetracker_issue_pattern = r'[Ii]ssue #(\d+)'
+#issuetracker = "github"
+#issuetracker_user = "ask"
+#issuetracker_project = "celery"
+#issuetracker_issue_pattern = r'[Ii]ssue #(\d+)'
