@@ -8,6 +8,9 @@
 """
 from __future__ import absolute_import
 
+import socket
+
+from contextlib import contextmanager
 from functools import partial
 
 from kombu.utils import cached_property, retry_over_time
@@ -15,7 +18,7 @@ from kombu.utils.url import _parse_url
 
 from celery import states
 from celery.canvas import maybe_signature
-from celery.exceptions import ChordError, ImproperlyConfigured
+from celery.exceptions import ChordError, ImproperlyConfigured, TimeoutError
 from celery.five import string_t
 from celery.utils import deprecated_property, strtobool
 from celery.utils.functional import dictfilter
@@ -131,6 +134,52 @@ class RedisBackend(KeyValueStoreBackend):
         # Query parameters override other parameters
         connparams.update(query)
         return connparams
+
+    def wait_for(self, task_id, timeout=None, cache=True, propagate=True,
+                 READY_STATES=states.READY_STATES,
+                 PROPAGATE_STATES=states.PROPAGATE_STATES,
+                 **kwargs):
+        key = self.get_key_for_task(task_id)
+        cached_meta = self._cache.get(task_id)
+        if cached_meta is None:
+            cached_meta = self.get(key)
+            if cached_meta:
+                cached_meta = self.decode(cached_meta)
+        if cache and cached_meta and \
+                cached_meta['status'] in READY_STATES:
+            meta = cached_meta
+        else:
+            try:
+                with self._subscribe([key], timeout) as pubsub:
+                    for msg in pubsub.listen():
+                        print('RECV: %r' % (msg, ))
+                        if msg and msg['type'] == 'message':
+                            meta = self.decode(msg['data'])
+                            break
+            except (socket.timeout, StopIteration):
+                raise TimeoutError('The operation timed out.')
+
+        if meta['status'] in PROPAGATE_STATES and propagate:
+            raise self.exception_to_python(meta['result'])
+        # consume() always returns READY_STATE.
+        return meta['result']
+
+    @contextmanager
+    def _subscribe(self, keys, timeout):
+        pubsub = self.client.pubsub()
+        for key in keys:
+            pubsub.subscribe(key)
+        connection = pubsub.connection
+        if connection._sock is None:
+            connection.connect()
+        prev = connection.socket_timeout
+        connection._sock.settimeout(timeout)
+        try:
+            yield pubsub
+        finally:
+            if connection._sock:
+                connection._sock.settimeout(prev)
+
 
     def get(self, key):
         return self.client.get(key)
