@@ -269,7 +269,8 @@ class AMQP(object):
                    expires=None, retries=0, chord=None,
                    callbacks=None, errbacks=None, reply_to=None,
                    time_limit=None, soft_time_limit=None,
-                   create_sent_event=False, now=None, timezone=None):
+                   create_sent_event=False, now=None, chain=None,
+                   timezone=None):
         args = args or ()
         kwargs = kwargs or {}
         utc = self.utc
@@ -300,7 +301,6 @@ class AMQP(object):
                 'expires': expires,
                 'callbacks': callbacks,
                 'errbacks': errbacks,
-                'chain': None,  # TODO
                 'group': group_id,
                 'chord': chord,
                 'retries': retries,
@@ -310,7 +310,7 @@ class AMQP(object):
                 'correlation_id': task_id,
                 'reply_to': reply_to or '',
             },
-            body=(args, kwargs),
+            body=(args, kwargs, chain),
             sent_event={
                 'uuid': task_id,
                 'name': name,
