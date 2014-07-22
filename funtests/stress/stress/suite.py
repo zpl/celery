@@ -263,8 +263,13 @@ def _is_descriptor(obj, attr):
 class Suite(BaseSuite):
 
     @testcase('all', 'green')
+    def unicode(self):
+        self.join(group(print_unicode.s() for i in range(10))(),
+                  timeout=10, propagate=True)
+
+    @testcase('all', 'green')
     def manyshort(self):
-        self.join(group(print_unicode.s(i, i) for i in range(1000))(),
+        self.join(group(add.s(i, i) for i in range(1000))(),
                   timeout=10, propagate=True)
 
     @testcase('all')

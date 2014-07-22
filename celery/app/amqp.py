@@ -417,7 +417,7 @@ class AMQP(object):
                          exchange=None, routing_key=None, queue=None,
                          event_dispatcher=None, retry=None, retry_policy=None,
                          serializer=None, delivery_mode=None,
-                         compression=None, declare=None,
+                         compression=None, declare=None, extra_declare=None,
                          headers=None, **kwargs):
             retry = default_retry if retry is None else retry
             headers2, properties, body, sent_event = message
@@ -443,6 +443,8 @@ class AMQP(object):
             routing_key = routing_key or queue.routing_key
             if declare is None and queue and not isinstance(queue, Broadcast):
                 declare = [queue]
+            if extra_declare:
+                declare = (declare or []) + extra_declare
 
             # merge default and custom policy
             retry = default_retry if retry is None else retry

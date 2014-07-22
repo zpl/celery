@@ -356,7 +356,8 @@ class Celery(object):
                   publisher=None, link=None, link_error=None,
                   add_to_parent=True, group_id=None, retries=0, chord=None,
                   reply_to=None, time_limit=None, soft_time_limit=None,
-                  root_id=None, parent_id=None, route_name=None, **options):
+                  root_id=None, parent_id=None, route_name=None,
+                  declare=None, extra_declare=None, **options):
         amqp = self.amqp
         task_id = task_id or uuid()
         producer = producer or publisher  # XXX compat
@@ -380,8 +381,13 @@ class Celery(object):
         if connection:
             producer = amqp.Producer(connection)
         with self.producer_or_acquire(producer) as P:
-            self.backend.on_task_call(P, task_id)
-            amqp.send_task_message(P, name, message, **options)
+            bdeclare = self.backend.on_task_call(P, task_id)
+            if bdeclare:
+                extra_declare = (bdeclare + extra_declare if extra_declare
+                                 else bdeclare)
+            amqp.send_task_message(
+                P, name, message, extra_declare=extra_declare, **options
+            )
         result = (result_cls or self.AsyncResult)(task_id)
         if add_to_parent:
             parent = get_current_worker_task()
@@ -414,6 +420,7 @@ class Celery(object):
             connect_timeout=self.either(
                 'BROKER_CONNECTION_TIMEOUT', connect_timeout
             ),
+            **kwargs
         )
     broker_connection = connection
 

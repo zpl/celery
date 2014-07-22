@@ -367,8 +367,6 @@ class Consumer(object):
             _error_handler, self.app.conf.BROKER_CONNECTION_MAX_RETRIES,
             callback=maybe_shutdown,
         )
-        if self.hub:
-            conn.transport.register_with_event_loop(conn.connection, self.hub)
         return conn
 
     def _flush_events(self):
@@ -509,6 +507,12 @@ class Connection(bootsteps.StartStopStep):
             params.pop('password', None)  # don't send password.
         return {'broker': params}
 
+    def register_with_event_loop(self, c, hub):
+        c.connection.transport.register_with_event_loop(
+            c.connection.connection, hub,
+        )
+
+
 
 class Events(bootsteps.StartStopStep):
     requires = (Connection, )
@@ -530,6 +534,13 @@ class Events(bootsteps.StartStopStep):
         if prev:
             dis.extend_buffer(prev)
             dis.flush()
+
+    def register_with_event_loop(self, c, hub):
+        evd = c.event_dispatcher
+        if evd:
+            evd.connection.transport.register_with_event_loop(
+                evd.connection.connection, hub,
+            )
 
     def stop(self, c):
         pass
@@ -619,13 +630,10 @@ class Tasks(bootsteps.StartStopStep):
         # and if so make sure the 'apply_global' flag is set on qos updates.
         qos_global = not c.connection.qos_semantics_matches_spec
 
-        # set initial prefetch count
-        c.connection.default_channel.basic_qos(
-            0, c.initial_prefetch_count, qos_global,
-        )
-
         c.task_consumer = c.app.amqp.TaskConsumer(
             c.connection, on_decode_error=c.on_decode_error,
+            prefetch_count=c.initial_prefetch_count,
+            prefetch_global=qos_global,
         )
 
         def set_prefetch_count(prefetch_count):
@@ -634,6 +642,7 @@ class Tasks(bootsteps.StartStopStep):
                 apply_global=qos_global,
             )
         c.qos = QoS(set_prefetch_count, c.initial_prefetch_count)
+        c.qos.prev = c.initial_prefetch_count
 
     def stop(self, c):
         if c.task_consumer:

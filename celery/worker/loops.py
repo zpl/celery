@@ -30,14 +30,12 @@ def asynloop(obj, connection, consumer, blueprint, hub, qos,
     errors = connection.connection_errors
     heartbeat = connection.get_heartbeat_interval()  # negotiated
 
-    on_task_received = obj.create_task_handler()
-
     if heartbeat and connection.supports_heartbeats:
         hub.call_repeatedly(heartbeat / hbrate, hbtick, hbrate)
 
+    on_task_received = obj.create_task_handler()
     consumer.on_message = on_task_received
     consumer.consume()
-    obj.on_ready()
     obj.controller.register_with_event_loop(hub)
     obj.register_with_event_loop(hub)
 
@@ -51,6 +49,7 @@ def asynloop(obj, connection, consumer, blueprint, hub, qos,
     # Tried and works, but no time to test properly before release.
     hub.propagate_errors = errors
     loop = hub.create_loop()
+    obj.on_ready()
 
     try:
         while blueprint.state == RUN and obj.connection:

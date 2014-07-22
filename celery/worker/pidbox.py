@@ -3,6 +3,8 @@ from __future__ import absolute_import
 import socket
 import threading
 
+from amqp import promise
+
 from kombu.common import ignore_errors
 from kombu.utils.encoding import safe_str
 
@@ -31,6 +33,7 @@ class Pidbox(object):
         self._forward_clock = self.c.app.clock.forward
 
     def on_message(self, body, message):
+        print('RECEIVED MESSAGE: %r' % (message, ))
         # just increase clock as clients usually don't
         # have a valid clock to adjust with.
         self._forward_clock()
@@ -43,7 +46,13 @@ class Pidbox(object):
             self.reset()
 
     def start(self, c):
+        c.connection.then(promise(self.on_connection_open, (c, )))
+
+    def on_connection_open(self, c, connection):
         self.node.channel = c.connection.channel()
+        self.node.channel.then(promise(self.on_channel_open, (c, )))
+
+    def on_channel_open(self, c, channel):
         self.consumer = self.node.listen(callback=self.on_message)
         self.consumer.on_decode_error = c.on_decode_error
 

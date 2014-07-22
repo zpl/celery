@@ -402,8 +402,8 @@ class ConsumerStep(StartStopStep):
     def start(self, c):
         channel = c.connection.channel()
         self.consumers = self.get_consumers(channel)
-        for consumer in self.consumers or []:
-            consumer.consume()
+        #for consumer in self.consumers or []:
+        #    consumer.consume()
 
     def stop(self, c):
         self._close(c, True)

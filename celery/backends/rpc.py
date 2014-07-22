@@ -29,7 +29,7 @@ class RPCBackend(amqp.AMQPBackend):
         return Exchange(None)
 
     def on_task_call(self, producer, task_id):
-        maybe_declare(self.binding(producer.channel), retry=True)
+        return [self.binding]
 
     def _create_binding(self, task_id):
         return self.binding

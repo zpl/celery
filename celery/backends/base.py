@@ -339,7 +339,7 @@ class BaseBackend(object):
         pass
 
     def on_task_call(self, producer, task_id):
-        return {}
+        pass
 
     def on_chord_part_return(self, task, state, result, propagate=False):
         pass
