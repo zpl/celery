@@ -131,7 +131,7 @@ The worker's main process overrides the following signals:
 +--------------+-------------------------------------------------+
 | :sig:`USR1`  | Dump traceback for all active threads.          |
 +--------------+-------------------------------------------------+
-| :sig:`USR2`  | Remote debug, see :mod:`celery.contrib.rdb`.    |
+| :sig:`USR2`  | Remote debug., see :mod:`celery.contrib.rdb`.   |
 +--------------+-------------------------------------------------+
 
 .. _worker-files:
