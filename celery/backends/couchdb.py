@@ -4,6 +4,7 @@ from __future__ import absolute_import, unicode_literals
 from kombu.utils.url import _parse_url
 from celery.exceptions import ImproperlyConfigured
 from .base import KeyValueStoreBackend
+from kombu.utils.encoding import bytes_to_str
 try:
     import pycouchdb
 except ImportError:
@@ -82,7 +83,7 @@ class CouchBackend(KeyValueStoreBackend):
             return None
 
     def set(self, key, value):
-        data = {'_id': key.decode('ascii'), 'value': value}
+        data = {'_id': bytes_to_str(key), 'value': value}
         try:
             self.connection.save(data)
         except pycouchdb.exceptions.Conflict:
